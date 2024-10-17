@@ -8,11 +8,71 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
 <script>
     $(document).ready(function () {
+        // 알람 메시지를 사이드바에 추가하는 함수
+        function displayAlarms(alarmMessages) {
+            const alarmContainer = $("#alarmMessages");
+            alarmContainer.empty(); // 기존 메시지 제거
+
+            // 오늘 날짜 가져오기
+            const today = new Date();
+            const todayString = today.toISOString().split("T")[0]; // YYYY-MM-DD 형식으로 변환
+
+            alarmMessages.forEach(alarm => {
+                // alarm.alarm_date가 오늘과 같은지 확인
+                if (alarm.alarm_date === todayString) {
+                    console.log(alarm.message); // 오늘의 알람 메시지만 출력
+                    alarmContainer.append(`<p class="tw-text-[#4D3E3E]">${alarm.message}</p>`);
+                }
+            });
+        }
+
+        // 서버에서 알람 메시지를 조회하는 함수
+        function fetchAlarms() {
+            const memberId = "[[${member.getId}]]"; // JSP에서 member.getId 값을 가져옴
+            const url = `/get?memberId=${memberId}`; // URL 생성
+            console.log("AJAX 요청을 보낼 URL:", url); // URL 로그 출력
+
+            $.ajax({
+                url: `${window.location.origin}/usr/alarm/get?memberId=${memberId}`,
+                type: 'GET',
+                success: function (data) {
+                    // 알람 데이터가 배열 형태로 오면, displayAlarms 호출
+                    displayAlarms(data);
+                },
+                error: function (error) {
+                    console.error("알람 메시지 가져오기 실패:", error);
+                }
+            });
+        }
+
+        // 페이지 로드 시 알람 메시지 표시
+        fetchAlarms(); // 알람 메시지를 가져오는 함수를 호출
+
+        $(".alarm_profile").click(function (event) {
+            event.stopPropagation();
+            // 알림 사이드바가 열려있으면 닫고, 사용자 정보 사이드바를 닫습니다.
+            if (!$(".alarm_profile_bar").hasClass("tw-hidden")) {
+                $(".alarm_profile_bar").addClass("tw-hidden");
+            } else {
+                $(".head_profile_bar").addClass("tw-hidden"); // 사용자 정보 사이드바 숨기기
+                $(".alarm_profile_bar").removeClass("tw-hidden"); // 알림 사이드바 열기
+            }
+        });
+
         $(".head_profile").click(function (event) {
             event.stopPropagation();
-            $(".head_profile_bar").removeClass("tw-hidden");
+            // 사용자 정보 사이드바가 열려있으면 닫고, 알림 사이드바를 닫습니다.
+            if (!$(".head_profile_bar").hasClass("tw-hidden")) {
+                $(".head_profile_bar").addClass("tw-hidden");
+            } else {
+                $(".alarm_profile_bar").addClass("tw-hidden"); // 알림 사이드바 숨기기
+                $(".head_profile_bar").removeClass("tw-hidden"); // 사용자 정보 사이드바 열기
+            }
         });
+
         $(document).click(function () {
+            // 문서 클릭 시 두 사이드바 모두 숨기기
+            $(".alarm_profile_bar").addClass("tw-hidden");
             $(".head_profile_bar").addClass("tw-hidden");
         });
     });
@@ -50,6 +110,7 @@
         </div>
         <div class="head_profile tw-cursor-pointer tw-text-white tw-text-lg tw-relative" th:if="${!isLogined}"><a
                 href="../member/login" class="tw-mr-[30px]">로그인</a></div>
+        <div class="tw-flex tw-items-center">
         <div class="head_profile tw-cursor-pointer tw-text-white tw-text-lg tw-relative" th:if="${isLogined}">
             <div th:if="${member.extra__dogPoto == null}" class="tw-mr-[30px]">프로필</div>
 
@@ -83,6 +144,21 @@
                 </div>
             </div>
         </div>
+        <div class="alarm_profile tw-cursor-pointer tw-text-white tw-text-lg tw-relative" th:if="${isLogined}">
+            <!-- 알림 아이콘을 클릭했을 때 sidebar로 이동 -->
+            <a href="#sidebar">
+                <i class="fa-solid fa-bell"></i>
+            </a>
+
+            <!-- 사이드 바 -->
+            <div id="sidebar" class="alarm_profile_bar tw-hidden tw-z-30 tw-cursor-default tw-mt-[30px] tw-ml-[200px] tw-absolute tw-w-[400px] tw-h-[350px] tw-bg-[#FFF3CD] tw-border tw-border-[#4D3E3E] tw-rounded-[30px] tw-flex tw-flex-col tw-items-center tw-justify-center tw-gap-2 tw-right-[-200px]">
+                <h3 class="tw-text-lg tw-font-bold">알람 메시지</h3>
+                <div id="alarmMessages" class="tw-flex tw-flex-col tw-items-start tw-w-full tw-h-full tw-overflow-auto tw-p-2">
+                    <!-- 알람 메시지가 여기에 동적으로 추가됩니다. -->
+                </div>
+            </div>
+        </div>
+    </div>
     </div>
 </div>
 </body>

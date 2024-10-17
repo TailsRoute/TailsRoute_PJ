@@ -604,6 +604,10 @@ video {
   right: 0px;
 }
 
+.tw-right-\[-200px\] {
+  right: -200px;
+}
+
 .tw-z-20 {
   z-index: 20;
 }
@@ -651,6 +655,10 @@ video {
 
 .tw-mt-\[15px\] {
   margin-top: 15px;
+}
+
+.tw-mt-\[30px\] {
+  margin-top: 30px;
 }
 
 .tw-block {
