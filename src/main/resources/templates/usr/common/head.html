@@ -6,7 +6,7 @@
 </head>
 <body>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
-<script>
+<script th:inline="javascript">
     $(document).ready(function () {
         // 알람 메시지를 사이드바에 추가하는 함수
         function displayAlarms(alarmMessages) {
@@ -21,19 +21,36 @@
                 // alarm.alarm_date가 오늘과 같은지 확인
                 if (alarm.alarm_date === todayString) {
                     console.log(alarm.message); // 오늘의 알람 메시지만 출력
-                    alarmContainer.append(`<p class="tw-text-[#4D3E3E]">${alarm.message}</p>`);
+                    alarmContainer.append(`<p class="tw-text-[#4D3E3E]">${alarm.message}</p>`); // 템플릿 리터럴 사용
                 }
             });
         }
 
-        // 서버에서 알람 메시지를 조회하는 함수
         function fetchAlarms() {
-            const memberId = "[[${member.getId}]]"; // JSP에서 member.getId 값을 가져옴
-            const url = `/get?memberId=${memberId}`; // URL 생성
-            console.log("AJAX 요청을 보낼 URL:", url); // URL 로그 출력
+            // 로그인 상태 확인 후 memberId 설정
+            const isLogined = /*[[${isLogined}]]*/ false; // JSP에서 로그인 상태를 가져옴
+            if (!isLogined) {
+                console.log("로그인 상태가 아닙니다.");
+                return; // 로그인 상태가 아닐 경우 함수 종료
+            }
+            const member = /*[[${member}]]*/ null; // JSP에서 member 객체 가져옴
+            // member가 null일 경우 함수 종료
+            if (!member) {
+                console.error("member 객체가 null입니다.");
+                return;
+            }
+            const memberId = member.id; // member 객체에서 id 가져오기
+
+            // memberId가 null 또는 빈 문자열인지 확인
+            if (!memberId || memberId === 'null') {
+                console.error("memberId가 유효하지 않습니다.");
+                return; // memberId가 유효하지 않으면 함수 종료
+            }
+
+            const url = `/usr/alarm/get?memberId=${memberId}`; // 템플릿 리터럴 사용
 
             $.ajax({
-                url: `${window.location.origin}/usr/alarm/get?memberId=${memberId}`,
+                url: url,
                 type: 'GET',
                 success: function (data) {
                     // 알람 데이터가 배열 형태로 오면, displayAlarms 호출
@@ -77,6 +94,7 @@
         });
     });
 </script>
+
 <div class="tw-fixed tw-h-[60px] tw-w-full tw-z-20" style="background-color: #4D3E3E;">
     <div class="tw-container tw-mx-auto tw-flex tw-justify-between tw-items-baseline">
         <a href="../home/main" class="tw-text-white tw-text-2xl tw-pl-[20px]">TailsRoute</a>
