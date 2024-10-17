@@ -27,7 +27,7 @@
         .modal {
             display: none; /* 기본적으로 숨김 */
             position: fixed;
-            z-index: 1000;
+            z-index: 10000;
             left: 0;
             top: 0;
             width: 100%;
@@ -75,6 +75,14 @@
             padding: 10px; /* 내부 여백 추가 */
             position: relative; /* 자식 요소의 절대 위치를 위한 상대 위치 */
         }
+        .fc-toolbar .fc-button {
+            background-color: #4D3E3E; /* 원하는 색상으로 변경 */
+            color: white; /* 글자 색상 */
+        }
+        .fc-toolbar .fc-button:hover {
+            background-color: #FFF3CD; /* 호버 시 색상 변경 */
+            color: #4D3E3E;
+        }
 
         /* list 스타일 */
         #List {
@@ -83,6 +91,8 @@
             width: 800px;
             border-radius: 5px; /* 네모박스에 모서리 둥글게 */
             background-color: #F2F2EB;
+            max-height: 600px; /* 스크롤을 적용할 최대 높이 설정 */
+            overflow-y: auto;  /* 세로 스크롤 활성화 */
         }
 
         /* 이미지 크기를 150px로 설정 */
@@ -156,6 +166,8 @@
         #sortButtons {
             display: flex;
             justify-content: flex-end; /* 버튼들을 오른쪽에 배치 */
+            position: relative;
+            top: 25px; /* 요소를 10px 아래로 이동 */
         }
 
         table {
@@ -174,10 +186,15 @@
             padding: 10px; /* 각 td 요소의 내부 여백 */
             border: 1px solid #ccc; /* 셀 경계선 */
         }
+        h2 {
+            margin-bottom: 10px; /* 제목과 달력/리스트 사이의 간격 조정 */
+            text-align: left;    /* 왼쪽 정렬 */
+        }
     </style>
 </head>
 <body>
-<div id="root"></div>
+<div id="root">
+</div>
 <script>
     document.addEventListener('DOMContentLoaded', function () {
         var calendarEl = document.getElementById('calendar');
@@ -199,12 +216,15 @@
             customButtons: {
                 customButton: {
                     text: '일정 생성',
-                    click: function() {
+                    click: function () {
                         // 일정 생성 팝업 열기
                         openPopup();
                     }
                 }
             },
+            eventLimit: true, // 이 옵션을 추가하면 일정이 2개 이상일 때 "더보기..." 표시
+            eventLimitClick: 'day', // "더보기..."를 클릭하면 일간 보기로 전환
+            dayMaxEventRows: 2, // 하루에 표시할 최대 일정 수
 
 // 달력 날짜 클릭 시 팝업 열고 날짜 저장
             dateClick: function (info) {
@@ -216,11 +236,16 @@
             .then(response => response.json())
             .then(data => {
                 data.forEach(event => {
+                    const startDate = new Date(event.purchaseDate); // 구매 날짜를 시작일로 사용
+                    const endDate = new Date(startDate);
+                    endDate.setDate(startDate.getDate() + parseInt(event.usageCycle) - 1); // 구매 주기에 따라 종료일 계산
                     calendar.addEvent({
                         id: event.id, // 이벤트 ID 추가
                         title: event.itemType, // 생필품 이름
-                        start: event.purchaseDate, // 구매 날짜
+                        start: startDate.toISOString().split('T')[0], // 시작 날짜
+                        end: endDate.toISOString().split('T')[0], // 종료 날짜 (주기에 따라)
                         allDay: true, // 하루 종일 일정
+                        color: '#4D3E3E',
                         extendedProps: {
                             selecteDate: event.selecteDate,
                             usageCycle: event.usageCycle, // 구매 주기
@@ -263,12 +288,10 @@
                 // 수정 모드일 때
                 document.getElementById("createScheduleBtn").style.display = "none"; // 일정 생성 버튼 숨김
                 document.getElementById("updateScheduleBtn").style.display = "block"; // 일정 수정 버튼 보임
-                document.getElementById("deleteScheduleBtn").style.display = "block"; // 일정 삭제 버튼 보임
             } else {
                 // 생성 모드일 때
                 document.getElementById("createScheduleBtn").style.display = "block"; // 일정 생성 버튼 보임
                 document.getElementById("updateScheduleBtn").style.display = "none"; // 일정 수정 버튼 숨김
-                document.getElementById("deleteScheduleBtn").style.display = "none"; // 일정 삭제 버튼 숨김
             }
         }
 
@@ -296,23 +319,30 @@
 
         // 일정 생성 버튼 클릭 시
         document.getElementById("createScheduleBtn").addEventListener("click", function () {
-            selectedDate = document.getElementById("scheduleDate").value;
+            const selectedDate = document.getElementById("scheduleDate").value;
             const itemName = document.getElementById("itemName").value;
             const purchaseCycle = document.getElementById("purchaseCycle").value;
             const alarmDays = document.getElementById("alarmDays").value;
 
             // 필수 입력값 확인
-            if (!itemName || !alarmDays || !selectedDate) {
-                alert("생필품 이름과 알람 설정을 입력하세요.");
+            if (!itemName || !selectedDate) {
+                alert("생필품 이름을 입력하세요.");
                 return;
             }
+
+            // 시작일 설정
+            const startDate = new Date(selectedDate);
+
+            // 주기를 일정 길이로 사용 (주기가 2라면 2일 동안 일정)
+            const endDate = new Date(startDate); // 종료일 설정
+            endDate.setDate(startDate.getDate() + parseInt(purchaseCycle) - 1); // 주기를 반영한 종료일 설정
 
             // 선택한 날짜에 새로운 일정 추가
             calendar.addEvent({
                 title: itemName,
                 start: selectedDate, // 저장한 날짜를 사용
+                end: endDate.toISOString().split('T')[0], // 종료일 (주기에 따라)
                 allDay: true, // 하루 종일 일정
-                // 필요에 따라 다른 속성 추가
             });
 
             // 생필품 정보 객체 생성
@@ -325,6 +355,16 @@
             };
 
             // 생필품 정보를 서버에 전송
+            sendEssentialInfo(essential);
+
+            // 알람이 설정된 경우에만 알람 정보를 전송
+            if (alarmDays) {
+                sendAlarmInfo(selectedDate, itemName, alarmDays);
+            }
+        });
+
+// 생필품 정보 전송 함수
+        function sendEssentialInfo(essential) {
             fetch('/usr/essential/add', {
                 method: 'POST',
                 headers: {
@@ -339,14 +379,49 @@
                     return response.text();
                 })
                 .then(data => {
-                    // 일정이 추가되었으므로 팝업 닫기
-                    location.reload();
-                    closePopup();
+                    console.log('Essential added:', data);
+                    location.reload(); // 페이지 새로고침
+                    closePopup(); // 팝업 닫기
                 })
                 .catch(error => {
-                    console.error('There was a problem with the fetch operation:', error);
+                    console.error('There was a problem with the essential fetch operation:', error);
                 });
-        });
+        }
+
+// 알람 정보 전송 함수
+        function sendAlarmInfo(selectedDate, itemName, alarmDays) {
+            // 알람 날짜 계산 (알람 일수 이전의 날짜로 설정)
+            const alarmDate = new Date(selectedDate);
+            alarmDate.setDate(alarmDate.getDate() - parseInt(alarmDays));
+
+            // 알람 정보 객체 생성
+            const alarm = {
+                memberId: [[${member.id}]], // JSP에서 동적으로 회원 ID를 삽입
+                alarm_date: alarmDate.toISOString().split('T')[0], // 알람이 울릴 날짜
+                message: `${itemName} 구매 주기가 ${alarmDays}일입니다.` // 알람 메시지
+            };
+
+            // 알람 정보를 서버에 전송
+            fetch('/usr/alarm/add', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(alarm),
+            })
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Network response was not ok');
+                    }
+                    return response.text();
+                })
+                .then(data => {
+                    console.log('Alarm added:', data);
+                })
+                .catch(error => {
+                    console.error('There was a problem with the alarm fetch operation:', error);
+                });
+        }
 
 // 일정 수정 버튼 클릭 시
         document.getElementById("updateScheduleBtn").addEventListener("click", function () {
@@ -378,6 +453,10 @@
                     })
                     .then(data => {
                         console.log('수정 성공:', data.message);
+
+                        // 알람 수정 로직 추가
+                        updateAlarmInfo(selectedEventId, purchaseDate, itemName, alarmDays);
+
                         // 수정된 데이터를 UI에 반영 (필요한 경우)
                         if (selectedEvent) {
                             // 선택된 이벤트의 제목과 추가 속성 수정
@@ -393,49 +472,165 @@
                 alert("해당 일정을 찾을 수 없습니다.");
             }
         });
-        // 일정 삭제 버튼 클릭 시
-        document.getElementById("deleteScheduleBtn").addEventListener("click", function () {
-            const itemName = document.getElementById("itemName").value;
+
+// 알람 정보 수정 함수
+        function updateAlarmInfo(eventId, purchaseDate, itemName, alarmDays) {
+            // 알람 날짜 계산 (알람 일수 이전의 날짜로 설정)
+            const alarmDate = new Date(purchaseDate);
+            alarmDate.setDate(alarmDate.getDate() - parseInt(alarmDays));
+
+            // 알람 정보 객체 생성
+            const alarm = {
+                memberId: [[${member.id}]], // JSP에서 동적으로 회원 ID를 삽입
+                alarm_date: alarmDate.toISOString().split('T')[0], // 알람이 울릴 날짜
+                message: `${itemName} 구매 주기가 ${alarmDays}일입니다.`, // 알람 메시지
+                id: eventId // 수정할 알람의 ID
+            };
+
+            // 알람 정보를 서버에 전송 (수정 요청)
+            fetch(`/usr/alarm/update`, {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(alarm),
+            })
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('알람 수정 요청이 실패했습니다.');
+                    }
+                    return response.json(); // 응답을 JSON으로 처리
+                })
+                .then(data => {
+                    console.log('알람 수정 성공:', data.message);
+                })
+                .catch(error => {
+                    console.error('알람 수정 실패:', error);
+                });
+        }
+
+        let essentials = []; // 전역 변수로 essentials 정의
+        let currentSortColumn = ''; // 현재 정렬된 열을 추적하기 위한 변수
+        let isAscending = true; // 정렬 방향을 추적하기 위한 변수
+        let memberId = "[[${member.id}]]";
+        console.log(memberId);
+        fetchEssentials(memberId);
+
+
+        // 데이터를 HTML로 렌더링하는 함수
+        function renderEssentials(essentialsData) {
+            const tableBody = document.querySelector("#essentialTable tbody");
+            tableBody.innerHTML = ""; // 기존 내용을 지웁니다.
+
+            essentialsData.forEach(item => {
+                // 구매일을 Date 객체로 변환
+                const purchaseDate = new Date(item.purchaseDate);
+
+                // 알람 날짜를 계산 및 포맷팅
+                let alarmDateFormatted = '';
+                if (item.timing === 0) {
+                    alarmDateFormatted = "알람 없음"; // timing이 0일 경우 "알람 없음"으로 출력
+                } else {
+                    const alarmDate = new Date(purchaseDate);
+                    alarmDate.setDate(purchaseDate.getDate() - item.timing); // timing을 빼기
+                    alarmDateFormatted = alarmDate.toISOString().split('T')[0]; // YYYY-MM-DD 형식
+                }
+                const row = document.createElement("tr");
+                row.innerHTML = `
+            <td>${item.itemType}</td>
+            <td>${item.purchaseDate}</td>
+            <td>${item.usageCycle}일</td>
+            <td>${alarmDateFormatted}</td>
+            <td>
+            <button class="delete-btn"
+                        data-item-type="${item.itemType}"
+                        data-purchase-date="${item.purchaseDate}"
+                        data-usage-cycle="${item.usageCycle}"
+                        data-alarm-date="${alarmDateFormatted}">삭제</button></td>
+        `;
+
+                // 클릭 이벤트 추가
+                row.addEventListener("click", () => {
+                    const query = encodeURIComponent(item.itemType); // itemType을 URL에 안전한 형태로 변환
+                    searchProducts(query); // 검색 함수 호출
+                });
+
+                tableBody.appendChild(row);
+            });
+            // 삭제 버튼 클릭 이벤트 설정
+            const deleteButtons = document.querySelectorAll(".delete-btn");
+            deleteButtons.forEach(button => {
+                button.addEventListener("click", function (event) {
+                    event.stopPropagation(); // 부모 요소의 클릭 이벤트가 발생하지 않도록 방지
+                    const itemName = this.getAttribute("data-item-type");
+                    const purchaseDate = this.getAttribute("data-purchase-date");
+                    const usageCycle = this.getAttribute("data-usage-cycle");
+                    const alarmDate = this.getAttribute("data-alarm-date");
+                    deleteSchedule(itemName, purchaseDate, usageCycle, alarmDate); // 삭제 함수 호출
+                });
+            });
+        }
+
+        // 삭제 일정 함수
+        function deleteSchedule(itemName, purchaseDate, usageCycle, alarmDate) {
             let eventIdToDelete;
 
+            console.log(memberId);
+
+            if (!itemName) {
+                alert("아이템 이름을 입력하세요.");
+                return;
+            }
+
             // memberId를 쿼리 파라미터로 추가하여 기존 일정 가져오기
-            fetch(`/usr/essential/get?memberId=${[[${member.id}]]}`)
+            fetch(`/usr/essential/get?memberId=` + memberId)
                 .then(response => response.json())
                 .then(data => {
                     // 특정 이벤트를 찾기 위한 로직
                     data.forEach(event => {
-                        if (event.itemType === itemName) {
+                        // 구매일을 Date 객체로 변환
+                        const purchaseDates = new Date(event.purchaseDate); // event.purchaseDate는 "2024-10-17" 형식
+                        const timingDays = event.timing; // timing은 몇 일인지
+
+                        // timing을 구매일에 빼서 새로운 날짜 계산
+                        const newDate = new Date(purchaseDates);
+                        newDate.setDate(purchaseDates.getDate() - timingDays); // timing일수를 빼기
+
+                        const formattedDate = newDate.toISOString().split('T')[0]; // YYYY-MM-DD 형식
+                        console.log("event.usageCycle:", event.usageCycle, "Type:", typeof event.usageCycle);
+                        console.log("usageCycle:", usageCycle, "Type:", typeof usageCycle);
+
+                        // itemName, purchaseDate, usageCycle, formattedDate 비교
+                        if (event.itemType === itemName &&
+                            event.purchaseDate === purchaseDate &&
+                            Number(event.usageCycle) === Number(usageCycle) && // == 사용, 데이터 형식이 다를 수 있음
+                            (formattedDate === alarmDate || (alarmDate === '알람 없음' && event.timing === 0))) {
                             eventIdToDelete = event.id; // 해당 ID를 저장
+                            console.log(eventIdToDelete);
+                        } else{
+                            console.log(formattedDate);
+                            console.log(alarmDate);
                         }
                     });
 
                     // 삭제할 이벤트 ID가 존재하면 삭제 요청
                     if (eventIdToDelete) {
+                        // 알람 삭제 요청
+                        deleteAlarmInfo(eventIdToDelete);
+
                         // DELETE 메소드로 요청 보내기
                         fetch(`/usr/essential/delete?id=` + eventIdToDelete, {
-                            method: 'DELETE' // HTTP DELETE 메소드 지정
+                            method: 'DELETE'
                         })
                             .then(response => {
-                                // 응답이 성공적일 때만 JSON 파싱
                                 if (!response.ok) {
                                     throw new Error('삭제 요청이 실패했습니다.');
                                 }
-                                return response.text(); // 응답을 텍스트로 처리
+                                return response.json(); // 응답을 JSON으로 처리
                             })
                             .then(data => {
-                                // 응답이 JSON 형식이라면, JSON 파싱 (추가적으로 확인)
-                                try {
-                                    const jsonData = JSON.parse(data);
-                                    console.log('삭제 성공:', jsonData.message);
-                                } catch (error) {
-                                    console.error('JSON 파싱 오류:', error);
-                                }
-
-                                // 일정 삭제 후 UI 업데이트
-                                location.reload(); // 선택된 이벤트 삭제
-                                closePopup(); // 팝업 닫기
-
-                                closePopup(); // 팝업 닫기
+                                console.log('삭제 성공:', data.message);
+                                location.reload();
                             })
                             .catch(error => {
                                 console.error('삭제 실패:', error);
@@ -447,67 +642,105 @@
                 .catch(error => {
                     console.error('일정 불러오기 실패:', error);
                 });
-        });
-    });
+        }
 
-    //페이지 로드가 완료된 후 실행하기
-    document.addEventListener('DOMContentLoaded', () => {
-        fetchEssentials();
-    });
+// 알람 정보 삭제 함수
+        function deleteAlarmInfo(eventId) {
+            // 알람 정보를 서버에 전송 (삭제 요청)
+            fetch(`/usr/alarm/delete?id=` + eventId, {
+                method: 'DELETE',
+            })
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('알람 삭제 요청이 실패했습니다.');
+                    }
+                    return response.json(); // 응답을 JSON으로 처리
+                })
+                .then(data => {
+                    console.log('알람 삭제 성공:', data.message);
+                })
+                .catch(error => {
+                    console.error('알람 삭제 실패:', error);
+                });
+        }
 
-    // 품목 리스트를 가져오는 함수
-    function fetchEssentials(memberId) {
-        fetch(`/usr/essential/get?memberId=${[[${member.id}]]}`)
-            .then(response => {
-                if (!response.ok) {
-                    throw new Error('데이터를 가져오는 데 실패했습니다.');
+        // 정렬 로직
+        function sortByColumn(essentialsData, column, isAscending) {
+            return essentialsData.sort((a, b) => {
+                let valueA = a[column];
+                let valueB = b[column];
+
+                // 날짜 형식일 경우 비교 방법 변경
+                if (column === 'purchaseDate') {
+                    valueA = new Date(a.purchaseDate);
+                    valueB = new Date(b.purchaseDate);
                 }
-                return response.json();
-            })
-            .then(data => {
-                renderEssentials(data); // 데이터를 렌더링하는 함수 호출
-            })
-            .catch(error => {
-                console.error('Error fetching essentials:', error);
+                // 'timing'이 0인 경우에는 항상 맨 밑으로 보냄
+                if (column === 'timing') {
+                    if (a.timing === 0) return isAscending ? 1 : -1;
+                    if (b.timing === 0) return isAscending ? -1 : 1;
+                }
+
+                // 정렬 로직 (오름차순 또는 내림차순)
+                if (valueA < valueB) return isAscending ? -1 : 1;
+                if (valueA > valueB) return isAscending ? 1 : -1;
+                return 0;
             });
-    }
+        }
 
-    // 데이터를 HTML로 렌더링하는 함수
-    function renderEssentials(essentials) {
-        const tableBody = document.querySelector("#essentialTable tbody");
-        tableBody.innerHTML = ""; // 기존 내용을 지웁니다.
-
-        essentials.forEach(item => {
-            // 구매일을 Date 객체로 변환
-            const purchaseDate = new Date(item.purchaseDate);
-
-            // 알람 일수를 빼서 알람 날짜 계산
-            const alarmDate = new Date(purchaseDate);
-            alarmDate.setDate(purchaseDate.getDate() - item.timing); // timing을 빼기
-
-            // 알람 날짜를 포맷팅 (예: YYYY-MM-DD 형식으로 변환)
-            const alarmDateFormatted = alarmDate.toISOString().split('T')[0]; // YYYY-MM-DD 형식
-            const row = document.createElement("tr");
-            row.innerHTML = `
-            <td>${item.itemType}</td>
-            <td>${item.purchaseDate}</td>
-            <td>${item.usageCycle}일</td>
-            <td>${alarmDateFormatted}</td>
-        `;
-            // 클릭 이벤트 추가
-            row.addEventListener("click", () => {
-                // itemType을 쿼리로 사용하여 제품 검색
-                const query = encodeURIComponent(item.itemType); // itemType을 URL에 안전한 형태로 변환
-                searchProducts(query); // 검색 함수 호출
+        document.addEventListener('DOMContentLoaded', () => {
+            // 각 헤더에 클릭 이벤트 추가
+            document.getElementById("itemTypeHeader").addEventListener("click", () => {
+                isAscending = currentSortColumn !== 'itemType' || !isAscending; // 정렬 방향 결정
+                currentSortColumn = 'itemType';
+                const sortedEssentials = sortByColumn(essentials, 'itemType', isAscending); // 정렬
+                renderEssentials(sortedEssentials); // 정렬된 데이터 렌더링
             });
 
-            tableBody.appendChild(row);
+            document.getElementById("purchaseDateHeader").addEventListener("click", () => {
+                isAscending = currentSortColumn !== 'purchaseDate' || !isAscending; // 정렬 방향 결정
+                currentSortColumn = 'purchaseDate';
+                const sortedEssentials = sortByColumn(essentials, 'purchaseDate', isAscending); // 정렬
+                renderEssentials(sortedEssentials); // 정렬된 데이터 렌더링
+            });
+
+            document.getElementById("usageCycleHeader").addEventListener("click", () => {
+                isAscending = currentSortColumn !== 'usageCycle' || !isAscending; // 정렬 방향 결정
+                currentSortColumn = 'usageCycle';
+                const sortedEssentials = sortByColumn(essentials, 'usageCycle', isAscending); // 정렬
+                renderEssentials(sortedEssentials); // 정렬된 데이터 렌더링
+            });
+
+            document.getElementById("alarmDaysHeader").addEventListener("click", () => {
+                isAscending = currentSortColumn !== 'timing' || !isAscending; // 정렬 방향 결정
+                currentSortColumn = 'timing';
+                const sortedEssentials = sortByColumn(essentials, 'timing', isAscending); // 정렬
+                renderEssentials(sortedEssentials); // 정렬된 데이터 렌더링
+            });
         });
-    }
 
-    // memberId를 가져와서 품목 리스트를 요청합니다.
-    const memberId = [[${member.id}]]; // JSP로부터 memberId를 가져옵니다.
-    fetchEssentials(memberId); // 데이터를 가져옵니다.
+        // 품목 리스트를 가져오는 함수
+        function fetchEssentials(memberId) {
+            console.log("1");
+            fetch(`/usr/essential/get?memberId=${[[${member.id}]]}`) // memberId 값을 URL에 추가
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('데이터를 가져오는 데 실패했습니다.');
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    essentials = data; // 데이터를 essentials에 할당
+
+                    // 기본적으로 구매일 순으로 정렬
+                    essentials = sortByColumn(essentials, 'purchaseDate', true); // 오름차순 정렬
+                    renderEssentials(essentials); // 데이터를 렌더링하는 함수 호출
+                })
+                .catch(error => {
+                    console.error('Error fetching essentials:', error);
+                });
+        }
+    });
 </script>
 <script src="https://unpkg.com/react@17/umd/react.development.js"></script>
 <script src="https://unpkg.com/react-dom@17/umd/react-dom.development.js"></script>
@@ -526,37 +759,44 @@
         <input type="text" id="itemName" placeholder="생필품 이름을 입력하세요"/><br/><br/>
 
         <!-- 구매 주기 선택 -->
-        <label for="purchaseCycle">구매 주기 (일):</label>
-        <input type="number" id="purchaseCycle" placeholder="구매 주기를 입력하세요" min="1" /><br/><br/>
+        <label for="purchaseCycle">사용기한 (일):</label>
+        <input type="number" id="purchaseCycle" placeholder="구매 주기를 입력하세요" min="1"/><br/><br/>
 
         <!-- 알람 설정 -->
-        <label for="alarmDays">알람 (며칠 전에 알림):</label>
-        <input type="number" id="alarmDays" placeholder="예: 3" min="1"/><br/><br/>
+        <label for="alarmDays">알람 (사용 안 할시에는 0):</label>
+        <input type="number" id="alarmDays" placeholder="몇일 전 알람" min="0"/><br/><br/>
 
         <!-- 버튼들 -->
         <button id="createScheduleBtn">일정 생성</button>
         <button id="updateScheduleBtn">일정 수정</button>
-        <button id="deleteScheduleBtn">일정 삭제</button>
     </div>
 </div>
 <!-- Flexbox 컨테이너 추가 -->
 <div id="shopbody">
     <div class="flex-container">
-        <div id='calendar'></div>
-        <div id="List">
-            <table id="essentialTable">
-                <thead>
-                <tr>
-                    <th>품목</th>
-                    <th>구매일</th>
-                    <th>사용주기</th>
-                    <th>알람</th>
-                </tr>
-                </thead>
-                <tbody>
-                <!-- 데이터가 여기에 추가됩니다. -->
-                </tbody>
-            </table>
+        <div style="flex: 1; padding-right: 20px;">
+            <h2 style="text-align: left;">생필품 주기 달력</h2>
+            <div id="calendar"></div> <!-- 달력 영역 -->
+        </div>
+        <!-- 생필품 리스트 -->
+        <div style="flex: 1; padding-left: 20px;">
+            <h2 style="text-align: left;">생필품 리스트</h2>
+            <div id="List">
+                <table id="essentialTable">
+                    <thead>
+                    <tr>
+                        <th id="itemTypeHeader">품목</th>
+                        <th id="purchaseDateHeader">구매일</th>
+                        <th id="usageCycleHeader">사용기한</th>
+                        <th id="alarmDaysHeader">알람일</th>
+                        <th></th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <!-- 데이터가 여기에 추가됩니다. -->
+                    </tbody>
+                </table>
+            </div>
         </div>
     </div>
 
@@ -568,6 +808,9 @@
             <button id="sortByAccuracy">정확도순</button>
             <button id="sortByPrice">최저가순</button>
         </div>
+
+        <!-- 검색어를 포함한 제목 -->
+        <h2 id="searchTitle">쇼핑 추천 리스트 - 검색 결과: </h2>
 
         <!-- 검색 결과를 표시할 곳 -->
         <ul id="resultContainer"></ul> <!-- ul로 변경 -->
@@ -596,6 +839,11 @@
             let originalProducts = []; // 원본 데이터 저장
             // 제품 검색 함수
             function searchProducts(query, sort = '') {
+                // 검색어를 디코딩하여 사람이 읽을 수 있게 만듦
+                const decodedQuery = decodeURIComponent(query);
+
+                // 제목에 검색어 추가
+                document.getElementById("searchTitle").textContent = `쇼핑 추천 리스트 - 검색 결과 : ${decodedQuery}`;
                 // API 요청 보내기
                 fetch('/searchProducts?query=' + query + '&display=' + 100 + sort)
                     .then(response => response.json())
