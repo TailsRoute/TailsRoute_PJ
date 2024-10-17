@@ -78,23 +78,13 @@
 
         $(".head_profile").click(function (event) {
             event.stopPropagation();
-            // 사용자 정보 사이드바가 열려있으면 닫고, 알림 사이드바를 닫습니다.
-            if (!$(".head_profile_bar").hasClass("tw-hidden")) {
-                $(".head_profile_bar").addClass("tw-hidden");
-            } else {
-                $(".alarm_profile_bar").addClass("tw-hidden"); // 알림 사이드바 숨기기
-                $(".head_profile_bar").removeClass("tw-hidden"); // 사용자 정보 사이드바 열기
-            }
+            $(".head_profile_bar").removeClass("tw-hidden");
         });
-
         $(document).click(function () {
-            // 문서 클릭 시 두 사이드바 모두 숨기기
-            $(".alarm_profile_bar").addClass("tw-hidden");
             $(".head_profile_bar").addClass("tw-hidden");
         });
     });
 </script>
-
 <div class="tw-fixed tw-h-[60px] tw-w-full tw-z-20" style="background-color: #4D3E3E;">
     <div class="tw-container tw-mx-auto tw-flex tw-justify-between tw-items-baseline">
         <a href="../home/main" class="tw-text-white tw-text-2xl tw-pl-[20px]">TailsRoute</a>
@@ -128,7 +118,6 @@
         </div>
         <div class="head_profile tw-cursor-pointer tw-text-white tw-text-lg tw-relative" th:if="${!isLogined}"><a
                 href="../member/login" class="tw-mr-[30px]">로그인</a></div>
-        <div class="tw-flex tw-items-center">
         <div class="head_profile tw-cursor-pointer tw-text-white tw-text-lg tw-relative" th:if="${isLogined}">
             <div th:if="${member.extra__dogPoto == null}" class="tw-mr-[30px]">프로필</div>
 
@@ -162,21 +151,6 @@
                 </div>
             </div>
         </div>
-        <div class="alarm_profile tw-cursor-pointer tw-text-white tw-text-lg tw-relative" th:if="${isLogined}">
-            <!-- 알림 아이콘을 클릭했을 때 sidebar로 이동 -->
-            <a href="#sidebar">
-                <i class="fa-solid fa-bell"></i>
-            </a>
-
-            <!-- 사이드 바 -->
-            <div id="sidebar" class="alarm_profile_bar tw-hidden tw-z-30 tw-cursor-default tw-mt-[30px] tw-ml-[200px] tw-absolute tw-w-[400px] tw-h-[350px] tw-bg-[#FFF3CD] tw-border tw-border-[#4D3E3E] tw-rounded-[30px] tw-flex tw-flex-col tw-items-center tw-justify-center tw-gap-2 tw-right-[-200px]">
-                <h3 class="tw-text-lg tw-font-bold">알람 메시지</h3>
-                <div id="alarmMessages" class="tw-flex tw-flex-col tw-items-start tw-w-full tw-h-full tw-overflow-auto tw-p-2">
-                    <!-- 알람 메시지가 여기에 동적으로 추가됩니다. -->
-                </div>
-            </div>
-        </div>
-    </div>
     </div>
 </div>
 </body>
