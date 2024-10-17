@@ -43,7 +43,9 @@
 
 <!-- Google Maps API 호출 -->
 <script async defer
-        src="https://maps.googleapis.com/maps/api/js?key=googleMap_apikey"></script>
+        th:src="'https://maps.googleapis.com/maps/api/js?key='+${GOOGLE_MAP_API_KEY}">
+</script>
+
 <!-- &libraries=places -->
 
 <!-- JavaScript 파일 불러오기 -->
