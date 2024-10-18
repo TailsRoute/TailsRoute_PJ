@@ -111,7 +111,7 @@ public class UsrDiaryController {
         return "redirect:/usr/diary/list";
     }
     @GetMapping("/list")
-    public String showDiaryList(Model model, @RequestParam(defaultValue = "oldest") String sort) {
+    public String showDiaryList(Model model, @RequestParam(defaultValue = "oldest") String sort,@RequestParam(defaultValue = "1") int page) {
         boolean isLogined = rq.isLogined();
 
         if (isLogined) {
@@ -120,9 +120,23 @@ public class UsrDiaryController {
         }
         model.addAttribute("isLogined", isLogined);
 
-        List<Diary> diaries = diaryService.getDiaryList(sort);
+        int size = 7; // 페이지당 아이템 수
+        List<Diary> diaries = diaryService.getDiaryList(sort, page, size);
+        int totalDiaries = diaryService.countDiaries();
+        int totalPages = (int) Math.ceil((double) totalDiaries / size);
 
         model.addAttribute("diaries", diaries);
+        model.addAttribute("currentPage", page);
+        model.addAttribute("totalPages", totalPages);
+        model.addAttribute("sort", sort);
+
+        // pageNumbers 리스트 추가
+        List<Integer> pageNumbers = new ArrayList<>();
+        for (int i = 1; i <= totalPages; i++) {
+            pageNumbers.add(i);
+        }
+        model.addAttribute("pageNumbers", pageNumbers);
+
         return "usr/diary/list";
     }
 

@@ -1,6 +1,6 @@
 body {
     background-color: #FFFEF0;
-    color: #4D3E3E;
+    color: black;
 }
 
 #calendar {
@@ -39,6 +39,8 @@ body {
 
 /* 기록 리스트 조정 */
 .diaryList {
+    display: flex;
+    flex-direction: column;
     height: 600px; /* 캘린더 높이 조정 */
     width: 700px;  /* 캘린더 너비 조정 */
     margin-top: 20px; /* 제목과의 간격 조정 */
@@ -47,6 +49,7 @@ body {
     box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1); /* 그림자 효과 추가 */
     background-color: #E7E7E7; /* 캘린더 배경색 */
     text-align: end;
+    justify-content: space-between; /* 요소 간의 공간을 고르게 분배 */
 }
 
 
@@ -64,11 +67,10 @@ body {
 }
 
 #writeButton{
-    display: block;
-    margin-left: auto;
-    margin-top: 370px;
-    font-weight: bold;
-    font-size: large;
+    margin-top: auto;
+    max-width: 130px;
+    margin-left: 1370px;
+    margin-bottom: 30px;
 }
 .header{
     padding-bottom: 4px;
@@ -80,8 +82,20 @@ body {
     padding-top: 50px;
     border-bottom: 2px solid #000;
 }
-#dateFilter{
+.dateFilter{
     background-color:#E7E7E7 ;
-
+    margin-top: 30px;
 }
-
+.pagination{
+    display: flex;
+    justify-content: center;
+    margin-top: auto; /* 남은 공간을 차지하여 맨 아래에 위치 */
+}
+.container{
+    height: 800px;
+}
+#sortSelect{
+    background-color:#E7E7E7;
+    margin-right: 30px;
+    width: 100px;
+}
