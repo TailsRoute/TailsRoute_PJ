@@ -7,9 +7,14 @@ import java.util.List;
 
 @Mapper
 public interface AlarmRepository {
+
     @Insert("INSERT INTO alarm (regDate, updateDate, memberId, alarm_date, message, site) " +
             "VALUES (NOW(), NOW(), #{memberId},  #{alarm_date}, #{message}, #{site})")
     public void addAlarms(int memberId, String alarm_date, String message, String site);
+
+    @Insert("INSERT INTO alarm (regDate, updateDate, memberId, alarm_date, message) " +
+            "VALUES (NOW(), NOW(), #{memberId},  #{alarm_date}, #{message})")
+    public void addAlarms(int memberId, String alarm_date, String message);
 
     @Select("SELECT * FROM alarm WHERE memberId = #{memberId}")
     public List<Alarms> findByMemberId(int memberId);
