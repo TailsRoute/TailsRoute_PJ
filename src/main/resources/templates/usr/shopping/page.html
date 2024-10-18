@@ -36,11 +36,11 @@
         }
 
         .modal-content {
-            background-color: #fff;
+            background-color: #F2F2EB;
             margin: 15% auto;
             padding: 20px;
             border: 1px solid #888;
-            width: 400px;
+            width: 500px;
             border-radius: 10px;
         }
 
@@ -238,7 +238,7 @@
                 data.forEach(event => {
                     const startDate = new Date(event.purchaseDate); // 구매 날짜를 시작일로 사용
                     const endDate = new Date(startDate);
-                    endDate.setDate(startDate.getDate() + parseInt(event.usageCycle) - 1); // 구매 주기에 따라 종료일 계산
+                    endDate.setDate(startDate.getDate() + parseInt(event.usageCycle)); // 구매 주기에 따라 종료일 계산
                     calendar.addEvent({
                         id: event.id, // 이벤트 ID 추가
                         title: event.itemType, // 생필품 이름
@@ -323,6 +323,7 @@
             const itemName = document.getElementById("itemName").value;
             const purchaseCycle = document.getElementById("purchaseCycle").value;
             const alarmDays = document.getElementById("alarmDays").value;
+            console.log(alarmDays);
 
             // 필수 입력값 확인
             if (!itemName || !selectedDate) {
@@ -335,7 +336,7 @@
 
             // 주기를 일정 길이로 사용 (주기가 2라면 2일 동안 일정)
             const endDate = new Date(startDate); // 종료일 설정
-            endDate.setDate(startDate.getDate() + parseInt(purchaseCycle) - 1); // 주기를 반영한 종료일 설정
+            endDate.setDate(startDate.getDate() + parseInt(purchaseCycle)); // 주기를 반영한 종료일 설정
 
             // 선택한 날짜에 새로운 일정 추가
             calendar.addEvent({
@@ -356,10 +357,10 @@
 
             // 생필품 정보를 서버에 전송
             sendEssentialInfo(essential);
-
             // 알람이 설정된 경우에만 알람 정보를 전송
             if (alarmDays) {
                 sendAlarmInfo(selectedDate, itemName, alarmDays);
+                console.log("알람정보 전송");
             }
         });
 
@@ -394,11 +395,14 @@
             const alarmDate = new Date(selectedDate);
             alarmDate.setDate(alarmDate.getDate() - parseInt(alarmDays));
 
+            console.log(alarmDate.toISOString().split('T')[0]);
+
             // 알람 정보 객체 생성
             const alarm = {
                 memberId: [[${member.id}]], // JSP에서 동적으로 회원 ID를 삽입
                 alarm_date: alarmDate.toISOString().split('T')[0], // 알람이 울릴 날짜
-                message: `${itemName} 구매 주기가 ${alarmDays}일입니다.` // 알람 메시지
+                message: `${itemName} 구매 주기가 ${alarmDays}일입니다.`, // 알람 메시지
+                site: `../shopping/page`
             };
 
             // 알람 정보를 서버에 전송
@@ -429,7 +433,7 @@
             const itemName = document.getElementById("itemName").value;
             const purchaseCycle = document.getElementById("purchaseCycle").value;
             const alarmDays = document.getElementById("alarmDays").value;
-
+            console.log("일정 수정버튼 클릭 됨");
             if (selectedEventId) {
                 // PUT 메소드로 수정 요청 보내기
                 fetch(`/usr/essential/update`, {
@@ -483,7 +487,7 @@
             const alarm = {
                 memberId: [[${member.id}]], // JSP에서 동적으로 회원 ID를 삽입
                 alarm_date: alarmDate.toISOString().split('T')[0], // 알람이 울릴 날짜
-                message: `${itemName} 구매 주기가 ${alarmDays}일입니다.`, // 알람 메시지
+                message: `${itemName} 구매 예정일까지 ${alarmDays}일 남았습니다.`, // 알람 메시지
                 id: eventId // 수정할 알람의 ID
             };
 
@@ -751,20 +755,20 @@
         <h2>생필품 일정 관리</h2>
 
         <!-- 일정 날짜 입력-->
-        <label for="scheduleDate">일정 날짜 선택:</label>
-        <input type="date" id="scheduleDate" /><br/><br/>
+        <label for="scheduleDate">일정 날짜 선택</label>
+        <input type="date" id="scheduleDate" class="tw-border-box tw-w-[190px] tw-text-center tw-rounded-[5px] tw-border" /><br/><br/>
 
         <!-- 생필품 입력 -->
-        <label for="itemName">생필품 이름:</label>
-        <input type="text" id="itemName" placeholder="생필품 이름을 입력하세요"/><br/><br/>
+        <label for="itemName">생필품 이름</label>
+        <input type="text" id="itemName" class="tw-border-box tw-w-[190px] tw-text-center tw-rounded-[5px] tw-border" placeholder="생필품 이름을 입력하세요"/><br/><br/>
 
         <!-- 구매 주기 선택 -->
-        <label for="purchaseCycle">사용기한 (일):</label>
-        <input type="number" id="purchaseCycle" placeholder="구매 주기를 입력하세요" min="1"/><br/><br/>
+        <label for="purchaseCycle">사용기한(일)</label>
+        <input type="number" id="purchaseCycle" class="tw-border-box tw-w-[190px] tw-text-center tw-rounded-[5px] tw-border" placeholder="구매 주기를 입력하세요" min="1"/><br/><br/>
 
         <!-- 알람 설정 -->
-        <label for="alarmDays">알람 (사용 안 할시에는 0):</label>
-        <input type="number" id="alarmDays" placeholder="몇일 전 알람" min="0"/><br/><br/>
+        <label for="alarmDays">알람(사용 안 할시에는 0)</label>
+        <input type="number" id="alarmDays" class="tw-border-box tw-w-[190px] tw-text-center tw-rounded-[5px] tw-border" placeholder="몇일 전 알람" min="0"/><br/><br/>
 
         <!-- 버튼들 -->
         <button id="createScheduleBtn">일정 생성</button>
