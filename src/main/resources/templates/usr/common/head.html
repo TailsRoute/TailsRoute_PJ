@@ -11,40 +11,80 @@
         // 알람 메시지를 사이드바에 추가하는 함수
         function displayAlarms(alarmMessages) {
             const alarmContainer = $("#alarmMessages");
+            const alarmCountBadge = $("#alarmCount");
             alarmContainer.empty(); // 기존 메시지 제거
 
             // 오늘 날짜 가져오기
             const today = new Date();
-            const todayString = today.toISOString().split("T")[0]; // YYYY-MM-DD 형식으로 변환
+            const todayString = today.toISOString().split("T")[0];
 
+            let alarmCount = 0;
+
+            // 알람 메시지 표시
             alarmMessages.forEach(alarm => {
-                // alarm.alarm_date가 오늘과 같은지 확인
                 if (alarm.alarm_date === todayString) {
-                    console.log(alarm.message); // 오늘의 알람 메시지만 출력
-                    alarmContainer.append(`<p class="tw-text-[#4D3E3E]">${alarm.message}</p>`); // 템플릿 리터럴 사용
+                    // 알람 메시지를 추가
+                    const alarmElement = $(`<p data-id="${alarm.id}" class="alarm-message tw-text-[#4D3E3E] tw-bg-[#FFF3CD] tw-p-2 tw-rounded-[10px] tw-mb-[5px]">
+                    <a href="${alarm.site}" target="_blank" class="tw-no-underline tw-text-[#4D3E3E]">${alarm.message}</a>
+                    </p>`);
+                    alarmContainer.append(alarmElement);
+                    alarmCount++;
                 }
             });
+
+            // 클릭 이벤트 처리
+            alarmContainer.off("click", "p").on("click", "p", function () {
+                const alarmId = $(this).data("id"); // 클릭한 알람의 ID 가져오기
+
+                // 서버에 DELETE 요청 보내기
+                fetch(`/usr/alarm/delete?id=${alarmId}`, {
+                    method: 'DELETE',
+                })
+                    .then(response => {
+                        if (!response.ok) {
+                            throw new Error('삭제 실패');
+                        }
+                        return response.json(); // JSON 형식의 응답을 파싱
+                    })
+                    .then(data => {
+                        console.log(data.message); // 삭제 성공 메시지 출력
+                        $(this).remove(); // 클릭한 알람 메시지 제거
+                        alarmCount--; // 알람 개수 감소
+                        if (alarmCount <= 0) {
+                            alarmCountBadge.hide(); // 알람 배지 숨기기
+                        } else {
+                            alarmCountBadge.text(alarmCount); // 알람 개수 업데이트
+                        }
+                    })
+                    .catch(error => {
+                        console.error('오류 발생:', error);
+                    });
+            });
+
+            // 알람 개수 표시 업데이트
+            if (alarmCount > 0) {
+                alarmCountBadge.text(alarmCount);
+                alarmCountBadge.show();
+            } else {
+                alarmCountBadge.hide();
+            }
         }
 
         function fetchAlarms() {
-            // 로그인 상태 확인 후 memberId 설정
             const isLogined = /*[[${isLogined}]]*/ false; // JSP에서 로그인 상태를 가져옴
             if (!isLogined) {
                 console.log("로그인 상태가 아닙니다.");
-                return; // 로그인 상태가 아닐 경우 함수 종료
+                return;
             }
             const member = /*[[${member}]]*/ null; // JSP에서 member 객체 가져옴
-            // member가 null일 경우 함수 종료
             if (!member) {
                 console.error("member 객체가 null입니다.");
                 return;
             }
-            const memberId = member.id; // member 객체에서 id 가져오기
-
-            // memberId가 null 또는 빈 문자열인지 확인
+            const memberId = member.id;
             if (!memberId || memberId === 'null') {
                 console.error("memberId가 유효하지 않습니다.");
-                return; // memberId가 유효하지 않으면 함수 종료
+                return;
             }
 
             const url = `/usr/alarm/get?memberId=${memberId}`; // 템플릿 리터럴 사용
@@ -53,8 +93,7 @@
                 url: url,
                 type: 'GET',
                 success: function (data) {
-                    // 알람 데이터가 배열 형태로 오면, displayAlarms 호출
-                    displayAlarms(data);
+                    displayAlarms(data); // 알람 데이터가 배열 형태로 오면, displayAlarms 호출
                 },
                 error: function (error) {
                     console.error("알람 메시지 가져오기 실패:", error);
@@ -67,20 +106,26 @@
 
         $(".alarm_profile").click(function (event) {
             event.stopPropagation();
-            // 알림 사이드바가 열려있으면 닫고, 사용자 정보 사이드바를 닫습니다.
             if (!$(".alarm_profile_bar").hasClass("tw-hidden")) {
                 $(".alarm_profile_bar").addClass("tw-hidden");
             } else {
-                $(".head_profile_bar").addClass("tw-hidden"); // 사용자 정보 사이드바 숨기기
-                $(".alarm_profile_bar").removeClass("tw-hidden"); // 알림 사이드바 열기
+                $(".head_profile_bar").addClass("tw-hidden");
+                $(".alarm_profile_bar").removeClass("tw-hidden");
             }
         });
 
         $(".head_profile").click(function (event) {
             event.stopPropagation();
-            $(".head_profile_bar").removeClass("tw-hidden");
+            if (!$(".head_profile_bar").hasClass("tw-hidden")) {
+                $(".head_profile_bar").addClass("tw-hidden");
+            } else {
+                $(".alarm_profile_bar").addClass("tw-hidden");
+                $(".head_profile_bar").removeClass("tw-hidden");
+            }
         });
+
         $(document).click(function () {
+            $(".alarm_profile_bar").addClass("tw-hidden");
             $(".head_profile_bar").addClass("tw-hidden");
         });
     });
@@ -118,40 +163,56 @@
         </div>
         <div class="head_profile tw-cursor-pointer tw-text-white tw-text-lg tw-relative" th:if="${!isLogined}"><a
                 href="../member/login" class="tw-mr-[30px]">로그인</a></div>
-        <div class="head_profile tw-cursor-pointer tw-text-white tw-text-lg tw-relative" th:if="${isLogined}">
-            <div th:if="${member.extra__dogPoto == null}" class="tw-mr-[30px]">프로필</div>
+        <div class="tw-flex tw-items-center">
+            <div class="head_profile tw-cursor-pointer tw-text-white tw-text-lg tw-relative" th:if="${isLogined}">
+                <div th:if="${member.extra__dogPoto == null}" class="tw-mr-[30px]">프로필</div>
 
-            <img th:if="${member.extra__dogPoto != null}" th:src="@{${member.extra__dogPoto}}" alt="Profile Image"
-                 class="tw-w-[45px] tw-h-[45px] tw-rounded-full tw-mr-[30px] tw-mb-[5px] tw-inline-block tw-border tw-border-transparent hover:tw-border-white"/>
-
-            <div class="tw-hidden head_profile_bar tw-z-30 tw-cursor-default tw-mt-[15px] tw-absolute tw-w-[400px] tw-h-[350px] tw-bg-[#FFF3CD] tw-border tw-border-[#4D3E3E] tw-rounded-[30px] tw-flex tw-flex-col tw-items-center tw-justify-center tw-gap-2 tw-right-0">
-                <div class="head_profile_id tw-text-[#4D3E3E]" th:text="${member.getLoginId}">user01</div>
                 <img th:if="${member.extra__dogPoto != null}" th:src="@{${member.extra__dogPoto}}" alt="Profile Image"
-                     class="head_profile_image tw-w-[100px] tw-h-[100px] tw-border tw-border-[#4D3E3E] tw-rounded-full"/>
-                <img th:if="${member.extra__dogPoto == null}"
-                     th:src="@{/resource/photo/default.png}"
-                     alt="Default Profile Image"
-                     class="head_profile_image tw-w-[100px] tw-h-[100px] tw-border tw-border-[#4D3E3E] tw-rounded-full"/>
-                <div class="head_profile_text tw-text-[#4D3E3E]" th:text="|안녕하세요, ${member.getNickname}님|">안녕하세요, 콩이의
-                    대장님.
+                     class="tw-w-[45px] tw-h-[45px] tw-rounded-full tw-mr-[30px] tw-mb-[5px] tw-inline-block tw-border tw-border-transparent hover:tw-border-white"/>
+
+                <div class="tw-hidden head_profile_bar tw-z-30 tw-cursor-default tw-mt-[15px] tw-absolute tw-w-[400px] tw-h-[350px] tw-bg-[#FFF3CD] tw-border tw-border-[#4D3E3E] tw-rounded-[30px] tw-flex tw-flex-col tw-items-center tw-justify-center tw-gap-2 tw-right-0">
+                    <div class="head_profile_id tw-text-[#4D3E3E]" th:text="${member.getLoginId}">user01</div>
+                    <img th:if="${member.extra__dogPoto != null}" th:src="@{${member.extra__dogPoto}}" alt="Profile Image"
+                         class="head_profile_image tw-w-[100px] tw-h-[100px] tw-border tw-border-[#4D3E3E] tw-rounded-full"/>
+                    <img th:if="${member.extra__dogPoto == null}"
+                         th:src="@{/resource/photo/default.png}"
+                         alt="Default Profile Image"
+                         class="head_profile_image tw-w-[100px] tw-h-[100px] tw-border tw-border-[#4D3E3E] tw-rounded-full"/>
+                    <div class="head_profile_text tw-text-[#4D3E3E]" th:text="|안녕하세요, ${member.getNickname}님|">안녕하세요, 콩이의
+                        대장님.
+                    </div>
+                    <a href="../member/myPage"
+                       class="tw-no-underline tw-border tw-border-[#4D3E3E] tw-text-[#4D3E3E] tw-p-2.5 tw-px-5 tw-rounded-full tw-transition-colors tw-duration-300 tw-mb-2 hover:tw-bg-[#E6DCA8]">내
+                        정보</a>
+                    <div class="tw-flex tw-gap-2 tw-mb-[10px]">
+                        <a href="../dog/add"
+                           class="tw-no-underline tw-text-center tw-border tw-border-[#4D3E3E] tw-text-[#4D3E3E] tw-w-[170px] tw-p-2.5 tw-px-5 tw-rounded-l-full tw-transition-colors tw-duration-300 hover:tw-bg-[#E6DCA8]">
+                            <i class="fa-solid fa-circle-plus"></i> 반려견 추가
+                        </a>
+                        <!--로그아웃 주소 http://localhost:8081/usr/member/doLogout 이걸로 했는데 바꿀거면 아래 href 수정하면돼-->
+                        <a href="../member/doLogout"
+                           class="tw-no-underline tw-text-center tw-border tw-border-[#4D3E3E] tw-text-[#4D3E3E] tw-w-[170px] tw-p-2.5 tw-px-5 tw-rounded-r-full tw-transition-colors tw-duration-300 hover:tw-bg-[#E6DCA8]">
+                            <i class="fa-solid fa-arrow-right-from-bracket"></i> 로그아웃
+                        </a>
+                    </div>
                 </div>
-                <a href="../member/myPage"
-                   class="tw-no-underline tw-border tw-border-[#4D3E3E] tw-text-[#4D3E3E] tw-p-2.5 tw-px-5 tw-rounded-full tw-transition-colors tw-duration-300 tw-mb-2 hover:tw-bg-[#E6DCA8]">내
-                    정보</a>
-                <div class="tw-flex tw-gap-2 tw-mb-[10px]">
-                    <a href="../dog/add"
-                       class="tw-no-underline tw-text-center tw-border tw-border-[#4D3E3E] tw-text-[#4D3E3E] tw-w-[170px] tw-p-2.5 tw-px-5 tw-rounded-l-full tw-transition-colors tw-duration-300 hover:tw-bg-[#E6DCA8]">
-                        <i class="fa-solid fa-circle-plus"></i> 반려견 추가
-                    </a>
-                    <!--로그아웃 주소 http://localhost:8081/usr/member/doLogout 이걸로 했는데 바꿀거면 아래 href 수정하면돼-->
-                    <a href="../member/doLogout"
-                       class="tw-no-underline tw-text-center tw-border tw-border-[#4D3E3E] tw-text-[#4D3E3E] tw-w-[170px] tw-p-2.5 tw-px-5 tw-rounded-r-full tw-transition-colors tw-duration-300 hover:tw-bg-[#E6DCA8]">
-                        <i class="fa-solid fa-arrow-right-from-bracket"></i> 로그아웃
-                    </a>
+            </div>
+            <div class="alarm_profile tw-cursor-pointer tw-text-white tw-text-lg tw-relative" th:if="${isLogined}">
+                <!-- 알림 아이콘을 클릭했을 때 sidebar로 이동 -->
+                <a href="#sidebar">
+                    <i class="fa-solid fa-bell"></i>
+                    <!-- 알람 수를 표시하는 배지 -->
+                    <span id="alarmCount" class="tw-absolute tw-top-[-7px] tw-right-[-5px] te-text-l-[10px] tw-text-[10px] tw-bg-red-500 tw-text-white tw-rounded-full tw-w-[10px] tw-h-[10px] tw-text-center tw-flex tw-items-center tw-justify-center tw-hidden"></span>
+                </a>
+                <!-- 사이드 바 -->
+                <div id="sidebar" class="alarm_profile_bar tw-hidden tw-z-30 tw-cursor-default tw-mt-[30px] tw-ml-[200px] tw-absolute tw-w-[400px] tw-h-[350px] tw-bg-[#FFFEF0] tw-border tw-border-[#4D3E3E] tw-rounded-[30px] tw-flex tw-flex-col tw-items-center tw-justify-center tw-gap-2 tw-right-[-200px]">
+                    <h3 class="tw-text-lg tw-text-[#4D3E3E] tw-font-bold">알람 메시지</h3>
+                        <div id="alarmMessages" class="tw-flex tw-flex-col tw-items-start tw-w-full tw-h-full tw-overflow-auto tw-p-2">
+                            <!-- 알람 메시지가 여기에 동적으로 추가됩니다. -->
+                        </div>
                 </div>
             </div>
         </div>
     </div>
 </div>
 </body>
-</html>
