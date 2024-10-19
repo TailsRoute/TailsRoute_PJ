@@ -68,3 +68,7 @@ dog_behavior_analysis/models/
 *.hdf5
 *.csv
 *.json
+
+### 데이터 폴더와 압축 파일 제외###
+data/
+*.zip
