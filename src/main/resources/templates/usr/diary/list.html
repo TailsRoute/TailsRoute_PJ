@@ -1,13 +1,17 @@
-<div class="header">
-    <th:block th:replace="usr/common/head"/>
+<div class = "header">
+<th:block th:replace="usr/common/head"/>
 </div>
 <!DOCTYPE html>
-<html lang="ko">
+<html lang="en">
+<link rel="stylesheet" type="text/css" th:href="@{/main.css}">
+<!--테일윈드 적용-->
+<link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+<!--켈린더.js 사용경로적용-->
+<script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.15/index.global.min.js"></script>
+<!--리스트 css 경로적용-->
+<link rel="stylesheet" href="/resource/css/diary/DiaryList.css">
+
 <head>
-    <link rel="stylesheet" type="text/css" th:href="@{/main.css}">
-    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
-    <script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.15/index.global.min.js"></script>
-    <link rel="stylesheet" href="/resource/css/diary/DiaryList.css">
     <meta charset="UTF-8">
     <title>PetdiaryList</title>
 </head>
@@ -17,6 +21,9 @@
 <div class="pageName mx-auto mt-8">
     <h1 class="text-center text-4xl font-bold mb-6">반려견 성장 기록</h1>
 </div>
+
+
+
 
 <!-- 메인컨테이너-->
 <section class="container pt-20 mx-auto flex flex-col justify-between h-screen">

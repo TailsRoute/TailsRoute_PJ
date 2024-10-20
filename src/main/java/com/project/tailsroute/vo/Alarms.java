@@ -15,5 +15,6 @@ public class Alarms {
     private String alarm_date;
     private String alarm_day;
     private String message;
+    private String site;
     private String is_sent;
 }
