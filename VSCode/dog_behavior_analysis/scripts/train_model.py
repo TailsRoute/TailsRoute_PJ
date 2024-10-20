@@ -21,7 +21,10 @@ model = models.Sequential([
 model.compile(optimizer=Adam(learning_rate=1e-4), loss='binary_crossentropy', metrics=['accuracy'])
 
 # 데이터 로드 (preprocess.py에서 생성된 데이터 사용)
-from preprocess import train_images, val_images, train_labels, val_labels
+from preprocess import get_data
+
+train_images, val_images, train_labels, val_labels = get_data()
+
 
 # 모델 훈련
 history = model.fit(
@@ -37,7 +40,7 @@ if not os.path.exists(save_dir):
     os.makedirs(save_dir)
 
 # 모델 저장
-model_path = os.path.join(save_dir, 'dog_behavior_model.h5')
+model_path = os.path.join(save_dir, 'dog_behavior_model.keras')
 model.save(model_path)
 
 print(f"모델 훈련 완료 및 저장 완료: {model_path}")

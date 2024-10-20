@@ -45,7 +45,7 @@ function LoginForm() {
             display: 'flex',
             alignItems: 'flex-start',
             justifyContent: 'center',
-            pt: 7
+            pt: 20,
         }}>
             <Container maxWidth="sm">
                 <Typography variant="h4" component="h1" gutterBottom>
@@ -104,6 +104,8 @@ document.addEventListener("DOMContentLoaded", function () {
     if (rootElement) {
         const root = createRoot(rootElement);
         root.render(<LoginForm/>);
+
+        document.body.style.overflow = 'hidden';
     } else {
         console.error("Target container 'login-root' not found.");
     }
