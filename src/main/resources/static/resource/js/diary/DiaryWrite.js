@@ -1,4 +1,3 @@
-/*등록한파일 미리보기*/
 document.getElementById('fileInput').addEventListener('change', function(event) {
     const file = event.target.files[0];  // 선택한 파일
     if (file) {

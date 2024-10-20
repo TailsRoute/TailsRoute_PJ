@@ -34,16 +34,9 @@ public class UsrDiaryController {
 
     @GetMapping("/write")
     public String showWriteForm(Model model) {
-          boolean isLogined = rq.isLogined();
+        boolean isLogined = rq.isLogined();
 
-        if (isLogined) {
-            Member member = rq.getLoginedMember();
-            model.addAttribute("member", member);
-        }
-        model.addAttribute("isLogined", isLogined);
-
-
-     /*   if (!isLogined) {
+        if (!isLogined) {
             // 로그인되지 않은 경우 로그인 페이지로 리다이렉트
             return "redirect:/usr/member/login";
         } else {
@@ -51,7 +44,7 @@ public class UsrDiaryController {
             Member member = rq.getLoginedMember();
             model.addAttribute("member", member);
             model.addAttribute("isLogined", true);
-        }*/
+        }
         return "usr/diary/write"; // 다이어리 작성 페이지로 이동
     }
 
@@ -110,8 +103,9 @@ public class UsrDiaryController {
         diaryService.writeDiary(memberId, title, body, imagePath, startDate, endDate, takingTime, information);
         return "redirect:/usr/diary/list";
     }
+
     @GetMapping("/list")
-    public String showDiaryList(Model model, @RequestParam(defaultValue = "oldest") String sort,@RequestParam(defaultValue = "1") int page) {
+    public String showDiaryList(Model model, @RequestParam(defaultValue = "oldest") String sort, @RequestParam(defaultValue = "1") int page) {
         boolean isLogined = rq.isLogined();
 
         if (isLogined) {
@@ -139,8 +133,48 @@ public class UsrDiaryController {
 
         return "usr/diary/list";
     }
+    @GetMapping("/detail/{id}")
+    public String showDiaryDetail(@PathVariable int id, Model model) {
+        Diary diary = diaryService.getForPrintDiary(id);
+        if (diary == null) {
+            // 다이어리가 존재하지 않을 경우, 목록으로 리다이렉트
+            return "redirect:/usr/diary/list";
+        }
+        model.addAttribute("diary", diary);
+        return "usr/diary/detail"; // 올바른 뷰 이름
+    }
 
+    @PostMapping("/delete/{id}")
+    public String deleteDiary(@PathVariable int id) {
+        diaryService.deleteDiary(id);
+        return "redirect:/usr/diary/list";
+    }
 
+    @GetMapping("/modify/{id}")
+    public String showModifyForm(@PathVariable int id, Model model) {
+        Diary diary = diaryService.getDiaryById(id);
+        model.addAttribute("diary", diary);
+        return "usr/diary/modify";
+    }
+
+    @PostMapping("/modify/{id}")
+    public String modifyDiaryEntry(
+            @PathVariable int id,
+            @RequestParam("title") String title,
+            @RequestParam("body") String body,
+            @RequestParam("file") MultipartFile file,
+            @RequestParam("startDate") LocalDate startDate,
+            @RequestParam("endDate") LocalDate endDate,
+            @RequestParam("takingTime") LocalTime takingTime,
+            @RequestParam("information") String information
+    ) {
+        String imageUrl = null;
+        if (file != null && !file.isEmpty()) {
+            imageUrl = "/resource/DiaryImages/" + file.getOriginalFilename();
+        }
+        diaryService.modifyDiary(id, title, body, imageUrl, startDate, endDate, takingTime, information);
+        return "redirect:/usr/diary/detail/" + id;
+    }
 
 
 }
