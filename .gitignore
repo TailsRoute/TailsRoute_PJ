@@ -39,7 +39,6 @@ out/
 # 환경 변수 파일 무시하기
 .env
 
-
 ### Python 가상 환경 ###
 dog_behavior_env/
 env/
@@ -60,6 +59,8 @@ __pycache__/
 build/
 dist/
 *.egg-info/
+node_modules/
+*.bundle.js
 
 ### 데이터셋 및 모델 파일 ###
 dog_behavior_analysis/data/
