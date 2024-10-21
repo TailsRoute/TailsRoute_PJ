@@ -119,10 +119,8 @@
         $(".head_profile").click(function (event) {
             event.stopPropagation();
             if (!$(".head_profile_bar").hasClass("tw-hidden")) {
-                $(".head_profile_bar").addClass("tw-hidden");
             } else {
                 $(".alarm_profile_bar").addClass("tw-hidden");
-                $(".head_profile_bar").removeClass("tw-hidden");
             }
         });
 
@@ -167,10 +165,13 @@
                 href="../member/login" class="tw-mr-[30px]">로그인</a></div>
         <div class="tw-flex tw-items-center">
             <div class="head_profile tw-cursor-pointer tw-text-white tw-text-lg tw-relative" th:if="${isLogined}">
-                <div th:if="${member.extra__dogPoto == null}" class="tw-mr-[30px]">프로필</div>
+                <div th:if="${member.extra__dogPoto == null}" class="tw-mr-[30px]"
+                     th:onclick="'this.nextElementSibling.classList.toggle(&quot;tw-hidden&quot;)'">프로필
+                </div>
 
                 <img th:if="${member.extra__dogPoto != null}" th:src="@{${member.extra__dogPoto}}" alt="Profile Image"
-                     class="tw-w-[45px] tw-h-[45px] tw-rounded-full tw-mr-[30px] tw-mb-[5px] tw-inline-block tw-border tw-border-transparent hover:tw-border-white"/>
+                     class="tw-w-[45px] tw-h-[45px] tw-rounded-full tw-mr-[30px] tw-mb-[5px] tw-inline-block tw-border tw-border-transparent hover:tw-border-white"
+                     th:onclick="'this.nextElementSibling.classList.toggle(&quot;tw-hidden&quot;)'"/>
 
                 <div class="tw-hidden head_profile_bar tw-z-30 tw-cursor-default tw-mt-[15px] tw-absolute tw-w-[400px] tw-h-[350px] tw-bg-[#FFF3CD] tw-border tw-border-[#4D3E3E] tw-rounded-[30px] tw-flex tw-flex-col tw-items-center tw-justify-center tw-gap-2 tw-right-0">
                     <div class="head_profile_id tw-text-[#4D3E3E]" th:text="${member.getLoginId}">user01</div>

@@ -16,4 +16,5 @@ public class Dog {
     private String weight;
     private String photo;
     private String type;
+    private String comPortName;
 }
