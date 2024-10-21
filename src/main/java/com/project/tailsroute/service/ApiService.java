@@ -28,7 +28,7 @@ public class ApiService {
     }
 
     public String searchProducts(String query) {
-        String apiUrl = "https://openapi.naver.com/v1/search/shop.json?query=" + query + "&display=100";
+        String apiUrl = "https://openapi.naver.com/v1/search/shop.json?query=펫" + query + "&display=100";
 
         // 헤더에 Client ID와 Client Secret 설정
         HttpHeaders headers = new HttpHeaders();
