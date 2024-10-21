@@ -1,9 +1,11 @@
 package com.project.tailsroute.controller;
 
 import com.project.tailsroute.service.DogService;
+import com.project.tailsroute.service.GpsAlertService;
 import com.project.tailsroute.service.MemberService;
 import com.project.tailsroute.util.Ut;
 import com.project.tailsroute.vo.Dog;
+import com.project.tailsroute.vo.GpsAlert;
 import com.project.tailsroute.vo.Member;
 import com.project.tailsroute.vo.Rq;
 import jakarta.servlet.http.HttpServletRequest;
@@ -30,6 +32,9 @@ public class UsrMemberController {
     @Autowired
     private DogService dogService;
 
+    @Autowired
+    private GpsAlertService gpsAlertService;
+
     @GetMapping("/usr/member/login")
     public String showMain(Model model) {
         boolean isLogined = rq.isLogined();
@@ -40,6 +45,7 @@ public class UsrMemberController {
         }
 
         model.addAttribute("isLogined", isLogined);
+
 
         return "usr/member/login";
     }
@@ -100,6 +106,15 @@ public class UsrMemberController {
         }
 
         Dog dog = dogService.getDogfile(rq.getLoginedMemberId());
+
+        boolean locationChack;
+        GpsAlert gpsAlert = gpsAlertService.getGpsAlert(dog.getId());
+        if (gpsAlert == null) {
+            locationChack = false;
+        }else {
+            locationChack = true;
+        }
+        model.addAttribute("locationChack", locationChack);
 
         model.addAttribute("isLogined", isLogined);
         model.addAttribute("dog", dog);
