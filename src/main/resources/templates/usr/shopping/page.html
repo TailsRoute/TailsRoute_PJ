@@ -344,7 +344,6 @@
             const itemName = document.getElementById("itemName").value;
             const purchaseCycle = document.getElementById("purchaseCycle").value;
             const alarmDays = document.getElementById("alarmDays").value;
-            console.log(alarmDays);
 
             // 필수 입력값 확인
             if (!itemName || !selectedDate) {
@@ -381,7 +380,6 @@
             // 알람이 설정된 경우에만 알람 정보를 전송
             if (alarmDays) {
                 sendAlarmInfo(selectedDate, itemName, alarmDays);
-                console.log("알람정보 전송");
             }
         });
 
@@ -401,7 +399,6 @@
                     return response.text();
                 })
                 .then(data => {
-                    console.log('Essential added:', data);
                     location.reload(); // 페이지 새로고침
                     closePopup(); // 팝업 닫기
                 })
@@ -415,8 +412,6 @@
             // 알람 날짜 계산 (알람 일수 이전의 날짜로 설정)
             const alarmDate = new Date(selectedDate);
             alarmDate.setDate(alarmDate.getDate() - parseInt(alarmDays));
-
-            console.log(alarmDate.toISOString().split('T')[0]);
 
             // 알람 정보 객체 생성
             const alarm = {
@@ -558,7 +553,6 @@
         let currentSortColumn = ''; // 현재 정렬된 열을 추적하기 위한 변수
         let isAscending = true; // 정렬 방향을 추적하기 위한 변수
         let memberId = "[[${member.id}]]";
-        console.log(memberId);
         fetchEssentials(memberId);
 
 
@@ -630,8 +624,6 @@
         function deleteSchedule(itemName, purchaseDate, usageCycle, alarmDate) {
             let eventIdToDelete;
 
-            console.log(memberId);
-
             if (!itemName) {
                 alert("아이템 이름을 입력하세요.");
                 return;
@@ -652,8 +644,6 @@
                         newDate.setDate(purchaseDates.getDate() - timingDays); // timing일수를 빼기
 
                         const formattedDate = newDate.toISOString().split('T')[0]; // YYYY-MM-DD 형식
-                        console.log("event.usageCycle:", event.usageCycle, "Type:", typeof event.usageCycle);
-                        console.log("usageCycle:", usageCycle, "Type:", typeof usageCycle);
 
                         // itemName, purchaseDate, usageCycle, formattedDate 비교
                         if (event.itemType === itemName &&
@@ -661,10 +651,6 @@
                             Number(event.usageCycle) === Number(usageCycle) && // == 사용, 데이터 형식이 다를 수 있음
                             (formattedDate === alarmDate || (alarmDate === '알람 없음' && event.timing === 0))) {
                             eventIdToDelete = event.id; // 해당 ID를 저장
-                            console.log(eventIdToDelete);
-                        } else{
-                            console.log(formattedDate);
-                            console.log(alarmDate);
                         }
                     });
 
@@ -825,7 +811,6 @@
 
         // 품목 리스트를 가져오는 함수
         function fetchEssentials(memberId) {
-            console.log("1");
             fetch(`/usr/essential/get?memberId=${[[${member.id}]]}`) // memberId 값을 URL에 추가
                 .then(response => {
                     if (!response.ok) {
@@ -932,7 +917,7 @@
 
             // 페이지 로드 시 자동으로 검색
             document.addEventListener("DOMContentLoaded", function () {
-                const query = "%ED%8E%AB%20%EC%9A%A9%ED%92%88";  // 예: "펫 용품"
+                const query = "용품";  // 예: "펫 용품"
                 searchProducts(query); // 초기 검색 실행
             });
             function searchItems() {
@@ -945,7 +930,11 @@
             // 제품 검색 함수
             function searchProducts(query, sort = '') {
                 // 검색어를 디코딩하여 사람이 읽을 수 있게 만듦
-                const decodedQuery = decodeURIComponent(query);
+                let decodedQuery = decodeURIComponent(query);
+
+                if(decodedQuery==='용품'){
+                    decodedQuery = '펫' + decodedQuery;
+                }
 
                 // 제목에 검색어 추가
                 document.getElementById("searchTitle").textContent = `쇼핑 추천 리스트 - 검색 결과 : ${decodedQuery}`;
