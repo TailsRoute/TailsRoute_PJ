@@ -22,7 +22,8 @@ public class AlarmService {
         alarmRepository.addAlarms(
                 alarm.getMemberId(),
                 alarm.getAlarm_date(),
-                alarm.getMessage()
+                alarm.getMessage(),
+                alarm.getSite()
         );
     }
     public List<Alarms> findAlarmsByMemberId(int memberId) {

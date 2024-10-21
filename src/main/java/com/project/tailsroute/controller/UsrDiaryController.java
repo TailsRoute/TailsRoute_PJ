@@ -34,16 +34,9 @@ public class UsrDiaryController {
 
     @GetMapping("/write")
     public String showWriteForm(Model model) {
-          boolean isLogined = rq.isLogined();
+        boolean isLogined = rq.isLogined();
 
-        if (isLogined) {
-            Member member = rq.getLoginedMember();
-            model.addAttribute("member", member);
-        }
-        model.addAttribute("isLogined", isLogined);
-
-
-     /*   if (!isLogined) {
+        if (!isLogined) {
             // 로그인되지 않은 경우 로그인 페이지로 리다이렉트
             return "redirect:/usr/member/login";
         } else {
@@ -51,7 +44,7 @@ public class UsrDiaryController {
             Member member = rq.getLoginedMember();
             model.addAttribute("member", member);
             model.addAttribute("isLogined", true);
-        }*/
+        }
         return "usr/diary/write"; // 다이어리 작성 페이지로 이동
     }
 
@@ -100,18 +93,21 @@ public class UsrDiaryController {
                 imagePath = "/resource/DiaryImages/" + fileName; // 웹에서 접근할 수 있는 URL 경로
             } catch (IOException e) {
                 e.printStackTrace();
-                imagePath = "/resource/DiaryImages/default.png"; // 기본 이미지 URL로 설정
+                imagePath = "/resource/photo/default.png"; // 기본 이미지 URL로 설정
             }
         } else {
-            imagePath = "/resource/DiaryImages/default.png"; // 기본 이미지 URL
+            imagePath = "/resource/photo/default.png"; // 기본 이미지 URL
         }
 
         // 다이어리 작성 서비스 호출
         diaryService.writeDiary(memberId, title, body, imagePath, startDate, endDate, takingTime, information);
         return "redirect:/usr/diary/list";
     }
+
     @GetMapping("/list")
-    public String showDiaryList(Model model, @RequestParam(defaultValue = "oldest") String sort) {
+
+    public String showDiaryList(Model model, @RequestParam(defaultValue = "oldest") String sort, @RequestParam(defaultValue = "1") int page) {
+
         boolean isLogined = rq.isLogined();
 
         if (isLogined) {
@@ -120,13 +116,67 @@ public class UsrDiaryController {
         }
         model.addAttribute("isLogined", isLogined);
 
-        List<Diary> diaries = diaryService.getDiaryList(sort);
+        int size = 7; // 페이지당 아이템 수
+        List<Diary> diaries = diaryService.getDiaryList(sort, page, size);
+        int totalDiaries = diaryService.countDiaries();
+        int totalPages = (int) Math.ceil((double) totalDiaries / size);
 
         model.addAttribute("diaries", diaries);
+        model.addAttribute("currentPage", page);
+        model.addAttribute("totalPages", totalPages);
+        model.addAttribute("sort", sort);
+
+        // pageNumbers 리스트 추가
+        List<Integer> pageNumbers = new ArrayList<>();
+        for (int i = 1; i <= totalPages; i++) {
+            pageNumbers.add(i);
+        }
+        model.addAttribute("pageNumbers", pageNumbers);
+
         return "usr/diary/list";
     }
+    @GetMapping("/detail/{id}")
+    public String showDiaryDetail(@PathVariable int id, Model model) {
+        Diary diary = diaryService.getForPrintDiary(id);
+        if (diary == null) {
+            // 다이어리가 존재하지 않을 경우, 목록으로 리다이렉트
+            return "redirect:/usr/diary/list";
+        }
+        model.addAttribute("diary", diary);
+        return "usr/diary/detail"; // 올바른 뷰 이름
+    }
 
+    @PostMapping("/delete/{id}")
+    public String deleteDiary(@PathVariable int id) {
+        diaryService.deleteDiary(id);
+        return "redirect:/usr/diary/list";
+    }
 
+    @GetMapping("/modify/{id}")
+    public String showModifyForm(@PathVariable int id, Model model) {
+        Diary diary = diaryService.getDiaryById(id);
+        model.addAttribute("diary", diary);
+        return "usr/diary/modify";
+    }
+
+    @PostMapping("/modify/{id}")
+    public String modifyDiaryEntry(
+            @PathVariable int id,
+            @RequestParam("title") String title,
+            @RequestParam("body") String body,
+            @RequestParam("file") MultipartFile file,
+            @RequestParam("startDate") LocalDate startDate,
+            @RequestParam("endDate") LocalDate endDate,
+            @RequestParam("takingTime") LocalTime takingTime,
+            @RequestParam("information") String information
+    ) {
+        String imageUrl = null;
+        if (file != null && !file.isEmpty()) {
+            imageUrl = "/resource/DiaryImages/" + file.getOriginalFilename();
+        }
+        diaryService.modifyDiary(id, title, body, imageUrl, startDate, endDate, takingTime, information);
+        return "redirect:/usr/diary/detail/" + id;
+    }
 
 
 }

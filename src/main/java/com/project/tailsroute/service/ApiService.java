@@ -8,9 +8,18 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestTemplate;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Component;
 
 @Service
 public class ApiService {
+
+    @Value("${NAVER_CLIENT_ID}")
+    private String clientId;
+
+    @Value("${NAVER_CLIENT_SECRET}")
+    private String clientSecret;
+
 
     private final RestTemplate restTemplate;
 
@@ -19,13 +28,10 @@ public class ApiService {
     }
 
     public String searchProducts(String query) {
-        String apiUrl = "https://openapi.naver.com/v1/search/shop.json?query=" + query + "&display=100";
+        String apiUrl = "https://openapi.naver.com/v1/search/shop.json?query=펫" + query + "&display=100";
 
         // 헤더에 Client ID와 Client Secret 설정
         HttpHeaders headers = new HttpHeaders();
-
-        String clientId = System.getenv("NAVER_CLIENT_ID");
-        String clientSecret = System.getenv("NAVER_CLIENT_SECRET");
 
         headers.set("X-Naver-Client-Id", clientId);
         headers.set("X-Naver-Client-Secret", clientSecret);

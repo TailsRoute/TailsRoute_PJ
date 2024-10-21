@@ -27,13 +27,38 @@ public class DiaryService {
         diaryRepository.writeDiary(memberId, title, body, imagePath, startDate, endDate, takingTime, information);
     }
 
-    public List<Diary> getDiaryList(String sort) {
+    public List<Diary> getDiaryList(String sort, int page, int size) {
+        int offset = (page - 1) * size;
+        int limit = size;
+
         if ("oldest".equals(sort)) {
-            return diaryRepository.findAllByOrderByDateAsc(); // 오래된순
+            return diaryRepository.findAllByOrderByDateDesc(limit, offset); // 오래된순
         } else {
-            return diaryRepository.findAllByOrderByDateDesc(); // 최신순
+            return diaryRepository.findAllByOrderByDateAsc(limit, offset); // 최신순
         }
     }
 
+    public int countDiaries() {
+        return diaryRepository.countDiaries();
 
+    }
+
+
+    public void deleteDiary(int id) {
+        diaryRepository.deleteDiary(id);
+    }
+
+    public void modifyDiary(int id, String title, String body, String imagePath,
+                            LocalDate startDate, LocalDate endDate,
+                            LocalTime takingTime, String information) {
+        diaryRepository.modifyDiary(id, title, body, imagePath, startDate, endDate, takingTime, information);
+    }
+
+    public Diary getDiaryById(int id) {
+        return diaryRepository.getDiaryById(id);
+    }
+
+    public Diary getForPrintDiary(int id) {
+        return diaryRepository.getForPrintDiary(id);
+    }
 }
