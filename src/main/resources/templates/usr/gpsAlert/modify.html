@@ -1,8 +1,12 @@
 <th:block th:replace="usr/common/head"/>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
-    <title>위치 정보 등록</title>
+    <title>위치 정보 수정</title>
     <link rel="stylesheet" href="/resource/css/gpsAlertAdd.css"/>
+    <script>
+        let latitude = [[${latitude}]]; // Thymeleaf 표현식
+        let longitude = [[${longitude}]]; // Thymeleaf 표현식
+    </script>
     <script src="/resource/js/gpsAlertAdd.js"></script>
     <script th:src="@{'https://maps.googleapis.com/maps/api/js?key=' + ${GOOGLE_MAP_API_KEY} + '&libraries=places&callback=initMap'}"
             async defer></script>

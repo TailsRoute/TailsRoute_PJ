@@ -2,6 +2,7 @@ package com.project.tailsroute.controller;
 
 
 import com.project.tailsroute.service.GpsAlertService;
+import com.project.tailsroute.vo.GpsAlert;
 import com.project.tailsroute.vo.Member;
 import com.project.tailsroute.vo.Rq;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,6 +15,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+
+import javax.annotation.PostConstruct;
 
 @Controller
 public class UsrGpsAlertController {
@@ -29,6 +32,12 @@ public class UsrGpsAlertController {
 
     @Autowired
     private GpsAlertService gpsAlertService;
+
+    // 프로젝트 시작 시 GPS 데이터 수신을 시작하는 메서드 (한번만 실행됨)
+    @PostConstruct
+    public void startGpsDataListener() {
+        gpsAlertService.startGpsDataListener();
+    }
 
     @GetMapping("/usr/gpsAlert/add")
     public String showAdd(Model model, @RequestParam("dogId") int dogId) {
@@ -55,6 +64,15 @@ public class UsrGpsAlertController {
             model.addAttribute("member", member);
         }
 
+        GpsAlert gpsAlert = gpsAlertService.getGpsAlert(dogId);
+
+        if (gpsAlert != null) {
+            double latitude = gpsAlert.getLatitude();
+            double longitude = gpsAlert.getLongitude();
+            model.addAttribute("latitude", latitude);
+            model.addAttribute("longitude", longitude);
+        }
+
         model.addAttribute("GOOGLE_MAP_API_KEY", API_KEY);
         model.addAttribute("isLogined", isLogined);
         model.addAttribute("dogId", dogId);
@@ -71,7 +89,8 @@ public class UsrGpsAlertController {
         // System.err.println("컨트롤러 : " + latitude + ", " + longitude);
         try {
             gpsAlertService.saveLocation(dogId, latitude, longitude);
-            return ResponseEntity.ok("Location added successfully");
+            gpsAlertService.restartGpsDataListener();
+            return ResponseEntity.ok("위치가 등록되었습니다");
         } catch (Exception e) {
             e.printStackTrace(); // 에러 메시지를 콘솔에 출력
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
@@ -88,7 +107,8 @@ public class UsrGpsAlertController {
         // System.err.println("컨트롤러 : " + latitude + ", " + longitude);
         try {
             gpsAlertService.updateLocation(dogId, latitude, longitude);
-            return ResponseEntity.ok("Location added successfully");
+            gpsAlertService.restartGpsDataListener();
+            return ResponseEntity.ok("위치가 수정되었습니다");
         } catch (Exception e) {
             e.printStackTrace(); // 에러 메시지를 콘솔에 출력
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
@@ -102,7 +122,8 @@ public class UsrGpsAlertController {
             @RequestParam int dogId) {
         try {
             gpsAlertService.deleteLocation(dogId);
-            return ResponseEntity.ok("Location added successfully");
+            gpsAlertService.restartGpsDataListener();
+            return ResponseEntity.ok("위치가 삭제되었습니다");
         } catch (Exception e) {
             e.printStackTrace(); // 에러 메시지를 콘솔에 출력
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
