@@ -3,8 +3,17 @@ let marker; // 마커 객체
 let geocoder; // Geocoder 객체
 
 // 구글 지도를 초기화하는 함수
-function initMap() {
-    const initialLocation = { lat: 37.5665, lng: 126.9780 }; // 서울 시청의 초기 위치
+window.initMap = function() { // 전역으로 설정
+    let initialLocation = { lat: 37.5665, lng: 126.9780 }; // 서울 시청의 초기 위치
+
+    console.log(latitude);
+    console.log(longitude);
+
+    // 기본값이 아닌 경우에만 초기 위치를 변경
+    if (latitude !== null && longitude !== null) {
+        initialLocation = { lat: latitude, lng: longitude }; // 등록 위치
+    }
+
     const mapDiv = document.getElementById("map");
 
     if (!mapDiv) {
@@ -35,7 +44,7 @@ function initMap() {
 
     // 지도 드래그가 끝난 후 중앙 좌표 업데이트
     map.addListener("dragend", updateCenter);
-}
+};
 
 // 주소 검색 기능
 function searchPlace() {
