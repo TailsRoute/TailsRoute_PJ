@@ -1,15 +1,6 @@
 $(document).ready(function () {
-    // $(".message").click(function () {
-    //     $(".message").addClass("hidden");
-    // });
-    //
-    // $(".message2").click(function () {
-    //     $(".message2").addClass("hidden");
-    // });
-
     // 페이지 로드 시 시 데이터를 서버에서 가져옴
     loadCities();
-    // initMap();
 });
 
 // 시 데이터 로드
@@ -178,31 +169,3 @@ async function findAnimalHospitals(location) {
         console.error("Nearby Search 오류 발생:", error);
     }
 }
-
-// // 시 선택 시 군/구 데이터를 서버에서 로드
-// function loadCounties() {
-//     const selectedCity = document.getElementById('city-select').value;
-//     const countySelect = document.getElementById('county-select');
-//
-//     if (!selectedCity) {
-//         countySelect.innerHTML = '<option value="">군/구 없음</option>';
-//         return;
-//     }
-//
-//     $.ajax({
-//         url: '/counties',
-//         method: 'GET',
-//         data: { city: selectedCity },
-//         success: function (counties) {
-//             countySelect.innerHTML = counties.length
-//                 ? counties.map(county => `<option value="${county}">${county}</option>`).join('')
-//                 : '<option value="">군/구 없음</option>';
-//         }
-//     });
-// }
-
-// 페이지 로드 시 시/군/구 데이터를 Ajax로 로드
-document.addEventListener('DOMContentLoaded', () => {
-    // initMap();
-    // loadCities();  // 시 데이터를 로드
-});
