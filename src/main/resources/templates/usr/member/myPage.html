@@ -60,6 +60,25 @@
                 <label>반려견 유형</label>
                 <span class="myPage_text" th:text="${dog.type}"></span>
             </div>
+            <div>
+                <label>GPS 보유 여부</label>
+                <span class="myPage_text" th:if="${dog.comPortName==null}">Ⅹ</span>
+                <span class="myPage_text" th:if="${dog.comPortName!=null}">○</span>
+            </div>
+            <div>
+                <button class="upload_button"
+                        th:if="${dog.comPortName != null && locationChack == false}"
+                        th:onclick="'location.href=\'/usr/gpsAlert/add?dogId=' + ${dog.id} + '\';'">위치 등록
+                </button>
+                <button class="upload_button"
+                        th:if="${dog.comPortName != null && locationChack == true}"
+                        th:onclick="'location.href=\'/usr/gpsAlert/modify?dogId=' + ${dog.id} + '\';'">위치 수정
+                </button>
+                <button class="upload_button"
+                        th:if="${dog.comPortName != null && locationChack == true}"
+                        th:onclick="'deleteLocation(' + ${dog.id} + ')'">위치 삭제
+                </button>
+            </div>
         </div>
         <div class="upload_button_wrapper" th:if="${dog != null}">
             <button class="upload_button" th:onclick="'location.href=\'../dog/modify?dogId=' + ${dog.id} + '\''">수정</button>

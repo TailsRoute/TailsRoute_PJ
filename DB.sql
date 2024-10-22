@@ -104,7 +104,8 @@ CREATE TABLE `dog`(
                       `name` CHAR(20) DEFAULT '이름 없음' COMMENT '이름',
                       weight INT(10) DEFAULT -1 COMMENT '체중 (-1=모름)',
                       photo CHAR(50) NOT NULL COMMENT '사진',
-                      `type` CHAR(20) NOT NULL COMMENT '소형, 중형, 대형'
+                      `type` CHAR(20) NOT NULL COMMENT '소형, 중형, 대형',
+                      comPortName CHAR(20) COMMENT 'GPS 기기 연결 포트'
 
 );
 
@@ -140,7 +141,8 @@ INSERT INTO dog SET
                     `name` = '꾸미',
                     weight = 4,
                     photo = '/resource/photo/dog4.png',
-                    `type` = '소형';
+                    `type` = '소형',
+                    comPortName = "COM7";
 
 ## 게시글 테이블
 CREATE TABLE article(
@@ -396,6 +398,17 @@ CREATE TABLE Diary(
                       endDate DATE NOT NULL COMMENT '약복용 종료일',
                       takingTime TIME NOT NULL COMMENT '복용 시간',
                       information TEXT NOT NULL COMMENT '복용약 특이사항'
+);
+
+##반려견 행동범위 지정 테이블
+CREATE TABLE gpsAlert(
+                         id INT(10) UNSIGNED NOT NULL PRIMARY KEY AUTO_INCREMENT COMMENT '식별번호',
+                         regDate DATETIME NOT NULL COMMENT '등록 날짜',
+                         updateDate DATETIME NOT NULL COMMENT '수정 날짜',
+                         dogId INT(10) UNSIGNED NOT NULL COMMENT '반려견 식별번호',
+                         latitude DECIMAL(10, 7) NOT NULL COMMENT '설정한 위도',
+                         longitude DECIMAL(10, 7) NOT NULL COMMENT '설정한 경도',
+                         chack INT(1) UNSIGNED DEFAULT 0 COMMENT '범위 벗어났는지 여부'
 );
 
 ## 일지작성 테스트데이터
