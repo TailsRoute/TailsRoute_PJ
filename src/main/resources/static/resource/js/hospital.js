@@ -1,15 +1,15 @@
 $(document).ready(function () {
-    $(".message").click(function () {
-        $(".message").addClass("hidden");
-    });
-
-    $(".message2").click(function () {
-        $(".message2").addClass("hidden");
-    });
+    // $(".message").click(function () {
+    //     $(".message").addClass("hidden");
+    // });
+    //
+    // $(".message2").click(function () {
+    //     $(".message2").addClass("hidden");
+    // });
 
     // 페이지 로드 시 시 데이터를 서버에서 가져옴
     loadCities();
-    initMap();
+    // initMap();
 });
 
 // 시 데이터 로드
@@ -149,7 +149,7 @@ async function findAnimalHospitals(location) {
             radius: 5000,  // 반경 5km 내에서 검색
         },
         includedPrimaryTypes: ["veterinary_care"],  // 동물 병원 검색
-        maxResultCount: 10,  // 최대 결과 10개
+        maxResultCount: 20,  // 최대 결과
         rankPreference: SearchNearbyRankPreference.POPULARITY,  // 인기순 정렬
     };
 
@@ -179,48 +179,30 @@ async function findAnimalHospitals(location) {
     }
 }
 
-// 시 데이터를 서버에서 로드
-function loadCities() {
-    $.ajax({
-        url: '/cities',
-        method: 'GET',
-        success: function (cities) {
-            const citySelect = document.getElementById('city-select');
-            citySelect.innerHTML = '<option value="">시 선택</option>';
-            cities.forEach(city => {
-                const option = document.createElement('option');
-                option.value = city;
-                option.text = city;
-                citySelect.appendChild(option);
-            });
-        }
-    });
-}
-
-// 시 선택 시 군/구 데이터를 서버에서 로드
-function loadCounties() {
-    const selectedCity = document.getElementById('city-select').value;
-    const countySelect = document.getElementById('county-select');
-
-    if (!selectedCity) {
-        countySelect.innerHTML = '<option value="">군/구 없음</option>';
-        return;
-    }
-
-    $.ajax({
-        url: '/counties',
-        method: 'GET',
-        data: { city: selectedCity },
-        success: function (counties) {
-            countySelect.innerHTML = counties.length
-                ? counties.map(county => `<option value="${county}">${county}</option>`).join('')
-                : '<option value="">군/구 없음</option>';
-        }
-    });
-}
+// // 시 선택 시 군/구 데이터를 서버에서 로드
+// function loadCounties() {
+//     const selectedCity = document.getElementById('city-select').value;
+//     const countySelect = document.getElementById('county-select');
+//
+//     if (!selectedCity) {
+//         countySelect.innerHTML = '<option value="">군/구 없음</option>';
+//         return;
+//     }
+//
+//     $.ajax({
+//         url: '/counties',
+//         method: 'GET',
+//         data: { city: selectedCity },
+//         success: function (counties) {
+//             countySelect.innerHTML = counties.length
+//                 ? counties.map(county => `<option value="${county}">${county}</option>`).join('')
+//                 : '<option value="">군/구 없음</option>';
+//         }
+//     });
+// }
 
 // 페이지 로드 시 시/군/구 데이터를 Ajax로 로드
 document.addEventListener('DOMContentLoaded', () => {
-    initMap();
-    loadCities();  // 시 데이터를 로드
+    // initMap();
+    // loadCities();  // 시 데이터를 로드
 });

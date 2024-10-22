@@ -43,7 +43,7 @@
 
 <!-- Google Maps API 호출 -->
 <script async defer
-        th:src="'https://maps.googleapis.com/maps/api/js?key='+${GOOGLE_MAP_API_KEY}">
+        th:src="'https://maps.googleapis.com/maps/api/js?key='+${GOOGLE_MAP_API_KEY}+'&callback=initMap'">
 </script>
 
 <!-- &libraries=places -->
