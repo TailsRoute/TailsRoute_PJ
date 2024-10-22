@@ -106,7 +106,6 @@ CREATE TABLE `dog`(
                       photo CHAR(50) NOT NULL COMMENT '사진',
                       `type` CHAR(20) NOT NULL COMMENT '소형, 중형, 대형',
                       comPortName CHAR(20) COMMENT 'GPS 기기 연결 포트'
-
 );
 
 INSERT INTO dog SET
