@@ -43,6 +43,24 @@ public class DiaryService {
 
     }
 
+    public void deleteDiary(int id) {
+        diaryRepository.deleteDiary(id);
+    }
+
+    public void modifyDiary(int id, String title, String body, String imagePath,
+                            LocalDate startDate, LocalDate endDate,
+                            LocalTime takingTime, String information) {
+        diaryRepository.modifyDiary(id, title, body, imagePath, startDate, endDate, takingTime, information);
+    }
+
+    public Diary getDiaryById(int id) {
+        return diaryRepository.getDiaryById(id);
+    }
+
+    public Diary getForPrintDiary(int id) {
+        return diaryRepository.getForPrintDiary(id);
+    }
+
 
 
 }
