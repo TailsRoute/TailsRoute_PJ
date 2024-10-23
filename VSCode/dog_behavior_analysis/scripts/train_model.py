@@ -5,7 +5,6 @@ from tensorflow.keras.optimizers import Adam
 from tensorflow.keras.preprocessing.image import ImageDataGenerator
 from tensorflow.keras.callbacks import EarlyStopping, ModelCheckpoint
 import os
-import cv2
 import numpy as np
 
 
@@ -42,7 +41,7 @@ val_generator = val_datagen.flow(val_images, val_labels, batch_size=32)
 model = models.Sequential([
     base_model,
     layers.GlobalAveragePooling2D(),
-    layers.Dense(512, activation='relu'),  # 기존 128에서 512로 확장
+    layers.Dense(216, activation='relu'),  # 기존 128에서 216로 확장
     layers.Dropout(0.5),
     layers.Dense(128, activation='relu'),
     layers.Dropout(0.3),
@@ -63,12 +62,11 @@ early_stopping = EarlyStopping(monitor='val_loss', patience=10, restore_best_wei
 model_checkpoint = ModelCheckpoint(model_path, save_best_only=True, monitor='val_loss')
 
 
-
 # 모델 훈련
 history = model.fit(
     train_generator, 
     validation_data=val_generator,
-    epochs=50,
+    epochs=10,
     callbacks=[early_stopping, model_checkpoint]
 )
 
