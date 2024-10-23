@@ -18,10 +18,20 @@
 </div>
 <script src="https://unpkg.com/react@17/umd/react.development.js"></script>
 <script src="https://unpkg.com/react-dom@17/umd/react-dom.development.js"></script>
+<!-- 팝업을 위한 모달 추가 -->
+<div id="cartPopup" class="modal cart-popup" style="display: none;">
+    <div class="modal-content">
+        <span class="close" id="closeCartPopup">&times;</span>
+        <h2>관심목록</h2>
+        <ul id="cartItems">
+            <!-- 장바구니 아이템들이 여기에 추가됩니다. -->
+        </ul>
+    </div>
+</div>
 <!-- 팝업을 위한 모달 -->
 <div id="schedulePopup" class="modal" style="display: none;">
     <div class="modal-content">
-        <span class="close">&times;</span>
+        <span class="close" id="closeSchedulePopup">&times;</span>
         <h2>생필품 일정 관리</h2>
 
         <!-- 일정 날짜 입력-->

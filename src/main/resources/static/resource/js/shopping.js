@@ -1,3 +1,4 @@
+//  달력구현  //
 document.addEventListener('DOMContentLoaded', function () {
     var calendarEl = document.getElementById('calendar');
     let selectedDate = null; // 선택된 날짜를 저장할 변수
@@ -36,7 +37,7 @@ document.addEventListener('DOMContentLoaded', function () {
         }
     });
 
-    fetch(`/usr/essential/get?memberId= ${member.id}`) // memberId를 쿼리 파라미터로 추가
+    fetch(`/usr/essential/get?memberId=` + member.id) // memberId를 쿼리 파라미터로 추가
         .then(response => response.json())
         .then(data => {
             data.forEach(event => {
@@ -182,7 +183,9 @@ document.addEventListener('DOMContentLoaded', function () {
                 return response.text();
             })
             .then(data => {
-                location.reload(); // 페이지 새로고침
+                setTimeout(() => {
+                    location.reload(); // 페이지 새로고침
+                }, 5000); // 2초 후에 새로고침
                 closePopup(); // 팝업 닫기
             })
             .catch(error => {
@@ -292,7 +295,6 @@ document.addEventListener('DOMContentLoaded', function () {
                         // 알람 날짜 계산
                         const newDate = new Date(purchaseDates);
                         newDate.setDate(purchaseDates.getDate() - timingDays);
-
                         const formattedDate = newDate.toISOString().split('T')[0];
 
                         // itemName, purchaseDate, usageCycle, formattedDate 비교
@@ -331,13 +333,13 @@ document.addEventListener('DOMContentLoaded', function () {
                 });
         });
     }
-
+                                              //  달력구현 끝  //
+                                              //  리스트 구현  //
     let essentials = []; // 전역 변수로 essentials 정의
     let currentSortColumn = ''; // 현재 정렬된 열을 추적하기 위한 변수
     let isAscending = true; // 정렬 방향을 추적하기 위한 변수
     let memberId = member.id;
     fetchEssentials(memberId);
-
 
     // 데이터를 HTML로 렌더링하는 함수
     function renderEssentials(essentialsData) {
@@ -613,6 +615,8 @@ document.addEventListener('DOMContentLoaded', function () {
             });
     }
 });
+                                                             //  리스트 구현 끝  //
+                                                             //  검색 구현  //
 let products = []; // 전역 변수로 상품 배열을 선언
 let currentPage = 1; // 현재 페이지
 const itemsPerPage = 5; // 페이지당 아이템 수
@@ -668,11 +672,13 @@ function displayResults(data) {
         productItem.classList.add('product-item'); // 클래스 추가
         productItem.innerHTML =
             `<img src="${item.image}" alt="${item.title}" class="product-image">
-                        <div class="product-info">
+                        <div class="product-info" style="display: flex; justify-content: space-between; align-items: center; width: 100%">
+                        <div>
                             <a href="${item.link}">${item.title}</a>
                             <br>
                             <a href="${item.link}" class="product-price">가격: ${item.lprice} 원</a>
-                        </div><button id="addToCartButton" onclick="addToCart()">장바구니에 추가</button>`;
+                            </div>
+                        <button id="addToCartButton" onclick="addToCart()">관심목록에 추가</button></div>`;
         resultContainer.appendChild(productItem); // 리스트에 추가
     });
 }
@@ -683,6 +689,88 @@ function setupPagination(totalItems) {
     const pageInfo = document.getElementById("pageInfo");
     pageInfo.innerHTML = `${currentPage} / ${pageCount}`; // 현재 페이지 정보 표시
 }
+let cart = [];
+
+// 상품을 장바구니에 추가하는 함수
+function addToCart() {
+    const productItem = event.target.closest('.product-item');
+    const productTitle = productItem.querySelector('a').textContent;
+    const productPrice = parseInt(productItem.querySelector('.product-price').textContent.replace(/[^0-9]/g, ''), 10);
+
+    const product = {
+        memberId: member.id,
+        itemName: productTitle,
+        itemprice: productPrice
+    };
+
+    fetch('/usr/cart/add', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(product),
+    })
+        .then(response => response.ok ? alert(`${productTitle}이(가) 관심목록에 추가되었습니다.`) : Promise.reject())
+        .catch(console.error);
+}
+
+// 장바구니 팝업을 열고 내용을 표시하는 함수
+function showCartPopup() {
+    const cartPopup = document.getElementById('cartPopup');
+    const cartItemsList = document.getElementById('cartItems');
+    cartItemsList.innerHTML = '';  // 초기화
+
+    fetch(`/usr/cart/get?memberId=${member.id}`)
+        .then(response => response.json())
+        .then(cartData => {
+            if (cartData.length === 0) {
+                cartItemsList.innerHTML = '<li>관심목록에 제품이 없습니다.</li>';
+            } else {
+                cartData.forEach(item => {
+                    const listItem = document.createElement('li');
+                    listItem.innerHTML = `
+                        <div style="display: flex; justify-content: space-between; align-items: center; height: 50px; width:450px; border-bottom: 1px solid #ccc; margin-bottom: 10px;">
+                            <span style="width: 400px;">${item.itemName} - ${item.itemprice}원</span>
+                            <button style="display: inline-block; padding: 0;">삭제</button>
+                        </div>`;
+                    listItem.querySelector('button').addEventListener('click', () => {
+                        if (confirm('정말로 삭제하시겠습니까?')) {
+                            removeCartItem(item.id);
+                        }
+                    });
+                    cartItemsList.appendChild(listItem);
+                });
+            }
+        })
+        .catch(error => {
+            cartItemsList.innerHTML = '<li>장바구니 데이터를 가져오는 중 오류가 발생했습니다.</li>';
+            console.error(error);
+        });
+
+    cartPopup.style.display = 'block';
+}
+
+// 장바구니 항목 삭제
+function removeCartItem(cartItemId) {
+    fetch(`/usr/cart/delete?id=${cartItemId}`, { method: 'DELETE' })
+        .then(response => response.ok ? showCartPopup() : console.error('Failed to delete cart item'))
+        .catch(console.error);
+}
+
+// 팝업 닫기
+function closeCartPopup() {
+    document.getElementById('cartPopup').style.display = 'none';
+}
+
+document.getElementById('wishlistButton').addEventListener('click', showCartPopup);
+
+document.addEventListener('DOMContentLoaded', function() {
+    document.getElementById('closeCartPopup')?.addEventListener('click', closeCartPopup);
+});
+
+window.onclick = function(event) {
+    if (event.target === document.getElementById('cartPopup')) {
+        closeCartPopup();
+    }
+};
 
 // 페이지 변경 함수
 function changePage(direction) {
