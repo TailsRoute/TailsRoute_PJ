@@ -3,6 +3,7 @@ package com.project.tailsroute.controller;
 
 import com.opencsv.CSVReader;
 import com.project.tailsroute.service.HospitalService;
+import com.project.tailsroute.util.CoordinateConverter;
 import com.project.tailsroute.vo.Hospital;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -39,7 +40,38 @@ public class UsrHospitalController {
         return "usr/map/hospital";
     }
 
+    // 일회성 코드(DB에 있는 중부원점 좌표를 위도/경도로 Update 하기)
+    @RequestMapping("/usr/hospital/doLatlonUpdate")
+    @ResponseBody
+    public String doLatlonUpdate() {
+        String res = "doLatlonUpdate 성공!";
 
+        // 전체 pool의 갯수 알아오기
+        int hospitalsCount = hospitalService.getHospitalsCount();
+
+        // pool의 갯수만큼 해당 행의
+        for (int i = 1; i <= hospitalsCount; i++) { //
+            // 해당 행의...
+            // 중부원점 x좌표 알아오기
+            String tmpStrLat = hospitalService.getX(i);
+            if (tmpStrLat == "" || tmpStrLat.isEmpty())
+                continue;
+            double tmpLat = Double.parseDouble(tmpStrLat);
+            // 중부원점 y좌표 알아오기
+            String tmpStrLon = hospitalService.getY(i);
+            if (tmpStrLon == "" || tmpStrLon.isEmpty())
+                continue;
+            double tmpLon = Double.parseDouble(tmpStrLon);
+
+            // 알아온 좌표를 위도/경도로 계산하기
+            double[] result = CoordinateConverter.convertProj4j(tmpLat, tmpLon);
+
+            // 위도/경도 반영하기
+            hospitalService.setLatLon(i, result[0], result[1]);
+        }
+
+        return res + " " + hospitalsCount;
+    }
 
     // 주소 클린징 함수 추가
     private String cleanAddress(String address) {
@@ -169,7 +201,7 @@ public class UsrHospitalController {
 
         StringBuilder output = new StringBuilder(); // CSV 파일 내용을 담을 StringBuilder
 
-        try (InputStream inputStream = getClass().getClassLoader().getResourceAsStream("csv/data_veterinary_care.csv");
+        try (InputStream inputStream = getClass().getClassLoader().getResourceAsStream("csv/data_veterinary_care_and_xy.csv");
              CSVReader reader = new CSVReader(new InputStreamReader(inputStream, "UTF-8"))) {
 
             if (inputStream == null) {
@@ -214,7 +246,7 @@ public class UsrHospitalController {
         CSVReader reader = null;
 
         try {
-            InputStream inputStream = getClass().getClassLoader().getResourceAsStream("csv/data_veterinary_care.csv");
+            InputStream inputStream = getClass().getClassLoader().getResourceAsStream("csv/data_veterinary_care_and_xy.csv");
 
             if (inputStream == null) {
                 throw new FileNotFoundException("CSV file not found in resources folder");
@@ -233,14 +265,16 @@ public class UsrHospitalController {
                 String addressLocation = checkEmpty(nextLine[2]); // 소재지 전체 주소
                 String addressStreet = checkEmpty(nextLine[3]); // 도로명 전체 주소
                 String name = checkEmpty(nextLine[4]); // 사업장 명
+                String latitude = checkEmpty(nextLine[5]); // 중부원점 x좌표
+                String longitude = checkEmpty(nextLine[6]); // 중부원점 y좌표
 
                 System.err.println(id);
                 // int temp = Integer.parseInt(id);
 
-                hospitalService.doInsertHospitalInfo(callNumber, addressLocation, addressStreet, name);
+                hospitalService.doInsertHospitalInfo(callNumber, addressLocation, addressStreet, name, latitude, longitude);
 
                 output.append("Inserted: ").append(id).append(", ").append(callNumber).append(", ").append(addressLocation)
-                        .append(", ").append(addressStreet).append(", ").append(name).append("<hr>");
+                        .append(", ").append(addressStreet).append(", ").append(name).append(", ").append(latitude).append(", ").append(longitude).append("<hr>");
 
             }
 
