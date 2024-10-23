@@ -1,0 +1,43 @@
+body {
+    background-color: #FFFEF0;
+    color: black;
+}
+.container {
+    max-width: 600px;
+    margin: 20px auto;
+    padding: 20px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    background-color: #fff;
+}
+
+.diary-details {
+    margin-bottom: 20px;
+}
+
+.diary-image {
+    margin: 10px 0;
+}
+
+.actions {
+    display: flex;
+    justify-content: space-between;
+}
+
+.btn {
+    padding: 10px 20px;
+    background-color: #696969;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+.btn:hover {
+    background-color: #555;
+}
+.header{
+    display: block;
+}

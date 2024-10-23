@@ -101,12 +101,11 @@ CREATE TABLE `dog`(
                       regDate DATETIME NOT NULL COMMENT '생성 날짜',
                       updateDate DATETIME NOT NULL COMMENT '수정 날짜',
                       memberId INT(10) UNSIGNED NOT NULL COMMENT '주인 식별번호',
-                      `name` CHAR(20) DEFAULT '이름 없음' COMMENT '이름',
-                      weight INT(10) DEFAULT -1 COMMENT '체중 (-1=모름)',
+                      `name` CHAR(20) NOT NULL DEFAULT '이름 없음' COMMENT '이름',
+                      weight CHAR(20) NOT NULL DEFAULT '모름' COMMENT '체중',
                       photo CHAR(50) NOT NULL COMMENT '사진',
                       `type` CHAR(20) NOT NULL COMMENT '소형, 중형, 대형',
                       comPortName CHAR(20) COMMENT 'GPS 기기 연결 포트'
-
 );
 
 INSERT INTO dog SET
@@ -423,3 +422,22 @@ INSERT INTO Diary (regDate, updateDate, memberId, title, BODY, imagePath, startD
                                                                                                                            ('2023-01-08 17:00:00', '2023-01-08 17:00:00', 1, 'Final Days', 'Last few days of medication.', '/images/entry8.jpg', '2023-01-01', '2023-01-10', '08:00:00', 'Reflecting on my journey.'),
                                                                                                                            ('2023-01-09 18:00:00', '2023-01-09 18:00:00', 2, 'Follow-up Appointment', 'Had a follow-up appointment today.', '/images/entry9.jpg', '2023-01-03', '2023-01-20', '09:00:00', 'Doctor is pleased with progress.'),
                                                                                                                            ('2023-01-10 19:00:00', '2023-01-10 19:00:00', 3, 'Completion', 'Finished my medication course.', '/images/entry10.jpg', '2023-01-05', '2023-01-15', '07:30:00', 'Celebrate the achievement!');
+
+
+## 병원 테이블
+CREATE TABLE hospital(
+                         id INT(10) UNSIGNED NOT NULL PRIMARY KEY AUTO_INCREMENT COMMENT '고유 병원 ID',
+                         `name` TEXT NOT NULL COMMENT '병원 이름',
+                         callNumber VARCHAR(20) DEFAULT NULL COMMENT '소재지전화번호',
+                         jibunAddress TEXT COMMENT '병원의 지번 주소',
+                         roadAddress TEXT COMMENT '병원의 도로명 주소',
+                         latitude VARCHAR(20) DEFAULT NULL COMMENT '좌표정보(x)',
+                         longitude VARCHAR(20) DEFAULT NULL COMMENT '좌표정보(y)',
+                         businessStatus ENUM('영업', '폐업') DEFAULT '영업' COMMENT '영업 상태',
+                         `type` ENUM('일반', '야간', '24시간') NOT NULL DEFAULT '일반' COMMENT '병원 타입'
+);
+
+USE `tails_route`;
+SHOW TABLES;
+
+SELECT * FROM hospital;
