@@ -101,8 +101,8 @@ CREATE TABLE `dog`(
                       regDate DATETIME NOT NULL COMMENT '생성 날짜',
                       updateDate DATETIME NOT NULL COMMENT '수정 날짜',
                       memberId INT(10) UNSIGNED NOT NULL COMMENT '주인 식별번호',
-                      `name` CHAR(20) DEFAULT '이름 없음' COMMENT '이름',
-                      weight INT(10) DEFAULT -1 COMMENT '체중 (-1=모름)',
+                      `name` CHAR(20) NOT NULL DEFAULT '이름 없음' COMMENT '이름',
+                      weight CHAR(20) NOT NULL DEFAULT '모름' COMMENT '체중',
                       photo CHAR(50) NOT NULL COMMENT '사진',
                       `type` CHAR(20) NOT NULL COMMENT '소형, 중형, 대형',
                       comPortName CHAR(20) COMMENT 'GPS 기기 연결 포트'
