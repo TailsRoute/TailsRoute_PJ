@@ -66,7 +66,7 @@ body {
 #writeButton{
     display: block;
     margin-left: auto;
-    margin-top: 370px;
+    margin-right: 30px;
     font-weight: bold;
     font-size: large;
 }
@@ -91,4 +91,9 @@ body {
     background-color:#E7E7E7;
     margin-right: 30px;
     width: 100px;
+}
+.pagination{
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: auto;
 }

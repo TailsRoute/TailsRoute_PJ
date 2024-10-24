@@ -61,6 +61,7 @@ public class DiaryService {
         return diaryRepository.getForPrintDiary(id);
     }
 
-
-
+    public List<Diary> findAllDiary(){
+        return diaryRepository.findAllDiary();
+    }
 }

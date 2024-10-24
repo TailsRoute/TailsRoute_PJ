@@ -10,7 +10,6 @@ import com.project.tailsroute.vo.Member;
 import com.project.tailsroute.vo.Rq;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -26,9 +25,6 @@ public class UsrMemberController {
     public UsrMemberController(Rq rq) {
         this.rq = rq;
     }
-
-    @Value("${GOOGLE_MAP_API_KEY}")
-    private String API_KEY;
 
     @Autowired
     private MemberService memberService;
@@ -112,20 +108,13 @@ public class UsrMemberController {
         Dog dog = dogService.getDogfile(rq.getLoginedMemberId());
 
         boolean locationChack;
-
-        if (dog != null) {
-            GpsAlert gpsAlert = gpsAlertService.getGpsAlert(dog.getId());
-            if (gpsAlert == null) {
-                locationChack = false;
-            }else {
-                locationChack = true;
-
-                String location = gpsAlertService.getPlaceName(gpsAlert.getLatitude(), gpsAlert.getLongitude());
-                location = location.substring(5);
-                model.addAttribute("location", location);
-            }
-            model.addAttribute("locationChack", locationChack);
+        GpsAlert gpsAlert = gpsAlertService.getGpsAlert(dog.getId());
+        if (gpsAlert == null) {
+            locationChack = false;
+        }else {
+            locationChack = true;
         }
+        model.addAttribute("locationChack", locationChack);
 
         model.addAttribute("isLogined", isLogined);
         model.addAttribute("dog", dog);

@@ -74,6 +74,7 @@
         // 알람을 가져오는 함수
         function fetchAlarms() {
             const isLogined = /*[[${isLogined}]]*/ false; // JSP에서 로그인 상태를 가져옴
+            console.log(isLogined);
             if (!isLogined) {
                 console.log("로그인 상태가 아닙니다.");
                 return;
