@@ -713,6 +713,14 @@ video {
   height: 100%;
 }
 
+.tw-mh-\[250px\]{
+  max-height: 250px;
+}
+
+.tw-overflow-auto{
+  overflow: auto;
+}
+
 .tw-w-\[10px\] {
   width: 10px;
 }

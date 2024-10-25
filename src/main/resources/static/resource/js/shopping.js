@@ -83,7 +83,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
     // 팝업 열기 및 닫기 기능
     const modal = document.getElementById("schedulePopup");
-    const closeBtn = document.querySelector(".close");
+    const closeBtn = document.getElementById("closeSchedulePopup");
 
     function openPopup(isEditMode = false) {
         // 팝업 열기
@@ -142,14 +142,6 @@ document.addEventListener('DOMContentLoaded', function () {
         const endDate = new Date(startDate); // 종료일 설정
         endDate.setDate(startDate.getDate() + parseInt(purchaseCycle)); // 주기를 반영한 종료일 설정
 
-        // 선택한 날짜에 새로운 일정 추가
-        calendar.addEvent({
-            title: itemName,
-            start: selectedDate, // 저장한 날짜를 사용
-            end: endDate.toISOString().split('T')[0], // 종료일 (주기에 따라)
-            allDay: true, // 하루 종일 일정
-        });
-
         // 생필품 정보 객체 생성
         const essential = {
             memberId: member.id, // JSP에서 동적으로 회원 ID를 삽입
@@ -159,16 +151,46 @@ document.addEventListener('DOMContentLoaded', function () {
             timing: alarmDays // 알람 일수
         };
 
-        // 생필품 정보를 서버에 전송
-        sendEssentialInfo(essential);
+        // 생필품 정보를 서버에 전송하고 일정 동적으로 추가
+        sendEssentialInfo(essential, startDate, endDate, itemName);
+
         // 알람이 설정된 경우에만 알람 정보를 전송
         if (alarmDays) {
             sendAlarmInfo(selectedDate, itemName, alarmDays);
         }
+        location.reload(); // 페이지 새로고침
     });
+// 일정 수정 버튼 클릭 시
+    document.getElementById("updateScheduleBtn").addEventListener("click", function () {
+        const purchaseDate = document.getElementById("scheduleDate").value;
+        const itemName = document.getElementById("itemName").value;
+        const purchaseCycle = document.getElementById("purchaseCycle").value;
+        const alarmDays = document.getElementById("alarmDays").value;
+        const currentSelectedEventId = selectedEventId;
+        const alarmDate = calculateAlarmDate(purchaseDate,alarmDays)
 
-// 생필품 정보 전송 함수
-    function sendEssentialInfo(essential) {
+        // 입력 검증
+        if (!itemName || !purchaseDate) {
+            alert("생필품 이름과 구매일을 입력하세요.");
+            return;
+        }
+
+        // 기존 일정 업데이트
+        updateExistingSchedule(itemName, purchaseDate, purchaseCycle, alarmDays, currentSelectedEventId)
+            .then(async () => {
+                // 알람이 설정된 경우에만 알람 정보를 전송
+                if (alarmDays) {
+                    checkAndUpdateAlarm(purchaseDate, itemName, alarmDays, currentSelectedEventId,alarmDate); // 알람 확인 및 업데이트
+                }
+                    location.reload(); // 페이지 새로고침
+            })
+            .catch(error => {
+                console.error('일정 수정 실패:', error);
+                alert('일정 수정 중 오류가 발생했습니다.'); // 사용자에게 오류 메시지 표시
+            });
+    });
+    // 생필품 정보 전송 함수
+    function sendEssentialInfo(essential, startDate, endDate, itemName) {
         fetch('/usr/essential/add', {
             method: 'POST',
             headers: {
@@ -180,12 +202,23 @@ document.addEventListener('DOMContentLoaded', function () {
                 if (!response.ok) {
                     throw new Error('Network response was not ok');
                 }
-                return response.text();
+                // JSON이 아니라 텍스트로 반환되는 경우
+                return response.text(); // 서버 응답을 텍스트로 처리
             })
             .then(data => {
-                setTimeout(() => {
-                    location.reload(); // 페이지 새로고침
-                }, 5000); // 2초 후에 새로고침
+                console.log('Server response:', data);
+
+                // 캘린더에 새로 추가된 일정을 동적으로 반영
+                calendar.addEvent({
+                    title: itemName,
+                    start: startDate.toISOString().split('T')[0],
+                    end: endDate.toISOString().split('T')[0],
+                    allDay: true, // 하루 종일 일정
+                    color: '#4D3E3E',
+                });
+
+                calendar.render(); // 캘린더 다시 렌더링
+                fetchEssentials(memberId)
                 closePopup(); // 팝업 닫기
             })
             .catch(error => {
@@ -228,111 +261,113 @@ document.addEventListener('DOMContentLoaded', function () {
                 console.error('There was a problem with the alarm fetch operation:', error);
             });
     }
+    //알람날짜 출력함수
+    function calculateAlarmDate(purchaseDate, alarmDays) {
+        // purchaseDate를 'YYYY-MM-DD' 형식에서 Date 객체로 변환
+        const dateParts = purchaseDate.split('-'); // "2024-10-25" -> ["2024", "10", "25"]
+        const purchaseDateObj = new Date(dateParts[0], dateParts[1] - 1, dateParts[2]); // 월은 0부터 시작하므로 -1
 
-// 일정 수정 버튼 클릭 시
-    document.getElementById("updateScheduleBtn").addEventListener("click", function () {
-        const purchaseDate = document.getElementById("scheduleDate").value;
-        const itemName = document.getElementById("itemName").value;
-        const purchaseCycle = document.getElementById("purchaseCycle").value;
-        const alarmDays = document.getElementById("alarmDays").value;
+        // alarmDays만큼 날짜를 뺌
+        purchaseDateObj.setDate(purchaseDateObj.getDate() - parseInt(alarmDays));
 
-        if (!itemName || !purchaseDate) {
-            alert("생필품 이름과 구매일을 입력하세요.");
-            return;
-        }
+        // 연, 월, 일을 추출하여 YYYY-MM-DD 형식으로 변환
+        const year = purchaseDateObj.getFullYear();
+        let month = purchaseDateObj.getMonth() + 1; // getMonth()는 0부터 시작하므로 1을 더해줌
+        let day = purchaseDateObj.getDate();
 
-        // 기존 일정을 삭제한 후 새로운 일정 추가
-        deleteExistingSchedule(itemName, purchaseDate, purchaseCycle, alarmDays)
-            .then(() => {
-                // 일정 삭제가 완료된 후 새 일정 추가
-                const startDate = new Date(purchaseDate);
-                const endDate = new Date(startDate);
-                endDate.setDate(startDate.getDate() + parseInt(purchaseCycle));
+        // 월과 일을 두 자릿수로 변환
+        month = month < 10 ? `0${month}` : month;
+        day = day < 10 ? `0${day}` : day;
 
-                // 새로운 일정 추가
-                calendar.addEvent({
-                    title: itemName,
-                    start: purchaseDate,
-                    end: endDate.toISOString().split('T')[0],
-                    allDay: true,
-                });
-
-                // 생필품 정보 객체 생성
-                const essential = {
-                    memberId: member.id, // JSP에서 동적으로 회원 ID를 삽입
-                    itemType: itemName, // 생필품 이름
-                    purchaseDate: purchaseDate, // 선택한 날짜
-                    usageCycle: purchaseCycle, // 선택한 주기
-                    timing: alarmDays // 알람 일수
-                };
-
-                // 생필품 정보를 서버에 전송
-                sendEssentialInfo(essential);
-
-                // 알람이 설정된 경우에만 알람 정보를 전송
-                if (alarmDays) {
-                    sendAlarmInfo(purchaseDate, itemName, alarmDays);
-                }
-            })
-            .catch(error => {
-                console.error('일정 삭제 실패:', error);
-            });
-    });
-
-// 기존 일정 삭제 함수
-    function deleteExistingSchedule(itemName, purchaseDate, purchaseCycle, alarmDays) {
+        // YYYY-MM-DD 형식으로 반환
+        return `${year}-${month}-${day}`;
+    }
+// 기존 일정 수정 함수
+    function updateExistingSchedule(itemName, purchaseDate, purchaseCycle, alarmDays,currentSelectedEventId) {
         return new Promise((resolve, reject) => {
-            let eventIdToDelete;
+            // 업데이트할 데이터 객체 생성
+            const updatedEvent = {
+                id: selectedEventId, // 선택된 이벤트 ID
+                itemType: itemName,
+                purchaseDate: purchaseDate,
+                usageCycle: purchaseCycle,
+                timing: alarmDays
+            };
 
-            fetch(`/usr/essential/get?memberId=` + memberId)
-                .then(response => response.json())
-                .then(data => {
-                    // 특정 이벤트를 찾기 위한 로직
-                    data.forEach(event => {
-                        const purchaseDates = new Date(event.purchaseDate);
-                        const timingDays = event.timing;
-
-                        // 알람 날짜 계산
-                        const newDate = new Date(purchaseDates);
-                        newDate.setDate(purchaseDates.getDate() - timingDays);
-                        const formattedDate = newDate.toISOString().split('T')[0];
-
-                        // itemName, purchaseDate, usageCycle, formattedDate 비교
-                        if (event.itemType === itemName &&
-                            event.purchaseDate === purchaseDate &&
-                            Number(event.usageCycle) === Number(purchaseCycle) &&
-                            (formattedDate === (alarmDays ? formattedDate : '알람 없음'))) {
-                            eventIdToDelete = event.id; // 해당 ID를 저장
-                        }
-                    });
-
-                    // 삭제할 이벤트 ID가 존재하면 삭제 요청
-                    if (eventIdToDelete) {
-                        // 알람 삭제 요청
-                        deleteAlarmInfo(eventIdToDelete);
-
-                        // DELETE 메소드로 요청 보내기
-                        fetch(`/usr/essential/delete?id=` + eventIdToDelete, {
-                            method: 'DELETE'
-                        })
-                            .then(response => {
-                                if (!response.ok) {
-                                    throw new Error('삭제 요청이 실패했습니다.');
-                                }
-                                resolve(); // 삭제 완료
-                            })
-                            .catch(error => {
-                                reject(error);
-                            });
-                    } else {
-                        resolve(); // 삭제할 일정이 없으면 그냥 완료
+            // PUT 메소드로 요청 보내기
+            fetch(`/usr/essential/update`, {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(updatedEvent)
+            })
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('수정 요청이 실패했습니다.');
                     }
+                    // 성공적으로 수정된 경우, essentials를 다시 가져와서 렌더링
+                    fetchEssentials(memberId);
+                    closePopup(); // 팝업 닫기
+                    resolve(); // 수정 완료
                 })
                 .catch(error => {
                     reject(error);
                 });
         });
     }
+    // 알람 정보 확인 및 업데이트 또는 추가 함수
+    function checkAndUpdateAlarm(purchaseDate, itemName, alarmDays,selectedEventId,formattedDate) {
+        // 먼저 알람 정보를 가져옴
+        fetch(`/usr/alarm/get?memberId=${member.id}`)
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('알람 정보를 가져오는 데 실패했습니다.');
+                }
+                return response.json();
+            })
+            .then(alarms => {
+                // 알람이 이미 존재하는지 확인
+                const existingAlarm = alarms.find(alarm => String(alarm.id) === selectedEventId);
+                if (existingAlarm) {
+                    // 알람이 존재하면 업데이트
+                    updateAlarm(existingAlarm.id, itemName, alarmDays,formattedDate);
+                } else {
+                    // 알람이 존재하지 않으면 새 알람 추가
+                    sendAlarmInfo(purchaseDate, itemName, alarmDays);
+                }
+            })
+            .catch(error => {
+                console.error('알람 확인 실패:', error);
+            });
+    }
+
+// 알람 수정 함수
+    function updateAlarm(alarmId, itemName, alarmDays,formattedDate) {
+        const updatedAlarm = {
+            alarm_date: formattedDate,
+            message: `${itemName} 구매 예정일까지 ${alarmDays}일 남았습니다.`,
+            id: alarmId
+        };
+
+        fetch(`/usr/alarm/update`, {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(updatedAlarm)
+        })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('알람 수정 실패');
+                }
+                console.log('알람이 성공적으로 수정되었습니다.');
+            })
+            .catch(error => {
+                console.error('알람 수정 중 오류 발생:', error);
+            });
+    }
+
                                               //  달력구현 끝  //
                                               //  리스트 구현  //
     let essentials = []; // 전역 변수로 essentials 정의
@@ -438,7 +473,6 @@ document.addEventListener('DOMContentLoaded', function () {
                         eventIdToDelete = event.id; // 해당 ID를 저장
                     }
                 });
-
                 // 삭제할 이벤트 ID가 존재하면 삭제 요청
                 if (eventIdToDelete) {
                     // 알람 삭제 요청
