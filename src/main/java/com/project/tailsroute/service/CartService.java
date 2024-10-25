@@ -20,7 +20,8 @@ public class CartService {
         cartRepository.addCarts(
                 cart.getMemberId(),
                 cart.getItemName(),
-                cart.getItemprice()
+                cart.getItemprice(),
+                cart.getItemlink()
         );
     }
     public List<Carts> findCartsByMemberId(int memberId) {
