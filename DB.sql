@@ -437,6 +437,16 @@ CREATE TABLE hospital(
                          `type` ENUM('일반', '야간', '24시간') NOT NULL DEFAULT '일반' COMMENT '병원 타입'
 );
 
+CREATE TABLE cart(
+                     id INT(10) UNSIGNED NOT NULL PRIMARY KEY AUTO_INCREMENT COMMENT '식별번호',
+                     regDate DATETIME NOT NULL COMMENT '가입 날짜',
+                     updateDate DATETIME NOT NULL COMMENT '수정 날짜',
+                     memberId INT(10) UNSIGNED NOT NULL COMMENT '생성자 식별번호',
+                     itemName TEXT NOT NULL COMMENT '제품이름',
+                     itemprice INT(10) UNSIGNED NOT NULL COMMENT '제품가격',
+                     itemlink TEXT NOT NULL COMMENT '제품사이트'
+);
+
 USE `tails_route`;
 SHOW TABLES;
 
