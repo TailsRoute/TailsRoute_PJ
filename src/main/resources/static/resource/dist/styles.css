@@ -152,7 +152,7 @@ html,
   -moz-tab-size: 4;
   /* 3 */
   -o-tab-size: 4;
-     tab-size: 4;
+  tab-size: 4;
   /* 3 */
   font-family: ui-sans-serif, system-ui, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
   /* 4 */
@@ -197,7 +197,7 @@ Add the correct text decoration in Chrome, Edge, and Safari.
 
 abbr:where([title]) {
   -webkit-text-decoration: underline dotted;
-          text-decoration: underline dotted;
+  text-decoration: underline dotted;
 }
 
 /*
@@ -620,6 +620,14 @@ video {
   z-index: 30;
 }
 
+.tw-top-\[-7px\]{
+  top: -7px;
+}
+
+.tw-right-\[-5px\]{
+  right:-5px;
+}
+
 .tw-mx-auto {
   margin-left: auto;
   margin-right: auto;
@@ -723,6 +731,18 @@ video {
 
 .tw-h-full {
   height: 100%;
+}
+
+.tw-mh-\[250px\]{
+  max-height: 250px;
+}
+
+.tw-overflow-auto{
+  overflow: auto;
+}
+
+.tw-w-\[10px\] {
+  width: 10px;
 }
 
 .tw-w-\[100px\] {
