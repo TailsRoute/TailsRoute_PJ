@@ -70,7 +70,7 @@ html {
 #calendar {
     border: 1px solid #ccc;
     height: 600px; /* 자동 높이 설정 */
-    width: 800px; /* 적절한 너비 설정 */
+    width: 100%; /* 적절한 너비 설정 */
     border-radius: 5px;
     background-color: #F2F2EB;
     padding: 10px; /* 내부 여백 추가 */
@@ -89,7 +89,7 @@ html {
 #List {
     border: 1px solid #ccc;
     height: 600px;
-    width: 800px;
+    width: 100%;
     border-radius: 5px; /* 네모박스에 모서리 둥글게 */
     background-color: #F2F2EB;
     max-height: 600px; /* 스크롤을 적용할 최대 높이 설정 */
