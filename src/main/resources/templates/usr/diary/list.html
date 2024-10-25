@@ -3,7 +3,6 @@
 </div>
 <!DOCTYPE html>
 <html lang="en">
-<link rel="stylesheet" type="text/css" th:href="@{/main.css}">
 <!--테일윈드 적용-->
 <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
 <!--켈린더.js 사용경로적용-->
@@ -24,21 +23,26 @@
 
 <!-- 메인컨테이너-->
 <section class="container pt-20 mx-auto flex flex-col justify-between h-screen">
+    <!-- 필터 -->
+    <form action="list" method="get" id="sortForm">
+        <script src="/resource/js/diary/DiaryList.js"></script>
+        <select  id="sortSelect" name="sort" onchange="saveSortValue(); document.getElementById('sortForm').submit();">
+            <option value="newest">최신순</option>
+            <option value="oldest">오래된순</option>
+        </select>
+    </form>
+
     <div class="flex flex-grow justify-center items-start space-x-20">
+
+
         <!-- 켈린더 -->
         <div id="calendar"></div>
         <script src="/resource/js/calender.js"></script>
 
+
+
         <!-- 기록 리스트 페이지-->
         <div class="diaryList flex flex-col w-full">
-            <!-- 필터 -->
-            <form action="list" method="get" id="sortForm">
-                <script src="/resource/js/diary/DiaryList.js"></script>
-                <select  id="sortSelect" name="sort" onchange="saveSortValue(); document.getElementById('sortForm').submit();">
-                    <option value="newest">최신순</option>
-                    <option value="oldest">오래된순</option>
-                </select>
-            </form>
             <table class="min-w-full table-auto">
                 <thead>
                 <tr class="listType">

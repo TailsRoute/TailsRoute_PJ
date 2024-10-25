@@ -22,3 +22,5 @@ document.getElementById('fileBtn').addEventListener('click', function() {
     document.getElementById('fileInput').click();  // 파일 선택 창 열기
 });
 
+
+

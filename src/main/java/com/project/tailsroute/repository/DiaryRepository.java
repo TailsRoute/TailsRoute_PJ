@@ -71,20 +71,22 @@ public interface DiaryRepository {
                         FROM diary AS D
                         INNER JOIN `member` AS M
                         ON D.memberId = M.id
+                        WHERE D.memberId = #{memberId}
                         ORDER BY D.id DESC
             LIMIT #{limit} OFFSET #{offset}
                         """)
-	List<Diary> findAllByOrderByDateDesc(@Param("limit") int limit, @Param("offset") int offset);
+	List<Diary> findAllByOrderByDateDesc(@Param("memberId") int memeberId,@Param("limit") int limit, @Param("offset") int offset);
 
 	@Select("""
         SELECT D.*, M.nickname AS extra__writer
             FROM diary AS D
             INNER JOIN `member` AS M
             ON D.memberId = M.id
+            WHERE D.memberId = #{memberId}
             ORDER BY D.id asc 		
          LIMIT #{limit} OFFSET #{offset}
 """)
-	List<Diary> findAllByOrderByDateAsc(@Param("limit") int limit, @Param("offset") int offset);
+	List<Diary> findAllByOrderByDateAsc(@Param("memberId") int memeberId,@Param("limit") int limit, @Param("offset") int offset);
 
 
 	@Select("""
@@ -92,17 +94,19 @@ public interface DiaryRepository {
                         FROM diary AS D
                         INNER JOIN `member` AS M
                         ON D.memberId = M.id
+                        WHERE D.memberId = #{memberId}
                         ORDER BY D.id DESC
            
                         """)
-	List<Diary> findAllDiary();
+	List<Diary> findAllDiary(int memberId);
 
 
 
 	@Select("""
     SELECT COUNT(*)
     FROM diary
+     WHERE memberId = #{memberId}
 """)
-	int countDiaries();
+	int countDiaries(int memberId);
 
 }
