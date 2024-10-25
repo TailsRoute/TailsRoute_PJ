@@ -21,8 +21,8 @@ def extract_zip(file_name, extract_to):
         print(f"{file_name} not found.")
 
 # Google Drive 에서 가져온 파일 ID
-sit_file_id = '1QFqTjMe4Ti_WcY3Ez8q6laK1aQjJlNIE'  # sit.zip 파일 ID
-other_file_id = '1-yr0u0e9xHFV6_tjWsi0yYlceyb8l3pa'  # other.zip 파일 ID
+sit_file_id = '1o5PhfL6T7-OqIHEKmV70BBup592rNnPe'  # sit.zip 파일 ID
+other_file_id = '1HSIhwW3mtrOqMmpTGvP8XS7Jg61-84Un'  # other.zip 파일 ID
 
 # 데이터 폴더 생성 
 os.makedirs('dog_behavior_analysis/data', exist_ok=True)
@@ -36,8 +36,8 @@ os.makedirs('dog_behavior_analysis/data/sit', exist_ok=True)
 os.makedirs('dog_behavior_analysis/data/other', exist_ok=True)
 
 # 압축 해제
-extract_zip('dog_behavior_analysis/data/sit.zip', 'dog_behavior_analysis/data/sit')
-extract_zip('dog_behavior_analysis/data/other.zip', 'dog_behavior_analysis/data/other')
+extract_zip('dog_behavior_analysis/data/sit.zip', 'dog_behavior_analysis/data')
+extract_zip('dog_behavior_analysis/data/other.zip', 'dog_behavior_analysis/data')
 
 # 데이터 경로 설정
 sit_path = 'dog_behavior_analysis/data/sit'
@@ -66,7 +66,7 @@ for img_name in os.listdir(other_path):
         labels.append(0)  # "기타 행동"을 0으로 레이블링
 
 # 리스트를 넘파이 배열로 변환
-images = np.array(images, dtype="float") / 255.0  # 픽셀 값을 0-1 사이로 정규화
+images = np.array(images, dtype="float32") / 255.0  # 픽셀 값을 0-1 사이로 정규화
 labels = np.array(labels)
 
 # 훈련용과 검증용 데이터셋으로 나누기
@@ -76,3 +76,7 @@ train_images, val_images, train_labels, val_labels = train_test_split(images, la
 def get_data():
     global train_images, val_images, train_labels, val_labels
     return train_images, val_images, train_labels, val_labels
+
+
+print(f"이미지 배열 모양: {images.shape}")
+print(f"레이블 배열 모양: {labels.shape}")
