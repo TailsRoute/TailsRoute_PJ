@@ -4,9 +4,14 @@ package com.project.tailsroute.controller;
 import com.opencsv.CSVReader;
 import com.project.tailsroute.service.HospitalService;
 import com.project.tailsroute.vo.Hospital;
+import org.json.JSONException;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -28,6 +33,13 @@ public class UsrHospitalController {
     @Value("${GOOGLE_MAP_API_KEY}")
     private String API_KEY;
 
+    // 루트 디렉토리에 있는 .env 파일에서 API 키 불러옴
+
+    @Value("${NAVER_MAP_CLIENT_ID}")
+    private String naver_clientId; // 네이버 클라이언트 ID
+    @Value("${NAVER_MAP_CLIENT_SECRET}")
+    private String naver_clientSecret;  // 네이버 클라이언트 Secret
+
     @Autowired
     private HospitalService hospitalService;
 
@@ -35,11 +47,24 @@ public class UsrHospitalController {
     public String showMain(Model model) {
 
         model.addAttribute("GOOGLE_MAP_API_KEY", API_KEY);
-        model.addAttribute("message", "24시간 병원 message 추가");
+
         return "usr/map/hospital";
     }
 
+    @GetMapping("/hospitals")
+    @ResponseBody
+    public List<Hospital> getAllHospitals() {
+        // DB에서 모든 병원 데이터를 가져와 반환
+        return hospitalService.getAllHospitals();
+    }
 
+    // DB 데이터 조회하는 테스트 코드
+    @RequestMapping("/usr/hospital/hospitalList")
+    public String showHospitals(Model model) {
+        List<Hospital> hospitals = hospitalService.getAllHospitals();
+        model.addAttribute("hospitals", hospitals);
+        return "usr/hospital/hospitals";
+    }
 
     // 주소 클린징 함수 추가
     private String cleanAddress(String address) {
@@ -48,9 +73,8 @@ public class UsrHospitalController {
 
     @GetMapping("/usr/hospital/updateCoordinates")
     @ResponseBody
-    public String updateHospitalCoordinates() {
+    public String updateHospitalCoordinates_Naver() {
         List<Hospital> hospitals = hospitalService.getHospitalsWithoutCoordinates();
-        String apiKey = API_KEY;
 
         int count = 0;
 
@@ -65,30 +89,117 @@ public class UsrHospitalController {
             else if (hospital.getJibunAddress() != null && !hospital.getJibunAddress().trim().isEmpty()) {
                 address = hospital.getJibunAddress();
             } else {
-                System.out.println("주소 정보가 없는 병원 ID: " + hospital.getId());
+                // System.out.println("주소 정보가 없는 병원 ID: " + hospital.getId());
                 continue; // 주소가 없으면 다음 병원으로 넘어감
             }
 
             // 좌표를 가져와서 업데이트
-            String coordinates = getCoordinatesFromAddress(address, apiKey);
+            String coordinates = getCoordinatesFromAddress_NAVER(address);
             if (coordinates != null) {
                 String[] latLng = coordinates.split(",");
                 hospitalService.updateHospitalCoordinates(hospital.getId(), latLng[0], latLng[1]);
-                System.out.println("좌표 업데이트 성공: 병원 ID " + hospital.getId());
+                // System.out.println("좌표 업데이트 성공: 병원 ID " + hospital.getId());
             } else {
-                System.out.println("좌표를 가져오지 못한 병원 ID: " + hospital.getId());
+                // System.out.println("좌표를 가져오지 못한 병원 ID: " + hospital.getId());
             }
 
             count++;
 
-            if (count > 3)
-                break;
+//            if (count > 10)
+//                break;
         }
 
-        return "Coordinates updated for hospitals without latitude/longitude";
+        return "Coordinates updated for hospitals without latitude/longitude " + count;
     }
 
-    private String getCoordinatesFromAddress(String address, String apiKey) {
+//    @GetMapping("/usr/hospital/updateCoordinatesGoogle")
+//    @ResponseBody
+//    public String updateHospitalCoordinates() {
+//        List<Hospital> hospitals = hospitalService.getHospitalsWithoutCoordinates();
+//        String apiKey = API_KEY;
+//
+//        int count = 0;
+//
+//        for (Hospital hospital : hospitals) {
+//            String address = null;
+//
+//            // 도로명 주소가 빈 문자열이 아닌지 확인
+//            if (hospital.getRoadAddress() != null && !hospital.getRoadAddress().trim().isEmpty()) {
+//                address = hospital.getRoadAddress();
+//            }
+//            // 지번 주소가 빈 문자열이 아닌지 확인
+//            else if (hospital.getJibunAddress() != null && !hospital.getJibunAddress().trim().isEmpty()) {
+//                address = hospital.getJibunAddress();
+//            } else {
+//                System.out.println("주소 정보가 없는 병원 ID: " + hospital.getId());
+//                continue; // 주소가 없으면 다음 병원으로 넘어감
+//            }
+//
+//            // 좌표를 가져와서 업데이트
+//            String coordinates = getCoordinatesFromAddress(address, apiKey);
+//            if (coordinates != null) {
+//                String[] latLng = coordinates.split(",");
+//                hospitalService.updateHospitalCoordinates(hospital.getId(), latLng[0], latLng[1]);
+//                System.out.println("좌표 업데이트 성공: 병원 ID " + hospital.getId());
+//            } else {
+//                System.out.println("좌표를 가져오지 못한 병원 ID: " + hospital.getId());
+//            }
+//
+//            count++;
+//
+//            if (count > 3)
+//                break;
+//        }
+//
+//        return "Coordinates updated for hospitals without latitude/longitude";
+//    }
+
+    private String getCoordinatesFromAddress_NAVER(String address) {
+
+        // 클린징을 하지 않고 원본 주소를 그대로 사용
+        String apiUrl = "https://naveropenapi.apigw.ntruss.com/map-geocode/v2/geocode?query=" + address;
+
+        // System.out.println("요청하는 주소: <" + address + ">");
+        // System.out.println("API 요청 URL: " + apiUrl);
+
+        // 헤더에 클라이언트 ID와 시크릿 추가
+        HttpHeaders headers = new HttpHeaders();
+        headers.set("X-NCP-APIGW-API-KEY-ID", naver_clientId);
+        headers.set("X-NCP-APIGW-API-KEY", naver_clientSecret);
+
+        HttpEntity<String> entity = new HttpEntity<>(headers);
+
+        // RestTemplate로 API 요청
+        RestTemplate restTemplate = new RestTemplate();
+        ResponseEntity<String> response = restTemplate.exchange(apiUrl, HttpMethod.GET, entity, String.class);
+
+        try {
+            if (response.getStatusCode().is2xxSuccessful()) {
+                // 응답 파싱
+                String responseBody = response.getBody();
+                JSONObject json = new JSONObject(responseBody);  // JSONObject 생성 시 예외 처리 필요
+
+                if (json.has("addresses") && json.getJSONArray("addresses").length() > 0) {
+                    JSONObject location = json.getJSONArray("addresses").getJSONObject(0);
+                    String lat = location.getString("y");  // 위도
+                    String lng = location.getString("x");  // 경도
+                    return lat + "," + lng;
+                } else {
+                    System.out.println("No results found.");
+                    return null;
+                }
+            } else {
+                System.out.println("API 호출 실패: " + response.getStatusCode());
+                return null;
+            }
+        } catch (JSONException e) {
+            System.out.println("JSON 파싱 오류: " + e.getMessage());
+            e.printStackTrace();  // 오류 스택 트레이스 출력
+            return null;
+        }
+    }
+
+    private String getCoordinatesFromAddressGoogle(String address, String apiKey) {
         String coordinates = null;
         try {
             // 클린징을 하지 않고 원본 주소를 그대로 사용
@@ -116,50 +227,6 @@ public class UsrHospitalController {
             e.printStackTrace();
         }
         return coordinates;
-    }
-
-    // 클린징 하고 보내기
-//    private String getCoordinatesFromAddress(String address, String apiKey) {
-//        String coordinates = null;
-//        try {
-//            // 주소 클린징
-//            String cleanedAddress = cleanAddress(address);
-//            System.out.println("클린징된 주소: " + cleanedAddress);
-//
-//            // API 요청 URL 생성
-//            String apiUrl = "https://maps.googleapis.com/maps/api/geocode/json?address=" + URLEncoder.encode(cleanedAddress, "UTF-8") + "&key=" + apiKey;
-//            System.out.println("API 요청 URL: " + apiUrl);
-//
-//            // RestTemplate 사용하여 API 호출
-//            RestTemplate restTemplate = new RestTemplate();
-//            String response = restTemplate.getForObject(apiUrl, String.class);
-//            JSONObject json = new JSONObject(response);
-//
-//            // API 응답 상태 확인
-//            if ("OK".equals(json.getString("status"))) {
-//                JSONObject location = json.getJSONArray("results").getJSONObject(0).getJSONObject("geometry").getJSONObject("location");
-//                String lat = location.getDouble("lat") + "";
-//                String lng = location.getDouble("lng") + "";
-//                coordinates = lat + "," + lng;
-//                System.out.println("위도/경도: " + coordinates);
-//            } else {
-//                // 오류 발생 시 로그 출력
-//                System.out.println("Geocoding API 오류: " + json.getString("status") + " - " + json.optString("error_message"));
-//                System.out.println("API 응답 내용: " + json.toString());
-//            }
-//        } catch (Exception e) {
-//            System.out.println("주소 변환 실패: " + address);
-//            e.printStackTrace();
-//        }
-//        return coordinates;
-//    }
-
-    // DB 데이터 조회하는 테스트 코드
-    @RequestMapping("/usr/hospital/hospitals")
-    public String showHospitals(Model model) {
-        List<Hospital> hospitals = hospitalService.getAllHospitals();
-        model.addAttribute("hospitals", hospitals);
-        return "usr/hospital/hospitals";
     }
 
     // 테스트용 코드
@@ -214,7 +281,7 @@ public class UsrHospitalController {
         CSVReader reader = null;
 
         try {
-            InputStream inputStream = getClass().getClassLoader().getResourceAsStream("csv/data_veterinary_care.csv");
+            InputStream inputStream = getClass().getClassLoader().getResourceAsStream("csv/fulldata_veterinary_care.csv");
 
             if (inputStream == null) {
                 throw new FileNotFoundException("CSV file not found in resources folder");
@@ -229,10 +296,11 @@ public class UsrHospitalController {
                 // 번호,소재지전화,소재지전체주소,도로명전체주소,사업장명 순으로 저장됨. 0~4
 
                 String id = checkEmpty(nextLine[0]); // 번호
-                String callNumber = checkEmpty(nextLine[1]); // 소재지 전화
-                String addressLocation = checkEmpty(nextLine[2]); // 소재지 전체 주소
-                String addressStreet = checkEmpty(nextLine[3]); // 도로명 전체 주소
-                String name = checkEmpty(nextLine[4]); // 사업장 명
+                String state = checkEmpty(nextLine[1]); // 영업 상태
+                String callNumber = checkEmpty(nextLine[2]); // 소재지 전화
+                String addressLocation = checkEmpty(nextLine[3]); // 소재지 전체 주소
+                String addressStreet = checkEmpty(nextLine[4]); // 도로명 전체 주소
+                String name = checkEmpty(nextLine[5]); // 사업장 명
 
                 System.err.println(id);
                 // int temp = Integer.parseInt(id);
