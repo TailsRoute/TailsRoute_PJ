@@ -11,7 +11,7 @@ model = load_model(model_path)
 print("모델 정상 작동")
 
 #테스트 이미지 로드 및 전처리
-image_path = r'C:\Users\admin\IdeaProjects\TailsRoute_PJ\VSCode\dog_behavior_analysis\data\other\n02085620_3880.jpg' # 이미지 경로
+image_path = r'C:\Users\admin\IdeaProjects\TailsRoute_PJ\VSCode\dog_behavior_analysis\data\other\n02086646_3052.jpg' # 이미지 경로
 image = load_img(image_path, target_size=(224, 224)) # 이미지 크기 
 image = img_to_array(image) / 255.0 # 정류화 (0-1 사이 값으로 변환)
 image = np.expand_dims(image, axis=0) # 배치 차원 추가
