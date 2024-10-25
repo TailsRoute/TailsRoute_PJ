@@ -73,3 +73,8 @@ dog_behavior_analysis/models/
 ### 데이터 폴더와 압축 파일 제외###
 data/
 *.zip
+
+
+### 훈련 시킨 데이터 제외 ###
+VSCode/models/*.keras
+

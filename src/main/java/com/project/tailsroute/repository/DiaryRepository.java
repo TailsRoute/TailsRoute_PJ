@@ -87,6 +87,16 @@ public interface DiaryRepository {
 	List<Diary> findAllByOrderByDateAsc(@Param("limit") int limit, @Param("offset") int offset);
 
 
+	@Select("""
+                        SELECT D.*, M.nickname AS extra__writer
+                        FROM diary AS D
+                        INNER JOIN `member` AS M
+                        ON D.memberId = M.id
+                        ORDER BY D.id DESC
+           
+                        """)
+	List<Diary> findAllDiary();
+
 
 
 	@Select("""
