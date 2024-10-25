@@ -22,9 +22,6 @@
     <h1 class="text-center text-4xl font-bold mb-6">반려견 성장 기록</h1>
 </div>
 
-
-
-
 <!-- 메인컨테이너-->
 <section class="container pt-20 mx-auto flex flex-col justify-between h-screen">
     <div class="flex flex-grow justify-center items-start space-x-20">
@@ -84,14 +81,14 @@
                                 <span>...</span>
                             </span>
                             <span th:if="${currentPage > 3 && currentPage < totalPages - 2}">
-                                <a th:href="@{|list?page=1&sort=${sort}|}">1</a>
+                                <!--<a th:href="@{|list?page=1&sort=${sort}|}">1</a>-->
                                 <span>...</span>
                                 <span th:each="page : ${#numbers.sequence(currentPage - 2, currentPage + 2)}">
                                     <a th:href="@{|list?page=${page}&sort=${sort}|}" th:text="${page}"
                                        th:class="${page == currentPage} ? 'active' : ''"></a>
                                 </span>
                                 <span>...</span>
-                                <a th:href="@{|list?page=${totalPages}&sort=${sort}|}" th:text="${totalPages}"></a>
+                             <!--   <a th:href="@{|list?page=${totalPages}&sort=${sort}|}" th:text="${totalPages}"></a>-->
                             </span>
                             <span th:if="${currentPage >= totalPages - 2}">
                                 <span>...</span>

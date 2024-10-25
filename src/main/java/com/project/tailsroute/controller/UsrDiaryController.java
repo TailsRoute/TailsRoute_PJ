@@ -12,6 +12,7 @@ import org.springframework.web.multipart.MultipartFile;
 import com.project.tailsroute.vo.Rq;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.io.File;
 import java.io.IOException;
@@ -93,10 +94,10 @@ public class UsrDiaryController {
                 imagePath = "/resource/DiaryImages/" + fileName; // 웹에서 접근할 수 있는 URL 경로
             } catch (IOException e) {
                 e.printStackTrace();
-                imagePath = "/resource/DiaryImages/default.png"; // 기본 이미지 URL로 설정
+                imagePath = "/resource/photo/default.png"; // 기본 이미지 URL로 설정
             }
         } else {
-            imagePath = "/resource/DiaryImages/default.png"; // 기본 이미지 URL
+            imagePath = "/resource/photo/default.png"; // 기본 이미지 URL
         }
 
         // 다이어리 작성 서비스 호출
@@ -114,7 +115,7 @@ public class UsrDiaryController {
         }
         model.addAttribute("isLogined", isLogined);
 
-        int size = 7; // 페이지당 아이템 수
+        int size = 8; // 페이지당 아이템 수
         List<Diary> diaries = diaryService.getDiaryList(sort, page, size);
         int totalDiaries = diaryService.countDiaries();
         int totalPages = (int) Math.ceil((double) totalDiaries / size);
@@ -133,14 +134,58 @@ public class UsrDiaryController {
 
         return "usr/diary/list";
     }
+
+    @GetMapping("/calendar")
+    @ResponseBody // 이 메서드는 JSON으로 반환됨
+    public List<Map<String, Object>> getDiaryEvents() {
+        List<Diary> diaries = diaryService.findAllDiary(); // 모든 다이어리 항목을 가져옵니다.
+        List<Map<String, Object>> events = new ArrayList<>();
+        // 날짜 포맷터 정의
+        DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+        DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm");
+
+        for (Diary diary : diaries) {
+            Map<String, Object> diaryEvent = new HashMap<>();
+            diaryEvent.put("id", diary.getId()); // ID 추가
+            diaryEvent.put("title", diary.getTitle()); // 제목 추가
+            diaryEvent.put("start", diary.getRegDate().format(dateFormatter)); // 글작성날짜
+            events.add(diaryEvent); // 이벤트를 리스트에 추가
+
+            Map<String, Object> MedicineEvent = new HashMap<>();
+            MedicineEvent.put("id", diary.getId()); // ID 추가
+            MedicineEvent.put("title", diary.getInformation()); // 제목 추가
+            LocalDateTime startDateTime = LocalDateTime.of(diary.getStartDate(), diary.getTakingTime());
+            MedicineEvent.put("start", startDateTime.format(dateTimeFormatter)); // 복용시작일
+            LocalDateTime endDateTime = LocalDateTime.of(diary.getEndDate(), diary.getTakingTime());
+            MedicineEvent.put("end", endDateTime.format(dateTimeFormatter)); // 종료 시간 설정
+            events.add(MedicineEvent); // 이벤트를 리스트에 추가
+
+        }
+
+
+        return events; // JSON 형식으로 반환
+    }
+
     @GetMapping("/detail/{id}")
     public String showDiaryDetail(@PathVariable int id, Model model) {
+
+        boolean isLogined = rq.isLogined();
+
+        if (isLogined) {
+            Member member = rq.getLoginedMember();
+            model.addAttribute("member", member);
+        }
+        model.addAttribute("isLogined", isLogined);
+
         Diary diary = diaryService.getForPrintDiary(id);
         if (diary == null) {
             // 다이어리가 존재하지 않을 경우, 목록으로 리다이렉트
             return "redirect:/usr/diary/list";
         }
+
         model.addAttribute("diary", diary);
+
+
         return "usr/diary/detail"; // 올바른 뷰 이름
     }
 
@@ -152,6 +197,15 @@ public class UsrDiaryController {
 
     @GetMapping("/modify/{id}")
     public String showModifyForm(@PathVariable int id, Model model) {
+
+        boolean isLogined = rq.isLogined();
+
+        if (isLogined) {
+            Member member = rq.getLoginedMember();
+            model.addAttribute("member", member);
+        }
+        model.addAttribute("isLogined", isLogined);
+
         Diary diary = diaryService.getDiaryById(id);
         model.addAttribute("diary", diary);
         return "usr/diary/modify";
@@ -168,11 +222,38 @@ public class UsrDiaryController {
             @RequestParam("takingTime") LocalTime takingTime,
             @RequestParam("information") String information
     ) {
-        String imageUrl = null;
+
+        String imagePath;
+
         if (file != null && !file.isEmpty()) {
-            imageUrl = "/resource/DiaryImages/" + file.getOriginalFilename();
+            String fileName = file.getOriginalFilename();
+
+            // 저장할 디렉토리 경로 설정
+            String directoryPath = "src/main/resources/static/resource/DiaryImages";
+            File directory = new File(directoryPath);
+
+            // 디렉토리가 존재하지 않으면 생성
+            if (!directory.exists()) {
+                directory.mkdirs(); // 디렉토리 생성
+            }
+
+            String savePath = new File(directory, fileName).getAbsolutePath();
+
+            System.out.println("File will be saved to: " + savePath);
+
+            try {
+                // 파일을 지정된 경로에 저장
+                file.transferTo(new File(savePath));
+                imagePath = "/resource/DiaryImages/" + fileName; // 웹에서 접근할 수 있는 URL 경로
+            } catch (IOException e) {
+                e.printStackTrace();
+                imagePath = "/resource/photo/default.png"; // 기본 이미지 URL로 설정
+            }
+        } else {
+            imagePath = "/resource/photo/default.png"; // 기본 이미지 URL
         }
-        diaryService.modifyDiary(id, title, body, imageUrl, startDate, endDate, takingTime, information);
+
+        diaryService.modifyDiary(id, title, body, imagePath, startDate, endDate, takingTime, information);
         return "redirect:/usr/diary/detail/" + id;
     }
 
