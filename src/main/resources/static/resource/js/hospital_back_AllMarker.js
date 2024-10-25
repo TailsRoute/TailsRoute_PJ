@@ -67,8 +67,8 @@ if (typeof service === 'undefined') {
 
 async function initMap() {
     // Google Maps와 Places 라이브러리를 비동기로 불러옴
-    const {Map} = await google.maps.importLibrary("maps");
-    const {Place, SearchNearbyRankPreference} = await google.maps.importLibrary("places");
+    const { Map } = await google.maps.importLibrary("maps");
+    const { Place, SearchNearbyRankPreference } = await google.maps.importLibrary("places");
 
     // 지도 중심 좌표 설정 (서울)
     let center = new google.maps.LatLng(37.5665, 126.9780);
@@ -79,9 +79,6 @@ async function initMap() {
         zoom: 14,
         mapId: "d46969492471ae84",
     });
-
-    // 마커를 저장할 배열 생성
-    const markers = [];
 
     // 서버에서 병원 데이터 가져오기 (비동기 요청)
     fetch('/hospitals')
@@ -94,13 +91,10 @@ async function initMap() {
             activeHospitals.forEach(hospital => {
                 if (hospital.latitude && hospital.longitude) {
                     const marker = new google.maps.Marker({
-                        position: {lat: parseFloat(hospital.latitude), lng: parseFloat(hospital.longitude)},
+                        position: { lat: parseFloat(hospital.latitude), lng: parseFloat(hospital.longitude) },
                         map: map,
                         title: hospital.name
                     });
-
-                    // 마커를 markers 배열에 추가
-                    markers.push(marker);
 
                     // 클릭 이벤트 추가 (필요 시)
                     const infoWindow = new google.maps.InfoWindow({
@@ -112,15 +106,11 @@ async function initMap() {
                     });
                 }
             });
-
-            // 마커 클러스터링 적용
-            new MarkerClusterer(map, markers, {
-                imagePath: 'https://developers.google.com/maps/documentation/javascript/examples/markerclusterer/m',
-            });
-
         })
         .catch(error => console.error('Error fetching hospital data:', error));
 }
+
+
 
 // 신) 사용자가 시/군/구를 선택하여 주소를 좌표로 변환
 function geocodeAddress() {
@@ -138,7 +128,7 @@ function geocodeAddress() {
     // 주소 값을 콘솔에 출력하여 확인
     console.log("Geocoding 주소:", address);
 
-    geocoder.geocode({address}, function (results, status) {
+    geocoder.geocode({ address }, function (results, status) {
         if (status === 'OK') {
 
             const location = results[0].geometry.location;  // 위치 정보 가져오기
@@ -168,8 +158,8 @@ function geocodeAddress() {
 
 // 동물 병원을 찾는 함수 (Places API - New 사용)
 async function findAnimalHospitals(location) {
-    const {Place, SearchNearbyRankPreference} = await google.maps.importLibrary("places");
-    const {AdvancedMarkerElement} = await google.maps.importLibrary("marker");
+    const { Place, SearchNearbyRankPreference } = await google.maps.importLibrary("places");
+    const { AdvancedMarkerElement } = await google.maps.importLibrary("marker");
 
     const request = {
         // 검색할 위치와 반경 설정
@@ -184,10 +174,10 @@ async function findAnimalHospitals(location) {
     };
 
     try {
-        const {places} = await Place.searchNearby(request);  // 장소 검색
+        const { places } = await Place.searchNearby(request);  // 장소 검색
 
         if (places.length) {
-            const {LatLngBounds} = await google.maps.importLibrary("core");
+            const { LatLngBounds } = await google.maps.importLibrary("core");
             const bounds = new LatLngBounds();
 
             // 검색된 장소마다 마커 생성
