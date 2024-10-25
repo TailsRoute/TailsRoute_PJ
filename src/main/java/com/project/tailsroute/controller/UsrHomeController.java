@@ -31,6 +31,7 @@ public class UsrHomeController {
             Member member = rq.getLoginedMember();
             model.addAttribute("member", member);
         }
+        model.addAttribute("isLogined", isLogined);
 
         List<Missing> missings = missingService.list(0, 10, "전체");
 
