@@ -1,23 +1,19 @@
-
-document.addEventListener('DOMContentLoaded', function() {
+document.addEventListener('DOMContentLoaded', function () {
     var calendarEl = document.getElementById('calendar');
-    var events = [/*[[${diaries}]]*/].map(function (diary){
-        return {
-            title: diary.title,
-            start: diary.regDate.replace(' ', 'T') // 공백을 T로 교체
-        };
-    })
 
     var calendar = new FullCalendar.Calendar(calendarEl, {
-        initialView: 'dayGridMonth', // 기본 보기를 월간 그리드로 설정
-        locale: 'ko', // 한국어 설정
-        headerToolbar: {
-            right: 'prev,next today',
-            center: 'title',
-            left: 'dayGridMonth,timeGridWeek,timeGridDay'
+        initialView: 'dayGridMonth',
+        events: 'calendar', // API 엔드포인트
+        eventClick: function(info) {
+            alert('Event: ' + info.event.title);
         },
-        events: events,
+            eventTimeFormat: { // 24시간제로 시간 형식 설정
+                hour: '2-digit',
+                    minute: '2-digit',
+                    hour12: false
+            }
+
     });
 
-    calendar.render(); // 캘린더 렌더링
+    calendar.render(); // 달력 렌더링
 });

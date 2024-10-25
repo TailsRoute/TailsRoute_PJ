@@ -16,8 +16,8 @@ import java.time.format.DateTimeFormatter;
 @NoArgsConstructor
 public class Diary {
     private int id;
-    private String regDate;
-    private String updateDate;
+    private LocalDate regDate;
+    private LocalDate updateDate;
     private int memberId;
     private String title;
     private String body;
@@ -28,5 +28,7 @@ public class Diary {
     private String information;
     private String extra__writer;
 
+    public Diary(String title, LocalDate startDate) {
+    }
 }
 

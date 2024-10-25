@@ -8,26 +8,21 @@
     <title>PetdiaryWrite</title>
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
     <link rel="stylesheet" href="/resource/css/diary/DiaryWrite.css">
-    <script src="https://cdn.tiny.cloud/1/no-api-key/tinymce/5/tinymce.min.js" referrerpolicy="origin"></script>
-    <link href="https://unpkg.com/@fullcalendar/core@5.10.1/main.css" rel="stylesheet" />
-    <link href="https://unpkg.com/@fullcalendar/daygrid@5.10.1/main.css" rel="stylesheet" />
-    <script src="https://unpkg.com/@fullcalendar/core@5.10.1/main.js"></script>
-    <script src="https://unpkg.com/@fullcalendar/daygrid@5.10.1/main.js"></script>
-
 </head>
 
 <body >
+
 
 
 <form  id = "diaryContent" action="/usr/diary/write" method="post" enctype="multipart/form-data">
     <input type="hidden" name="memberId" value="1" >
 
     <div class="flex items-center justify-center  ">
-        <input type="text" name="title" placeholder="제목을 입력해주세요." class="input-hidden ">
+        <label for="title"></label><input type="text" id="title" name="title" placeholder="제목을 입력해주세요." class="input-hidden "/>
     </div>
 
     <div class="upload-container text-center mb-6">
-        <div id="preview" class="w-full h-64 bg-white relative overflow-hidden">
+        <div class="preview">
             <div id="uploadContent" class="text-center flex flex-col items-center justify-center w-full h-full">
                 <button type="button" id="fileBtn" class="text-white px-4 py-2 rounded-lg mb-2" style="background-color:#696969">이미지 업로드</button>
                 <p class="fileInput-text text-gray-500 text-xl font-bold">또는 파일 놓기.</p>
@@ -69,9 +64,6 @@
                 <button id="SubmitButton" type="submit" class="text-white px-4 py-2 rounded-lg mb-2" style="background-color:#696969">작성</button>
             </div>
         </nav>
-
-
 </form>
-
 </body>
 </html>
