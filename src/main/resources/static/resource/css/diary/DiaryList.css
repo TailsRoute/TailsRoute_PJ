@@ -10,11 +10,18 @@ body {
     border: 1px solid #ddd; /* 테두리 설정 */
     border-radius: 8px; /* 모서리를 둥글게 */
     box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1); /* 그림자 효과 추가 */
-    background-color: #E7E7E7; /* 캘린더 배경색 */
+    background-color:#E7E7E7; /* 캘린더 배경색 */
 }
-
 .fc {
     font-family: 'Arial', sans-serif; /* 폰트 설정 */
+}
+.fc-next-button{
+    background-color: #888888 !important;
+    margin-right: 50px!important;
+}
+.fc-prev-button{
+    background-color: #888888 !important;
+    margin-left: 50px!important;
 }
 
 .fc-toolbar {
@@ -23,6 +30,16 @@ body {
     padding: 10px; /* 툴바 여백 */
     border-top-left-radius: 8px; /* 상단 왼쪽 모서리 둥글게 */
     border-top-right-radius: 8px; /* 상단 오른쪽 모서리 둥글게 */
+}
+
+.fc-day-today {
+    border: 2px solid #888888 !important;
+    background-color: #E7E7E7 !important;
+    color: #888888;
+}
+
+.fc-event{
+    background-color:#D0C3C3 ;
 }
 
 /* 제목 및 제목 아래 선 스타일 */
@@ -47,20 +64,21 @@ body {
     box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1); /* 그림자 효과 추가 */
     background-color: #E7E7E7; /* 캘린더 배경색 */
     text-align: end;
+    padding-left: 30px;
+    padding-right: 30px;
 }
 
 
 /* 헤더에 더 두꺼운 선 */
 .diaryList th {
     border-bottom: 2px solid #000;  /* 테이블 헤더에 두꺼운 줄 */
-    border-bottom-color: #9ca3af;
-
+    border-bottom-color: #888888;
 }
 .diaryList td {
     border-bottom: 2px solid #000 ;  /* 테이블 헤더에 두꺼운 줄 */
     text-align: center;
-    border-bottom-color: #9ca3af;
-
+    border-bottom-color: #888888;
+    font-size: 18px;
 }
 
 #writeButton{
@@ -88,12 +106,18 @@ body {
     height: 800px;
 }
 #sortSelect{
-    background-color:#E7E7E7;
+    background-color:#FFFEF0;
     margin-right: 30px;
     width: 100px;
+    font-weight: bold;
+    font-size: 18px;
 }
 .pagination{
     margin-left: auto;
     margin-right: auto;
     margin-top: auto;
+}
+#sortForm{
+  display: flex;
+  margin-left: auto;
 }
