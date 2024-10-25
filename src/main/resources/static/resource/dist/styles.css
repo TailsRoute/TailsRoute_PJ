@@ -152,7 +152,7 @@ html,
   -moz-tab-size: 4;
   /* 3 */
   -o-tab-size: 4;
-  tab-size: 4;
+     tab-size: 4;
   /* 3 */
   font-family: ui-sans-serif, system-ui, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
   /* 4 */
@@ -197,7 +197,7 @@ Add the correct text decoration in Chrome, Edge, and Safari.
 
 abbr:where([title]) {
   -webkit-text-decoration: underline dotted;
-  text-decoration: underline dotted;
+          text-decoration: underline dotted;
 }
 
 /*
@@ -550,7 +550,7 @@ video {
 
 /* Make elements with the HTML hidden attribute stay hidden by default */
 
-[hidden] {
+[hidden]:where(:not([hidden="until-found"])) {
   display: none;
 }
 
@@ -604,8 +604,12 @@ video {
   right: 0px;
 }
 
-.tw-right-\[-200px\] {
-  right: -200px;
+.tw-right-\[-5px\] {
+  right: -5px;
+}
+
+.tw-top-\[-7px\] {
+  top: -7px;
 }
 
 .tw-z-20 {
@@ -614,14 +618,6 @@ video {
 
 .tw-z-30 {
   z-index: 30;
-}
-
-.tw-top-\[-7px\]{
-  top: -7px;
-}
-
-.tw-right-\[-5px\]{
-  right:-5px;
 }
 
 .tw-mx-auto {
@@ -653,8 +649,12 @@ video {
   margin-left: 12px;
 }
 
-.tw-ml-\[200px\]{
+.tw-ml-\[200px\] {
   margin-left: 200px;
+}
+
+.tw-ml-auto {
+  margin-left: auto;
 }
 
 .tw-mr-\[30px\] {
@@ -689,20 +689,32 @@ video {
   display: none;
 }
 
-.tw-h-\[10px\] {
-  height: 10px;
-}
-
 .tw-h-\[100px\] {
   height: 100px;
+}
+
+.tw-h-\[10px\] {
+  height: 10px;
 }
 
 .tw-h-\[350px\] {
   height: 350px;
 }
 
+.tw-h-\[40px\] {
+  height: 40px;
+}
+
 .tw-h-\[45px\] {
   height: 45px;
+}
+
+.tw-h-\[500px\] {
+  height: 500px;
+}
+
+.tw-h-\[50px\] {
+  height: 50px;
 }
 
 .tw-h-\[60px\] {
@@ -713,20 +725,12 @@ video {
   height: 100%;
 }
 
-.tw-mh-\[250px\]{
-  max-height: 250px;
-}
-
-.tw-overflow-auto{
-  overflow: auto;
+.tw-w-\[100px\] {
+  width: 100px;
 }
 
 .tw-w-\[10px\] {
   width: 10px;
-}
-
-.tw-w-\[100px\] {
-  width: 100px;
 }
 
 .tw-w-\[145px\] {
@@ -753,6 +757,10 @@ video {
   width: 45px;
 }
 
+.tw-w-\[50px\] {
+  width: 50px;
+}
+
 .tw-w-\[700px\] {
   width: 700px;
 }
@@ -765,6 +773,10 @@ video {
   flex: 1 1 0%;
 }
 
+.tw-flex-grow {
+  flex-grow: 1;
+}
+
 .tw-cursor-default {
   cursor: default;
 }
@@ -775,6 +787,14 @@ video {
 
 .tw-flex-col {
   flex-direction: column;
+}
+
+.tw-items-start {
+  align-items: flex-start;
+}
+
+.tw-items-end {
+  align-items: flex-end;
 }
 
 .tw-items-center {
@@ -797,12 +817,20 @@ video {
   gap: 0.5rem;
 }
 
+.tw-overflow-auto {
+  overflow: auto;
+}
+
+.tw-rounded-\[10px\] {
+  border-radius: 10px;
+}
+
 .tw-rounded-\[30px\] {
   border-radius: 30px;
 }
 
-.tw-rounded-\[10px\] {
-  border-radius: 30px;
+.tw-rounded-\[5px\] {
+  border-radius: 5px;
 }
 
 .tw-rounded-full {
@@ -823,13 +851,27 @@ video {
   border-width: 1px;
 }
 
+.tw-border-b {
+  border-bottom-width: 1px;
+}
+
 .tw-border-\[\#4D3E3E\] {
   --tw-border-opacity: 1;
   border-color: rgb(77 62 62 / var(--tw-border-opacity));
 }
 
+.tw-border-gray-500 {
+  --tw-border-opacity: 1;
+  border-color: rgb(107 114 128 / var(--tw-border-opacity));
+}
+
 .tw-border-transparent {
   border-color: transparent;
+}
+
+.tw-bg-\[\#4D3E3E\] {
+  --tw-bg-opacity: 1;
+  background-color: rgb(77 62 62 / var(--tw-bg-opacity));
 }
 
 .tw-bg-\[\#FFF3CD\] {
@@ -837,9 +879,14 @@ video {
   background-color: rgb(255 243 205 / var(--tw-bg-opacity));
 }
 
-.tw-bg-\[\#FFFEF0\]{
+.tw-bg-\[\#FFFEF0\] {
   --tw-bg-opacity: 1;
-  background-color: #FFFEF0;
+  background-color: rgb(255 254 240 / var(--tw-bg-opacity));
+}
+
+.tw-bg-red-500 {
+  --tw-bg-opacity: 1;
+  background-color: rgb(239 68 68 / var(--tw-bg-opacity));
 }
 
 .tw-bg-white {
@@ -847,9 +894,8 @@ video {
   background-color: rgb(255 255 255 / var(--tw-bg-opacity));
 }
 
-.tw-bg-red-500 {
-  --tw-bg-opacity: 1;
-  background-color: rgb(239 68 68 / var(--tw-bg-opacity));
+.tw-p-10 {
+  padding: 2.5rem;
 }
 
 .tw-p-2 {
@@ -898,6 +944,10 @@ video {
   padding-left: 9px;
 }
 
+.tw-pr-2 {
+  padding-right: 0.5rem;
+}
+
 .tw-pr-\[10px\] {
   padding-right: 10px;
 }
@@ -919,16 +969,16 @@ video {
   line-height: 2rem;
 }
 
-.tw-text-\[50px\] {
-  font-size: 50px;
-}
-
 .tw-text-\[10px\] {
   font-size: 10px;
 }
 
-.tw-text-l-\[10px\] {
-  line-height: 10px;
+.tw-text-\[30px\] {
+  font-size: 30px;
+}
+
+.tw-text-\[50px\] {
+  font-size: 50px;
 }
 
 .tw-text-lg {
@@ -943,6 +993,11 @@ video {
 .tw-text-\[\#4D3E3E\] {
   --tw-text-opacity: 1;
   color: rgb(77 62 62 / var(--tw-text-opacity));
+}
+
+.tw-text-red-500 {
+  --tw-text-opacity: 1;
+  color: rgb(239 68 68 / var(--tw-text-opacity));
 }
 
 .tw-text-white {

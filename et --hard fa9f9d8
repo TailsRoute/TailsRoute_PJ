@@ -1,0 +1,271 @@
+[33mcommit 6f129e294d165a64032a20ec52a2b9de308f2a1e[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mfeature/Eichi[m[33m, [m[1;31morigin/feature/Eichi[m[33m)[m
+Author: Eichi2514 <picon1317@gmail.com>
+Date:   Fri Oct 25 14:17:19 2024 +0900
+
+    커뮤니티 CRUD 추가
+
+[33mcommit 55a682e00ac0a69b36e5b0d0184d5d7d020e3bd6[m
+Merge: ca95842 fa9f9d8
+Author: Eichi2514 <picon1317@gmail.com>
+Date:   Fri Oct 25 14:02:05 2024 +0900
+
+    A
+    Merge branch 'develop' into feature/Eichi
+
+[33mcommit fa9f9d86ff9ee952af33942edd4db8b5884327d6[m
+Author: ljh01067 <leejh01067@gmail.com>
+Date:   Fri Oct 25 13:48:54 2024 +0900
+
+    ljh: js와 css분리와 즐겨찾기 기능 추가
+
+[33mcommit 04642456b983a017476e01cc3d84ce5c6e4bf95b[m
+Author: s3496h <s3496h@gmail.com>
+Date:   Thu Oct 24 21:19:51 2024 +0900
+
+    jsh 켈린더에 리스트 목록 띄우기
+
+[33mcommit 34d0e47d81d234ce1108726a761b49078fb40355[m
+Author: ljh01067 <leejh01067@gmail.com>
+Date:   Wed Oct 23 16:53:12 2024 +0900
+
+    ljh:즐겨찾기 기능 추가
+
+[33mcommit 0bd51c0fcfc2f98f6b7da601f7b32c44551e94e0[m
+Author: ljh01067 <leejh01067@gmail.com>
+Date:   Tue Oct 22 16:45:33 2024 +0900
+
+    ljh:shopping/page.html에js와css분리
+
+[33mcommit da9f26b4c14c3f701440412ca0a33edc5fea7040[m
+Author: yeosang0508 <yeosang0508@gmail.com>
+Date:   Wed Oct 23 16:05:35 2024 +0900
+
+    SSA : keras 파일 ignore에 저장
+
+[33mcommit e50aea149bffaa2c05533fd9a93050274590d6b0[m
+Author: yeosang0508 <yeosang0508@gmail.com>
+Date:   Wed Oct 23 16:01:15 2024 +0900
+
+    SSA : epochs 10, layers.Dense 216으로 조절
+
+[33mcommit e18cb676d45d6b868a382b80e0302eb12568a8a9[m
+Author: yeosang0508 <yeosang0508@gmail.com>
+Date:   Wed Oct 23 02:20:14 2024 +0900
+
+    SSA : ResNet50 변경 후 전처리
+
+[33mcommit 3b327fd77c3b13ae5016c75631968e7c96223f94[m
+Author: Eichi2514 <picon1317@gmail.com>
+Date:   Tue Oct 22 18:29:08 2024 +0900
+
+    위치 정보 등록시 저장한 위치 주소 보이게 수정
+
+[33mcommit ca95842caabd3503fe18bda16153fc4c64847341[m
+Author: Eichi2514 <picon1317@gmail.com>
+Date:   Tue Oct 22 18:29:08 2024 +0900
+
+    위치 정보 등록시 저장한 위치 주소 보이게 수정
+
+[33mcommit 84d186a253c2805f5743a52dae3fce265222c031[m
+Merge: 9b7e07f b913334
+Author: Eichi2514 <picon1317@gmail.com>
+Date:   Tue Oct 22 11:38:04 2024 +0900
+
+    Merge branch 'develop' into feature/Eichi
+
+[33mcommit 6b2607821212fdc106510a2915cff0b8184e842b[m
+Author: Eichi2514 <picon1317@gmail.com>
+Date:   Tue Oct 22 11:05:42 2024 +0900
+
+    jsh: 상세페이지 구현
+
+[33mcommit ac3c2bb47a6b1b622bfaf097d5e99454cea815f4[m
+Author: jby9725 <jby9725@gmail.com>
+Date:   Tue Oct 22 10:57:02 2024 +0900
+
+    병원 위치 데이í이터 파싱 추가
+
+[33mcommit 5ddc1dcbe38ebf84bb2469ff6a43a7eb947464c8[m
+Author: jby9725 <jby9725@gmail.com>
+Date:   Tue Oct 22 10:47:53 2024 +0900
+
+    병합커밋
+
+[33mcommit b913334ea95025171e4fe079387f254d8129a62e[m
+Author: Eichi2514 <picon1317@gmail.com>
+Date:   Mon Oct 21 17:43:56 2024 +0900
+
+    GPS 알림 서비스 구현
+
+[33mcommit 9b7e07f8f41ed57b425ebfe9eed4395088e6d8de[m
+Author: Eichi2514 <picon1317@gmail.com>
+Date:   Mon Oct 21 17:43:56 2024 +0900
+
+    GPS 알림 서비스 구현
+
+[33mcommit 4ad915093b7650fdc0ce0538dd7ad2878033ecde[m
+Author: ljh01067 <leejh01067@gmail.com>
+Date:   Mon Oct 21 16:32:12 2024 +0900
+
+    ljh:반려용품검색방식변경
+
+[33mcommit 2f7372e891ceaf8f7624126d7c4efd63368caa02[m
+Author: ljh01067 <leejh01067@gmail.com>
+Date:   Mon Oct 21 13:55:21 2024 +0900
+
+    ljh:페이지네이션수정
+
+[33mcommit 1476771b2a5c79994968a14190d0adc9c19438f0[m
+Author: yeosang0508 <yeosang0508@gmail.com>
+Date:   Sun Oct 20 23:40:28 2024 +0900
+
+    SSA : 로그인 페이지 수정 (padding top, 스크롤 제거)
+
+[33mcommit f3380828be284eb50e64c3230cbf814cf6d3a5e7[m
+Author: yeosang0508 <yeosang0508@gmail.com>
+Date:   Sun Oct 20 01:07:23 2024 +0900
+
+    SSA : dog_behavior_analysis 환경 설정 및 실행 가이드(README 작성)
+
+[33mcommit 941bc5c432b4f195fa710012d2f3564ca2a4f86d[m
+Author: yeosang0508 <yeosang0508@gmail.com>
+Date:   Sun Oct 20 00:53:52 2024 +0900
+
+    SSA : model_test(1) 및 google drive 연동
+
+[33mcommit f140e1857bb32b8f301e191d65aa9a6801da112d[m
+Author: ljh01067 <leejh01067@gmail.com>
+Date:   Fri Oct 18 17:01:20 2024 +0900
+
+    API수정
+
+[33mcommit 03bbe53f5406bfca2a5576e261d937972bc0deb7[m
+Author: ljh01067 <leejh01067@gmail.com>
+Date:   Fri Oct 18 15:38:11 2024 +0900
+
+    ljh:알람완성
+
+[33mcommit 010f1abc59b89fea833f47b76a8947faa1b7af22[m
+Author: ljh01067 <leejh01067@gmail.com>
+Date:   Fri Oct 18 15:36:04 2024 +0900
+
+    ljh:알람완성
+
+[33mcommit 75a63ddfc3029262cd9b7bf0583522fb4f8c2c92[m
+Author: s3496h <s3496h@gmail.com>
+Date:   Fri Oct 18 15:00:08 2024 +0900
+
+    jsh 필터링 바로되게 수정, 페이지네이션 추가
+
+[33mcommit 598af5edac6ffde20215117fdd5b2aa855117405[m
+Author: yeosang0508 <yeosang0508@gmail.com>
+Date:   Thu Oct 17 23:15:06 2024 +0900
+
+    SSA : 전이 학습 중 (MobileNetV2)
+
+[33mcommit c49e948ff867e062571aabc73878d53624855c9a[m
+Author: yeosang0508 <yeosang0508@gmail.com>
+Date:   Thu Oct 17 23:00:41 2024 +0900
+
+    SSA : dog_behavior_analysis 폴더 생성
+
+[33mcommit ccacc49551e81c8d2e9608482d0597db386fb086[m
+Author: ljh01067 <leejh01067@gmail.com>
+Date:   Thu Oct 17 18:08:41 2024 +0900
+
+    feature/ljh: 알람수정사항 수정롼료 ë°완료 및 알람기능 90%완성
+
+[33mcommit 94b02782f6e37f12658056a7d9ab9a8db87de937[m
+Merge: 72eea63 35c07fe
+Author: yeosang0508 <yeosang0508@gmail.com>
+Date:   Thu Oct 17 09:57:36 2024 +0900
+
+    Merge pull request #22 from TailsRoute/feature/jby
+    
+    JBY : GOOGLE_MAP_API 키 가리고 dotenv 라이브러리로 불러와 기존 기능 사용하기
+
+[33mcommit 35c07fe13cd9076a7a3348e25bfd318228d9ea46[m
+Author: jby9725 <jby9725@gmail.com>
+Date:   Thu Oct 17 09:55:48 2024 +0900
+
+    JBY : GOOGLE_MAP_API 키 가리고 dotenv 라이브러리로 불러와 기존 기능 사용하기
+
+[33mcommit 72eea6315732f97cde410b21adc478cb3888c1c0[m
+Merge: 89f97ae c1d146e
+Author: yeosang0508 <yeosang0508@gmail.com>
+Date:   Wed Oct 16 21:20:20 2024 +0900
+
+    Merge pull request #21 from TailsRoute/feature/jsh
+    
+    jsh 최신 순 오래된 순 필터 추가
+
+[33mcommit c1d146ee90ddd6f9fd40d786f352f2d2b8594280[m
+Author: s3496h <s3496h@gmail.com>
+Date:   Wed Oct 16 18:22:02 2024 +0900
+
+    jsh 최신 순 오래된 순 필터 추가
+
+[33mcommit 89f97ae4d4c2fbd4baf4be2e8211188eca2d1d9d[m
+Merge: 4b2aa95 f511d0a
+Author: yeosang0508 <yeosang0508@gmail.com>
+Date:   Wed Oct 16 18:02:28 2024 +0900
+
+    Merge pull request #20 from TailsRoute/feature/jsh
+    
+    Feature/jsh
+
+[33mcommit f511d0a18a54339ea1c73c5e9755a5bfb892a770[m
+Author: s3496h <s3496h@gmail.com>
+Date:   Wed Oct 16 17:59:01 2024 +0900
+
+    test3
+
+[33mcommit 2c5c94788b7b2398136763aaef995f8019c8adbc[m
+Author: s3496h <s3496h@gmail.com>
+Date:   Wed Oct 16 17:55:17 2024 +0900
+
+    제ë°ㅅtest4ã
+
+[33mcommit 4b2aa95abc71ea55f67ab883c992d5e75a916979[m
+Merge: 69b62ec 76b0e80
+Author: seong hun <s3496h@gmail.com>
+Date:   Wed Oct 16 17:50:59 2024 +0900
+
+    Merge pull request #18 from TailsRoute/feature/ljh
+    
+    수정사항 7개 추가
+
+[33mcommit 76b0e80db3383a35a8ddc1cfbaddfcdf5f80105d[m
+Author: ljh01067 <leejh01067@gmail.com>
+Date:   Wed Oct 16 17:46:31 2024 +0900
+
+    수정사항 7개 추가
+
+[33mcommit 69b62eccdcf42feb2f802aa63860327428b1193a[m
+Merge: 6a2e17c 8b860e9
+Author: jby9725 <56372909+jby9725@users.noreply.github.com>
+Date:   Wed Oct 16 17:32:34 2024 +0900
+
+    Merge pull request #17 from TailsRoute/feature/jby
+    
+    Feature/jby
+
+[33mcommit 8b860e95ad822a6576d459bef7a80c57ad5b5f2f[m
+Merge: f2d7efc 6a2e17c
+Author: jby9725 <jby9725@gmail.com>
+Date:   Wed Oct 16 17:31:26 2024 +0900
+
+    충돌 해결2
+
+[33mcommit f2d7efc9c5ed73d94384f12403a152ea202ce3ee[m
+Author: jby9725 <jby9725@gmail.com>
+Date:   Wed Oct 16 17:30:26 2024 +0900
+
+    충돌해결
+
+[33mcommit 6a2e17cd8cc50d29d1d4435cb25cd735c4e57a31[m
+Merge: 36df933 aaca021
+Author: Eichi2514 <picon1317@gmail.com>
+Date:   Wed Oct 16 17:28:57 2024 +0900
+
+    Merge pull request #16 from TailsRoute/feature/E

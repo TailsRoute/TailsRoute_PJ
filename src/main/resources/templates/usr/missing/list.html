@@ -59,7 +59,7 @@
 
 
 <div class="pagination tw-flex tw-justify-center tw-items-center" th:if="${totalPage != 0}">
-    <a class="pagination_left tw-p-[10px]" th:href="@{'list?page=' + ${lpage} + 'srt='+${srt}}">
+    <a class="pagination_left tw-p-[10px]" th:href="@{'list?page=' + ${lpage} + '&str='+${str}}">
         <i class="fa-solid fa-caret-left" style="font-size: 70px;"></i>
     </a>
 
@@ -68,7 +68,7 @@
         <!-- 처음 페이지로 이동 -->
         <div th:if="${startPage > 1}">
             <a class="tw-text-[50px] tw-pl-[10px] tw-pr-[10px]"
-               th:href="@{'list?page=1&' + 'srt='+${srt}}">1</a>
+               th:href="@{'list?page=1&' + '&str='+${str}}">1</a>
         </div>
 
         <!-- 중간 생략 버튼 -->
@@ -79,7 +79,7 @@
         <!-- 페이지 번호 목록 -->
         <div th:each="i : ${#numbers.sequence(startPage, endPage)}">
             <a class="tw-text-[50px] tw-pl-[20px] tw-pr-[20px]"
-               th:classappend="${page == i} ? 'tw-bg-white tw-rounded-full'" th:href="@{'list?page=' + ${i} + '&srt='+${srt}}"
+               th:classappend="${page == i} ? 'tw-bg-white tw-rounded-full'" th:href="@{'list?page=' + ${i} + '&str='+${str}}"
                th:text="${i}"></a>
         </div>
 
@@ -91,16 +91,15 @@
         <!-- 마지막 페이지로 이동 -->
         <div th:if="${endPage < totalPage}">
             <a class="tw-text-[50px] tw-pl-[20px] tw-pr-[20px]"
-               th:href="@{'list?page=' + ${totalPage} + '&srt='+${srt}}"
+               th:href="@{'list?page=' + ${totalPage} + '&str='+${str}}"
                th:text="${totalPage}"></a>
         </div>
     </div>
 
-    <a class="pagination_right tw-p-[10px]" th:href="@{'list?page=' + ${rpage} + '&srt='+${srt}}">
+    <a class="pagination_right tw-p-[10px]" th:href="@{'list?page=' + ${rpage} + '&str='+${str}}">
         <i class="fa-solid fa-caret-right" style="font-size: 70px;"></i>
     </a>
 </div>
-
 
 </body>
 </html>

@@ -152,14 +152,20 @@ CREATE TABLE article(
                         boardId INT(10) UNSIGNED NOT NULL COMMENT '게시판 식별번호',
                         title CHAR(100) NOT NULL COMMENT '제목',
                         `body` TEXT NOT NULL COMMENT '내용',
-                        hitCount INT(10) UNSIGNED NOT NULL DEFAULT 0 COMMENT '조회수'
+                        hitCount INT(10) UNSIGNED NOT NULL DEFAULT 0 COMMENT '조회수',
+                        goodReactionPoint INT(10) UNSIGNED NOT NULL DEFAULT 0 COMMENT '좋아요',
+                        badReactionPoint INT(10) UNSIGNED NOT NULL DEFAULT 0 COMMENT '싫어요'
 );
 
 ## 게시판 테이블
 CREATE TABLE board(
                       id INT(10) UNSIGNED NOT NULL PRIMARY KEY AUTO_INCREMENT COMMENT '식별번호',
+                      regDate DATETIME NOT NULL COMMENT '생성 날짜',
+                      updateDate DATETIME NOT NULL COMMENT '수정 날짜',
                       `code` CHAR(100) NOT NULL UNIQUE COMMENT 'notice(공지사항) free(자유) Q&A(질의응답)',
-                      `name` CHAR(20) NOT NULL UNIQUE COMMENT '이름'
+                      `name` CHAR(20) NOT NULL UNIQUE COMMENT '이름',
+                      delStatus TINYINT(1) UNSIGNED NOT NULL DEFAULT 0 COMMENT '삭제 여부 (0=삭제 전, 1=삭제 후)',
+                      delDate DATETIME COMMENT '삭제 날짜'
 );
 
 ## 리액션(좋아요, 싫어요) 테이블
@@ -181,7 +187,9 @@ CREATE TABLE reply (
                        memberId INT(10) UNSIGNED NOT NULL COMMENT '작성자 식별번호',
                        relTypeCode CHAR(50) NOT NULL COMMENT '작성대상 식별코드',
                        relId INT(10) UNSIGNED NOT NULL COMMENT '작성대상 식별번호',
-                       `body` TEXT NOT NULL COMMENT '내용'
+                       `body` TEXT NOT NULL COMMENT '내용',
+                       goodReactionPoint INT(10) UNSIGNED NOT NULL DEFAULT 0 COMMENT '좋아요',
+                       badReactionPoint INT(10) UNSIGNED NOT NULL DEFAULT 0 COMMENT '싫어요'
 );
 
 ## 알람 테이블
@@ -436,6 +444,15 @@ CREATE TABLE hospital(
                          businessStatus ENUM('영업', '폐업') DEFAULT '영업' COMMENT '영업 상태',
                          `type` ENUM('일반', '야간', '24시간') NOT NULL DEFAULT '일반' COMMENT '병원 타입'
 );
+
+INSERT INTO article
+SET
+    regDate = NOW() - INTERVAL FLOOR(RAND() * 100000000) SECOND,
+updateDate = NOW() - INTERVAL FLOOR(RAND() * 100000000) SECOND,
+memberId = FLOOR(1 + RAND() * 6),
+boardId = FLOOR(1 + RAND() * 3),
+title = CONCAT('제목', FLOOR(RAND() * 10000)),
+`body` = CONCAT('내용', FLOOR(RAND() * 10000));
 
 USE `tails_route`;
 SHOW TABLES;
