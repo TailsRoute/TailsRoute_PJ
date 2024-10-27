@@ -76,5 +76,5 @@ data/
 
 
 ### 훈련 시킨 데이터 제외 ###
-VSCode/models/*.keras
+VSCode/models/dog_behavior_model.keras
 
