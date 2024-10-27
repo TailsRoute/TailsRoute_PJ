@@ -1,12 +1,17 @@
-import tensorflow as tf
-from tensorflow.keras.applications import ResNet50
-from tensorflow.keras import layers, models
-from tensorflow.keras.optimizers import Adam
-from tensorflow.keras.callbacks import EarlyStopping, ModelCheckpoint
-import cv2
 import numpy as np
 import os
+import cv2
+import tensorflow as tf
+from tensorflow.keras.models import Sequential
+from tensorflow.keras.layers import Dense, Dropout, GlobalAveragePooling2D
+from tensorflow.keras.applications import ResNet50
 from sklearn.utils.class_weight import compute_class_weight
+from tensorflow.keras.callbacks import EarlyStopping, ModelCheckpoint
+import matplotlib.pyplot as plt
+import tensorflow.keras.backend as K
+from tensorflow.keras.optimizers import Adam
+from tensorflow.keras.callbacks import ReduceLROnPlateau
+from tensorflow.keras.regularizers import l2
 
 # 데이터 로드 (preprocess.py에서 생성된 데이터 사용)
 from preprocess import get_data
@@ -15,125 +20,177 @@ train_images, val_images, train_labels, val_labels = get_data()
 print(f"훈련 이미지 개수: {len(train_images)}")
 print(f"검증 이미지 개수: {len(val_images)}")
 
-# 이미지 로드 및 전처리 함수
-def load_and_preprocess_image(images):
-    images = os.path.abspath(images)
+# OpenCV로 이미지를 로드하고 전처리하는 함수 정의
+def load_and_preprocess_image(filepath):
+    img = cv2.imread(filepath)
+    img = cv2.resize(img, (150, 150))  # ResNet50 입력 크기 맞추기
+    img = img / 255.0  # 정규화
+    return img
 
-    image = cv2.imread(images)
-    if image is None:
-        raise ValueError(f"이미지를 불러올 수 없습니다: {images}")
-    image = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY) # 흑백 변환
-    image = cv2.resize(image, (224, 224))
-    image = image / 255.0
-    return image 
-
-
-# 이미지 증강 함수 정의 (OpenCV 활용)
+# OpenCV 기반 증강 함수 정의
 def augment_image(image):
-    # 밝기 조절
-    brightness = np.random.uniform(0.6, 1.4)
+    # 1. 밝기 조절 (alpha 범위는 0.8~1.2로 조정)
+    brightness = np.random.uniform(0.8, 1.2)
     image = cv2.convertScaleAbs(image, alpha=brightness)
 
-    # 회전
-    angle = np.random.uniform(-45, 45)
+    # 2. 회전 (각도 범위 -30도~30도)
+    angle = np.random.uniform(-30, 30)
     (h, w) = image.shape[:2]
     M = cv2.getRotationMatrix2D((w / 2, h / 2), angle, 1.0)
-    image = cv2.warpAffine(image, M, (w, h), flags=cv2.INTER_NEAREST)
+    image = cv2.warpAffine(image, M, (w, h), flags=cv2.INTER_LINEAR, borderMode=cv2.BORDER_REFLECT_101)
 
-    # 대비 조정
-    contrast = np.random.uniform(0.8, 1.2)
+    # 3. 대비 조정 (1.0~1.3 범위)
+    contrast = np.random.uniform(1.0, 1.3)
     image = cv2.addWeighted(image, contrast, np.zeros_like(image), 0, 0)
 
-    # 노이즈 추가
-    noise = np.random.normal(0, 0.05, image.shape)
-    image = np.clip(image + noise, 0, 1)
+    # 4. 노이즈 추가 (픽셀 범위 조정)
+    noise = np.random.normal(0, 15, image.shape).astype(np.uint8)
+    image = cv2.add(image, noise)
 
-    # 이동
-    tx = np.random.uniform(-0.2 * w, 0.2 * w)
-    ty = np.random.uniform(-0.2 * h, 0.2 * h)
+    # 5. 이동 (폭과 높이의 ±10% 범위)]
+    (h, w) = image.shape[:2]
+    tx = np.random.uniform(-0.1 * w, 0.1 * w)
+    ty = np.random.uniform(-0.1 * h, 0.1 * h)
     M = np.float32([[1, 0, tx], [0, 1, ty]])
-    image = cv2.warpAffine(image, M, (w, h), flags=cv2.INTER_NEAREST)
+    image = cv2.warpAffine(image, M, (w, h), flags=cv2.INTER_LINEAR, borderMode=cv2.BORDER_REFLECT_101)
 
-    # 확대/축소
-    zoom = np.random.uniform(0.8, 1.2)
-    image = cv2.resize(image, None, fx=zoom, fy=zoom)
+    # 6. 확대/축소 (0.9배~1.1배 범위)
+    zoom = np.random.uniform(0.9, 1.1)
+    new_w, new_h = int(w * zoom), int(h * zoom)
+    image = cv2.resize(image, (new_w, new_h), interpolation=cv2.INTER_LINEAR)
 
-    # 수평 뒤집기
+    # 확대 후 크기 조정 (224x224로 맞춤)
+    if zoom < 1.0:
+        pad_w = (w - new_w) // 2
+        pad_h = (h - new_h) // 2
+        image = cv2.copyMakeBorder(image, pad_h, pad_h, pad_w, pad_w, cv2.BORDER_REFLECT_101)
+    else:
+        image = cv2.resize(image, (224, 224))
+
+    # 7. 수평 뒤집기 (50% 확률)
     if np.random.rand() < 0.5:
         image = cv2.flip(image, 1)
 
-    # 이미지 크기를 ResNet50 입력 크기에 맞게 조정
-    image = cv2.resize(image, (224, 224))
-    image = image / 255.0
+    # 8. 정규화 (ResNet50 입력과 동일)
+    image = image / 255.0  # 0~1로 정규화
+    mean = np.array([0.485, 0.456, 0.406])
+    std = np.array([0.229, 0.224, 0.225])
+    image = (image - mean) / std
+
+   # 색조 변화 추가 (Hue shift)
+    image = cv2.cvtColor(image, cv2.COLOR_BGR2HSV)
+    hue_shift = np.random.uniform(-10, 10)
+    image[:, :, 0] = np.clip(image[:, :, 0] + hue_shift, 0, 255)
+    image = cv2.cvtColor(image, cv2.COLOR_HSV2BGR)
 
     return image
 
-# 데이터셋 생성기 정의
-def data_generator(images, labels, batch_size):
+# Custom generator 정의 (OpenCV 증강 포함)
+def custom_generator(generator):
     while True:
-        for i in range(0, len(images), batch_size):
-            batch_images = []
-            batch_labels = labels[i:i + batch_size]
-            for image in images[i:i + batch_size]:
-                augmented_image = augment_image(image)  # OpenCV를 사용한 증강
-                batch_images.append(augmented_image)
-            yield np.array(batch_images), np.array(batch_labels)
-
-# 배치 생성기 초기화
-batch_size = 16
-train_generator = data_generator(train_images, train_labels, batch_size)
-val_generator = data_generator(val_images, val_labels, batch_size)
+        batch = next(generator)
+        images, labels = batch
+        augmented_images = np.array([augment_image(img) for img in images])
+        yield augmented_images, labels
 
 
-# ResNet50 모델 설정
-base_model = ResNet50(weights='imagenet', include_top=False, input_shape=(224, 224, 3))
+
+# 폴더 내 모든 이미지 경로를 가져오는 함수
+def load_dataset_from_directory(directory):
+    images = []
+    labels = []
+    for class_label, class_name in enumerate(['dogs', 'cats']):  # 두 클래스
+        class_dir = os.path.join(directory, class_name)
+        for img_name in os.listdir(class_dir):
+            img_path = os.path.join(class_dir, img_name)
+            img = load_and_preprocess_image(img_path)
+            images.append(img)
+            labels.append(class_label)
+    return np.array(images), np.array(labels)
+
+# 훈련 및 검증 데이터 로드
+x_train, y_train = load_dataset_from_directory(train_dir)
+x_val, y_val = load_dataset_from_directory(validation_dir)
+
+# TensorFlow 데이터셋으로 변환
+train_dataset = tf.data.Dataset.from_tensor_slices((x_train, y_train)).batch(32).shuffle(buffer_size=1000)
+val_dataset = tf.data.Dataset.from_tensor_slices((x_val, y_val)).batch(32)
+
+# ResNet50 모델 불러오기 (사전 학습된 가중치 사용)
+base_model = ResNet50(weights='imagenet', include_top=False, input_shape=(150, 150, 3))
+
+# 사전 학습된 가중치 고정
 base_model.trainable = True
-
-# 첫 120개의 레이어 고정
-for layer in base_model.layers[:120]:
+for layer in base_model.layers[:50]:
     layer.trainable = False
 
-
 # 모델 구성
-model = models.Sequential([
+model = Sequential([
     base_model,
-    layers.GlobalAveragePooling2D(),
-    layers.Dense(216, activation='relu'),
-    layers.Dropout(0.4),
-    layers.Dense(128, activation='relu'),
-    layers.Dropout(0.2),
-    layers.Dense(1, activation='sigmoid')  # 이진 분류
+    GlobalAveragePooling2D(),
+    Dense(128, activation='relu', kernel_regularizer=l2(0.01)),  # 유닛 수를 128로 줄임
+    Dropout(0.5),
+    Dense(64, activation='relu', kernel_regularizer=l2(0.01)),   # 유닛 수를 64로 줄임
+    Dropout(0.3),
+    Dense(1, activation='sigmoid')
 ])
 
 # 모델 컴파일
-model.compile(optimizer=Adam(learning_rate=1e-5), loss='binary_crossentropy', metrics=['accuracy'])
+class_weight = compute_class_weight(
+    class_weight='balanced',
+    classes=np.unique(y_train),
+    y=y_train
+)
+class_weight_dict = dict(enumerate(class_weight))
 
 # 모델 체크포인트 설정
 save_dir = os.path.join(os.getcwd(), 'models')
 os.makedirs(save_dir, exist_ok=True)
 model_path = os.path.join(save_dir, 'dog_behavior_model.keras')
 
-early_stopping = EarlyStopping(monitor='val_loss', patience=5, restore_best_weights=True)
-model_checkpoint = ModelCheckpoint(model_path, save_best_only=True, monitor='val_loss')
+def weighted_binary_crossentropy(class_weight):
+    def loss(y_true, y_pred):
+        weights = y_true * class_weight[1] + (1 - y_true) * class_weight[0]
+        return K.mean(weights * K.binary_crossentropy(y_true, y_pred))
+    return loss
 
-class_weights = compute_class_weight(
-    class_weight = 'balanced',
-    classes=np.unique(train_labels),
-    y=train_labels
+optimizer = Adam(learning_rate=1e-5)
+model.compile(
+    loss=weighted_binary_crossentropy(class_weight),
+    optimizer=optimizer,
+    metrics=['accuracy']
 )
 
-class_weights_dict = {i: weight for i, weight in enumerate(class_weights)}
-print(f"클래스 가중치: {class_weights_dict}")
+# 조기 종료 콜백
+early_stopping = EarlyStopping(monitor='val_loss', patience=5, restore_best_weights=True, verbose=1)
+model_checkpoint = ModelCheckpoint(model_path, save_best_only=True, monitor='val_loss')
+
+
+lr_scheduler = ReduceLROnPlateau(
+    monitor='val_loss', factor=0.5, patience=3, verbose=1, min_lr=1e-7
+)
 
 # 모델 훈련
 history = model.fit(
-    train_generator,
-    validation_data=val_generator,
-    steps_per_epoch=len(train_images) // batch_size,
-    validation_steps=len(val_images) // batch_size,
-    epochs=10,
-    callbacks=[early_stopping, model_checkpoint]
+    train_dataset,
+    epochs=20,
+    validation_data=val_dataset,
+    class_weight=class_weight_dict,
+    callbacks=[early_stopping, lr_scheduler]
 )
+
+# 정확도 그래프 출력
+acc = history.history['accuracy']
+val_acc = history.history['val_accuracy']
+loss = history.history['loss']
+val_loss = history.history['val_loss']
+
+epochs = range(1, len(acc) + 1)
+plt.plot(epochs, acc, 'b', label='Training accuracy')
+plt.plot(epochs, val_acc, 'r', label='Validation accuracy')
+plt.title('Training and validation accuracy')
+plt.legend()
+plt.show()
 
 # 모델 저장
 model.save(model_path)
