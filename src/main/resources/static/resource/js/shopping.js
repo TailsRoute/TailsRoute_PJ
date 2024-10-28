@@ -22,6 +22,10 @@ document.addEventListener('DOMContentLoaded', function () {
             customButton: {
                 text: '일정 생성',
                 click: function () {
+                    document.getElementById("scheduleDate").value = ''; // 날짜 필드 초기화
+                    document.getElementById("itemName").value = ''; // 일정 제목 초기화
+                    document.getElementById("purchaseCycle").value = ''; // 구매 주기 초기화
+                    document.getElementById("alarmDays").value = ''; // 알림 일수 초기화
                     // 일정 생성 팝업 열기
                     openPopup();
                 }
