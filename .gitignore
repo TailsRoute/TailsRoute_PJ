@@ -71,7 +71,8 @@ dog_behavior_analysis/models/
 *.json
 
 ### 데이터 폴더와 압축 파일 제외###
-data/
+VSCode/dog_behavior_analysis/train
+VSCode/dog_behavior_analysis/validation
 *.zip
 
 

@@ -25,29 +25,36 @@ dogs_file_id = '1lW_Lt5O6GXnneygL5vMIdbyPnloQSQNJ'  # dogs.zip 파일 ID
 cats_file_id = '1ClSsK6J4lZvyQhpzI9BvVNVQxZCOMObu'  # cats.zip 파일 ID
 
 # 데이터 폴더 생성 
-os.makedirs('dog_behavior_analysis/data', exist_ok=True)
+os.makedirs('dog_behavior_analysis/train', exist_ok=True)
+os.makedirs('dog_behavior_analysis/validation', exist_ok=True)
 
 # 파일 다운로드 
-download_file(dogs_file_id, 'dog_behavior_analysis/data/dogs.zip')
-download_file(cats_file_id, 'dog_behavior_analysis/data/cats.zip')
+download_file(dogs_file_id, 'dog_behavior_analysis/train/dogs.zip')
+download_file(cats_file_id, 'dog_behavior_analysis/train/cats.zip')
+download_file(dogs_file_id, 'dog_behavior_analysis/validation/dogs.zip')
+download_file(cats_file_id, 'dog_behavior_analysis/validation/cats.zip')
 
 # 압축 해제 경로 설정
-os.makedirs('dog_behavior_analysis/data/dogs', exist_ok=True)
-os.makedirs('dog_behavior_analysis/data/cats', exist_ok=True)
+os.makedirs('dog_behavior_analysis/train/dogs', exist_ok=True)
+os.makedirs('dog_behavior_analysis/train/cats', exist_ok=True)
+os.makedirs('dog_behavior_analysis/validation/dogs', exist_ok=True)
+os.makedirs('dog_behavior_analysis/validation/cats', exist_ok=True)
 
 # 압축 해제
-extract_zip('dog_behavior_analysis/data/dogs.zip', 'dog_behavior_analysis/data')
-extract_zip('dog_behavior_analysis/data/cats.zip', 'dog_behavior_analysis/data')
+extract_zip('dog_behavior_analysis/train/dogs.zip', 'dog_behavior_analysis/train')
+extract_zip('dog_behavior_analysis/train/cats.zip', 'dog_behavior_analysis/train')
+extract_zip('dog_behavior_analysis/validation/dogs.zip', 'dog_behavior_analysis/validation')
+extract_zip('dog_behavior_analysis/validation/cats.zip', 'dog_behavior_analysis/validation')
 
 # 데이터 경로 설정
-dogs_path = 'dog_behavior_analysis/data/dogs'
-cats_path = 'dog_behavior_analysis/data/cats'
+dogs_path = 'dog_behavior_analysis/train/dogs'
+cats_path = 'dog_behavior_analysis/train/cats'
 
 # 이미지 데이터와 레이블 저장할 리스트 초기화
 images = []
 labels = []
 
-# 앉아있는 행동 이미지 불러오기
+# 강아지 이미지 불러오기
 for img_name in os.listdir(dogs_path):
     img_path = os.path.join(dogs_path, img_name)
     if img_name.endswith(('.png', '.jpg', '.jpeg')):
@@ -56,7 +63,7 @@ for img_name in os.listdir(dogs_path):
         images.append(image)
         labels.append(1)  # "앉기" 행동을 1로 레이블링
 
-# 기타 행동 이미지 불러오기
+# 고양이 이미지 불러오기
 for img_name in os.listdir(cats_path):
     img_path = os.path.join(cats_path, img_name)
     if img_name.endswith(('.png', '.jpg', '.jpeg')):
