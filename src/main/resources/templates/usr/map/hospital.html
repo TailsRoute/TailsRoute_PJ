@@ -1,45 +1,63 @@
+<th:block th:replace="usr/common/head"/>
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org" lang="ko">
 <head>
     <meta charset="UTF-8">
     <title>24 hour hospital</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="/resource/dist/styles.css" th:href="@{/resource/dist/styles.css}" rel="stylesheet">
     <link rel="stylesheet" href="/resource/css/hospital.css"/>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/2.1.4/tailwind.min.css">
 
 </head>
+
 <body>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
 
-<h1>지역별 동물병원 검색</h1>
-
-<hr>
-
-<!-- 시 선택 셀렉트 박스 -->
-<label for="city-select">시/도를 선택하세요 : </label>
-<select id="city-select" onchange="loadCounties()">
-    <option value="">시/도 선택</option>
-</select>
-
-<!-- 군/구 선택 셀렉트 박스 -->
-<label for="county-select">시/군/구를 선택하세요 : </label>
-<select id="county-select">
-    <option value="">시/군/구 선택</option>
-</select>
-
-<button onclick="geocodeAddress()">검색</button>
-
-<hr>
+<div id="top-bar" class=""></div>
+<h1 class="">지역별 동물병원 검색</h1>
 
 <!-- 서버에서 전달받은 mapId 변수를 JavaScript 변수로 전달 -->
 <script th:inline="javascript">
     var google_mapId = [[${GOOGLE_MAP_ID}]];  // GOOGLE_MAP_ID Thymeleaf 구문
 </script>
 
-<!-- 지도 표시할 div -->
-<div id="map" style="height: 500px; width: 100%;"></div>
+<section class="tw-bg-blue-700">
+    <div>
+        지역별 검색
+    </div>
+    <nav id="city-option-select">
+        <!-- 시 선택 셀렉트 박스 -->
+        <label for="city-select">시/도를 선택하세요 : </label>
+        <select id="city-select" onchange="loadCounties()">
+            <option value="">시/도 선택</option>
+        </select>
+        <!-- 군/구 선택 셀렉트 박스 -->
+        <label for="county-select">시/군/구를 선택하세요 : </label>
+        <select id="county-select">
+            <option value="">시/군/구 선택</option>
+        </select>
+
+        <button onclick="geocodeAddress()">검색</button>
+    </nav>
+    <div>
+        <div id="hospital-type-toggle-button"></div>
+        <div>24시간 병원만 보기</div>
+    </div>
+    <div>
+        <div>동물 병원 지도</div>
+        <div>
+            <!-- 지도 표시할 div -->
+            <div id="map"></div>
+        </div>
+    </div>
+    <div>
+        <div>상세 병원 정보</div>
+        <div id="hospital-detail-info"></div>
+    </div>
+</section>
 
 <!-- JavaScript 파일 불러오기 -->
 <script src="/resource/js/hospital.js"></script> <!-- JS 파일 경로 -->
@@ -50,7 +68,9 @@
 </script>
 
 <!-- MarkerClusterer 라이브러리 추가 -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/js-marker-clusterer/1.0.0/markerclusterer_compiled.js" integrity="sha512-DRb7DDx102X//EZzXafSrvSfM2vsm58IEdTpAlUAJPv27ziyWCoKL25E42yY+GJM6AEtCGzSrsQ9RPGfDnd1Cg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/js-marker-clusterer/1.0.0/markerclusterer_compiled.js"
+        integrity="sha512-DRb7DDx102X//EZzXafSrvSfM2vsm58IEdTpAlUAJPv27ziyWCoKL25E42yY+GJM6AEtCGzSrsQ9RPGfDnd1Cg=="
+        crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 
 </body>
 </html>
