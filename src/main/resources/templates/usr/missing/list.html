@@ -13,23 +13,23 @@
                 onchange="location.href='list?page=1&str=' + this.value;">
             <option value="${str}" th:text="${str}"></option>
             <option th:if="${str != '전체'}" value="전체">전체</option>
-            <option th:if="${str != '인천'}" value="인천">인천광역시</option>
-            <option th:if="${str != '서울'}" value="서울">서울특별시</option>
-            <option th:if="${str != '경기'}" value="경기">경기도</option>
-            <option th:if="${str != '강원'}" value="강원">강원도</option>
-            <option th:if="${str != '충남'}" value="충남">충청남도</option>
-            <option th:if="${str != '세종'}" value="세종">세종특별자치시</option>
-            <option th:if="${str != '대전'}" value="대전">대전광역시</option>
-            <option th:if="${str != '충북'}" value="충북">충청북도</option>
-            <option th:if="${str != '전북'}" value="전북">전라북도</option>
-            <option th:if="${str != '대구'}" value="대구">대구광역시</option>
-            <option th:if="${str != '울산'}" value="울산">울산광역시</option>
-            <option th:if="${str != '경북'}" value="경북">경상북도</option>
-            <option th:if="${str != '전남'}" value="전남">전라남도</option>
-            <option th:if="${str != '광주'}" value="광주">광주광역시</option>
-            <option th:if="${str != '경남'}" value="경남">경상남도</option>
-            <option th:if="${str != '부산'}" value="부산">부산광역시</option>
-            <option th:if="${str != '제주도'}" value="제주도">제주특별자치도</option>
+            <option th:if="${str != '인천광역시'}" value="인천광역시">인천광역시</option>
+            <option th:if="${str != '서울특별시'}" value="서울특별시">서울특별시</option>
+            <option th:if="${str != '경기도'}" value="경기도">경기도</option>
+            <option th:if="${str != '강원도'}" value="강원도">강원도</option>
+            <option th:if="${str != '충청남도'}" value="충청남도">충청남도</option>
+            <option th:if="${str != '세종특별자치시'}" value="세종특별자치시">세종특별자치시</option>
+            <option th:if="${str != '대전광역시'}" value="대전광역시">대전광역시</option>
+            <option th:if="${str != '충청북도'}" value="충청북도">충청북도</option>
+            <option th:if="${str != '전라북도'}" value="전라북도">전라북도</option>
+            <option th:if="${str != '대구광역시'}" value="대구광역시">대구광역시</option>
+            <option th:if="${str != '울산광역시'}" value="울산광역시">울산광역시</option>
+            <option th:if="${str != '경상북도'}" value="경상북도">경상북도</option>
+            <option th:if="${str != '전라남도'}" value="전라남도">전라남도</option>
+            <option th:if="${str != '광주광역시'}" value="광주광역시">광주광역시</option>
+            <option th:if="${str != '경상남도'}" value="경상남도">경상남도</option>
+            <option th:if="${str != '부산광역시'}" value="부산광역시">부산광역시</option>
+            <option th:if="${str != '제주특별자치도'}" value="제주특별자치도">제주특별자치도</option>
         </select>
     </div>
     <a class="misssing_write" href="../missing/write">글 작성</a>
@@ -57,9 +57,8 @@
     </a>
 </div>
 
-
 <div class="pagination tw-flex tw-justify-center tw-items-center" th:if="${totalPage != 0}">
-    <a class="pagination_left tw-p-[10px]" th:href="@{'list?page=' + ${lpage} + '&str='+${str}}">
+    <a class="pagination_left tw-p-[10px]" th:href="@{'list?page=' + ${lpage} + 'str='+${str}}">
         <i class="fa-solid fa-caret-left" style="font-size: 70px;"></i>
     </a>
 
@@ -68,7 +67,7 @@
         <!-- 처음 페이지로 이동 -->
         <div th:if="${startPage > 1}">
             <a class="tw-text-[50px] tw-pl-[10px] tw-pr-[10px]"
-               th:href="@{'list?page=1&' + '&str='+${str}}">1</a>
+               th:href="@{'list?page=1&' + 'str='+${str}}">1</a>
         </div>
 
         <!-- 중간 생략 버튼 -->
@@ -102,4 +101,3 @@
 </div>
 </body>
 </html>
-

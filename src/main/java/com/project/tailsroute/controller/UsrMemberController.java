@@ -123,6 +123,7 @@ public class UsrMemberController {
                 String location = gpsAlertService.getPlaceName(gpsAlert.getLatitude(), gpsAlert.getLongitude());
                 location = location.substring(5);
                 model.addAttribute("location", location);
+                model.addAttribute("gpsAlert", gpsAlert);
             }
             model.addAttribute("locationChack", locationChack);
         }

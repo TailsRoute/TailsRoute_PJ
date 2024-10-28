@@ -130,4 +130,31 @@ public class UsrGpsAlertController {
                     .body("위치 삭제에 실패했습니다: " + e.getMessage());
         }
     }
+
+    @GetMapping("/usr/gpsAlert/test")
+    public String showAdd(Model model) {
+        boolean isLogined = rq.isLogined();
+
+        if (isLogined) {
+            Member member = rq.getLoginedMember();
+            model.addAttribute("member", member);
+        }
+
+        model.addAttribute("isLogined", isLogined);
+
+        return "/usr/gpsAlert/test";
+    }
+
+    @GetMapping("/usr/gpsAlert/toggleOnOff")
+    public String toggleGps(@RequestParam("dogId") int dogId, @RequestParam("value") int value) {
+        if (value == 1) {
+            // GPS 켜기 로직
+            gpsAlertService.toggleOnOff(dogId, value);
+            return "redirect:/usr/member/myPage";
+        } else {
+            // GPS 끄기 로직
+            gpsAlertService.toggleOnOff(dogId, value);
+            return "redirect:/usr/member/myPage";
+        }
+    }
 }

@@ -9,16 +9,13 @@
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
     <link rel="stylesheet" href="/resource/css/diary/DiaryWrite.css">
 </head>
-
 <body >
-
-
 
 <form  id = "diaryContent" action="/usr/diary/write" method="post" enctype="multipart/form-data">
     <input type="hidden" name="memberId" value="1" >
 
     <div class="flex items-center justify-center  ">
-        <label for="title"></label><input type="text" id="title" name="title" placeholder="제목을 입력해주세요." class="input-hidden "/>
+        <label for="title"></label><input type="text" id="title" name="title" placeholder="제목을 입력해주세요." class="input-hidden " required />
     </div>
 
     <div class="upload-container text-center mb-6">
@@ -45,15 +42,15 @@
 
             <div>
                 <label for="startDate">복용 시작일</label>
-                <input type="date" name="startDate" id="startDate">
+                <input type="date" name="startDate" id="startDate" required>
             </div>
             <div>
                 <label for="endDate">복용 종료일</label>
-                <input type="date" name="endDate" id="endDate">
+                <input type="date" name="endDate" id="endDate" required>
             </div>
             <div>
                 <label for="TakingTime"> 복용 시간 </label>
-                <input type="time" name="takingTime" id="TakingTime">
+                <input type="time" name="takingTime" id="TakingTime" required>
             </div>
 
             <div>

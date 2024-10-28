@@ -22,6 +22,10 @@ document.addEventListener('DOMContentLoaded', function () {
             customButton: {
                 text: '일정 생성',
                 click: function () {
+                    document.getElementById("scheduleDate").value = ''; // 날짜 필드 초기화
+                    document.getElementById("itemName").value = ''; // 일정 제목 초기화
+                    document.getElementById("purchaseCycle").value = ''; // 구매 주기 초기화
+                    document.getElementById("alarmDays").value = ''; // 알림 일수 초기화
                     // 일정 생성 팝업 열기
                     openPopup();
                 }
@@ -704,6 +708,7 @@ function displayResults(data) {
     paginatedData.forEach(item => {
         const productItem = document.createElement('li'); // li 요소 생성
         productItem.classList.add('product-item'); // 클래스 추가
+        productItem.setAttribute('data-link', item.link);
         productItem.innerHTML =
             `<img src="${item.image}" alt="${item.title}" class="product-image">
                         <div class="product-info" style="display: flex; justify-content: space-between; align-items: center; width: 100%">
@@ -730,11 +735,13 @@ function addToCart() {
     const productItem = event.target.closest('.product-item');
     const productTitle = productItem.querySelector('a').textContent;
     const productPrice = parseInt(productItem.querySelector('.product-price').textContent.replace(/[^0-9]/g, ''), 10);
+    const productLink = productItem.getAttribute('data-link');
 
     const product = {
         memberId: member.id,
         itemName: productTitle,
-        itemprice: productPrice
+        itemprice: productPrice,
+        itemlink: productLink
     };
 
     fetch('/usr/cart/add', {
@@ -762,7 +769,7 @@ function showCartPopup() {
                     const listItem = document.createElement('li');
                     listItem.innerHTML = `
                         <div style="display: flex; justify-content: space-between; align-items: center; height: 50px; width:450px; border-bottom: 1px solid #ccc; margin-bottom: 10px;">
-                            <span style="width: 400px;">${item.itemName} - ${item.itemprice}원</span>
+                            <a style="width: 400px;" href="${item.itemlink}"><span>${item.itemName} - ${item.itemprice}원</span></a>
                             <button style="display: inline-block; padding: 0;">삭제</button>
                         </div>`;
                     listItem.querySelector('button').addEventListener('click', () => {
