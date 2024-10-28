@@ -94,23 +94,40 @@ def custom_generator(generator):
         yield augmented_images, labels
 
 
-
 # 폴더 내 모든 이미지 경로를 가져오는 함수
 def load_dataset_from_directory(directory):
     images = []
     labels = []
     for class_label, class_name in enumerate(['dogs', 'cats']):  # 두 클래스
         class_dir = os.path.join(directory, class_name)
+        if not os.path.exists(class_dir):  # 경로가 유효한지 확인
+            raise FileNotFoundError(f"Directory not found: {class_dir}")
+        print(f"Processing class: {class_name} at {class_dir}")
+
         for img_name in os.listdir(class_dir):
             img_path = os.path.join(class_dir, img_name)
-            img = load_and_preprocess_image(img_path)
-            images.append(img)
-            labels.append(class_label)
+            print(f"Loading image: {img_path}")
+
+            try:
+                img = load_and_preprocess_image(img_path)
+                images.append(img)
+                labels.append(class_label)
+            except Exception as e:
+                print(f"Failed to load {img_name}: {e}")
+
     return np.array(images), np.array(labels)
+
+def get_data():
+    # 데이터셋의 경로 반환
+    train_dir = "dog_behavior_analysis/train"
+    val_dir = "dog_behavior_analysis/validation"
+    return train_dir, val_dir
+
+train_dir, val_dir = get_data()
 
 # 훈련 및 검증 데이터 로드
 x_train, y_train = load_dataset_from_directory(train_dir)
-x_val, y_val = load_dataset_from_directory(validation_dir)
+x_val, y_val = load_dataset_from_directory(val_dir)
 
 # TensorFlow 데이터셋으로 변환
 train_dataset = tf.data.Dataset.from_tensor_slices((x_train, y_train)).batch(32).shuffle(buffer_size=1000)
