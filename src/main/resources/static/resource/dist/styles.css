@@ -152,7 +152,7 @@ html,
   -moz-tab-size: 4;
   /* 3 */
   -o-tab-size: 4;
-  tab-size: 4;
+     tab-size: 4;
   /* 3 */
   font-family: ui-sans-serif, system-ui, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
   /* 4 */
@@ -197,7 +197,7 @@ Add the correct text decoration in Chrome, Edge, and Safari.
 
 abbr:where([title]) {
   -webkit-text-decoration: underline dotted;
-  text-decoration: underline dotted;
+          text-decoration: underline dotted;
 }
 
 /*
@@ -604,8 +604,12 @@ video {
   right: 0px;
 }
 
-.tw-right-\[-200px\] {
-  right: -200px;
+.tw-right-\[-5px\] {
+  right: -5px;
+}
+
+.tw-top-\[-7px\] {
+  top: -7px;
 }
 
 .tw-z-20 {
@@ -614,14 +618,6 @@ video {
 
 .tw-z-30 {
   z-index: 30;
-}
-
-.tw-top-\[-7px\]{
-  top: -7px;
-}
-
-.tw-right-\[-5px\]{
-  right:-5px;
 }
 
 .tw-mx-auto {
@@ -653,7 +649,7 @@ video {
   margin-left: 12px;
 }
 
-.tw-ml-\[200px\]{
+.tw-ml-\[200px\] {
   margin-left: 200px;
 }
 
@@ -689,12 +685,12 @@ video {
   display: none;
 }
 
-.tw-h-\[10px\] {
-  height: 10px;
-}
-
 .tw-h-\[100px\] {
   height: 100px;
+}
+
+.tw-h-\[10px\] {
+  height: 10px;
 }
 
 .tw-h-\[350px\] {
@@ -713,20 +709,12 @@ video {
   height: 100%;
 }
 
-.tw-mh-\[250px\]{
-  max-height: 250px;
-}
-
-.tw-overflow-auto{
-  overflow: auto;
+.tw-w-\[100px\] {
+  width: 100px;
 }
 
 .tw-w-\[10px\] {
   width: 10px;
-}
-
-.tw-w-\[100px\] {
-  width: 100px;
 }
 
 .tw-w-\[145px\] {
@@ -777,6 +765,10 @@ video {
   flex-direction: column;
 }
 
+.tw-items-start {
+  align-items: flex-start;
+}
+
 .tw-items-center {
   align-items: center;
 }
@@ -797,12 +789,20 @@ video {
   gap: 0.5rem;
 }
 
+.tw-overflow-auto {
+  overflow: auto;
+}
+
+.tw-rounded-\[10px\] {
+  border-radius: 10px;
+}
+
 .tw-rounded-\[30px\] {
   border-radius: 30px;
 }
 
-.tw-rounded-\[10px\] {
-  border-radius: 30px;
+.tw-rounded-\[5px\] {
+  border-radius: 5px;
 }
 
 .tw-rounded-full {
@@ -837,9 +837,19 @@ video {
   background-color: rgb(255 243 205 / var(--tw-bg-opacity));
 }
 
-.tw-bg-\[\#FFFEF0\]{
+.tw-bg-\[\#FFFEF0\] {
   --tw-bg-opacity: 1;
-  background-color: #FFFEF0;
+  background-color: rgb(255 254 240 / var(--tw-bg-opacity));
+}
+
+.tw-bg-blue-700 {
+  --tw-bg-opacity: 1;
+  background-color: rgb(29 78 216 / var(--tw-bg-opacity));
+}
+
+.tw-bg-red-500 {
+  --tw-bg-opacity: 1;
+  background-color: rgb(239 68 68 / var(--tw-bg-opacity));
 }
 
 .tw-bg-white {
@@ -847,9 +857,9 @@ video {
   background-color: rgb(255 255 255 / var(--tw-bg-opacity));
 }
 
-.tw-bg-red-500 {
+.tw-bg-black {
   --tw-bg-opacity: 1;
-  background-color: rgb(239 68 68 / var(--tw-bg-opacity));
+  background-color: rgb(0 0 0 / var(--tw-bg-opacity));
 }
 
 .tw-p-2 {
@@ -919,16 +929,12 @@ video {
   line-height: 2rem;
 }
 
-.tw-text-\[50px\] {
-  font-size: 50px;
-}
-
 .tw-text-\[10px\] {
   font-size: 10px;
 }
 
-.tw-text-l-\[10px\] {
-  line-height: 10px;
+.tw-text-\[50px\] {
+  font-size: 50px;
 }
 
 .tw-text-lg {

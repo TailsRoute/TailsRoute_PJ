@@ -3,6 +3,8 @@ package com.project.tailsroute.controller;
 import com.opencsv.CSVReader;
 import com.project.tailsroute.service.HospitalService;
 import com.project.tailsroute.vo.Hospital;
+import com.project.tailsroute.vo.Member;
+import com.project.tailsroute.vo.Rq;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -43,8 +45,24 @@ public class UsrHospitalController {
     @Autowired
     private HospitalService hospitalService;
 
+    ////
+    private final Rq rq;
+    public UsrHospitalController(Rq rq) {
+        this.rq = rq;
+    }
+    ////
+
     @GetMapping("/usr/hospital/main")
     public String showMain(Model model) {
+
+        ////
+        boolean isLogined = rq.isLogined();
+        if (isLogined) {
+            Member member = rq.getLoginedMember();
+            model.addAttribute("member", member);
+        }
+        model.addAttribute("isLogined", isLogined);
+        ////
 
         model.addAttribute("GOOGLE_MAP_API_KEY", API_KEY);
         model.addAttribute("GOOGLE_MAP_ID", GOOGLE_MAP_ID);
