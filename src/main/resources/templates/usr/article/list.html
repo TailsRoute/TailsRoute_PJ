@@ -21,6 +21,9 @@
         <div th:class="${boardId == 3 ? 'article_button tw-bg-[#4D3E3E] tw-text-white' : 'article_button'}">
             <a href="../article/list?boardId=3&page=1">Q & A</a>
         </div>
+        <div th:class="${boardId == 4 ? 'article_button tw-bg-[#4D3E3E] tw-text-white' : 'article_button'}">
+            <a href="../article/list?boardId=4&page=1">추천합니다</a>
+        </div>
     </div>
     <div class="article_list tw-flex-grow tw-h-[500px]">
         <form th:action="@{../article/list}" class="tw-p-2">

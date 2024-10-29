@@ -6,13 +6,12 @@ import com.project.tailsroute.service.ReactionPointService;
 import com.project.tailsroute.service.ReplyService;
 import com.project.tailsroute.util.Ut;
 import com.project.tailsroute.vo.*;
+import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartRequest;
 
@@ -223,6 +222,13 @@ public class UsrArticleController {
 
 		return Ut.jsReplace(writeArticleRd.getResultCode(), writeArticleRd.getMsg(), "../article/detail?id=" + id);
 
+	}
+	@PostMapping("/usr/article/saveContentToSession")
+	@ResponseBody
+	public ResponseEntity<Void> saveContentToSession(@RequestBody Map<String, String> data, HttpSession session) {
+		String content = data.get("content");
+		session.setAttribute("initialContent", content);
+		return ResponseEntity.ok().build();
 	}
 
 	@GetMapping("/usr/article/list")
