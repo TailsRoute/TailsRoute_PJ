@@ -45,3 +45,97 @@ $(document).ready(function () {
         }, 1000);
     });
 });
+
+function gpsChackOn() {
+    if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(function (position) {
+            const latitude = position.coords.latitude;
+            const longitude = position.coords.longitude;
+
+            // 위치 정보를 서버로 전송
+            $.ajax({
+                url: '/usr/gpsChack/on',
+                type: 'POST',
+                data: {
+                    latitude: latitude,
+                    longitude: longitude
+                },
+                success: function (response) {
+                    if (response.success) {
+                        $('.gps_popup').fadeOut();
+                        alert('위치 정보가 저장되었습니다.');
+                    } else {
+                        alert('위치 정보를 저장하지 못했습니다.');
+                    }
+                },
+                error: function (xhr, status, error) {
+                    console.error('Error:', error);
+                    alert('위치 정보 저장 중 오류가 발생했습니다.');
+                }
+            });
+        }, function (error) {
+            alert('위치 정보를 가져올 수 없습니다. \n먼저 위치 정보 권한을 켜주세요');
+            console.error(error);
+        });
+    } else {
+        alert('이 브라우저는 위치 정보를 지원하지 않습니다.');
+    }
+}
+
+function gpsChackOff() {
+    $.ajax({
+        url: '/usr/gpsChack/off',
+        type: 'POST',
+        success: function (response) {
+            if (response.success) {
+                $('.gps_popup').fadeOut();
+                alert('정보 수신을 거절하였습니다');
+            }
+        },
+        error: function (xhr, status, error) {
+            console.error('Error:', error);
+            alert('정보 수신 거절 중 오류가 발생했습니다.');
+        }
+    });
+}
+
+function gpsChackUpdate() {
+    if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(function (position) {
+            const latitude = position.coords.latitude;
+            const longitude = position.coords.longitude;
+
+            // 위치 정보를 서버로 전송
+            $.ajax({
+                url: '/usr/gpsChack/update',
+                type: 'POST',
+                data: {
+                    latitude: latitude,
+                    longitude: longitude
+                },
+                success: function (response) {
+                    if (response.success) {
+                        $('.gps_popup2').fadeOut();
+                        alert('위치 정보가 저장되었습니다.');
+                    } else {
+                        alert('위치 정보를 저장하지 못했습니다.');
+                    }
+                },
+                error: function (xhr, status, error) {
+                    console.error('Error:', error);
+                    alert('위치 정보 저장 중 오류가 발생했습니다.');
+                }
+            });
+        }, function (error) {
+            alert('위치 정보를 가져올 수 없습니다. \n먼저 위치 정보 권한을 켜주세요');
+            console.error(error);
+        });
+    } else {
+        alert('이 브라우저는 위치 정보를 지원하지 않습니다.');
+    }
+}
+
+function gpsChackCancel() {
+    $('.gps_popup2').fadeOut();
+    alert('정보 수신을 거절하였습니다');
+}

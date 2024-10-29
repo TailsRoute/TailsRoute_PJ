@@ -428,7 +428,8 @@ CREATE TABLE gpsAlert(
                          dogId INT(10) UNSIGNED NOT NULL COMMENT '반려견 식별번호',
                          latitude DECIMAL(10, 7) NOT NULL COMMENT '설정한 위도',
                          longitude DECIMAL(10, 7) NOT NULL COMMENT '설정한 경도',
-                         chack INT(1) UNSIGNED DEFAULT 0 COMMENT '범위 벗어났는지 여부'
+                         chack INT(1) UNSIGNED DEFAULT 0 COMMENT '범위 벗어났는지 여부',
+                         switch INT(1) UNSIGNED DEFAULT 0 COMMENT 'gps 알림 온오프 여부'
 );
 
 ## 일지작성 테스트데이터
