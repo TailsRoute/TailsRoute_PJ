@@ -27,5 +27,9 @@ public class GpsChackService {
     public void update(double latitude, double longitude, String location, int memberId) {
         gpsChackRepository.update(latitude, longitude, location, memberId);
     }
+
+    public int[] getRegionCode(String[] locations) {
+        return gpsChackRepository.getRegionCode(locations[0], locations[1]);
+    }
 }
 

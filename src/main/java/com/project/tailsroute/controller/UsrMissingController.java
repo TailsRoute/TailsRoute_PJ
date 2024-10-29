@@ -1,11 +1,10 @@
 package com.project.tailsroute.controller;
 
+import com.project.tailsroute.service.AlarmService;
+import com.project.tailsroute.service.GpsChackService;
 import com.project.tailsroute.service.MissingService;
 import com.project.tailsroute.util.Ut;
-import com.project.tailsroute.vo.Dog;
-import com.project.tailsroute.vo.Member;
-import com.project.tailsroute.vo.Missing;
-import com.project.tailsroute.vo.Rq;
+import com.project.tailsroute.vo.*;
 import net.coobird.thumbnailator.Thumbnails;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -18,6 +17,8 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
 import java.io.IOException;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 @Controller
@@ -28,9 +29,14 @@ public class UsrMissingController {
         this.rq = rq;
     }
 
+    @Autowired
+    private GpsChackService gpsChackService;
 
     @Autowired
     private MissingService missingService;
+
+    @Autowired
+    private AlarmService alarmService;
 
     @GetMapping("/usr/missing/write")
     public String showWrite(Model model) {
@@ -176,6 +182,25 @@ public class UsrMissingController {
 
         // 데이터베이스에 반려견 정보 저장
         missingService.write(rq.getLoginedMemberId(), name, reportDate2, missingLocation, breed, color, gender, age2, RFID, photoPath, trait);
+
+        int id = missingService.findMissingId();
+
+        String[] locations = missingService.getRegionCode(missingLocation);
+
+        if (locations != null) {
+            int[] memberIds = gpsChackService.getRegionCode(locations);
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd"); // 원하는 형식 지정
+
+            for (int memberId : memberIds) {
+                Alarms alarm = new Alarms();
+                alarm.setMemberId(memberId);
+                alarm.setAlarm_date(LocalDate.now().format(formatter)); // 형식화된 문자열로 설정
+                alarm.setMessage("주위 사용자가 " +name+"(을)를 잃어버렸습니다 도와주세요!"); // 적절한 메시지 설정
+                alarm.setSite("/usr/missing/detail?missingId=" + id);       // 적절한 사이트 설정
+
+                alarmService.saveAlarm(alarm);
+            }
+        }
 
         return "redirect:/usr/missing/list"; // 메인 페이지로 리다이렉트
     }
