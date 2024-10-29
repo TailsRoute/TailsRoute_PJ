@@ -27,7 +27,44 @@ public class MissingService {
     }
 
     public List<Missing> list(int limitFrom, int itemsInAPage, String str) {
-        return missingRepository.list(limitFrom, itemsInAPage, str);
+        String str2 = "전체";
+        if (str.equals("인천광역시")) {
+            str2 = "인천";
+        } else if (str.equals("서울특별시")) {
+            str2 = "서울";
+        } else if (str.equals("경기도")) {
+            str2 = "경기";
+        } else if (str.equals("강원도")) {
+            str2 = "강원";
+        } else if (str.equals("충청남도")) {
+            str2 = "충남";
+        } else if (str.equals("세종특별자치시")) {
+            str2 = "세종";
+        } else if (str.equals("대전광역시")) {
+            str2 = "대전";
+        } else if (str.equals("충청북도")) {
+            str2 = "충북";
+        } else if (str.equals("전라북도")) {
+            str2 = "전북";
+        } else if (str.equals("대구광역시")) {
+            str2 = "대구";
+        } else if (str.equals("울산광역시")) {
+            str2 = "울산";
+        } else if (str.equals("경상북도")) {
+            str2 = "경북";
+        } else if (str.equals("전라남도")) {
+            str2 = "전남";
+        } else if (str.equals("광주광역시")) {
+            str2 = "광주";
+        } else if (str.equals("경상남도")) {
+            str2 = "경남";
+        } else if (str.equals("부산광역시")) {
+            str2 = "부산";
+        } else if (str.equals("제주특별자치도")) {
+            str2 = "제주";
+        }
+        System.err.println(str + ", " + str2);
+        return missingRepository.list(limitFrom, itemsInAPage, str, str2);
     }
 
     public Missing missingArticle(int missingId) {

@@ -70,17 +70,25 @@
                 <span class="myPage_text" th:if="${dog.comPortName!=null}">○</span>
             </div>
             <div class="myPage_text" th:if="${location!=null}" th:text="${location}"></div>
-            <div>
+            <div th:if="${dog.comPortName != null}">
                 <button class="upload_button"
-                        th:if="${dog.comPortName != null && locationChack == false}"
+                        th:if="${gpsAlert != null && gpsAlert.getOnOff() == 0}"
+                        th:onclick="'location.href=\'/usr/gpsAlert/toggleOnOff?value=1&dogId=' + ${dog.id} + '\';'">GPS 끄기
+                </button>
+                <button class="upload_button"
+                        th:if="${gpsAlert != null && gpsAlert.getOnOff() == 1}"
+                        th:onclick="'location.href=\'/usr/gpsAlert/toggleOnOff?value=0&dogId=' + ${dog.id} + '\';'">GPS 켜기
+                </button>
+                <button class="upload_button"
+                        th:if="${locationChack == false}"
                         th:onclick="'location.href=\'/usr/gpsAlert/add?dogId=' + ${dog.id} + '\';'">위치 등록
                 </button>
                 <button class="upload_button"
-                        th:if="${dog.comPortName != null && locationChack == true}"
+                        th:if="${locationChack == true && gpsAlert != null && gpsAlert.getOnOff() == 0}"
                         th:onclick="'location.href=\'/usr/gpsAlert/modify?dogId=' + ${dog.id} + '\';'">위치 수정
                 </button>
                 <button class="upload_button"
-                        th:if="${dog.comPortName != null && locationChack == true}"
+                        th:if="${locationChack == true && gpsAlert != null && gpsAlert.getOnOff() == 0}"
                         th:onclick="'deleteLocation(' + ${dog.id} + ')'">위치 삭제
                 </button>
             </div>

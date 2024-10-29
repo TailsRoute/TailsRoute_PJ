@@ -152,15 +152,40 @@ CREATE TABLE article(
                         boardId INT(10) UNSIGNED NOT NULL COMMENT '게시판 식별번호',
                         title CHAR(100) NOT NULL COMMENT '제목',
                         `body` TEXT NOT NULL COMMENT '내용',
-                        hitCount INT(10) UNSIGNED NOT NULL DEFAULT 0 COMMENT '조회수'
+                        hitCount INT(10) UNSIGNED NOT NULL DEFAULT 0 COMMENT '조회수',
+                        goodReactionPoint int(10) unsigned not null default 0 COMMENT '좋아요',
+                        badReactionPoint INT(10) UNSIGNED NOT NULL DEFAULT 0 COMMENT '싫어요'
 );
 
 ## 게시판 테이블
 CREATE TABLE board(
                       id INT(10) UNSIGNED NOT NULL PRIMARY KEY AUTO_INCREMENT COMMENT '식별번호',
+                      regDate DATETIME NOT NULL COMMENT '생성 날짜',
+                      updateDate DATETIME NOT NULL COMMENT '수정 날짜',
                       `code` CHAR(100) NOT NULL UNIQUE COMMENT 'notice(공지사항) free(자유) Q&A(질의응답)',
-                      `name` CHAR(20) NOT NULL UNIQUE COMMENT '이름'
+                      `name` CHAR(20) NOT NULL UNIQUE COMMENT '이름',
+                      delStatus TINYINT(1) UNSIGNED NOT NULL DEFAULT 0 COMMENT '삭제 여부 (0=삭제 전, 1=삭제 후)',
+                      delDate DATETIME COMMENT '삭제 날짜'
 );
+
+## 게시판 테스트 데이터
+INSERT INTO board
+SET regDate = NOW(),
+updateDate = NOW(),
+`code` = 'NOTICE',
+`name` = '공지사항';
+
+INSERT INTO board
+SET regDate = NOW(),
+updateDate = NOW(),
+`code` = 'FREE',
+`name` = '자유';
+
+INSERT INTO board
+SET regDate = NOW(),
+updateDate = NOW(),
+`code` = 'QnA',
+`name` = '질의응답';
 
 ## 리액션(좋아요, 싫어요) 테이블
 CREATE TABLE reactionPoint(
@@ -181,7 +206,9 @@ CREATE TABLE reply (
                        memberId INT(10) UNSIGNED NOT NULL COMMENT '작성자 식별번호',
                        relTypeCode CHAR(50) NOT NULL COMMENT '작성대상 식별코드',
                        relId INT(10) UNSIGNED NOT NULL COMMENT '작성대상 식별번호',
-                       `body` TEXT NOT NULL COMMENT '내용'
+                       `body` TEXT NOT NULL COMMENT '내용',
+                       goodReactionPoint int(10) unsigned not null default 0 COMMENT '좋아요',
+                       badReactionPoint INT(10) UNSIGNED NOT NULL DEFAULT 0 COMMENT '싫어요'
 );
 
 ## 알람 테이블
@@ -229,17 +256,11 @@ CREATE TABLE missing(
                         breed CHAR(30) NOT NULL COMMENT '품종',
                         color CHAR(30) NOT NULL COMMENT '색상',
                         gender CHAR(30) NOT NULL COMMENT '성별',
-                        age CHAR(30) DEFAULT '불명' COMMENT '나이',
+                        age CHAR(30) DEFAULT '모름' COMMENT '나이',
                         photo TEXT NOT NULL COMMENT '사진',
                         RFID CHAR(30) DEFAULT '없음' COMMENT '마이크로칩 번호',
                         trait TEXT NOT NULL COMMENT '특징'
 );
-
-SELECT S.*, M.name extra__ownerName, M.cellphoneNum extra__ownerCellphoneNum
-FROM missing S
-         LEFT JOIN `member` M
-                   ON m.id = S.memberId
-LIMIT 0, 25;
 
 ## 실종 테스트 데이터
 INSERT INTO `missing` SET
@@ -450,3 +471,12 @@ USE `tails_route`;
 SHOW TABLES;
 
 SELECT * FROM hospital;
+
+INSERT INTO article
+SET
+    regDate = NOW() + INTERVAL FLOOR(RAND() * 100000000) SECOND,
+updateDate = NOW() + INTERVAL FLOOR(RAND() * 100000000) SECOND,
+memberId = FLOOR(1 + RAND() * 6),
+boardId = FLOOR(1 + RAND() * 3),
+title = CONCAT('제목', FLOOR(RAND() * 10000)),
+`body` = CONCAT('내용', FLOOR(RAND() * 10000));

@@ -3,9 +3,12 @@ package com.project.tailsroute.service;
 import com.fazecast.jSerialComm.SerialPort;
 import com.project.tailsroute.repository.GpsAlertRepository;
 import com.project.tailsroute.vo.GpsAlert;
-import com.twilio.Twilio; // Twilio API를 사용하기 위한 클래스 임포트
-import com.twilio.rest.api.v2010.account.Message; // 메시지를 전송하기 위한 클래스 임포트
-import com.twilio.type.PhoneNumber; // 전화번호 형식을 정의하기 위한 클래스 임포트
+
+import net.nurigo.sdk.message.service.DefaultMessageService;
+import net.nurigo.sdk.message.model.Message;
+import net.nurigo.sdk.message.exception.NurigoMessageNotReceivedException;
+import net.nurigo.sdk.NurigoApp;
+
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -31,11 +34,11 @@ public class GpsAlertService {
     private List<Future<?>> runningTasks; // 실행 중인 쓰레드 작업 관리
 
     // Twilio 계정의 SID와 인증 토큰을 저장
-    @Value("${SMS_SID}")
-    private String ACCOUNT_SID; // Twilio 계정 SID
+    @Value("${apiKey}")
+    private String apiKey; // Twilio 계정 SID
 
-    @Value("${SMS_TOKEN}")
-    private String AUTH_TOKEN; // Twilio 인증 토큰
+    @Value("${apiSecret}")
+    private String apiSecret; // Twilio 인증 토큰
 
     private static final double EARTH_RADIUS = 6371.0; // 지구 반지름 (km 단위)
 
@@ -108,11 +111,13 @@ public class GpsAlertService {
 
         double distance = calculateDistance(lat1, lon1, lat2, lon2); // 거리 계산
 
-        if (distance > 1.0 && chack == 1) { // 1km 이상 떨어져 있을 때
-            sendSms("아이고! " + dogName + "(이)가 정해진 장소를 떠났네요. 위치를 확인해 주세요!", gpsAlert); // SMS 전송
-            chack = 0;
-        } else { // 다시 구역 안으로 들어왔을때
+        if (distance > 1.0 && chack == 0) { // 1km 이상 떨어져 있을 때
+            // sendSms("아이고! " + dogName + "(이)가 정해진 장소를 떠났네요. 위치를 확인해 주세요!", gpsAlert); // SMS 전송
+            gpsAlertRepository.toggleChack(1, gpsAlert.getId());
             chack = 1;
+        } else if (distance <= 1.0) { // 다시 구역 안으로 들어왔을때
+            gpsAlertRepository.toggleChack(0, gpsAlert.getId());
+            chack = 0;
         }
     }
 
@@ -132,23 +137,35 @@ public class GpsAlertService {
 
     // SMS를 전송하는 메서드
     private void sendSms(String messageContent, GpsAlert gpsAlert) {
-        // Twilio API 초기화 (계정 SID와 인증 토큰 사용)
-        Twilio.init(ACCOUNT_SID, AUTH_TOKEN);
-
         String userCellphoneNum = gpsAlert.getExtra__cellphoneNum();
 
-        // SMS 메시지를 생성하고 전송
-        Message message = Message.creator(
+        // String toNumber = userCellphoneNum; // 수신자 번호
+        String toNumber = "01022296877"; // 수신자 번호
+        String fromNumber = "01022296877";  // 발신 번호 (등록된 번호)
 
-                // new PhoneNumber("+1 " + userCellphoneNum), // SMS를 받을 전화번호 (유료결제 해야지 일반번호에 보낼 수 있어서 가상 번호로만 확인 가능)
-                new PhoneNumber("+1 8777804236"),
-                new PhoneNumber("+1 6305997479"), // Twilio에서 구매한 전화번호
-                messageContent // 전송할 메시지 내용
-        ).create(); // 메시지를 생성하고 전송
+        // Coolsms 객체 생성
+        DefaultMessageService messageService = NurigoApp.INSTANCE.initialize(apiKey, apiSecret, "https://api.coolsms.co.kr");
+        // DefaultMessageService messageService = NurigoApp.INSTANCE.initialize(apiKey, apiSecret, "https://api.nurigo.net");
 
-        // 전송된 메시지의 SID를 출력 (디버깅 용도)
-        System.err.println("문자 전송됨: " + message.getSid());
+        Message message = new Message();
+        message.setFrom(fromNumber);
+        message.setTo(toNumber);
+        message.setText(messageContent); // 전송할 메시지 내용
+
+        try {
+            // SMS 전송
+            messageService.send(message);
+            System.out.println("메시지가 성공적으로 전송되었습니다.");
+        } catch (NurigoMessageNotReceivedException exception) {
+            // 발송에 실패한 메시지 목록을 확인할 수 있습니다
+            System.out.println(exception.getFailedMessageList());
+            System.out.println("메시지 발송 실패: " + exception.getMessage());
+        } catch (Exception e) {
+            // 일반적인 예외 처리
+            System.err.println("오류 발생: " + e.getMessage());
+        }
     }
+
 
     /**
      * 아두이노 GPS 트래커에서 데이터를 읽고 처리하는 메소드
@@ -161,12 +178,18 @@ public class GpsAlertService {
         comPort.setComPortParameters(9600, 8, 1, 0);
         comPort.openPort();
 
-        System.out.println(gpsAlert.getExtra__comPortName() + " 연결되었습니다.");
         int number = 1;
+
+        if (gpsAlert.getOnOff() == 1) {
+            System.err.println(gpsAlert.getExtra__comPortName()+" : gps가 꺼져있습니다");
+            return;
+        }else {
+            System.err.println(gpsAlert.getExtra__comPortName() + " 연결되었습니다.");
+        }
 
         try {
             while (!Thread.currentThread().isInterrupted()) {
-                System.err.println(gpsAlert.getExtra__comPortName() + " 실행중 : " + number + "회");
+                // System.err.println(gpsAlert.getExtra__comPortName() + " 실행중 : " + number + "회");
                 number++;
 
                 if (comPort.bytesAvailable() > 0) {
@@ -180,6 +203,9 @@ public class GpsAlertService {
                         if (gpsData.length == 2) {
                             double latitude = Double.parseDouble(gpsData[0].trim());
                             double longitude = Double.parseDouble(gpsData[1].trim());
+
+                            System.err.println(latitude);
+                            System.err.println(longitude);
 
                             checkDistanceAndSendSms(latitude, longitude, gpsAlert);
                         } else {
@@ -201,7 +227,7 @@ public class GpsAlertService {
             }
         } finally {
             comPort.closePort(); // 포트 종료 처리
-            System.out.println(gpsAlert.getExtra__comPortName() + " 포트가 닫혔습니다.");
+            System.err.println(gpsAlert.getExtra__comPortName() + " 포트가 닫혔습니다.");
         }
     }
 
@@ -242,6 +268,11 @@ public class GpsAlertService {
 
     public List<GpsAlert> All() {
         return gpsAlertRepository.All();
+    }
+
+    public void toggleOnOff(int dogId, int value) {
+        gpsAlertRepository.toggleOnOff(dogId, value);
+        restartGpsDataListenerForDog(dogId);
     }
 }
 
