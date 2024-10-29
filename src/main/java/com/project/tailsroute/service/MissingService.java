@@ -63,7 +63,7 @@ public class MissingService {
         } else if (str.equals("제주특별자치도")) {
             str2 = "제주";
         }
-        System.err.println(str + ", " + str2);
+        // System.err.println(str + ", " + str2);
         return missingRepository.list(limitFrom, itemsInAPage, str, str2);
     }
 
@@ -77,5 +77,30 @@ public class MissingService {
 
     public void modify(int id, String name, String reportDate, String missingLocation, String breed, String color, String gender, String age, String rfid, String photoPath, String trait) {
         missingRepository.modify(id, name, reportDate, missingLocation, breed, color, gender, age, rfid, photoPath, trait);
+    }
+
+    public String[] getRegionCode(String missingLocation) {
+        if (missingLocation.contains("인천")) return new String[]{"인천", "인천광역시"};
+        if (missingLocation.contains("서울")) return new String[]{"서울", "서울특별시"};
+        if (missingLocation.contains("경기")) return new String[]{"경기", "경기도"};
+        if (missingLocation.contains("강원")) return new String[]{"강원", "강원도"};
+        if (missingLocation.contains("충남") || missingLocation.contains("충청남도") ) return new String[]{"충남", "충청남도"};
+        if (missingLocation.contains("세종")) return new String[]{"세종", "세종특별자치시"};
+        if (missingLocation.contains("대전")) return new String[]{"대전", "대전광역시"};
+        if (missingLocation.contains("충북") || missingLocation.contains("충청북도")) return new String[]{"충북", "충청북도"};
+        if (missingLocation.contains("전북") || missingLocation.contains("전라북도")) return new String[]{"전북", "전라북도"};
+        if (missingLocation.contains("대구")) return new String[]{"대구", "대구광역시"};
+        if (missingLocation.contains("울산")) return new String[]{"울산", "울산광역시"};
+        if (missingLocation.contains("경북") || missingLocation.contains("경상북도")) return new String[]{"경북", "경상북도"};
+        if (missingLocation.contains("전남") || missingLocation.contains("전라남도")) return new String[]{"전남", "전라남도"};
+        if (missingLocation.contains("광주")) return new String[]{"광주", "광주광역시"};
+        if (missingLocation.contains("경남") || missingLocation.contains("경상남도")) return new String[]{"경남", "경상남도"};
+        if (missingLocation.contains("부산")) return new String[]{"부산", "부산광역시"};
+        if (missingLocation.contains("제주")) return new String[]{"제주", "제주특별자치도"};
+        return null;
+    }
+
+    public int findMissingId() {
+        return missingRepository.findMissingId();
     }
 }
