@@ -468,6 +468,17 @@ CREATE TABLE cart(
                      itemlink TEXT NOT NULL COMMENT '제품사이트'
 );
 
+## GPS 수신 정보 동의 테이블
+CREATE TABLE gpsChack(
+                         id INT(10) UNSIGNED NOT NULL PRIMARY KEY AUTO_INCREMENT COMMENT '식별번호',
+                         memberId INT(10) UNSIGNED NOT NULL COMMENT '접속자 식별번호',
+                         regDate DATETIME NOT NULL COMMENT '등록 날짜',
+                         updateDate DATETIME NOT NULL COMMENT '수정 날짜',
+                         latitude DECIMAL(10, 7) COMMENT '현재 위도',
+                         longitude DECIMAL(10, 7) COMMENT '현재 경도',
+                         location VARCHAR(100) COMMENT '장소'
+);
+
 USE `tails_route`;
 SHOW TABLES;
 
