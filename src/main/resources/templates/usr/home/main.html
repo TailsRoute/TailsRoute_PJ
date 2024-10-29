@@ -6,6 +6,53 @@
     <link rel="stylesheet" href="/resource/css/main.css"/>
 </head>
 <body>
+<div th:if="${gpsChack != null}">
+    <script>
+        let currentLatitude;
+        let currentLongitude;
+
+        function getCurrentLocation() {
+            if (navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition((position) => {
+                    currentLatitude = position.coords.latitude;
+                    currentLongitude = position.coords.longitude;
+
+                    // 페이지 로드 후 조건을 확인
+                    checkGpsCondition();
+                }, (error) => {
+                    console.error("Error getting location: ", error);
+                });
+            } else {
+                console.error("Geolocation is not supported by this browser.");
+            }
+        }
+
+        function checkGpsCondition() {
+            // 서버에서 가져온 gpsChack 객체를 Thymeleaf를 통해 JavaScript로 초기화
+            const gpsChack = {
+                latitude: [[${gpsChack.latitude}]],
+                longitude: [[${gpsChack.longitude}]]
+            };
+
+            if (gpsChack.latitude == null || gpsChack.longitude == null) {
+                return; // 조건을 만족하지 않으면 함수를 종료
+            }
+
+            // 디버깅용 로그
+            console.log("gpsChack.latitude : " + gpsChack.latitude);
+            console.log("gpsChack.longitude : " + gpsChack.longitude);
+            console.log("currentLatitude : " + currentLatitude);
+            console.log("currentLongitude : " + currentLongitude);
+
+            // 현재 위도와 경도가 다를 경우 팝업 표시
+            if (gpsChack.latitude !== currentLatitude && gpsChack.longitude !== currentLongitude) {
+                document.querySelector('.gps_popup2').style.display = 'flex'; // 팝업 표시
+            }
+        }
+
+        window.onload = getCurrentLocation;
+    </script>
+</div>
 <script src="/resource/js/main.js"></script>
 <div class="main_box tw-relative">
     <img class="main_image" th:src="@{/resource/photo/main.png}" alt="">
@@ -62,6 +109,24 @@
 </div>
 <div class="left_box"></div>
 <div class="right_box"></div>
+
+<div class="gps_popup tw-gap-5" th:if="${isLogined && gpsChack == null}">
+    <div class="tw-p-2 tw-text-3xl">GPS 정보 수신에 동의 하시겠습니까? (1)</div>
+    <div class="tw-p-2 tw-text-3xl">접속 환경이 변경될 경우, 새로운 팝업이 표시될 수 있습니다.</div>
+    <div class="tw-flex tw-gap-11">
+        <button class="gps_popup_button" onclick="gpsChackOn()">확인</button>
+        <button class="gps_popup_button" onclick="gpsChackOff()">취소</button>
+    </div>
+</div>
+
+<div class="gps_popup2 tw-gap-5" style="display: none;">
+    <div class="tw-p-2 tw-text-3xl">GPS 정보 수신에 동의 하시겠습니까? (2)</div>
+    <div class="tw-p-2 tw-text-3xl">접속 환경이 변경될 경우, 새로운 팝업이 표시될 수 있습니다.</div>
+    <div class="tw-flex tw-gap-11">
+        <button class="gps_popup_button" onclick="gpsChackUpdate()">확인</button>
+        <button class="gps_popup_button" onclick="gpsChackCancel()">취소</button>
+    </div>
+</div>
 </body>
 </html>
 
