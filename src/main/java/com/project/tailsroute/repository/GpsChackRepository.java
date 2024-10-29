@@ -1,10 +1,10 @@
 package com.project.tailsroute.repository;
 
+import com.project.tailsroute.vo.GpsAlert;
 import com.project.tailsroute.vo.GpsChack;
-import org.apache.ibatis.annotations.Insert;
-import org.apache.ibatis.annotations.Mapper;
-import org.apache.ibatis.annotations.Select;
-import org.apache.ibatis.annotations.Update;
+import org.apache.ibatis.annotations.*;
+
+import java.util.List;
 
 @Mapper
 public interface GpsChackRepository {
@@ -47,4 +47,14 @@ public interface GpsChackRepository {
             WHERE memberId = #{memberId}
             """)
 	void update(double latitude, double longitude, String location, int memberId);
+
+	@Select("""
+		   SELECT memberId
+           FROM gpsChack
+           WHERE (
+                location LIKE CONCAT('%', #{location1}, '%') 
+                OR location LIKE CONCAT('%', #{location2}, '%')
+            ) 		
+             """)
+	int[] getRegionCode(String location1, String location2);
 }
