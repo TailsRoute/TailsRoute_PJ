@@ -187,6 +187,12 @@ updateDate = NOW(),
 `code` = 'QnA',
 `name` = '질의응답';
 
+INSERT INTO board
+SET regDate = NOW(),
+updateDate = NOW(),
+`code` = 'recommend',
+`name` = '추천합니다';
+
 ## 리액션(좋아요, 싫어요) 테이블
 CREATE TABLE reactionPoint(
                               id INT(10) UNSIGNED NOT NULL PRIMARY KEY AUTO_INCREMENT COMMENT '식별번호',

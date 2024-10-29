@@ -717,7 +717,9 @@ function displayResults(data) {
                             <br>
                             <a href="${item.link}" class="product-price">가격: ${item.lprice} 원</a>
                             </div>
-                        <button id="addToCartButton" onclick="addToCart()">관심목록에 추가</button></div>`;
+                            <div>
+                            <button id="addToArticleButton" onclick="addToArticle(event)">추천하기</button>
+                        <button id="addToCartButton" onclick="addToCart()">관심목록에 추가</button></div></div>`;
         resultContainer.appendChild(productItem); // 리스트에 추가
     });
 }
@@ -729,9 +731,59 @@ function setupPagination(totalItems) {
     pageInfo.innerHTML = `${currentPage} / ${pageCount}`; // 현재 페이지 정보 표시
 }
 let cart = [];
+let editor; // 전역 변수로 editor를 선언하지만 초기화는 하지 않음
+
+function addToArticle(event) {
+    // confirm 대화상자
+    if (!confirm("정말로 추천하시겠습니까?")) {
+        return; // 사용자가 "아니오"를 선택한 경우 함수 종료
+    }
+
+    const productItem = event.target.closest('.product-item');
+    const productPicture = productItem.querySelector('img').src; // 제품 이미지 URL
+    const productTitle = productItem.querySelector('a').textContent; // 제품 제목
+    const productPrice = productItem.querySelector('.product-price').textContent; // 제품 가격
+    const productLink = productItem.getAttribute('data-link'); // 제품 링크
+
+    // WYSIWYG 방식으로 HTML 콘텐츠 생성
+    const contentContainer = document.createElement('div');
+
+    const clickElement = document.createElement('span');
+    clickElement.textContent = `👈 클릭해서 링크 들어가기`;
+
+    const linkElement = document.createElement('a');
+    linkElement.href = productLink;
+    linkElement.target = '_blank';
+    linkElement.style.textDecoration = 'none';
+    linkElement.style.color = 'inherit';
+    linkElement.textContent = `${productTitle} - ${productPrice} `;
+
+    const imgElement = document.createElement('img');
+    imgElement.src = productPicture;
+    imgElement.alt = productTitle;
+    imgElement.style.width = '200px';  // 너비를 200px로 설정
+    imgElement.style.height = 'auto';   // 높이는 자동 조정
+
+
+    // 요소들을 contentContainer에 추가
+    contentContainer.appendChild(imgElement);
+    contentContainer.appendChild(document.createElement('br')); // 줄 바꿈
+    contentContainer.appendChild(linkElement);
+    contentContainer.appendChild(clickElement);
+
+    // HTML 콘텐츠를 인코딩
+    const encodedContent = encodeURIComponent(contentContainer.innerHTML);
+
+    // 페이지를 initializeEditor가 있는 HTML 파일로 이동
+    window.location.href = `http://localhost:8081/usr/shopping/write?content=${encodedContent}&image=${encodeURIComponent(productPicture)}&link=${encodeURIComponent(productLink)}&linkText=${encodeURIComponent(productTitle)}`;
+}
+
 
 // 상품을 장바구니에 추가하는 함수
 function addToCart() {
+    if (!confirm("관심목록에 추가하시겠습니까?")) {
+        return;  // 사용자가 "아니오"를 선택한 경우 함수 종료
+    }
     const productItem = event.target.closest('.product-item');
     const productTitle = productItem.querySelector('a').textContent;
     const productPrice = parseInt(productItem.querySelector('.product-price').textContent.replace(/[^0-9]/g, ''), 10);
