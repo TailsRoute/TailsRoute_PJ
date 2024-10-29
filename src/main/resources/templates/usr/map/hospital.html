@@ -11,53 +11,60 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/2.1.4/tailwind.min.css">
 
 </head>
-
 <body>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
-
-<div id="top-bar" class=""></div>
-<h1 class="">지역별 동물병원 검색</h1>
 
 <!-- 서버에서 전달받은 mapId 변수를 JavaScript 변수로 전달 -->
 <script th:inline="javascript">
     var google_mapId = [[${GOOGLE_MAP_ID}]];  // GOOGLE_MAP_ID Thymeleaf 구문
 </script>
 
-<section class="tw-bg-blue-700">
-    <div>
-        지역별 검색
-    </div>
-    <nav id="city-option-select">
-        <!-- 시 선택 셀렉트 박스 -->
-        <label for="city-select">시/도를 선택하세요 : </label>
-        <select id="city-select" onchange="loadCounties()">
-            <option value="">시/도 선택</option>
-        </select>
-        <!-- 군/구 선택 셀렉트 박스 -->
-        <label for="county-select">시/군/구를 선택하세요 : </label>
-        <select id="county-select">
-            <option value="">시/군/구 선택</option>
-        </select>
+<!-- 상단 고정 top-bar -->
+<div id="top-bar" class="w-full text-white flex items-center justify-center" style="height: 61px;">
+    <span class="text-lg font-semibold">Top Bar</span>
+</div>
 
-        <button onclick="geocodeAddress()">검색</button>
-    </nav>
-    <div>
-        <div id="hospital-type-toggle-button"></div>
-        <div>24시간 병원만 보기</div>
-    </div>
-    <div>
-        <div>동물 병원 지도</div>
-        <div>
-            <!-- 지도 표시할 div -->
-            <div id="map"></div>
+<!-- 전체 레이아웃 컨테이너 -->
+<div class="flex-grow" style="height: calc(100vh - 61px);"> <!-- 전체 높이에서 top-bar 높이 제외 -->
+    <!-- 내부 레이아웃 컨테이너: 지도 영역 -->
+    <div class="w-full h-full p-6">
+        <!-- 지역별 검색 -->
+        <div class="mb-4">
+            <h2 class="text-xl font-semibold mb-4">지역별 동물병원 검색</h2>
+            <div class="flex space-x-4">
+                <div class="flex items-center space-x-2">
+                    <label for="city-select" class="font-medium">시/도를 선택하세요 : </label>
+                    <select id="city-select" onchange="loadCounties()" class="p-2 border border-gray-300 rounded">
+                        <option value="">시/도 선택</option>
+                    </select>
+                </div>
+                <div class="flex items-center space-x-2">
+                    <label for="county-select" class="font-medium">시/군/구를 선택하세요 : </label>
+                    <select id="county-select" class="p-2 border border-gray-300 rounded">
+                        <option value="">시/군/구 선택</option>
+                    </select>
+                </div>
+                <div>
+                    <button class="p-2 border border-gray-300 bg-white rounded" onclick="geocodeAddress()">검색</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- 24시간 병원만 보기 토글 -->
+        <div class="mb-4 flex items-center">
+            <label class="flex items-center space-x-2">
+                <input role="switch" type="checkbox" />
+                <span>24시간 병원만 보기</span>
+            </label>
+        </div>
+
+        <!-- 지도 영역 -->
+        <div class="bg-gray-200 flex items-center justify-center" style="height: calc(100% - 150px);">
+            <div id="map" style="width: 100%; height: 100%;"></div>
         </div>
     </div>
-    <div>
-        <div>상세 병원 정보</div>
-        <div id="hospital-detail-info"></div>
-    </div>
-</section>
+</div>
 
 <!-- JavaScript 파일 불러오기 -->
 <script src="/resource/js/hospital.js"></script> <!-- JS 파일 경로 -->
