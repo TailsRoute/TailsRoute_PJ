@@ -8,9 +8,9 @@ import java.util.List;
 @Mapper
 public interface EssentialsRepository {
 
-    @Insert("INSERT INTO essentials (regDate, updateDate, memberId, itemType, purchaseDate, usageCycle, timing) " +
-            "VALUES (NOW(), NOW(), #{memberId}, #{itemType}, #{purchaseDate}, #{usageCycle}, #{timing})")
-    public void addEssentials(int memberId, String itemType, String purchaseDate, Integer usageCycle, Integer timing);
+    @Insert("INSERT INTO essentials (regDate, updateDate, memberId, itemType, purchaseDate, usageCycle, timing, productPicture, productPrice, productLink) " +
+            "VALUES (NOW(), NOW(), #{memberId}, #{itemType}, #{purchaseDate}, #{usageCycle}, #{timing}, #{productPicture}, #{productPrice}, #{productLink})")
+    public void addEssentials(int memberId, String itemType, String purchaseDate, Integer usageCycle, Integer timing, String productPicture, String productPrice, String productLink);
 
     @Select("SELECT * FROM essentials WHERE memberId = #{memberId}")
     public List<Essentials> findByMemberId(int memberId);

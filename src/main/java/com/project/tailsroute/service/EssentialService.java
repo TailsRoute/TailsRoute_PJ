@@ -24,7 +24,10 @@ public class EssentialService {
                 essential.getItemType(),
                 essential.getPurchaseDate(),
                 essential.getUsageCycle(),
-                essential.getTiming()
+                essential.getTiming(),
+                essential.getProductPicture(),
+                essential.getProductPrice(),
+                essential.getProductLink()
         );
     }
     public List<Essentials> findEssentialsByMemberId(int memberId) {
