@@ -9,7 +9,6 @@
     <link rel="stylesheet" href="/resource/css/hospital.css"/>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/2.1.4/tailwind.min.css">
-
 </head>
 <body>
 
@@ -26,7 +25,7 @@
 </div>
 
 <!-- 전체 레이아웃 컨테이너 -->
-<div class="flex-grow" style="height: calc(100vh - 61px);"> <!-- 전체 높이에서 top-bar 높이 제외 -->
+<div class="flex-grow" style="height: calc(100vh - 61px);">
     <!-- 내부 레이아웃 컨테이너: 지도 영역 -->
     <div class="w-full h-full p-6">
         <!-- 지역별 검색 -->
@@ -46,7 +45,9 @@
                     </select>
                 </div>
                 <div>
-                    <button class="p-2 border border-gray-300 bg-white rounded" onclick="geocodeAddress()">검색</button>
+                    <button class="p-2 border border-gray-300 bg-white rounded"
+                            onclick="toggleSidebar(); geocodeAddress();">검색
+                    </button>
                 </div>
             </div>
         </div>
@@ -54,7 +55,7 @@
         <!-- 24시간 병원만 보기 토글 -->
         <div class="mb-4 flex items-center">
             <label class="flex items-center space-x-2">
-                <input role="switch" type="checkbox" />
+                <input role="switch" type="checkbox"/>
                 <span>24시간 병원만 보기</span>
             </label>
         </div>
@@ -66,8 +67,32 @@
     </div>
 </div>
 
+<!-- 사이드바 -->
+<div id="sidebar">
+    <!-- 헤더에 가려지지 않도록 공간을 확보하는 역할 -->
+    <div class="tw-bg-blue-500 w-full text-white flex items-center justify-center" style="height: 60px;"></div>
+    <div class="p-4">
+        <h2 class="text-xl font-semibold mb-4">검색 결과</h2>
+        <ul>
+            <!-- 병원 리스트 항목 -->
+            <li class="mb-4 border-b pb-4">
+                <p class="font-semibold">오아시스 정형외과 신경외과 동물병원</p>
+                <p class="text-sm text-gray-600">동물병원 | 광교 센터블럭로 107</p>
+                <div class="flex space-x-2 mt-2 text-sm text-blue-600">
+                    <a href="#" class="hover:underline">웹사이트</a>
+                    <a href="#" class="hover:underline">경로</a>
+                </div>
+            </li>
+            <!-- 추가적인 병원 리스트 항목 반복 -->
+        </ul>
+    </div>
+</div>
+
+<!-- 토글 버튼 -->
+<div id="toggle-button" onclick="toggleSidebar()">&#9654;</div>
+
 <!-- JavaScript 파일 불러오기 -->
-<script src="/resource/js/hospital.js"></script> <!-- JS 파일 경로 -->
+<script src="/resource/js/hospital.js"></script>
 
 <!-- Google Maps API 호출 -->
 <script async defer
