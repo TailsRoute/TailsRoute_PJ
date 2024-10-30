@@ -41,8 +41,8 @@ label {
 }
 
 [type="checkbox"]:checked {
-    background-color: tomato;
-    border-color: tomato;
+    background-color: #4D3E3E;
+    border-color: #4D3E3E;
 }
 
 [type="checkbox"]:checked::before {
@@ -67,7 +67,7 @@ label {
 
 [type="checkbox"]:focus-visible {
     outline-offset: max(2px, 0.1em);
-    outline: max(2px, 0.1em) solid tomato;
+    outline: max(2px, 0.1em) solid #4D3E3E;
 }
 
 [type="checkbox"]:enabled:hover {
