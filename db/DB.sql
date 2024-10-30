@@ -33,7 +33,7 @@ INSERT INTO `member` SET
                          delStatus = 0;
 
 INSERT INTO `member` SET
-                         regDate = '2024-01-10 10:30:00',
+    regDate = '2024-01-10 10:30:00',
                          updateDate = '2024-02-10 12:00:00',
                          loginId = 'user01',
                          loginPw = 'pw_hash1',
@@ -46,7 +46,7 @@ INSERT INTO `member` SET
 
 
 INSERT INTO `member` SET
-                         regDate = '2024-03-20 09:45:00',
+    regDate = '2024-03-20 09:45:00',
                          updateDate = '2024-04-25 14:15:00',
                          loginId = 'user02',
                          loginPw = 'pw_hash3',
@@ -59,7 +59,7 @@ INSERT INTO `member` SET
                          delDate = '2024-05-01 10:30:00';
 
 INSERT INTO `member` SET
-                         regDate = '2024-04-18 16:00:00',
+    regDate = '2024-04-18 16:00:00',
                          updateDate = '2024-05-20 09:00:00',
                          loginId = 'user03',
                          loginPw = 'pw_hash4',
@@ -71,7 +71,7 @@ INSERT INTO `member` SET
                          delStatus = 0;
 
 INSERT INTO `member` SET
-                         regDate = '2024-05-22 11:30:00',
+    regDate = '2024-05-22 11:30:00',
                          updateDate = '2024-06-10 15:45:00',
                          loginId = 'user04',
                          loginPw = 'pw_hash5',
@@ -83,7 +83,7 @@ INSERT INTO `member` SET
                          delStatus = 0;
 
 INSERT INTO `member` SET
-                         regDate = '2024-07-22 12:20:00',
+    regDate = '2024-07-22 12:20:00',
                          updateDate = '2024-08-01 12:40:00',
                          loginId = 'asd',
                          loginPw = 'asd',
@@ -102,14 +102,14 @@ CREATE TABLE `dog`(
                       updateDate DATETIME NOT NULL COMMENT '수정 날짜',
                       memberId INT(10) UNSIGNED NOT NULL COMMENT '주인 식별번호',
                       `name` CHAR(20) NOT NULL DEFAULT '이름 없음' COMMENT '이름',
-                      weight CHAR(20) NOT NULL DEFAULT '모름' COMMENT '체중',
+                      weight CHAR(20) NOT NULL DEFAULT '불명' COMMENT '체중',
                       photo CHAR(50) NOT NULL COMMENT '사진',
                       `type` CHAR(20) NOT NULL COMMENT '소형, 중형, 대형',
                       comPortName CHAR(20) COMMENT 'GPS 기기 연결 포트'
 );
 
 INSERT INTO dog SET
-                    regDate = '2024-01-01 10:00:00',
+    regDate = '2024-01-01 10:00:00',
                     updateDate = '2024-01-01 10:00:00',
                     memberId = 1,
                     weight = 5,
@@ -117,7 +117,7 @@ INSERT INTO dog SET
                     `type` = '소형';
 
 INSERT INTO dog SET
-                    regDate = '2024-02-15 14:30:00',
+    regDate = '2024-02-15 14:30:00',
                     updateDate = '2024-02-15 14:30:00',
                     memberId = 3,
                     `name` = '바둑이',
@@ -125,7 +125,7 @@ INSERT INTO dog SET
                     `type` = '중형';
 
 INSERT INTO dog SET
-                    regDate = '2024-03-20 09:15:00',
+    regDate = '2024-03-20 09:15:00',
                     updateDate = '2024-03-20 09:15:00',
                     memberId = 5,
                     `name` = '뭉치',
@@ -134,7 +134,7 @@ INSERT INTO dog SET
                     `type` = '대형';
 
 INSERT INTO dog SET
-                    regDate = '2024-04-25 16:45:00',
+    regDate = '2024-04-25 16:45:00',
                     updateDate = '2024-04-25 16:45:00',
                     memberId = 6,
                     `name` = '꾸미',
@@ -238,7 +238,10 @@ CREATE TABLE essentials (
                             regDate DATETIME NOT NULL COMMENT '생성 날짜',
                             updateDate DATETIME NOT NULL COMMENT '수정 날짜',
                             memberId INT(10) UNSIGNED NOT NULL COMMENT '생성자 식별번호',
-                            itemType CHAR(20) NOT NULL COMMENT '생필품 종류',
+                            itemType CHAR(50) NOT NULL COMMENT '생필품 종류',
+                            productPicture TEXT NOT NULL COMMENT '생필품 사진',
+                            productPrice TEXT NOT NULL COMMENT '생필품 가격',
+                            productLink TEXT NOT NULL COMMENT '생필품 링크',
                             purchaseDate DATE NOT NULL COMMENT '구매 날짜',
                             usageCycle INT(10) NOT NULL COMMENT '사용주기',
                             timing INT(10) NOT NULL COMMENT '알림 시기'
@@ -262,7 +265,7 @@ CREATE TABLE missing(
                         breed CHAR(30) NOT NULL COMMENT '품종',
                         color CHAR(30) NOT NULL COMMENT '색상',
                         gender CHAR(30) NOT NULL COMMENT '성별',
-                        age CHAR(30) DEFAULT '모름' COMMENT '나이',
+                        age CHAR(30) DEFAULT '불명' COMMENT '나이',
                         photo TEXT NOT NULL COMMENT '사진',
                         RFID CHAR(30) DEFAULT '없음' COMMENT '마이크로칩 번호',
                         trait TEXT NOT NULL COMMENT '특징'
@@ -282,7 +285,7 @@ INSERT INTO `missing` SET
                           trait = '흰 바탕에 표범같은 작은 점들이 많이 있고 귀 엉덩이 허리부분에 진갈색 과 검정색이 섞인 큰 얼룩이 있어요';
 
 INSERT INTO `missing` SET
-                          memberId = 2,
+    memberId = 2,
                           `name` = '몽이',
                           reportDate = '2024-10-10 08',
                           missingLocation  = '서울특별시 강서구 강서로45길 113 (내발산동)올라가는길',
@@ -294,7 +297,7 @@ INSERT INTO `missing` SET
                           trait = '포메스피츠 믹스견';
 
 INSERT INTO `missing` SET
-                          memberId = 3,
+    memberId = 3,
                           `name` = '콩이',
                           reportDate = '2024-10-10 09',
                           missingLocation  = '강원특별자치도 강릉시 주문진읍 신리천로 4-1 (해안연립)19동201호',
@@ -307,7 +310,7 @@ INSERT INTO `missing` SET
                           trait = '흰색 미니 칩심어져있음 사람에게 호의적';
 
 INSERT INTO `missing` SET
-                          memberId = 4,
+    memberId = 4,
                           `name` = '로또',
                           reportDate = '2024-10-06 20',
                           missingLocation  = '전북특별자치도 김제시 부량면 벽골제로 320-13벽골제 지평선축제장',
@@ -320,7 +323,7 @@ INSERT INTO `missing` SET
                           trait = '전체적으로 갈색검정털에 입주위 가슴 등쪽 날개모양 흰털 검은코 동그랗게 말린 꼬리';
 
 INSERT INTO `missing` SET
-                          memberId = 5,
+    memberId = 5,
                           `name` = '하루',
                           reportDate = '2024-10-05 16',
                           missingLocation  = '경상남도 남해군 설천면 설천로775번길 256-17남해양떼목장양모리학교',
@@ -331,7 +334,7 @@ INSERT INTO `missing` SET
                           trait = '오른쪽뒷다리를다쳐서 절음';
 
 INSERT INTO `missing` SET
-                          memberId = 6,
+    memberId = 6,
                           `name` = '멍이',
                           reportDate = '2024-10-05 22',
                           missingLocation  = '울산광역시 동구 등대로 95 (일산동)대왕암공원 주차장 일대',
@@ -343,7 +346,7 @@ INSERT INTO `missing` SET
                           trait = '목뒤 M자 무늬가 있음';
 
 INSERT INTO `missing` SET
-                          memberId = 1,
+    memberId = 1,
                           `name` = '구름이',
                           reportDate = '2024-10-05 07',
                           missingLocation  = '대전광역시 중구 보문로 341 (선화동, 현대아파트)101동',
@@ -355,7 +358,7 @@ INSERT INTO `missing` SET
                           trait = '사람을 엄청나게 경계함 지금은 사진보다 털이 많이 자란상태임';
 
 INSERT INTO `missing` SET
-                          memberId = 2,
+    memberId = 2,
                           `name` = '누비',
                           reportDate = '2024-10-03 10',
                           missingLocation  = '경기도 김포시 하성면 원통로28번길 37',
@@ -367,7 +370,7 @@ INSERT INTO `missing` SET
                           trait = '폼피츠 이고 특별한 특징은 없읍니다';
 
 INSERT INTO `missing` SET
-                          memberId = 3,
+    memberId = 3,
                           `name` = '모카',
                           reportDate = '2024-09-28 15',
                           missingLocation  = '경상북도 문경시 굴모리길 14 (불정동)초록울타리집',
@@ -379,7 +382,7 @@ INSERT INTO `missing` SET
                           trait = '귀 속에 진도견인증도장찍혀있음 ㆍ선꼬리';
 
 INSERT INTO `missing` SET
-                          memberId = 4,
+    memberId = 4,
                           `name` = '초코',
                           reportDate = '2024-09-25 06',
                           missingLocation  = '전라남도 강진군 강진읍 사의재길 31-23동성리 전 침례교회 아래집',
@@ -391,7 +394,7 @@ INSERT INTO `missing` SET
                           trait = '이름 만득이 진도 믹스 파랑빨강 목줄 꼬리 말아 올려져 있음 다리 길고 귀 쫑긋 털이 지저분함';
 
 INSERT INTO `missing` SET
-                          memberId = 5,
+    memberId = 5,
                           `name` = '복실이',
                           reportDate = '2024-09-20 06',
                           missingLocation  = '충청북도 청주시 흥덕구 풍년로198번길 45-6 (가경동)3층',

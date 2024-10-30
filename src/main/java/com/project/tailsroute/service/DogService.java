@@ -17,7 +17,7 @@ public class DogService {
     }
 
     public void upload(int loginedMemberId, String dogName, String dogWeight, String dogType, String photoPath) {
-        if (dogWeight.isEmpty()) dogWeight = "모름";
+        if (dogWeight.isEmpty()) dogWeight = "불명";
         dogRepository.upload(loginedMemberId, dogName, dogWeight, dogType, photoPath);
     }
 
@@ -30,7 +30,7 @@ public class DogService {
     }
 
     public void modify(int dogId, String dogName, String dogWeight, String dogType, String photoPath) {
-        if (dogWeight.isEmpty()) dogWeight = "모름";
+        if (dogWeight.isEmpty()) dogWeight = "불명";
         dogRepository.modify(dogId, dogName, dogWeight, dogType, photoPath);
     }
 }
