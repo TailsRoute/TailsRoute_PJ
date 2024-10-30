@@ -193,18 +193,33 @@ table {
 .sort-arrow.visible {
     visibility: visible; /* 클릭 시 보이도록 설정 */
 }
+th{
+    padding: 10px;
+    text-align: center;
+    border: 1px solid #ccc;
+}
 
-th {
-    width: 20%; /* 각 th 요소의 너비를 20%로 설정 */
-    padding: 10px; /* 각 th 요소의 내부 여백 */
-    text-align: center; /* 텍스트 가운데 정렬 */
-    border: 1px solid #ccc; /* 셀 경계선 */
+th#purchaseDateHeader,
+th#alarmDateHeader {
+    width: 110px;
+}
+th#usageCycleHeader,
+th#deleteHeader,
+th#recommendHearder {
+    width: 100px;
 }
 
 td {
     padding: 10px; /* 각 td 요소의 내부 여백 */
     border: 1px solid #ccc; /* 셀 경계선 */
     text-align: center; /* 텍스트 가운데 정렬 */
+}
+
+td.ellipsis {
+    max-width: 200px; /* 적절한 최대 너비 설정 */
+    white-space: nowrap; /* 텍스트 줄바꿈 방지 */
+    overflow: hidden; /* 넘치는 텍스트 숨기기 */
+    text-overflow: ellipsis; /* 넘치는 부분에 '...' 표시 */
 }
 h2 {
     margin-bottom: 10px; /* 제목과 달력/리스트 사이의 간격 조정 */

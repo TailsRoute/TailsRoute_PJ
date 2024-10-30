@@ -17,4 +17,7 @@ public class Essentials {
     private int usageCycle;
     private int timing;
     private int purchaseStatus;
+    private String productPicture;
+    private String productPrice;
+    private String productLink;
 }

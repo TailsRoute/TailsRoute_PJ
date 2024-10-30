@@ -238,7 +238,10 @@ CREATE TABLE essentials (
                             regDate DATETIME NOT NULL COMMENT '생성 날짜',
                             updateDate DATETIME NOT NULL COMMENT '수정 날짜',
                             memberId INT(10) UNSIGNED NOT NULL COMMENT '생성자 식별번호',
-                            itemType CHAR(20) NOT NULL COMMENT '생필품 종류',
+                            itemType CHAR(50) NOT NULL COMMENT '생필품 종류',
+                            productPicture TEXT NOT NULL COMMENT '생필품 사진',
+                            productPrice TEXT NOT NULL COMMENT '생필품 가격',
+                            productLink TEXT NOT NULL COMMENT '생필품 링크',
                             purchaseDate DATE NOT NULL COMMENT '구매 날짜',
                             usageCycle INT(10) NOT NULL COMMENT '사용주기',
                             timing INT(10) NOT NULL COMMENT '알림 시기'
