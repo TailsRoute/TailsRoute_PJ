@@ -75,7 +75,7 @@ public class UsrMissingController {
 
     @PostMapping("/usr/missing/doDelete")
     @ResponseBody
-    public String doDelete(Model model, @RequestParam("missingId") int missingId) {
+    public String doDelete(@RequestParam("missingId") int missingId) {
 
         Missing missing = missingService.missingArticle(missingId);
 
@@ -123,31 +123,34 @@ public class UsrMissingController {
         }
 
         String reportDate2 = reportDate + " " + reportTime;
-
-        String age2 = "불명";
-        if (age != null) age2 = Integer.toString(age);
+        String age2 = (age != null) ? Integer.toString(age) : "불명";
 
         // 파일 처리 로직
-        String photoPath = null;
+        String photoPath;
         if (!file.isEmpty()) {
+            // 파일 저장 시 절대 경로 사용
+            String uploadDir = "uploads" + File.separator + "photo"; // 저장할 디렉토리
+            String filePath = uploadDir + File.separator + "missing" + id + ".png"; // 저장할 파일 경로
 
-            String filePath = "src/main/resources/static/resource/photo/missing" + id + ".png";
             try {
                 // 파일 저장 전에 이미지 크기 조절
-                Thumbnails.of(file.getInputStream()).size(80, 80) // 원하는 사이즈로 조정
+                Thumbnails.of(file.getInputStream())
+                        .size(800, 800) // 원하는 사이즈로 조정
                         .toFile(new File(filePath));
 
-                photoPath = "/resource/photo/missing" + id + ".png"; // 웹에서 접근할 수 있는 경로
+                photoPath = "/uploads/photo/missing" + id + ".png"; // 웹에서 접근할 수 있는 경로
             } catch (IOException e) {
-                return "redirect:/usr/missing/modify?missingId="+id;
+                return "redirect:/usr/home/main";
             }
-            // 데이터베이스에 반려견 정보 수정
-            missingService.modify(id, name, reportDate2, missingLocation, breed, color, gender, age2, RFID, photoPath, trait);
-        }else missingService.modify(id, name, reportDate2, missingLocation, breed, color, gender, age2, RFID, dogPhoto, trait);
+        } else {
+            // 파일이 없는 경우 기존 사진 경로 사용
+            photoPath = dogPhoto;
+        }
 
+        // 데이터베이스에 반려견 정보 수정
+        missingService.modify(id, name, reportDate2, missingLocation, breed, color, gender, age2, RFID, photoPath, trait);
 
-
-        return "redirect:/usr/missing/detail?missingId="+id;
+        return "redirect:/usr/missing/detail?missingId=" + id;
     }
 
 
@@ -158,7 +161,7 @@ public class UsrMissingController {
 
         String reportDate2 = reportDate + " " + reportTime;
 
-        String age2 = "불명";
+        String age2 = "모름";
         if (age != null) age2 = Integer.toString(age);
 
 
@@ -168,15 +171,19 @@ public class UsrMissingController {
             int number = missingService.lastNumber(); // 데이터베이스에서 가져온 마지막 ID
             number++;
 
-            String filePath = "src/main/resources/static/resource/photo/missing" + number + ".png";
+            // 절대 경로를 사용하여 저장
+            String uploadDir = "uploads" + File.separator + "photo"; // 저장할 디렉토리
+            String filePath = uploadDir + File.separator + "missing" + number + ".png"; // 저장할 파일 경로
+
             try {
                 // 파일 저장 전에 이미지 크기 조절
-                Thumbnails.of(file.getInputStream()).size(80, 80) // 원하는 사이즈로 조정
+                Thumbnails.of(file.getInputStream())
+                        .size(800, 800) // 원하는 사이즈로 조정
                         .toFile(new File(filePath));
 
-                photoPath = "/resource/photo/missing" + number + ".png"; // 웹에서 접근할 수 있는 경로
+                photoPath = "/uploads/photo/missing" + number + ".png"; // 웹에서 접근할 수 있는 경로
             } catch (IOException e) {
-                return "redirect:/usr/dog/add";
+                return "redirect:/usr/home/main";
             }
         }
 

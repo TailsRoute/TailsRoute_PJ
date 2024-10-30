@@ -14,8 +14,9 @@
     <div class="drop_area tw-relative">
         <button type="button" class="image_button">이미지 업로드</button>
         <p class="upload_text">또는 파일 놓기</p>
-        <input type="file" class="dog_photo" name="dog_photo" accept="image/*" required style="display: none;">
+        <input type="file" class="dog_photo" name="dog_photo" accept="image/*" style="display: none;">
         <img class="preview tw-absolute" src="#" alt="업로드된 이미지 미리보기" style="display: none;"/><br>
+        <button type="button" class="image_clear tw-absolute tw-cursor-pointer" onclick="preview_clear()">지우기</button>
     </div>
     <br>
 
@@ -69,7 +70,7 @@
     <div class="dogAdd_title tw-p-5">특징</div>
     <div class="dogAdd_body tw-p-5">
         <div class="tw-mt-5 tw-mb-5">
-            <textarea type="text" class="trait tw-border-box tw-p-5" id="trait" name="trait" required></textarea>
+            <label for="trait"></label><textarea type="text" class="trait tw-border-box tw-p-5" id="trait" name="trait" required></textarea>
         </div>
     </div>
     <div class="upload_button_wrapper">
@@ -77,4 +78,3 @@
     </div>
 </form>
 </body>
-</html>
