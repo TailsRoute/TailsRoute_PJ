@@ -85,4 +85,13 @@ public interface MissingRepository {
 			WHERE id = #{missingId}
 			""")
     void modify(int missingId, String name, String reportDate, String missingLocation, String breed, String color, String gender, String age, String rfid, String photoPath, String trait);
+
+    @Select("""        
+        SELECT id
+        FROM missing
+        ORDER BY id DESC
+        LIMIT 1
+        """)
+    int findMissingId();
+
 }

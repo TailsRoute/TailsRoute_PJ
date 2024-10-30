@@ -485,9 +485,6 @@ CREATE TABLE gpsChack(
                          location VARCHAR(100) COMMENT '장소'
 );
 
-USE `tails_route`;
-SHOW TABLES;
-
 INSERT INTO article
 SET
     regDate = NOW() + INTERVAL FLOOR(RAND() * 100000000) SECOND,
