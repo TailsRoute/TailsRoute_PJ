@@ -38,9 +38,9 @@
         <label for="scheduleDate">일정 날짜 선택</label>
         <input type="date" id="scheduleDate" class="tw-border-box tw-w-[190px] tw-text-center tw-rounded-[5px] tw-border" /><br/><br/>
 
-        <!-- 생필품 입력 -->
+        <!-- 생필품 이름 -->
         <label for="itemName">생필품 이름</label>
-        <input type="text" id="itemName" class="tw-border-box tw-w-[190px] tw-text-center tw-rounded-[5px] tw-border" placeholder="생필품 이름을 입력하세요"/><br/><br/>
+        <span id="itemName" style="display: inline-block;"></span><br/><br/>
 
         <!-- 구매 주기 선택 -->
         <label for="purchaseCycle">사용기한(일)</label>
@@ -73,7 +73,8 @@
                         <th id="purchaseDateHeader">구매일 <span class="sort-arrow" id="purchaseDateArrow">▲</span></th>
                         <th id="usageCycleHeader">사용기한 <span class="sort-arrow" id="usageCycleArrow"></span></th>
                         <th id="alarmDateHeader">알람일 <span class="sort-arrow" id="alarmDateArrow"></span></th>
-                        <th></th>
+                        <th id="deleteHeader">삭제</th>
+                        <th id="recommendHearder">추천</th>
                     </tr>
                     </thead>
                     <tbody>
