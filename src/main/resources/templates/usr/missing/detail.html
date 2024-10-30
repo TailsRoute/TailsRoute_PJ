@@ -12,8 +12,9 @@
         <form th:action="@{'../missing/doDelete'}" method="post" th:if="${member != null}">
             <a class="misssing_button" th:href="@{'../missing/modify?missingId='+${missing.id}}"
                th:if="${member.id == missing.memberId}">수정</a>
-            <input type="hidden" name="missingId" th:value="${missing.id}" \>
-            <button type="submit" class="misssing_button" th:if="${member.id == missing.memberId}">삭제</button>
+            <input type="hidden" name="missingId" th:value="${missing.id}">
+            <button type="submit" class="misssing_button" th:if="${member.id == missing.memberId}"
+                    onclick="return confirm('정말로 삭제하시겠습니까?');">삭제</button>
         </form>
     </div>
 </div>
@@ -86,4 +87,3 @@
     <button class="upload_button" onclick="location.href='../missing/list'">목록</button>
 </div>
 </body>
-</html>

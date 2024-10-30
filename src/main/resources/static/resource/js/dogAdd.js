@@ -4,6 +4,7 @@ $(document).ready(function () {
     const $inputFile = $('.dog_photo'); // 파일 입력 필드 선택
     const $preview = $('.preview'); // 미리보기 이미지 선택
     const $uploadButton = $('.image_button'); // 사진 업로드 버튼 선택
+    const $form = $('form'); // 폼 선택
 
     // 드래그 오버 이벤트
     $dropArea.on('dragover', function (event) {
@@ -14,12 +15,6 @@ $(document).ready(function () {
     // 드래그 리브 이벤트
     $dropArea.on('dragleave', function () {
         $(this).removeClass('highlight'); // 드롭 영역 강조 제거
-
-        const files = event.originalEvent.dataTransfer.files; // 드롭된 파일 가져오기
-        if (files.length > 0) {
-            $inputFile[0].files = files; // 파일 입력 필드에 드롭된 파일 설정
-            updatePreview(files[0]); // 미리보기 업데이트 함수 호출
-        }
     });
 
     // 드롭 이벤트
@@ -56,6 +51,15 @@ $(document).ready(function () {
         }
         fileReader.readAsDataURL(file); // 파일을 Data URL로 읽기
     }
+
+    // 폼 제출 이벤트
+    $form.on('submit', function (event) {
+        // 파일이 선택되지 않은 경우
+        if (!$inputFile[0].files.length) {
+            alert('사진을 업로드해 주세요.'); // 경고 메시지 표시
+            event.preventDefault(); // 폼 제출을 막음
+        }
+    });
 });
 
 function preview_clear() {
