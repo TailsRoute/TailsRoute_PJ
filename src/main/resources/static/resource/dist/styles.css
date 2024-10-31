@@ -813,8 +813,16 @@ video {
   justify-content: space-between;
 }
 
+.tw-gap-11 {
+  gap: 2.75rem;
+}
+
 .tw-gap-2 {
   gap: 0.5rem;
+}
+
+.tw-gap-5 {
+  gap: 1.25rem;
 }
 
 .tw-overflow-auto {
@@ -884,9 +892,9 @@ video {
   background-color: rgb(255 254 240 / var(--tw-bg-opacity));
 }
 
-.tw-bg-blue-700 {
+.tw-bg-blue-500 {
   --tw-bg-opacity: 1;
-  background-color: rgb(29 78 216 / var(--tw-bg-opacity));
+  background-color: rgb(59 130 246 / var(--tw-bg-opacity));
 }
 
 .tw-bg-red-500 {
@@ -974,6 +982,11 @@ video {
   line-height: 2rem;
 }
 
+.tw-text-3xl {
+  font-size: 1.875rem;
+  line-height: 2.25rem;
+}
+
 .tw-text-\[10px\] {
   font-size: 10px;
 }
@@ -984,10 +997,6 @@ video {
 
 .tw-text-\[50px\] {
   font-size: 50px;
-}
-
-.tw-text-l-\[10px\] {
-  line-height: 10px;
 }
 
 .tw-text-lg {

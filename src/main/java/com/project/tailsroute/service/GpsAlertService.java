@@ -189,7 +189,7 @@ public class GpsAlertService {
 
         try {
             while (!Thread.currentThread().isInterrupted()) {
-                // System.err.println(gpsAlert.getExtra__comPortName() + " 실행중 : " + number + "회");
+                System.err.println(gpsAlert.getExtra__comPortName() + " 실행중 : " + number + "회");
                 number++;
 
                 if (comPort.bytesAvailable() > 0) {

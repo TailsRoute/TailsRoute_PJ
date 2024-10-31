@@ -66,8 +66,8 @@
             </div>
             <div>
                 <label>GPS 보유 여부</label>
-                <span class="myPage_text" th:if="${dog.comPortName==null}">Ⅹ</span>
-                <span class="myPage_text" th:if="${dog.comPortName!=null}">○</span>
+                <span class="myPage_text" th:if="${dog.comPortName==null}">없음</span>
+                <span class="myPage_text" th:if="${dog.comPortName!=null}">있음</span>
             </div>
             <div class="myPage_text" th:if="${location!=null}" th:text="${location}"></div>
             <div th:if="${dog.comPortName != null}">
@@ -103,5 +103,3 @@
     </div>
 </div>
 </body>
-</html>
-

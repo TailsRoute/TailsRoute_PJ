@@ -15,7 +15,7 @@ input, select, textarea{
 .drop_area {
     width: 300px;
     height: 300px;
-    border: 2px dashed #ccc; /* 점선 테두리 */
+    /* border: 2px dashed #ccc; /* 점선 테두리 */
     border-radius: 5px; /* 모서리 둥글게 */
     padding: 20px; /* 내부 여백 */
     text-align: center; /* 텍스트 중앙 정렬 */
@@ -79,7 +79,6 @@ input, select, textarea{
     width: 300px;
     height: 300px;
     border-radius: 5px; /* 모서리 둥글게 */
-    object-fit: fill;
 }
 
 .upload_button_wrapper {

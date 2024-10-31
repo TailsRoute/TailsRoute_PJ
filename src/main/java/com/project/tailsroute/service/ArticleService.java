@@ -15,10 +15,6 @@ public class ArticleService {
 	@Autowired
 	private ArticleRepository articleRepository;
 
-	public ArticleService(ArticleRepository articleRepository) {
-		this.articleRepository = articleRepository;
-	}
-
 	public ResultData writeArticle(int memberId, String title, String body, String boardId) {
 		articleRepository.writeArticle(memberId, title, body, boardId);
 
@@ -31,8 +27,8 @@ public class ArticleService {
 		articleRepository.deleteArticle(id);
 	}
 
-	public void modifyArticle(int id, String title, String body) {
-		articleRepository.modifyArticle(id, title, body);
+	public void modifyArticle(int boardId, int id, String title, String body) {
+		articleRepository.modifyArticle(boardId, id, title, body);
 	}
 
 	public Article getForPrintArticle(int loginedMemberId, int id) {
@@ -50,7 +46,7 @@ public class ArticleService {
 	}
 
 	public List<Article> getForPrintArticles(int boardId, int itemsInAPage, int page, String searchKeywordTypeCode,
-			String searchKeyword) {
+											 String searchKeyword) {
 
 		int limitFrom = (page - 1) * itemsInAPage;
 		int limitTake = itemsInAPage;
