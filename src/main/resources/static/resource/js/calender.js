@@ -5,7 +5,6 @@ document.addEventListener('DOMContentLoaded', function () {
         initialView: 'dayGridMonth',
         events: 'calendar', // API 엔드포인트
         eventClick: function(info) {
-            alert('Event: ' + info.event.title);
         },
         eventDataTransform: function(eventData) {
             // eventData의 title이나 다른 속성을 기반으로 className을 설정

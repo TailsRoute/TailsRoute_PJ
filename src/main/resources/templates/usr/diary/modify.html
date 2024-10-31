@@ -13,7 +13,6 @@
 
 <body >
 
-
 <form th:action="@{|${diary.id}|}" class="pt-16 " method="post" enctype="multipart/form-data">
   <input type="hidden" name="memberId" value="1" >
 
@@ -62,10 +61,10 @@
       <textarea id="information" placeholder="복용약 정보 및 특이사항" name="information" class="w-full p-4 border border-gray-300 rounded-lg mb-6 text-center" rows="10" required th:text="${diary.information}"></textarea>
     </div>
 
-    <div style="display: flex; justify-content: center; align-items: center;">
-      <button id="SubmitButton" type="submit" class="text-white px-4 py-2 rounded-lg mb-2" style="background-color:#696969">수정</button>
+    <div class="button">
+      <button id="SubmitButton" type="submit"  >수정</button>
+      <button th:href="@{|/usr/diary/detail/${diary.id}|}" class="historyBack" >돌아가기</button>
     </div>
-    <a th:href="@{|/usr/diary/detail/${diary.id}|}" class="btn btn-primary bg-gray-500 text-white py-2 px-4 rounded">상세페이지로 돌아가기</a>
   </nav>
 </form>
 
