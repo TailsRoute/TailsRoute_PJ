@@ -1,6 +1,7 @@
 let map; // 구글 지도 객체
 let marker; // 마커 객체
 let geocoder; // Geocoder 객체
+let circle; // 반경 500m 원 객체
 
 // 구글 지도를 초기화하는 함수
 window.initMap = function() { // 전역으로 설정
@@ -24,7 +25,7 @@ window.initMap = function() { // 전역으로 설정
     // 구글 지도 객체 생성
     map = new google.maps.Map(mapDiv, {
         center: initialLocation,
-        zoom: 15,
+        zoom: 19,
     });
 
     // 초기 위치에 마커 생성
@@ -33,12 +34,25 @@ window.initMap = function() { // 전역으로 설정
         map: map,
     });
 
+    // 반경 100m 원 생성
+    circle = new google.maps.Circle({
+        map: map,
+        center: initialLocation,
+        radius: 50, // 반경 50m
+        fillColor: '#FF0000', // 붉은색
+        fillOpacity: 0.3, // 반투명
+        strokeColor: '#FF0000',
+        strokeOpacity: 0.8,
+        strokeWeight: 2
+    });
+
     // Geocoder 초기화
     geocoder = new google.maps.Geocoder();
 
     // 지도 클릭 시 마커를 클릭한 위치로 이동시키는 이벤트 리스너 추가
     map.addListener("click", (event) => {
         marker.setPosition(event.latLng); // 클릭한 위치로 마커 이동
+        circle.setCenter(event.latLng); // 원의 중심도 마커 위치로 이동
         updateCenter(); // 중앙 좌표 업데이트
     });
 
@@ -56,7 +70,8 @@ function searchPlace() {
             const place = results[0]; // 첫 번째 결과 사용
             map.setCenter(place.geometry.location); // 지도 중심을 결과 위치로 변경
             marker.setPosition(place.geometry.location); // 마커 위치 변경
-            map.setZoom(17); // 원하는 확대 수준으로 설정
+            circle.setCenter(place.geometry.location); // 원의 중심 위치도 변경
+            map.setZoom(19); // 원하는 확대 수준으로 설정
 
             // 위도와 경도 값을 숨겨진 input에 저장
             $('#lat').val(place.geometry.location.lat());
@@ -74,10 +89,11 @@ function updateCenter() {
     $('#lng').val(center.lng()); // 경도 값을 숨겨진 input에 저장
 }
 
+// 중심 좌표를 가져와서 전송하는 함수
 function getCenterCoordinates(dogId, chack) {
     const lat = $('#lat').val(); // 위도 가져오기
     const lng = $('#lng').val(); // 경도 가져오기
-    if(chack == true){
+    if(chack === true){
         sendLocation(dogId, lat, lng);
     }else {
         updateLocation(dogId, lat, lng);
@@ -99,14 +115,14 @@ function sendLocation(dogId, lat, lng) {
             alert("등록되었습니다.");
             window.location.href = '../member/myPage'; // 리다이렉트
         },
-        error: function(xhr, status, error) {
+        error: function(xhr) {
             alert(xhr.responseText);
             console.log(xhr.responseText);
         }
     });
 }
 
-// AJAX 요청을 보내는 함수
+// 위치 수정 요청을 보내는 함수
 function updateLocation(dogId, lat, lng) {
     $.ajax({
         url: '/usr/gpsAlert/updateLocation',
@@ -120,7 +136,7 @@ function updateLocation(dogId, lat, lng) {
             alert("수정되었습니다.");
             window.location.href = '../member/myPage'; // 리다이렉트
         },
-        error: function(xhr, status, error) {
+        error: function(xhr) {
             alert(xhr.responseText);
             console.log(xhr.responseText);
         }

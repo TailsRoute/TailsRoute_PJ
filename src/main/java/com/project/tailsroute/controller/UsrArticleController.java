@@ -1,18 +1,12 @@
 package com.project.tailsroute.controller;
 
-import com.project.tailsroute.service.ArticleService;
-import com.project.tailsroute.service.BoardService;
-import com.project.tailsroute.service.ReactionPointService;
-import com.project.tailsroute.service.ReplyService;
+import com.project.tailsroute.service.*;
 import com.project.tailsroute.util.Ut;
 import com.project.tailsroute.vo.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartRequest;
 
@@ -124,7 +118,7 @@ public class UsrArticleController {
 	// 로그인 체크 -> 유무 체크 -> 권한 체크 -> 수정
 	@PostMapping("/usr/article/doModify")
 	@ResponseBody
-	public String doModify(int id, String title, String body) {
+	public String doModify(int boardId, int id, String title, String body) {
 
 		Article article = articleService.getArticleById(id);
 
@@ -139,7 +133,7 @@ public class UsrArticleController {
 		}
 
 		if (userCanModifyRd.isSuccess()) {
-			articleService.modifyArticle(id, title, body);
+			articleService.modifyArticle(boardId, id, title, body);
 		}
 
 		article = articleService.getArticleById(id);
@@ -195,7 +189,7 @@ public class UsrArticleController {
 	@PostMapping("/usr/article/doWrite")
 	@ResponseBody
 	public String doWrite(String boardId, String title, String body, String replaceUri,
-			MultipartRequest multipartRequest) {
+						  MultipartRequest multipartRequest) {
 
 		if (Ut.isEmptyOrNull(title)) {
 			return Ut.jsHistoryBack("F-1", "제목을 입력해주세요");
@@ -227,9 +221,9 @@ public class UsrArticleController {
 
 	@GetMapping("/usr/article/list")
 	public String showList(Model model, @RequestParam(defaultValue = "0") int boardId,
-			@RequestParam(defaultValue = "1") int page,
-			@RequestParam(defaultValue = "전체") String searchKeywordTypeCode,
-			@RequestParam(defaultValue = "") String searchKeyword){
+						   @RequestParam(defaultValue = "1") int page,
+						   @RequestParam(defaultValue = "전체") String searchKeywordTypeCode,
+						   @RequestParam(defaultValue = "") String searchKeyword){
 
 		boolean isLogined = rq.isLogined();
 		if (isLogined) {

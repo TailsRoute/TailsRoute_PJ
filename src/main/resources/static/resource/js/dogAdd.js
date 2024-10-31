@@ -54,8 +54,8 @@ $(document).ready(function () {
 
     // 폼 제출 이벤트
     $form.on('submit', function (event) {
-        // 파일이 선택되지 않은 경우
-        if (!$inputFile[0].files.length) {
+        // 미리보기 이미지가 보이지 않는 경우 (display: none)
+        if ($('.preview').css('display') === 'none') {
             alert('사진을 업로드해 주세요.'); // 경고 메시지 표시
             event.preventDefault(); // 폼 제출을 막음
         }
