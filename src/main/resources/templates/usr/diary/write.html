@@ -8,11 +8,12 @@
     <title>PetdiaryWrite</title>
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
     <link rel="stylesheet" href="/resource/css/diary/DiaryWrite.css">
+
 </head>
 <body >
 
 <form  id = "diaryContent" action="/usr/diary/write" method="post" enctype="multipart/form-data">
-    <input type="hidden" name="memberId" value="1" >
+    <input type="hidden" name="memberId" th:value="${member.id}" >
 
     <div class="flex items-center justify-center  ">
         <label for="title"></label><input type="text" id="title" name="title" placeholder="제목을 입력해주세요." class="input-hidden " required />
@@ -61,6 +62,7 @@
                 <button id="SubmitButton" type="submit" class="text-white px-4 py-2 rounded-lg mb-2" style="background-color:#696969">작성</button>
             </div>
         </nav>
+    <script src="/resource/js/diary/DiaryWrite.js"></script>
 </form>
 </body>
 </html>
