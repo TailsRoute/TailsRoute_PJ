@@ -2,9 +2,7 @@ package com.project.tailsroute.service;
 
 import com.project.tailsroute.repository.DiaryRepository;
 
-import com.project.tailsroute.util.Ut;
 import com.project.tailsroute.vo.Diary;
-import com.project.tailsroute.vo.ResultData;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -22,26 +20,26 @@ public class DiaryService {
 
     @Transactional
     public void writeDiary(int memberId, String title, String body, String imagePath,
-                                 LocalDate startDate, LocalDate endDate,
-                                 LocalTime takingTime, String information) {
+                           LocalDate startDate, LocalDate endDate,
+                           LocalTime takingTime, String information) {
+
 
         diaryRepository.writeDiary(memberId, title, body, imagePath, startDate, endDate, takingTime, information);
     }
 
-    public List<Diary> getDiaryList(int memberId,String sort, int page, int size) {
+    public List<Diary> getDiaryList(int memberId,String sort, int page, int size ,String keyword) {
         int offset = (page - 1) * size;
         int limit = size;
 
         if ("oldest".equals(sort)) {
-            return diaryRepository.findAllByOrderByDateDesc(memberId,limit, offset); // 오래된순
+            return diaryRepository.findAllByOrderByDateDesc(memberId,limit, offset,keyword); // 오래된순
         } else {
-            return diaryRepository.findAllByOrderByDateAsc(memberId,limit, offset); // 최신순
+            return diaryRepository.findAllByOrderByDateAsc(memberId,limit, offset,keyword); // 최신순
         }
-
     }
 
-    public int countDiaries(int memberId) {
-        return diaryRepository.countDiaries(memberId);
+    public int countDiaries(int memeberId,String keyword) {
+        return diaryRepository.countDiaries(memeberId,keyword);
 
     }
 
@@ -63,7 +61,7 @@ public class DiaryService {
         return diaryRepository.getForPrintDiary(id);
     }
 
-    public List<Diary> findAllDiary(int memberId){
-        return diaryRepository.findAllDiary(memberId);
+    public List<Diary> findAllDiary(int memberId, String keyword){
+        return diaryRepository.findAllDiary(memberId,keyword);
     }
 }

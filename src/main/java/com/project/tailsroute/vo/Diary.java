@@ -30,5 +30,8 @@ public class Diary {
 
     public Diary(String title, LocalDate startDate) {
     }
+
+    public void setBoardId(int boardId) {
+    }
 }
 
