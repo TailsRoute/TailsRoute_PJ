@@ -490,9 +490,20 @@ CREATE TABLE walk(
                      memberId INT(10) UNSIGNED NOT NULL COMMENT '접속자 식별번호',
                      regDate DATETIME NOT NULL COMMENT '등록 날짜',
                      updateDate DATETIME NOT NULL COMMENT '수정 날짜',
+                     routeName TEXT NOT NULL COMMENT '산책이름',
                      purchaseDate DATE NOT NULL COMMENT '산책 날짜',
-                     purchaseTime DATETIME NOT NULL COMMENT '산책 시간',
+                     purchaseTime TEXT NOT NULL COMMENT '산책 시간',
                      routePicture TEXT NOT NULL COMMENT '루트 사진',
                      routedistance DOUBLE NOT NULL COMMENT '루트 거리',
                      location VARCHAR(100) COMMENT '장소'
 );
+## init 끝
+##############################################
+
+SELECT * FROM `member`;
+SELECT * FROM missing;
+SELECT * FROM essentials;
+SELECT * FROM alarm;
+SELECT * FROM cart;
+SELECT * FROM gpsChack;
+SELECT * FROM walk;
