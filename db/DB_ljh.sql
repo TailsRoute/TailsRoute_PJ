@@ -492,10 +492,8 @@ CREATE TABLE walk(
                      updateDate DATETIME NOT NULL COMMENT '수정 날짜',
                      routeName TEXT NOT NULL COMMENT '산책이름',
                      purchaseDate DATE NOT NULL COMMENT '산책 날짜',
-                     purchaseTime TEXT NOT NULL COMMENT '산책 시간',
                      routePicture TEXT NOT NULL COMMENT '루트 사진',
-                     routedistance DOUBLE NOT NULL COMMENT '루트 거리',
-                     location VARCHAR(100) COMMENT '장소'
+                     routedistance DOUBLE NOT NULL COMMENT '루트 거리'
 );
 ## init 끝
 ##############################################

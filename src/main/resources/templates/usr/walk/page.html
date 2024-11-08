@@ -482,6 +482,52 @@
           }
         });
       });
+      // 추천 버튼 클릭 이벤트 설정
+      const articleButtons = document.querySelectorAll(".article-btn");
+      articleButtons.forEach(button => {
+        button.addEventListener("click", function (event) {
+          event.stopPropagation(); // 부모 요소의 클릭 이벤트가 발생하지 않도록 방지
+          const routeName = this.getAttribute("data-route-name");
+          const location = this.getAttribute("data-location");
+          const purchaseDate = this.getAttribute("data-purchase-date");
+          const purchaseTime = this.getAttribute("data-purchase-time");
+          const routedistance = this.getAttribute("data-route-distance");
+          const routePicture = JSON.parse(decodeURIComponent(this.getAttribute("data-route-picture")));
+
+          if (!confirm("정말로 추천하시겠습니까?")) {
+            return; // 사용자가 "아니오"를 선택한 경우 함수 종료
+          }
+          // WYSIWYG 방식으로 HTML 콘텐츠 생성
+          const contentContainer = document.createElement('div');
+
+          const mapElement = document.createElement('div');
+          mapElement.textContent = routePicture;
+
+          const routeNameElement = document.createElement('div');
+          routeNameElement.textContent = `산책명 : ` + routeName;
+
+          const routeLocationElement = document.createElement('div');
+          routeLocationElement.textContent = `지역 : ` + location;
+
+          const routedistanceElement = document.createElement('div');
+          routedistanceElement.textContent = `산책거리 : ` + routedistance;
+
+          // 요소들을 contentContainer에 추가
+          contentContainer.appendChild(routeNameElement);
+          contentContainer.appendChild(document.createElement('br'));
+          contentContainer.appendChild(mapElement);
+          contentContainer.appendChild(document.createElement('br'));
+          contentContainer.appendChild(routeLocationElement);
+          contentContainer.appendChild(document.createElement('br'));
+          contentContainer.appendChild(routedistanceElement);
+
+          // HTML 콘텐츠를 인코딩
+          const encodedContent = encodeURIComponent(contentContainer.innerHTML);
+
+          // 페이지를 initializeEditor가 있는 HTML 파일로 이동
+          window.location.href = `http://localhost:8081/usr/shopping/write?content=${encodedContent}`;
+        });
+      });
     }
     function deleteWalk(routeName, location, purchaseDate, purchaseTime,routedistance) {
       let eventIdToDelete;

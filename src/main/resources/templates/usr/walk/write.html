@@ -1,0 +1,403 @@
+<div id="heads">
+    <th:block th:replace="usr/common/head"/>
+</div>
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script async defer th:src="'https://maps.googleapis.com/maps/api/js?key=' + ${GOOGLE_ROUTE_API_KEY} + '&callback=initMap1&libraries=places'"></script>
+    <title>글 작성</title>
+    <style>
+        html {
+            background-color: #FFFEF0;
+            color: #4D3E3E;
+        }
+        .title{
+            text-align: center;
+            padding-top: 70px;
+            font-size: 50px;
+        }
+        .writewalk{
+            border: 1px solid #ccc;
+            border-radius: 10px;
+            width: 80%;
+            margin-left: 10%;
+            padding: 20px;
+        }
+        .enterMap {
+            padding-left: 10px;
+            padding-top: 10px;
+            border: 1px solid #ccc;
+            border-radius: 10px;
+            background-color: #F2F2EB;
+            width: 400px;
+            height: 50px;
+            display: inline-block;
+        }
+        .WalkingTrail, .WalkingSchedule {
+            border: 1px solid #ccc;
+            border-radius: 10px;
+            background-color: #F2F2EB;
+            display: inline-block;
+            width: 400px;
+            height: 400px;
+        }
+        .buttons{
+            margin-left: 80%;
+        }
+        #clearPathButton, #showlist{
+            border: 1px solid #ccc;
+            border-radius: 10px;
+            width: 90px;
+            height: 40px;
+        }
+        th{
+            width: 24%;
+        }
+    </style>
+</head>
+<body>
+<div class="title">산책 일지 작성</div>
+<div class="writewalk">
+    <label for="routeName">산책명</label>
+    <input type="text" id="routeName" class="tw-border-box tw-w-[190px] tw-text-center tw-rounded-[5px] tw-border" /><br/><br/>
+    <label for="scheduleDate">산책 날짜 선택</label>
+    <input type="date" id="scheduleDate" class="tw-border-box tw-w-[190px] tw-text-center tw-rounded-[5px] tw-border" /><br/><br/>
+    <div class="enterMap">
+        <input type="text" id="locationInput" placeholder="주소를 입력해주세요" />
+        <button onclick="searchLocation()">찿기</button>
+    </div><br/><br/>
+    <div class="WalkingTrail" id="walkingTrailMap"></div>
+    <div class="WalkingSchedule">
+        <table id="WalkingTable">
+            <thead>
+            <tr>
+                <th id="routeNameHeader">산책명<span class="sort-arrow" id="routeNameArrow"></span></th>
+                <th id="purchaseDateHeader">산책 날짜<span class="sort-arrow" id="purchaseDateArrow">▲</span></th>
+                <th id="routedistanceHeader">산책 거리<span class="sort-arrow" id="routedistanceArrow"></span></th>
+                <th id="modifyHeader">즐겨찾기</th>
+            </tr>
+            </thead>
+            <tbody>
+            <!-- 데이터가 여기에 추가됩니다. -->
+            </tbody>
+        </table>
+    </div><br/><br/>
+    <button id="clearPathButton">이전 루트</button>
+    <button id="showlist">리스트 보기</button>
+    <br/><br/>
+    <!-- 산책 거리 -->
+    <label for="routedistance">산책 거리</label>
+    <span id="routedistance" style="display: inline-block;"></span><br/><br/>
+</div><br/>
+<!-- 버튼들 -->
+<div class="buttons">
+    <button id="savePathButton">일정 생성</button>
+    <button id="updateScheduleBtn" style="display: none">일정 수정</button>
+</div>
+<script>
+    let map;
+    let marker;
+    let polyline; // Polyline 객체 추가
+    let path = []; // 경로를 저장할 배열
+    let walks = [];
+    let isAscending = true; // 정렬 방향을 추적하기 위한 변수
+    let w1memberId = [[${member.id}]];
+    function initMap1() {
+        const latitude = [[${gpsCheck.latitude}]];
+        const longitude = [[${gpsCheck.longitude}]];
+        const initialPosition = { lat: latitude, lng: longitude };
+        map = new google.maps.Map(document.getElementById("walkingTrailMap"), {
+            center: initialPosition,
+            zoom: 15,
+        });
+        marker = new google.maps.Marker({
+            position: initialPosition,
+            map: map,
+            title: "My location",
+        });
+        // Polyline 객체 생성
+        polyline = new google.maps.Polyline({
+            path: path,
+            geodesic: true,
+            strokeColor: '#FF0000',
+            icons: [{
+                icon: {
+                    path: google.maps.SymbolPath.FORWARD_CLOSED_ARROW,
+                    scale: 3,
+                    strokeColor: '#0000FF',
+                },
+                offset: '100%',
+                repeat: '200px' // 화살표를 경로를 따라 20px 간격으로 반복
+            }],
+        });
+        polyline.setMap(map); // 지도에 polyline 추가
+        // 지도 클릭 이벤트 리스너 추가
+        map.addListener('click', (event) => {
+            addLatLng(event.latLng);
+        });
+        // 경로 지우기 버튼 클릭 이벤트 리스너
+        document.getElementById("clearPathButton").addEventListener("click", clearPath);
+        document.getElementById("savePathButton").addEventListener("click", function() {
+            // 입력 필드에서 값 가져오기
+            const routeName = document.getElementById("routeName").value;
+            const scheduleDate = document.getElementById("scheduleDate").value;
+            const routedistanceText = document.getElementById("routedistance").textContent; // "2.5 km"
+            const routedistance = parseFloat(routedistanceText.match(/[0-9.]+/)[0]);
+
+            console.log(routeName);
+            console.log(scheduleDate);
+            console.log(routedistanceText);
+            console.log(routedistance);
+
+            const data = JSON.stringify({ path: path });
+            console.log(data);
+
+            // 새로운 Walk 객체 생성
+            const walkData = {
+                memberId: w1memberId,
+                routeName: routeName,
+                purchaseDate: scheduleDate,
+                routePicture: data,
+                routedistance: routedistance // 문자열을 숫자로 변환
+            };
+            console.log(walkData);
+
+            // AJAX 요청을 보내기
+            fetch('/usr/walk/create', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(walkData) // Walk 객체를 JSON 문자열로 변환
+            })
+                .then(response => {
+                    if (response.ok) {
+                        return response.text(); // 성공적인 응답
+                    }
+                    throw new Error('Network response was not ok.');
+                })
+                .then(data => {
+                    console.log('성공:', data); // 성공 메시지 출력
+                    window.location.reload();
+                    document.getElementById("addRoutePopup").style.display = "none"; // 팝업 닫기
+                })
+                .catch((error) => {
+                    console.error('실패:', error); // 오류 메시지 출력
+                    alert('일정 생성 중 오류가 발생했습니다.');
+                });
+        });
+        document.getElementById("closeRoutePopup").addEventListener("click", function() {
+            document.getElementById("addRoutePopup").style.display = "none";
+        });
+    }
+    // 클릭된 위치를 polyline 경로에 추가하는 함수
+    function addLatLng(location) {
+        path.push(location);
+        polyline.setPath(path);
+        updateDistance(); // 경로가 업데이트될 때마다 거리 계산
+    }
+    function updateDistance() {
+        let totalDistance = 0;
+        // 두 좌표 간의 거리 계산 및 합산
+        for (let i = 0; i < path.length - 1; i++) {
+            totalDistance += google.maps.geometry.spherical.computeDistanceBetween(path[i], path[i + 1]);
+        }
+        // 거리 표시 (미터를 킬로미터로 변환)
+        const distanceInKm = (totalDistance / 1000).toFixed(2);
+        document.getElementById("routedistance").innerText = `${distanceInKm} km`;
+    }
+    // 경로를 지우는 함수
+    function clearPath() {
+        if (path.length > 0) {
+            path.pop(); // 마지막 좌표 제거
+            polyline.setPath(path); // 폴리라인에 새로운 경로 설정
+            updateDistance();
+        }
+    }
+    function savePathToLocalStorage() {
+        const pathCoordinates = path.map(point => ({ lat: point.lat(), lng: point.lng() }));
+        localStorage.setItem("savedPath", JSON.stringify(pathCoordinates));
+        alert("Path saved successfully!");
+    }
+    function loadPathFromLocalStorage() {
+        const savedPath = JSON.parse(localStorage.getItem("savedPath"));
+        if (savedPath && savedPath.length > 0) {
+            path = savedPath.map(coord => new google.maps.LatLng(coord.lat, coord.lng));
+            polyline.setPath(path);
+            updateDistance(); // 로드된 경로의 거리 업데이트
+            console.log(path);
+        } else {
+            alert("No path found in local storage.");
+        }
+    }
+    function searchLocation() {
+        const location = document.getElementById("locationInput").value;
+        if (!location) {
+            alert("Please enter a location.");
+            return;
+        }
+        const geocoder = new google.maps.Geocoder();
+        geocoder.geocode({address: location}, (results, status) => {
+            if (status === "OK" && results[0]) {
+                const position = results[0].geometry.location;
+                map.setCenter(position);
+                map.setZoom(15);
+                marker.setPosition(position);
+                marker.setTitle(location);
+
+                // 예시 사용
+                const latitude = position.lat(); // 실제 위치값
+                const longitude = position.lng(); // 실제 위치값
+                var gridCoordinates = convertLatLngToGrid(latitude, longitude);
+                getWeatherInfo(gridCoordinates.nx, gridCoordinates.ny); // 날씨 정보 요청
+            } else {
+                alert("Geocode was not successful for the following reason: " + status);
+            }
+        });
+    }
+    // 위치 입력 필드의 이벤트 리스너
+    document.getElementById("locationInput").addEventListener("keypress", function(event) {
+        if (event.key === "Enter") {
+            searchLocation();
+        }
+    });
+    document.addEventListener("DOMContentLoaded", function() {
+        fetchWalks(w1memberId);
+    });
+    function renderWalks(walksData) {
+        const tableBody = document.querySelector("#WalkingTable tbody");
+        tableBody.innerHTML = ""; // 기존 내용을 지웁니다.
+
+        walksData.forEach(item => {
+            const row = document.createElement("tr");
+            row.innerHTML = `
+            <td class="ellipsis">${item.routeName}</td>
+            <td>${item.purchaseDate}</td>
+            <td>${item.routedistance}Km</td>
+            <td>
+            <button class="modify-btn"
+                        data-route-name="${item.routeName}"
+                        data-purchase-date="${item.purchaseDate}"
+                        data-route-distance="${item.routedistance}">🔧</button></td>
+            <td>
+
+        `;
+
+            tableBody.appendChild(row);
+        });
+
+        const modifyButtons = document.querySelectorAll(".modify-btn");
+        modifyButtons.forEach(button => {
+            button.addEventListener("click", function (event) {
+                event.stopPropagation();
+                // 버튼에 설정된 데이터 속성에서 값 가져오기
+                const routeName = this.getAttribute("data-route-name");
+                const purchaseDate = this.getAttribute("data-purchase-date");
+
+
+            });
+        });
+    }
+    function sortByColumn(walksData, column, isAscending) {
+        return walksData.sort((a, b) => {
+            let valueA = a[column] || '';  // undefined 처리
+            let valueB = b[column] || '';
+
+            // 날짜 형식일 경우 비교 방법 변경
+            if (column === 'purchaseDate') {
+                valueA = valueA ? new Date(valueA) : new Date();
+                valueB = valueB ? new Date(valueB) : new Date();
+            }
+
+            // 정렬 로직 (오름차순 또는 내림차순)
+            if (valueA < valueB) return isAscending ? -1 : 1;
+            if (valueA > valueB) return isAscending ? 1 : -1;
+            return 0;
+        });
+    }
+    currentSortColumn = 'purchaseDate'; // 초기 정렬 열
+
+    const arrows = {
+        routeName: document.getElementById("routeNameArrow"),
+        purchaseDate: document.getElementById("purchaseDateArrow"),
+        routedistance: document.getElementById("routedistanceArrow"),
+    };
+
+    // 화살표 초기화 함수
+    function resetArrows() {
+        for (const key in arrows) {
+            arrows[key].textContent = ''; // 모든 화살표 초기화
+            arrows[key].classList.remove('visible');
+        }
+    }
+
+    // 초기화 함수
+    function init() {
+        resetArrows(); // 화살표 초기화
+        arrows.purchaseDate.textContent = '▼'; // 구매일 화살표 표시
+        arrows.purchaseDate.classList.add('visible'); // 화살표 보이기
+        const sortedWalks = sortByColumn(walks, currentSortColumn, isAscending); // 정렬
+        renderWalks(sortedWalks); // 정렬된 데이터 렌더링
+    }
+
+    init(); // 초기화 호출
+
+    // 산책명 정렬
+    document.getElementById("routeNameHeader").addEventListener("click", () => {
+        resetArrows(); // 화살표 초기화
+        isAscending = currentSortColumn !== 'routeName' || !isAscending; // 정렬 방향 결정
+        currentSortColumn = 'routeName';
+        arrows.routeName.textContent = isAscending ? '▼' : '▲'; // 화살표 표시
+        arrows.routeName.classList.add('visible'); // 화살표 보이기
+        const sortedWalks = sortByColumn(walks, 'routeName', isAscending); // 정렬
+        renderWalks(sortedWalks); // 정렬된 데이터 렌더링
+    });
+
+
+    // 산책날짜 정렬
+    document.getElementById("purchaseDateHeader").addEventListener("click", () => {
+        resetArrows(); // 화살표 초기화
+        isAscending = currentSortColumn !== 'purchaseDate' || !isAscending; // 정렬 방향 결정
+        currentSortColumn = 'purchaseDate';
+        arrows.purchaseDate.textContent = isAscending ? '▼' : '▲'; // 화살표 표시
+        arrows.purchaseDate.classList.add('visible'); // 화살표 보이기
+        const sortedWalks = sortByColumn(walks, 'purchaseDate', isAscending); // 정렬
+        renderWalks(sortedWalks); // 정렬된 데이터 렌더링
+    });
+
+    // 산책거리 정렬
+    document.getElementById("routedistanceHeader").addEventListener("click", () => {
+        resetArrows(); // 화살표 초기화
+        isAscending = currentSortColumn !== 'routedistance' || !isAscending; // 정렬 방향 결정
+        currentSortColumn = 'routedistance';
+        arrows.routedistance.textContent = isAscending ? '▼' : '▲'; // 화살표 표시
+        arrows.routedistance.classList.add('visible'); // 화살표 보이기
+        const sortedWalks = sortByColumn(walks, 'routedistance', isAscending); // 정렬
+        renderWalks(sortedWalks); // 정렬된 데이터 렌더링
+    });
+
+    // 품목 리스트를 가져오는 함수
+    function fetchWalks(w1memberId) {
+        fetch(`/usr/walk/get?memberId=`+w1memberId) // memberId 값을 URL에 추가
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('데이터를 가져오는 데 실패했습니다.');
+                }
+                return response.json();
+            })
+            .then(data => {
+                walks = data; // 데이터를 essentials에 할당
+
+                // 기본적으로 구매일 순으로 정렬
+                walks = sortByColumn(walks, 'purchaseDate', true); // 오름차순 정렬
+                renderWalks(walks); // 데이터를 렌더링하는 함수 호출
+            })
+            .catch(error => {
+                console.error('Error fetching essentials:', error);
+            });
+    }
+</script>
+</body>
+</html>
