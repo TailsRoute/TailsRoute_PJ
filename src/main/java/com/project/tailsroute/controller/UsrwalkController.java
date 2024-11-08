@@ -52,6 +52,26 @@ public class UsrwalkController {
 
         return "usr/walk/page";
     }
+    @GetMapping("/usr/walk/write")
+    public String showWalkwrite(Model model) {
+        boolean isLogined = rq.isLogined();
+
+        if (isLogined) {
+            Member member = rq.getLoginedMember();
+            model.addAttribute("member", member);
+
+            // GPS 정보 가져오기
+            GpsChack gpsCheck = gpsChackService.chack(member.getId());
+            model.addAttribute("gpsCheck", gpsCheck); // 가져온 GPS 정보 추가
+        } else {
+            return "redirect:/usr/member/login";
+        }
+
+        model.addAttribute("GOOGLE_ROUTE_API_KEY", googleRouteApiKey);
+        model.addAttribute("isLogined", isLogined);
+
+        return "usr/walk/write";
+    }
 
     // 날씨 정보 요청을 처리하는 메소드 추가
     @GetMapping("/usr/walk/getWeather")
@@ -90,7 +110,6 @@ public class UsrwalkController {
         walkService.updateWalks(
                 walk.getRouteName(),
                 walk.getPurchaseDate(),
-                walk.getPurchaseTime(),
                 walk.getId()
         );
         return ResponseEntity.ok("{\"message\":\"수정 성공\"}");

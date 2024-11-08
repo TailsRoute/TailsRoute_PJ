@@ -21,17 +21,15 @@ public class WalkService {
                 walk.getMemberId(),
                 walk.getRouteName(),
                 walk.getPurchaseDate(),
-                walk.getPurchaseTime(),
                 walk.getRoutePicture(),
-                walk.getRoutedistance(),
-                walk.getLocation()
+                walk.getRoutedistance()
         );
     }
     public List<Walk> findWalksByMemberId(int memberId) {
         return walkRepository.findByMemberId(memberId);
     }
-    public void updateWalks(String routeName, String purchaseDate, String purchaseTime, int id) {
-        walkRepository.updateWalks(routeName, purchaseDate ,purchaseTime,id);
+    public void updateWalks(String routeName, String purchaseDate, int id) {
+        walkRepository.updateWalks(routeName, purchaseDate,id);
     }
     public void deleteWalks(int id) {
         walkRepository.deleteWalks(id);
