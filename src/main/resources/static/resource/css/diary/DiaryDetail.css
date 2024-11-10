@@ -1,53 +1,165 @@
+@import url('https://fonts.googleapis.com/css2?family=Quicksand:wght@400;600&family=Nunito:wght@400;700&display=swap');
+
+/* 기본 스타일 */
 body {
-    background-color: #FFFEF0;
-    color: black;
+    background-color: #fdf6e3;
+    color: #4D3E3E;
+    font-family: 'Quicksand', sans-serif;
+    transition: background-color 0.3s ease;
 }
-.header{
+
+.header {
     padding-bottom: 4px;
 }
+
+/* 컨테이너 스타일 */
 .container {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    max-width: 600px;
-    margin-top: 100px;
-    padding: 20px;
-    border: 1px solid #ccc;
+    max-width: 800px;
+    margin: 100px auto;
+    padding: 24px;
+    background-color: #FFF9E6;
     border-radius: 8px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    background-color: #fff;
-
+    animation: fadeIn 1s ease-out;
 }
 
-.diary-details {
+/* 제목 스타일 */
+.title {
+    font-size: 2.25rem; /* 큰 제목 크기 */
+    font-weight: bold;
+    text-align: center;
+    color: #8B5E3B;
+    font-family: 'Nunito', sans-serif;
     margin-bottom: 20px;
+    animation: slideIn 1s ease-out;
 }
 
-.diary-image {
-    margin: 10px 0;
-}
-
-.actions {
+/* 작성자 및 날짜 스타일 */
+.diary-details {
     display: flex;
     justify-content: space-between;
+    align-items: center;
+    margin-bottom: 24px;
+    font-size: 1rem;
+    color: #4D3E3E;
+}
+
+.author {
+    font-weight: bold;
+    color: #8B5E3B;
+    font-size: 1rem; /* 작성자 텍스트 크기 */
+    text-align: left;
+}
+
+/* 날짜 스타일 */
+.date {
+    font-size: 0.9rem; /* 날짜 텍스트 크기 */
+    color: #888888;
+    text-align: right;
+}
+
+/* 다이어리 이미지 스타일 */
+.diary-image {
+    margin-bottom: 24px;
+}
+
+.image {
+    width: 100%;
+    height: auto;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    border: 4px solid #D8A86C;
+    transition: transform 0.5s ease;
+}
+
+.image:hover {
+    transform: scale(1.02);
+}
+
+/* 본문 텍스트 스타일 */
+.body-text {
+    font-size: 1.125rem; /* 본문 텍스트 크기 */
+    line-height: 1.8rem;
+    margin-bottom: 32px;
+    padding: 0 16px;
+    animation: slideIn 1s ease-out;
+}
+
+/* 복용약 정보 테이블 스타일 */
+.medicine-info {
+    background-color: #FFF9E6;
+    padding: 16px;
+    border-radius: 8px;
+    box-shadow: inset 0 4px 8px rgba(0, 0, 0, 0.05);
+    margin-bottom: 24px;
+    animation: slideIn 1s ease-out;
+}
+
+.sub-title {
+    font-size: 1.5rem; /* 테이블 제목 크기 */
+    font-weight: 600;
+    text-align: center;
+    color: #8B5E3B;
+    margin-bottom: 16px;
+}
+
+/* 테이블 스타일 */
+.info-table {
+    width: 100%;
+    color: #4D3E3E;
+    border-collapse: collapse;
+}
+
+.info-label {
+    font-weight: 500;
+    padding: 8px;
+    font-size: 1rem; /* 라벨 텍스트 크기 */
+}
+
+.info-value {
+    padding: 8px;
+    font-size: 1rem; /* 값 텍스트 크기 */
+}
+
+/* 버튼 스타일 */
+.action-buttons {
+    display: flex;
+    justify-content: center;
+    gap: 16px;
 }
 
 .btn {
-    padding: 10px 20px;
-    background-color: #696969;
+    padding: 12px 24px; /* 버튼 크기 조정 */
+    background-color: #4D3E3E;
     color: white;
     border: none;
     border-radius: 5px;
+    font-weight: bold;
+    font-size: 1rem; /* 버튼 텍스트 크기 */
+    font-family: 'Nunito', sans-serif;
     text-decoration: none;
     cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.2s ease;
 }
 
 .btn:hover {
-    background-color: #555;
+    background-color: #3b302e;
+    transform: scale(1.05);
 }
-.header{
-    display: block;
-}
-.submitButton{
 
+/* 애니메이션 */
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+@keyframes slideIn {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
 }

@@ -122,7 +122,32 @@ body {
 #diaryContent{
     padding-top: 70px;
 }
+/* 버튼 스타일 */
+#fileBtn, .remove-btn {
+    background-color: #4D3E3E; /* 따뜻한 배경색 */
+    color: white; /* 텍스트 색상 */
+    font-weight: bold; /* 폰트 굵기 */
+    padding: 10px 20px; /* 버튼 패딩 */
+    border-radius: 8px; /* 둥근 모서리 */
+    transition: background-color 0.3s ease; /* 배경색 변화 애니메이션 */
+    border: none; /* 테두리 제거 */
+    cursor: pointer; /* 포인터 커서 */
+}
 
-#calendar{
+/* 호버 스타일 */
+#fileBtn:hover, .remove-btn:hover {
+    background-color: #3b302e; /* 호버 시 배경색 */
+}
+#SubmitButton{
+    background-color: #4D3E3E; /* 따뜻한 배경색 */
+    border-radius: 8px; /* 둥근 모서리 */
+    transition: background-color 0.3s ease; /* 배경색 변화 애니메이션 */
+    border: none; /* 테두리 제거 */
+    cursor: pointer; /* 포인터 커서 */
+    font-weight: bold; /* 폰트 굵기 */
+}
 
+
+#SubmitButton:hover{
+    background-color: #3b302e; /* 호버 시 배경색 */
 }

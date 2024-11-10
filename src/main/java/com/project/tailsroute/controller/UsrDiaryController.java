@@ -1,11 +1,13 @@
 package com.project.tailsroute.controller;
 
+import com.project.tailsroute.repository.DiaryRepository;
+import com.project.tailsroute.service.AlarmService;
 import com.project.tailsroute.service.DiaryService;
-import com.project.tailsroute.util.Ut;
+import com.project.tailsroute.vo.Alarms;
 import com.project.tailsroute.vo.Diary;
 import com.project.tailsroute.vo.Member;
-import com.project.tailsroute.vo.ResultData;
 import com.project.tailsroute.vo.Rq;
+import net.coobird.thumbnailator.Thumbnails;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ResourceLoader;
 import org.springframework.stereotype.Controller;
@@ -19,7 +21,10 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 @Controller
 @RequestMapping("/usr/diary")
@@ -29,6 +34,10 @@ public class UsrDiaryController {
     private DiaryService diaryService;
     private ResourceLoader resourceLoader;
     private final Rq rq;
+    @Autowired
+    private AlarmService alarmService;
+    @Autowired
+    private DiaryRepository diaryRepository;
 
 
     public UsrDiaryController(Rq rq) {
@@ -52,80 +61,99 @@ public class UsrDiaryController {
     }
 
 
-        @PostMapping("/write")
-        public String submitDiary(
-                @RequestParam("memberId") int memberId,
-                @RequestParam("title") String title,
-                @RequestParam("body") String body,
-                @RequestParam("file") MultipartFile file,
-                @RequestParam("startDate") String startDateStr, // String으로 받아오기
-                @RequestParam("endDate") String endDateStr, // String으로 받아오기
-                @RequestParam("takingTime") LocalTime takingTime,
-                @RequestParam("information") String information,
-                Model model
-        ) {
+    @PostMapping("/write")
+    public String submitDiary(
+            @RequestParam("memberId") int memberId,
+            @RequestParam("title") String title,
+            @RequestParam("body") String body,
+            @RequestParam("file") MultipartFile file,
+            @RequestParam("startDate") String startDateStr, // String으로 받아오기
+            @RequestParam("endDate") String endDateStr, // String으로 받아오기
+            @RequestParam("takingTime") LocalTime takingTime,
+            @RequestParam("information") String information,
+            Model model
+    ) {
+        // DateTimeFormatter 정의
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
 
-            // DateTimeFormatter 정의
-            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+        // String을 LocalDate로 변환
+        LocalDate startDate = LocalDate.parse(startDateStr, formatter);
+        LocalDate endDate = LocalDate.parse(endDateStr, formatter);
 
-            // String을 LocalDate로 변환
-            LocalDate startDate = LocalDate.parse(startDateStr, formatter);
-            LocalDate endDate = LocalDate.parse(endDateStr, formatter);
 
-            String imagePath;
+        // 파일 처리 로직
+        String imagePath = null;
 
-            if (file != null && !file.isEmpty()) {
-                String fileName = file.getOriginalFilename();
+        String fileName = file.getOriginalFilename();
 
-                // 저장할 디렉토리 경로 설정
-                String directoryPath = "src/main/resources/static/resource/DiaryImages";
-                File directory = new File(directoryPath);
 
-                // 디렉토리가 존재하지 않으면 생성
-                if (!directory.exists()) {
-                    directory.mkdirs(); // 디렉토리 생성
-                }
+        // 절대 경로를 사용하여 저장
+        String uploadDir = "uploads" + File.separator + "diary"; // 저장할 디렉토리
+        String filePath = uploadDir + File.separator + fileName; // 저장할 파일 경로
 
-                String savePath = new File(directory, fileName).getAbsolutePath();
+        try {
+            // 파일 저장 전에 이미지 크기 조절
+            Thumbnails.of(file.getInputStream())
+                    .size(800, 800) // 원하는 사이즈로 조정
+                    .toFile(new File(filePath));
 
-                System.out.println("File will be saved to: " + savePath);
-
-                try {
-                    // 파일을 지정된 경로에 저장
-                    file.transferTo(new File(savePath));
-                    imagePath = "/resource/DiaryImages/" + fileName; // 웹에서 접근할 수 있는 URL 경로
-                } catch (IOException e) {
-                    e.printStackTrace();
-                    imagePath = "/resource/photo/default.png"; // 기본 이미지 URL로 설정
-                }
-            } else {
-                imagePath = "/resource/photo/default.png"; // 기본 이미지 URL
-            }
-
-            // 다이어리 작성 서비스 호출
-            diaryService.writeDiary(memberId, title, body, imagePath, startDate, endDate, takingTime, information);
+            imagePath = "/uploads/diary/" + fileName; // 웹에서 접근할 수 있는 경로
+        } catch (IOException e) {
             return "redirect:/usr/diary/list";
         }
 
+        // 다이어리 작성 서비스 호출
+        diaryService.writeDiary(memberId, title, body, imagePath, startDate, endDate, takingTime, information);
+
+// 알람 설정
+// DateTimeFormatter 정의
+        DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
+
+// 날짜와 시간을 함께 LocalDateTime으로 저장
+        for (LocalDate date = startDate; !date.isAfter(endDate); date = date.plusDays(1)) {
+            Alarms alarm = new Alarms();
+            alarm.setMemberId(memberId);
+
+            // 날짜와 시간을 함께 LocalDateTime으로 설정
+            LocalDateTime alarmDateTime = LocalDateTime.of(date, takingTime);
+            alarm.setAlarm_date(alarmDateTime.format(dateTimeFormatter)); // 알람 시간 설정
+
+            // 현재 시간이 설정된 알람 시간보다 이전이고, 정확히 takingTime과 일치하는 경우에만 저장
+            if (alarmDateTime.isAfter(LocalDateTime.now()) && alarmDateTime.getHour() == takingTime.getHour() && alarmDateTime.getMinute() == takingTime.getMinute()) {
+                // 현재 시간 이후의 알람 중 정확히 takingTime에 일치하는 시간만 저장
+                System.out.println("Setting alarm for: " + alarmDateTime.format(dateTimeFormatter));
+                alarm.setMessage("약 복용 일입니다. 복용시간은: " + takingTime + "입니다."); // 메시지 설정
+                alarm.setSite("/usr/diary/list"); // 알람 링크 설정
+
+                // 알람 저장
+                alarmService.saveAlarm(alarm); // 알람 저장
+            }
+        }
+        return "redirect:/usr/diary/list";
+    }
+
     @GetMapping("/list")
-    public String showDiaryList(Model model, @RequestParam(defaultValue = "oldest") String sort, @RequestParam(defaultValue = "1") int page) {
+    public String showDiaryList(Model model, @RequestParam(defaultValue = "oldest") String sort, @RequestParam(defaultValue = "1") int page, @RequestParam(defaultValue = "") String keyword) {
         boolean isLogined = rq.isLogined();
 
         if (isLogined) {
+
             Member member = rq.getLoginedMember();
             model.addAttribute("member", member);
 
             int memeberId = member.getId();
 
             int size = 8; // 페이지당 아이템 수
-            List<Diary> diaries = diaryService.getDiaryList(memeberId, sort, page, size);
-            int totalDiaries = diaryService.countDiaries(memeberId);
+            List<Diary> diaries = diaryService.getDiaryList(memeberId, sort, page, size, keyword);
+            int totalDiaries = diaryService.countDiaries(memeberId, keyword);
             int totalPages = (int) Math.ceil((double) totalDiaries / size);
 
             model.addAttribute("diaries", diaries);
             model.addAttribute("currentPage", page);
             model.addAttribute("totalPages", totalPages);
             model.addAttribute("sort", sort);
+            model.addAttribute("keyword", keyword);
+
 
             // pageNumbers 리스트 추가
             List<Integer> pageNumbers = new ArrayList<>();
@@ -141,7 +169,7 @@ public class UsrDiaryController {
 
     @GetMapping("/calendar")
     @ResponseBody // 이 메서드는 JSON으로 반환됨
-    public List<Map<String, Object>> getDiaryEvents(Model model) {
+    public List<Map<String, Object>> getDiaryEvents(Model model, @RequestParam(defaultValue = "") String keyword) {
         List<Map<String, Object>> events = new ArrayList<>();
         boolean isLogined = rq.isLogined(); // 로그인 여부 확인
 
@@ -151,7 +179,7 @@ public class UsrDiaryController {
 
             int memberId = member.getId(); // memberId 수정
 
-            List<Diary> diaries = diaryService.findAllDiary(memberId); // 로그인한 사용자 다이어리 항목 가져오기
+            List<Diary> diaries = diaryService.findAllDiary(memberId, keyword); // 로그인한 사용자 다이어리 항목 가져오기
 
             DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
             DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm");
@@ -162,7 +190,7 @@ public class UsrDiaryController {
                 diaryEvent.put("id", diary.getId());
                 diaryEvent.put("title", diary.getTitle());
                 diaryEvent.put("start", diary.getRegDate().format(dateFormatter)); // 글 작성 날짜
-                diaryEvent.put("className","diaryEvent");
+                diaryEvent.put("className", "diaryEvent");
                 events.add(diaryEvent);
 
                 // 약 복용 이벤트 추가
@@ -174,7 +202,7 @@ public class UsrDiaryController {
                 medicineEvent.put("start", startDateTime.format(dateTimeFormatter)); // 복용 시작일
                 LocalDateTime endDateTime = LocalDateTime.of(diary.getEndDate(), diary.getTakingTime());
                 medicineEvent.put("end", endDateTime.format(dateTimeFormatter)); // 종료 시간 설정
-                diaryEvent.put("className","medicineEvent");
+                diaryEvent.put("className", "medicineEvent");
                 events.add(medicineEvent);
             }
         } else {
@@ -186,10 +214,8 @@ public class UsrDiaryController {
         return events; // JSON 형식으로 반환
     }
 
-
-    @GetMapping("/detail/{id}")
-    public String showDiaryDetail(@PathVariable int id, Model model) {
-
+    @GetMapping("/detail")
+    public String showDiaryDetail(@RequestParam("id") int id, Model model) {
         boolean isLogined = rq.isLogined();
 
         if (isLogined) {
@@ -206,19 +232,17 @@ public class UsrDiaryController {
 
         model.addAttribute("diary", diary);
 
-
         return "usr/diary/detail"; // 올바른 뷰 이름
     }
 
-    @PostMapping("/delete/{id}")
-    public String deleteDiary(@PathVariable int id) {
+    @PostMapping("/delete")
+    public String deleteDiary(@RequestParam("id") int id) {
         diaryService.deleteDiary(id);
         return "redirect:/usr/diary/list";
     }
 
-    @GetMapping("/modify/{id}")
-    public String showModifyForm(@PathVariable int id, Model model) {
-
+    @GetMapping("/modify")
+    public String showModifyForm(@RequestParam("id") int id, Model model) {
         boolean isLogined = rq.isLogined();
 
         if (isLogined) {
@@ -232,9 +256,9 @@ public class UsrDiaryController {
         return "usr/diary/modify";
     }
 
-    @PostMapping("/modify/{id}")
+    @PostMapping("/modify")
     public String modifyDiaryEntry(
-            @PathVariable int id,
+            @RequestParam("id") int id,
             @RequestParam("title") String title,
             @RequestParam("body") String body,
             @RequestParam("file") MultipartFile file,
@@ -243,40 +267,75 @@ public class UsrDiaryController {
             @RequestParam("takingTime") LocalTime takingTime,
             @RequestParam("information") String information
     ) {
+        // 파일 처리 로직
+        String imagePath = null;
+        String fileName = file.getOriginalFilename();
 
-        String imagePath;
+        // 절대 경로를 사용하여 저장
+        String uploadDir = "uploads" + File.separator + "diary"; // 저장할 디렉토리
+        String filePath = uploadDir + File.separator + fileName; // 저장할 파일 경로
 
-        if (file != null && !file.isEmpty()) {
-            String fileName = file.getOriginalFilename();
+        try {
+            // 파일 저장 전에 이미지 크기 조절
+            Thumbnails.of(file.getInputStream())
+                    .size(800, 800) // 원하는 사이즈로 조정
+                    .toFile(new File(filePath));
 
-            // 저장할 디렉토리 경로 설정
-            String directoryPath = "src/main/resources/static/resource/DiaryImages";
-            File directory = new File(directoryPath);
-
-            // 디렉토리가 존재하지 않으면 생성
-            if (!directory.exists()) {
-                directory.mkdirs(); // 디렉토리 생성
-            }
-
-            String savePath = new File(directory, fileName).getAbsolutePath();
-
-            System.out.println("File will be saved to: " + savePath);
-
-            try {
-                // 파일을 지정된 경로에 저장
-                file.transferTo(new File(savePath));
-                imagePath = "/resource/DiaryImages/" + fileName; // 웹에서 접근할 수 있는 URL 경로
-            } catch (IOException e) {
-                e.printStackTrace();
-                imagePath = "/resource/photo/default.png"; // 기본 이미지 URL로 설정
-            }
-        } else {
-            imagePath = "/resource/photo/default.png"; // 기본 이미지 URL
+            imagePath = "/uploads/diary/" + fileName; // 웹에서 접근할 수 있는 경로
+        } catch (IOException e) {
+            return "redirect:/usr/diary/detail?id=" + id; // 상대 경로로 수정
         }
-
         diaryService.modifyDiary(id, title, body, imagePath, startDate, endDate, takingTime, information);
-        return "redirect:/usr/diary/detail/" + id;
+        return "redirect:/usr/diary/detail?id=" + id; // 상대 경로로 수정
     }
 
 
+    @GetMapping("/recommend")
+    public String showRecommendForm(@RequestParam("id") int id, Model model) {
+        boolean isLogined = rq.isLogined();
+
+        if (isLogined) {
+            Member member = rq.getLoginedMember();
+            model.addAttribute("member", member);
+        }
+        model.addAttribute("isLogined", isLogined);
+
+        Diary diary = diaryService.getDiaryById(id);
+        model.addAttribute("diary", diary);
+        return "usr/diary/recommend";
+    }
+
+
+    @PostMapping("/recommend")
+    public String recommendDiary(
+            @RequestParam("id") int id,
+            @RequestParam("title") String title,
+            @RequestParam("body") String body,
+            @RequestParam("file") MultipartFile file,
+            @RequestParam("startDate") LocalDate startDate,
+            @RequestParam("endDate") LocalDate endDate,
+            @RequestParam("takingTime") LocalTime takingTime,
+            @RequestParam("information") String information
+    ) {
+        // 파일 처리 로직
+        String imagePath = null;
+        String fileName = file.getOriginalFilename();
+
+        // 절대 경로를 사용하여 저장
+        String uploadDir = "uploads" + File.separator + "diary"; // 저장할 디렉토리
+        String filePath = uploadDir + File.separator + fileName; // 저장할 파일 경로
+
+        try {
+            // 파일 저장 전에 이미지 크기 조절
+            Thumbnails.of(file.getInputStream())
+                    .size(800, 800) // 원하는 사이즈로 조정
+                    .toFile(new File(filePath));
+
+            imagePath = "/uploads/diary/" + fileName; // 웹에서 접근할 수 있는 경로
+        } catch (IOException e) {
+            return "redirect:/usr/diary/detail?id=" + id; // 상대 경로로 수정
+        }
+        diaryService.modifyDiary(id, title, body, imagePath, startDate, endDate, takingTime, information);
+        return "redirect:/usr/diary/detail?id=" + id; // 상대 경로로 수정
+    }
 }

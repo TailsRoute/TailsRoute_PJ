@@ -72,10 +72,11 @@ public interface DiaryRepository {
                         INNER JOIN `member` AS M
                         ON D.memberId = M.id
                         WHERE D.memberId = #{memberId}
+                        AND (D.title LIKE CONCAT('%', #{keyword}, '%') OR #{keyword} = '')
                         ORDER BY D.id DESC
             LIMIT #{limit} OFFSET #{offset}
                         """)
-	List<Diary> findAllByOrderByDateDesc(@Param("memberId") int memeberId,@Param("limit") int limit, @Param("offset") int offset);
+	List<Diary> findAllByOrderByDateDesc(@Param("memberId") int memeberId,@Param("limit") int limit, @Param("offset") int offset,@Param("keyword") String keyword);
 
 	@Select("""
         SELECT D.*, M.nickname AS extra__writer
@@ -83,10 +84,11 @@ public interface DiaryRepository {
             INNER JOIN `member` AS M
             ON D.memberId = M.id
             WHERE D.memberId = #{memberId}
+            AND (D.title LIKE CONCAT('%', #{keyword}, '%') OR #{keyword} = '')
             ORDER BY D.id asc 		
          LIMIT #{limit} OFFSET #{offset}
 """)
-	List<Diary> findAllByOrderByDateAsc(@Param("memberId") int memeberId,@Param("limit") int limit, @Param("offset") int offset);
+	List<Diary> findAllByOrderByDateAsc(@Param("memberId") int memeberId,@Param("limit") int limit, @Param("offset") int offset,@Param("keyword") String keyword);
 
 
 	@Select("""
@@ -95,10 +97,11 @@ public interface DiaryRepository {
                         INNER JOIN `member` AS M
                         ON D.memberId = M.id
                         WHERE D.memberId = #{memberId}
+                        AND (D.title LIKE CONCAT('%', #{keyword}, '%') OR #{keyword} = '')
                         ORDER BY D.id DESC
            
                         """)
-	List<Diary> findAllDiary(int memberId);
+	List<Diary> findAllDiary(int memberId,@Param("keyword") String keyword);
 
 
 
@@ -106,7 +109,8 @@ public interface DiaryRepository {
     SELECT COUNT(*)
     FROM diary
      WHERE memberId = #{memberId}
+    AND (title LIKE CONCAT('%', #{keyword}, '%') OR #{keyword} = '')
 """)
-	int countDiaries(int memberId);
+	int countDiaries(int memberId,@Param("keyword") String keyword);
 
 }

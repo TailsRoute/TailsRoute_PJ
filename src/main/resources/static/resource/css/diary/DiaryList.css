@@ -1,59 +1,151 @@
+@import url('https://fonts.googleapis.com/css2?family=Quicksand:wght@400;600&family=Nunito:wght@400;700&display=swap');
+
 body {
     background-color: #fdf6e3;
     color: #4D3E3E;
+    font-family: 'Quicksand', sans-serif; /* 따뜻하고 친근한 느낌의 기본 폰트 */
+    transition: background-color 0.3s ease;
 }
 
+/* 캘린더 */
 #calendar {
-    height: 600px; /* 캘린더 높이 조정 */
-    width: 700px;  /* 캘린더 너비 조정 */
-    margin-top: 20px; /* 제목과의 간격 조정 */
-    border: 1px solid #ddd; /* 테두리 설정 */
-    border-radius: 8px; /* 모서리를 둥글게 */
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1); /* 그림자 효과 추가 */
-    background-color:#F2F2EB; /* 캘린더 배경색 */
-}
-.fc {
-    font-family: 'Arial', sans-serif; /* 폰트 설정 */
-}
-.fc-next-button{
-    background-color: #4D3E3E !important;
-    margin-right: 50px!important;
-}
-.fc-prev-button{
-    background-color: #4D3E3E !important;
-    margin-left: 50px!important;
-}
-.fc-prev-button:hover{
-    background-color: #fdf6e3 !important;
-    color: #4D3E3E !important;
-}
-.fc-next-button:hover{
-    background-color: #fdf6e3 !important;
-    color: #4D3E3E !important;
+    height: 700px;
+    width: 700px;
+    margin-top: 20px;
+    border: 1px solid #ddd;
+    border-radius: 15px;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+    background-color: #FFF9E6;
+    animation: fadeIn 0.5s;
+    padding: 10px;
 }
 
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+/* 이벤트 공통 스타일 */
+.fc-event {
+    border-radius: 10px;
+    padding: 5px;
+    font-weight: bold;
+    text-align: center;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    font-family: 'Nunito', sans-serif; /* 강조된 폰트 */
+}
+
+/* FullCalendar 내부 스크롤바가 일정 내용을 가리지 않도록 오른쪽 여백 추가 */
+.fc-scroller {
+    padding-right: 15px; /* 스크롤바 공간 확보 */
+    box-sizing: content-box; /* 패딩이 제대로 적용되도록 설정 */
+}
+
+/* FullCalendar 내부 스크롤바 숨기기, 스크롤 기능은 유지 */
+.fc-scroller {
+    overflow-y: scroll; /* 스크롤 기능 유지 */
+    -ms-overflow-style: none; /* Internet Explorer에서 스크롤바 숨기기 */
+    scrollbar-width: none; /* Firefox에서 스크롤바 숨기기 */
+}
+
+.fc-scroller::-webkit-scrollbar {
+    display: none; /* Chrome, Safari에서 스크롤바 숨기기 */
+}
+
+/* 약 복용 이벤트 */
+.medicineEvent {
+    background-color: #FFB6B9; /* 기존 색상 유지 */
+    color: #4D3E3E;
+    border: 1px solid #E89CA0;
+    font-size: 14px;
+}
+
+.medicineEvent:hover {
+    transform: scale(1.05); /* 호버 시 약간 확대 */
+    box-shadow: 0 5px 10px rgba(0, 0, 0, 0.15); /* 호버 시 그림자 효과 */
+}
+
+/* 일지 작성 이벤트 */
+.diaryEvent {
+    background-color: #F5D8B5; /* 기존 색상 유지 */
+    color: #4D3E3E;
+    border: 1px solid #E3B089;
+    font-size: 14px;
+}
+
+.diaryEvent:hover {
+    transform: translateY(-3px); /* 호버 시 약간 위로 이동 */
+    box-shadow: 0 5px 10px rgba(0, 0, 0, 0.15); /* 호버 시 그림자 효과 */
+}
+
+/* 오늘 날짜 스타일 */
+.fc-day-today {
+    border: 2px solid #4D3E3E !important;
+    background-color: #FFF9E6 !important;
+    color: #888888;
+    border-radius: 8px;
+}
+
+/* 캘린더 네비게이션 버튼 */
+.fc-next-button, .fc-prev-button {
+    background-color: #4D3E3E !important;
+    border-radius: 5px;
+    padding: 5px 12px;
+    color: white !important;
+    font-weight: bold;
+    transition: background-color 0.3s ease;
+}
+.fc-prev-button:hover, .fc-next-button:hover {
+    background-color: #3b302e !important;
+    color: white !important;
+}
+
+/* 캘린더 툴바 */
 .fc-toolbar {
-    background-color: #F2F2EB; /* 툴바 배경색 */
-    color: black; /* 툴바 텍스트 색상 */
-    padding: 10px; /* 툴바 여백 */
-    border-top-left-radius: 8px; /* 상단 왼쪽 모서리 둥글게 */
-    border-top-right-radius: 8px; /* 상단 오른쪽 모서리 둥글게 */
+    background-color: #FFF9E6;
+    color: #4D3E3E;
+    padding: 10px;
+    border-top-left-radius: 10px;
+    border-top-right-radius: 10px;
+    animation: slideIn 0.5s;
+}
+
+@keyframes slideIn {
+    from { transform: translateY(-10px); opacity: 0; }
+    to { transform: translateY(0); opacity: 1; }
 }
 
 .fc-day-today {
     border: 2px solid #4D3E3E !important;
-    background-color: #F2F2EB !important;
+    background-color: #FFF9E6 !important; /* 오늘 날짜 배경색 */
     color: #888888;
 }
 
-.fc-event{
-    background-color:#D0C3C3 ;
+/* 이벤트 스타일 */
+.fc-event {
+    background-color: #F5D8B5; /* 이벤트 색상 */
+    border-radius: 8px; /* 둥근 모서리 */
+    transition: transform 0.3s ease; /* 이벤트 크기 변화 애니메이션 */
+}
+
+.fc-event:hover {
+    transform: scale(1.05); /* 호버 시 크기 증가 */
 }
 
 /* 제목 및 제목 아래 선 스타일 */
 #title {
     text-align: center; /* 제목 중앙 정렬 */
     padding-top: 20px; /* 상단 여백 줄임 */
+    font-size: 28px; /* 제목 크기 조정 */
+    color: #8B5E3B; /* 제목 색상 */
+    animation: bounce 0.5s infinite; /* 제목 애니메이션 */
+    font-family: 'Nunito', sans-serif;
+}
+
+@keyframes bounce {
+    0%, 20%, 50%, 80%, 100% { transform: translateY(0); }
+    40% { transform: translateY(-10px); }
+    60% { transform: translateY(-5px); }
 }
 
 .titleLine {
@@ -64,63 +156,90 @@ body {
 
 /* 기록 리스트 조정 */
 .diaryList {
-    height: 600px; /* 캘린더 높이 조정 */
-    width: 700px;  /* 캘린더 너비 조정 */
+    height: auto; /* 리스트 높이 자동 조정 */
+    width: 700px;  /* 리스트 너비 조정 */
     margin-top: 20px; /* 제목과의 간격 조정 */
     border: 1px solid #ddd; /* 테두리 설정 */
-    border-radius: 8px; /* 모서리를 둥글게 */
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1); /* 그림자 효과 추가 */
-    background-color: #F2F2EB; /* 캘린더 배경색 */
+    border-radius: 10px; /* 모서리를 둥글게 */
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1); /* 그림자 효과 추가 */
+    background-color: #FFF9E6; /* 부드러운 배경색 */
     text-align: end;
     padding-left: 30px;
     padding-right: 30px;
+    animation: fadeIn 0.5s; /* 부드러운 페이드 인 애니메이션 */
 }
-
 
 /* 헤더에 더 두꺼운 선 */
 .diaryList th {
-    border-bottom: 2px solid #000;  /* 테이블 헤더에 두꺼운 줄 */
-    border-bottom-color: #888888;
-}
-.diaryList td {
-    border-bottom: 2px solid #000 ;  /* 테이블 헤더에 두꺼운 줄 */
-    text-align: center;
-    border-bottom-color: #888888;
-    font-size: 18px;
+    border-bottom: 2px solid #888888;  /* 테이블 헤더에 두꺼운 줄 */
 }
 
-#writeButton{
+.diaryList td {
+    border-bottom: 2px solid #888888; /* 테이블 데이터에 두꺼운 줄 */
+    text-align: center;
+    font-size: 18px;
+    color: #4D3E3E; /* 테이블 텍스트 색상 */
+}
+
+/* 버튼 */
+#writeButton {
     display: block;
     margin-left: auto;
     margin-right: 30px;
     font-weight: bold;
     font-size: large;
-    background-color: #4D3E3E;
+    background-color: #4D3E3E; /* 버튼 색상 */
+    border-radius: 5px; /* 둥글게 */
+    transition: background-color 0.3s; /* 배경색 변화 애니메이션 */
 }
 
-.header{
+#writeButton:hover {
+    background-color: #3b302e; /* 호버 시 색상 변경 */
+}
+
+.header {
     padding-bottom: 4px;
 }
-.listType{
-    font-size: x-large;
-}
-.pageName{
-    padding-top: 50px;
-    border-bottom: 2px solid #000;
-}
-#dateFilter{
-    background-color:#E7E7E7 ;
 
+.listType {
+    font-size: x-large;
+    font-family: 'Nunito', sans-serif;
 }
-.container{
-    height: 800px;
+
+.pageName {
+    padding-top: 50px;
+    border-bottom: 2px solid #888888; /* 페이지 이름 아래 줄 색상 */
 }
-#sortSelect{
-    background-color:#fdf6e3;
-    margin-right: 30px;
-    width: 100px;
+
+#dateFilter {
+    background-color: #E7E7E7; /* 필터 배경색 */
+}
+
+.container {
+    height: auto; /* 컨테이너 높이 자동 조정 */
+}
+
+#sortSelect {
+    background-color: #fdf6e3; /* 정렬 선택 박스 배경색 */
+    border: 2px solid #4D3E3E; /* 테두리 색상 */
+    padding: 8px 12px; /* 내부 여백 */
+    margin-right: 30px; /* 우측 여백 */
+    width: 120px; /* 너비 */
     font-weight: bold;
-    font-size: 18px;
+    font-size: 16px;
+    border-radius: 8px; /* 둥근 모서리 */
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1); /* 그림자 효과 */
+    transition: border-color 0.3s ease, box-shadow 0.3s ease; /* 전환 효과 */
+}
+
+#sortSelect:hover {
+    border-color: #D8A86C; /* 호버 시 테두리 색상 */
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15); /* 호버 시 그림자 확대 */
+}
+
+#sortSelect:focus {
+    outline: none;
+    border-color: #D8A86C; /* 포커스 시 테두리 색상 */
 }
 
 .pagination {
@@ -137,11 +256,11 @@ body {
     margin: 0 5px;
     padding: 8px 16px; /* 패딩을 더 넓게 설정 */
     text-decoration: none;
-    background-color: #4D3E3E;
+    background-color: #4D3E3E; /* 페이지 링크 배경색 */
     color: white; /* 링크 색상 */
     border: 1px solid #4D3E3E; /* 테두리 색상 */
     border-radius: 4px;
-    transition: background-color 0.3s, color 0.3s;
+    transition: background-color 0.3s, color 0.3s; /* 배경색 및 글자색 변화 애니메이션 */
 }
 
 .pagination-link:hover {
@@ -159,14 +278,24 @@ body {
     margin: 0 5px;
     color: #666; /* 생략 기호 색상 */
 }
-#sortForm{
-  display: flex;
-  margin-left: auto;
+
+#sortForm {
+    display: flex;
+    margin-left: auto;
+    font-family: 'Quicksand', sans-serif;
 }
-#searchButton{
- margin-right: 40px;
+
+#searchButton {
+    margin-right: 40px;
 }
-.searchBox{
-    background-color:#fdf6e3;
-    border: solid 2px #4D3E3E;
+
+.searchBox {
+    background-color: #fdf6e3; /* 검색 박스 배경색 */
+    border: solid 2px #4D3E3E; /* 검색 박스 테두리 색상 */
+    transition: border-color 0.3s; /* 테두리 색상 변화 애니메이션 */
+    font-family: 'Quicksand', sans-serif;
+}
+
+.searchBox:focus {
+    border-color: #D8A86C; /* 포커스 시 테두리 색상 변화 */
 }
