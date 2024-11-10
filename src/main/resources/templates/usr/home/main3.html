@@ -9,7 +9,7 @@
 <body>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
 <script src="/resource/js/main.js"></script>
-<section id="section2" class="content tw-bg-[#EDE0D4] tw-relative">
+<section class="content tw-bg-[#EDE0D4] tw-relative">
     <div class="main-missing-body">
         <div class="tw-p-[100px]">
             <h2 class="tw-text-4xl tw-font-bold tw-text-gray-700">실종 신고 및 알림 서비스</h2>
@@ -25,10 +25,13 @@
                     <div class="overlay">
                         <div class="tw-p-2 tw-text-[12px]" th:text="${missing.reportDate.substring(0, 13)}"></div>
                         <div class="tw-p-2" th:text="${missing.name}"></div>
-                        <div class="tw-p-2" th:text="${#strings.length(missing.missingLocation) >= 22 ? missing.missingLocation.substring(0, 22) + ' ...' : missing.missingLocation}"></div>
-                        <div class="tw-pl-2 tw-pt-2" th:text="${#strings.length(missing.trait) >= 22 ? missing.trait.substring(0, 22) : missing.trait}"></div>
+                        <div class="tw-p-2"
+                             th:text="${#strings.length(missing.missingLocation) >= 22 ? missing.missingLocation.substring(0, 22) + ' ...' : missing.missingLocation}"></div>
+                        <div class="tw-pl-2 tw-pt-2"
+                             th:text="${#strings.length(missing.trait) >= 22 ? missing.trait.substring(0, 22) : missing.trait}"></div>
                         <span class="tw-pl-2" th:if="${#strings.length(missing.trait) >= 22}" th:text="..."></span>
-                        <span class="tw-absolute tw-right-5" th:href="@{'../missing/detail?missingId='+${missing.id}}" th:text="'자세히보기 ' + '&#10095;'"></span>
+                        <span class="tw-absolute tw-right-5" th:href="@{'../missing/detail?missingId='+${missing.id}}"
+                              th:text="'자세히보기 ' + '&#10095;'"></span>
                     </div>
                 </a>
             </div>
@@ -53,6 +56,33 @@
         <div class="tw-flex tw-gap-11">
             <button class="gps_popup_button" onclick="gpsChackUpdate()">동의</button>
             <button class="gps_popup_button" onclick="gpsChackCancel()">거부</button>
+        </div>
+    </div>
+</section>
+<section class="content tw-bg-[#EDE0D4] tw-relative">
+    <div class="main-missing-body">
+        <div class="tw-p-[100px]">
+            <h2 class="tw-text-4xl tw-font-bold tw-text-gray-700">반려견 훈련 영상 추천,</h2>
+            <h2 class="tw-text-4xl tw-font-bold tw-text-gray-700">AI 기반 훈련 지원</h2>
+            <div class="box3">
+                <div class="container">
+                    <a href="../health/page" class="svg-box">
+                        <span class="svg-title tw-text-xl">실시간 피드백 제공</span>
+                        <span class="svg-icon flat-filled" id="filled-message"></span>
+                        <span class="svg-text tw-text-xl">AI가 훈련 진행 사항을 실시간으로 피드백</span>
+                    </a>
+                    <a href="../health/page" class="svg-box">
+                        <span class="svg-title tw-text-xl">즉각적인 도움 제공</span>
+                        <span class="svg-icon flat-filled" id="filled-film"></span>
+                        <span class="svg-text tw-text-xl">맞춤형 영상을 추천하여 주인의 훈련 노력을 더 효과적으로 도움</span>
+                    </a>
+                    <a href="../health/page" class="svg-box">
+                        <span class="svg-title tw-text-xl">행동 패턴 기록 및 분석</span>
+                        <span class="svg-icon flat-filled" id="filled-magnify"></span>
+                        <span class="svg-text tw-text-xl">AI가 행동 데이터를 기록해 맞춤 훈련 적략 제공</span>
+                    </a>
+                </div>
+            </div>
         </div>
     </div>
 </section>
