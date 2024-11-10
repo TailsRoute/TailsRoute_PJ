@@ -48,4 +48,20 @@ public class UsrHomeController {
         model.addAttribute("missings", missings);
         return "usr/home/main";
     }
+
+    @GetMapping("/usr/home/main3")
+    public String showMain3(Model model) {
+        boolean isLogined = rq.isLogined();
+        if (isLogined) {
+            Member member = rq.getLoginedMember();
+            GpsChack gpsChack = gpsChackService.chack(member.getId());
+            model.addAttribute("gpsChack", gpsChack);
+        }
+        model.addAttribute("isLogined", isLogined);
+        model.addAttribute("API_KEY", API_KEY);
+        List<Missing> missings = missingService.list(0, 10, "전체");
+
+        model.addAttribute("missings", missings);
+        return "usr/home/main3";
+    }
 }

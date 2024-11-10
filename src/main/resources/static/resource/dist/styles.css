@@ -151,7 +151,6 @@ html,
   /* 2 */
   -moz-tab-size: 4;
   /* 3 */
-  -o-tab-size: 4;
      tab-size: 4;
   /* 3 */
   font-family: ui-sans-serif, system-ui, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
@@ -196,7 +195,6 @@ Add the correct text decoration in Chrome, Edge, and Safari.
 */
 
 abbr:where([title]) {
-  -webkit-text-decoration: underline dotted;
           text-decoration: underline dotted;
 }
 
@@ -601,7 +599,11 @@ video {
 }
 
 .tw-right-0 {
-  right: 0px;
+  right: 0;
+}
+
+.tw-right-5 {
+  right: 1.25rem;
 }
 
 .tw-right-\[-5px\] {
@@ -659,6 +661,10 @@ video {
 
 .tw-mr-\[30px\] {
   margin-right: 30px;
+}
+
+.tw-mt-4 {
+  margin-top: 1rem;
 }
 
 .tw-mt-5 {
@@ -770,7 +776,7 @@ video {
 }
 
 .tw-flex-1 {
-  flex: 1 1 0%;
+  flex: 1 1 0;
 }
 
 .tw-flex-grow {
@@ -882,6 +888,11 @@ video {
   background-color: rgb(77 62 62 / var(--tw-bg-opacity));
 }
 
+.tw-bg-\[\#EDE0D4\] {
+  --tw-bg-opacity: 1;
+  background-color: rgb(237 224 212 / var(--tw-bg-opacity));
+}
+
 .tw-bg-\[\#FFF3CD\] {
   --tw-bg-opacity: 1;
   background-color: rgb(255 243 205 / var(--tw-bg-opacity));
@@ -923,6 +934,10 @@ video {
   padding: 1.25rem;
 }
 
+.tw-p-\[100px\] {
+  padding: 100px;
+}
+
 .tw-p-\[10px\] {
   padding: 10px;
 }
@@ -939,6 +954,10 @@ video {
 
 .tw-pb-\[9px\] {
   padding-bottom: 9px;
+}
+
+.tw-pl-2 {
+  padding-left: 0.5rem;
 }
 
 .tw-pl-5 {
@@ -969,6 +988,10 @@ video {
   padding-right: 20px;
 }
 
+.tw-pt-2 {
+  padding-top: 0.5rem;
+}
+
 .tw-text-center {
   text-align: center;
 }
@@ -987,8 +1010,17 @@ video {
   line-height: 2.25rem;
 }
 
+.tw-text-4xl {
+  font-size: 2.25rem;
+  line-height: 2.5rem;
+}
+
 .tw-text-\[10px\] {
   font-size: 10px;
+}
+
+.tw-text-\[12px\] {
+  font-size: 12px;
 }
 
 .tw-text-\[30px\] {
@@ -1004,6 +1036,11 @@ video {
   line-height: 1.75rem;
 }
 
+.tw-text-xl {
+  font-size: 1.25rem;
+  line-height: 1.75rem;
+}
+
 .tw-font-bold {
   font-weight: 700;
 }
@@ -1011,6 +1048,11 @@ video {
 .tw-text-\[\#4D3E3E\] {
   --tw-text-opacity: 1;
   color: rgb(77 62 62 / var(--tw-text-opacity));
+}
+
+.tw-text-gray-700 {
+  --tw-text-opacity: 1;
+  color: rgb(55 65 81 / var(--tw-text-opacity));
 }
 
 .tw-text-red-500 {
