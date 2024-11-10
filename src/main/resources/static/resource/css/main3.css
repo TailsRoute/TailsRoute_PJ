@@ -1,0 +1,115 @@
+body{
+    color: #4D3E3E;
+    white-space: normal;
+    word-break: keep-all;
+}
+
+.bo{
+    border: 1px solid;
+}
+
+.content{
+    width: 100vw;
+    height: 100vh;
+}
+
+.main-missing-body{
+    width: 1440px;
+    height: 924px;
+    position: relative;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.slider_wrapper {
+    left: 105px;
+    bottom: 200px;
+    position: absolute;
+    overflow: hidden;
+    width: 100%;
+    max-width: 1240px;
+    height: 380px;
+}
+
+.slider_container {
+    display: flex;
+    transition: transform 0.5s ease;
+}
+
+.misssing_item {
+    min-width: 380px;
+    height: 100%;
+    /*border-radius: 20px;*/
+    overflow: hidden;
+    margin-right: 50px;
+}
+
+.misssing_image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+/* 슬라이더 버튼 스타일 */
+.slider_btn {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    background-color: rgba(0, 0, 0, 0.5);
+    color: white;
+    border: none;
+    padding: 10px;
+    cursor: pointer;
+    z-index: 1;
+    width: 40px;
+    height: 40px;
+}
+
+.left_btn {
+    left: 10px;
+    display: none;
+}
+
+.right_btn {
+    right: 10px;
+    display: none;
+}
+
+.gps_popup, .gps_popup2 {
+    border: 1px solid;
+    border-radius: 10px;
+    padding: 30px;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    background-color: #FFFEF0;
+}
+
+
+.gps_popup_button{
+    padding: 10px;
+    border: 1px solid #4D3E3E;
+    border-radius: 10px;
+    height: 40px;
+    width: 100px;
+    text-align: center;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.overlay {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 50%;
+    /*-moz-border-radius-bottomleft: 20px;*/
+    /*-moz-border-radius-bottomright: 20px;*/
+    background: rgba(255, 255, 255, 0.7);
+}
