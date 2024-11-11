@@ -80,6 +80,7 @@ public class UsrwalkController {
     public List<Walk> getWalks(@RequestParam int memberId) {
         return walkService.findWalksByMemberId(memberId);
     }
+
     @DeleteMapping("/usr/walk/delete")
     public ResponseEntity<String> deleteWalks(@RequestParam int id) {
         walkService.deleteWalks(id);
