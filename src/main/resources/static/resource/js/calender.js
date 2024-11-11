@@ -28,7 +28,7 @@ document.addEventListener('DOMContentLoaded', function () {
         },
         eventLimit:true,
         eventLimitClick:'day',
-        dayMaxEventRows:2
+        dayMaxEventRows:3
 
     });
 

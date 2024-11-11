@@ -28,7 +28,7 @@ body {
 /* 이벤트 공통 스타일 */
 .fc-event {
     border-radius: 10px;
-    padding: 5px;
+    padding: 1px;
     font-weight: bold;
     text-align: center;
     transition: transform 0.3s ease, box-shadow 0.3s ease;
