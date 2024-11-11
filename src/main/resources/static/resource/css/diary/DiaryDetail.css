@@ -61,10 +61,12 @@ body {
 /* 다이어리 이미지 스타일 */
 .diary-image {
     margin-bottom: 24px;
+    display: flex;
+    justify-content: center;
 }
 
 .image {
-    width: 100%;
+    width: 500px;
     height: auto;
     border-radius: 8px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
@@ -78,12 +80,15 @@ body {
 
 /* 본문 텍스트 스타일 */
 .body-text {
-    font-size: 1.125rem; /* 본문 텍스트 크기 */
+    font-size: 1.3rem; /* 본문 텍스트 크기 */
     line-height: 1.8rem;
     margin-bottom: 32px;
     padding: 0 16px;
     animation: slideIn 1s ease-out;
+    font-weight: bold;
 }
+
+
 
 /* 복용약 정보 테이블 스타일 */
 .medicine-info {
@@ -149,8 +154,12 @@ body {
 
 /* 애니메이션 */
 @keyframes fadeIn {
-    from { opacity: 0; }
-    to { opacity: 1; }
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
 }
 
 @keyframes slideIn {
@@ -162,4 +171,6 @@ body {
         opacity: 1;
         transform: translateY(0);
     }
+
 }
+
