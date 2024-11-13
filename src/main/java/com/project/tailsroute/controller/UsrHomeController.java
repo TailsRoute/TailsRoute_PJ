@@ -49,6 +49,11 @@ public class UsrHomeController {
         return "usr/home/main";
     }
 
+    @GetMapping("/usr/home/main2")
+    public String showMain_ver2() {
+
+        return "usr/home/main2";
+    }
     @GetMapping("/usr/home/main3")
     public String showMain3(Model model) {
         boolean isLogined = rq.isLogined();
