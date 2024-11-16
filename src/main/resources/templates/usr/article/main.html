@@ -1,0 +1,116 @@
+<th:block th:replace="usr/common/head"/>
+<head>
+    <title>글 목록</title>
+    <link rel="stylesheet" href="/resource/css/article2.css"/>
+</head>
+<body>
+<div class="list_head">
+    <a class="list_head_a tw-relative" href="">
+        <img class="list_head_a_img"
+             src="" alt="쇼핑 사진">
+        <div class="tw-absolute list_head_a_title">쇼핑</div>
+        <div class="tw-absolute list_head_a_body">자유게시판, 질문 게시판을 통해 반려견 관련 정보를 공유하고, 다양한 경험을 나눠보세요.</div>
+    </a>
+    <a class="list_head_a tw-relative" href="">
+        <img class="list_head_a_img"
+             src="" alt="산책 사진">
+        <div class="tw-absolute list_head_a_title">산책</div>
+        <div class="tw-absolute list_head_a_body">자유게시판, 질문 게시판을 통해 반려견 관련 정보를 공유하고, 다양한 경험을 나눠보세요.</div>
+    </a>
+    <a class="list_head_a tw-relative" href="">
+        <img class="list_head_a_img"
+             src="" alt="일정 사진">
+        <div class="tw-absolute list_head_a_title">일정</div>
+        <div class="tw-absolute list_head_a_body">자유게시판, 질문 게시판을 통해 반려견 관련 정보를 공유하고, 다양한 경험을 나눠보세요.</div>
+    </a>
+</div>
+<div class="list_body">
+    <div class="list_sidebar">
+        <div class="list_profile">
+            <div class="" th:if="${member == null}">
+                <a class="list_profile_login button" href="../member/login" th:text="로그인"></a>
+            </div>
+            <div class="tw-flex tw-gap-[10px]" th:if="${member != null}">
+                <img class="list_profile_dogPoto" th:if="${member.extra__dogPoto != null}"
+                     th:src="@{${member.extra__dogPoto}}" alt="Profile Image"/>
+                <img class="list_profile_dogPoto" th:if="${member.extra__dogPoto == null}"
+                     th:src="@{/resource/photo/default.png}" alt="Default Profile Image"/>
+                <div class="tw-flex tw-flex-col tw-items-center tw-justify-center">
+                    <div class="list_profile_nickname" th:text="${member.nickname}"></div>
+                    <a class="link" href="">내가 작성한 글 보기</a>
+                </div>
+            </div>
+        </div>
+        <div class="tw-w-full tw-pl-[50px]">
+            <div class="list_board_title">🐕 즐거운 소통방</div>
+            <div th:class="${boardId == 0 ? 'list_board tw-text-[#ff6f61]' : 'list_board'}">
+                <a class="a" href="../article/list?boardId=0&page=1">전체 게시판</a>
+            </div>
+            <div th:class="${boardId == 1 ? 'list_board tw-text-[#ff6f61]' : 'list_board'}">
+                <a class="a" href="../article/list?boardId=1&page=1">공지사항</a>
+            </div>
+            <div th:class="${boardId == 2 ? 'list_board tw-text-[#ff6f61]' : 'list_board'}">
+                <a class="a" href="../article/list?boardId=2&page=1">자유게시판</a>
+            </div>
+            <div th:class="${boardId == 3 ? 'list_board tw-text-[#ff6f61]' : 'list_board'}">
+                <a class="a" href="../article/list?boardId=3&page=1">Q & A</a>
+            </div>
+            <div th:class="${boardId == 4 ? 'list_board tw-text-[#ff6f61]' : 'list_board'}">
+                <a class="a" href="../article/list?boardId=4&page=1">추천합니다</a>
+            </div>
+            <div th:class="${boardId == 5 ? 'list_board tw-text-[#ff6f61]' : 'list_board'}">
+                <a class="a" href="../article/list?boardId=5&page=1">일상기록공유</a>
+            </div>
+        </div>
+    </div>
+    <div class="list_main">
+        <div class="tw-flex tw-justify-between tw-items-center tw-pl-[80px] tw-pb-[20px]">
+            <div>
+                <div class="tw-font-bold tw-text-4xl tw-pb-[20px]">
+                    <span th:text="전체게시판"></span>
+                    <a href="../article/list?boardId=0&page=1" class="tw-text-base tw-pl-2"
+                       th:text="'더보기 ' + '&#10095;'"></a>
+                </div>
+                <div>모든 게시글을 한눈에 확인할 수 있는 공간입니다. 최신 소식과 다양한 주제를 만나보세요!</div>
+            </div>
+            <a class="link tw-pr-[100px]" th:href="@{../article/write}">작성하기</a>
+        </div>
+        <div class="tw-p-10">
+            <!-- 게시글 목록이 있는 경우 -->
+            <div class="underline tw-flex tw-gap-5 tw-p-5" th:each="article : ${articles}" th:if="${articles != null}">
+                <img class="list_main_dogPoto" th:if="${article.extra__dogPoto != null}"
+                     th:src="@{${article.extra__dogPoto}}" alt="Profile Image"/>
+                <img class="list_main_dogPoto" th:if="${article.extra__dogPoto == null}"
+                     th:src="@{/resource/photo/default.png}" alt="Default Profile Image"/>
+                <a class="list_main_body" th:href="@{'../article/detail?id=' + ${article.id}}">
+                    <div class="tw-flex tw-items-center">
+                        <span class="tw-text-3xl tw-pl-2 tw-pb-2 tw-pr-2 link"
+                              th:text="${#strings.abbreviate(article.title,20)}"></span>
+                        <span th:text="' [ ' + ${article.extra__repliesCount} + ' ]'"
+                              th:if="${article.extra__repliesCount} > 0"
+                              style="color: red; font-weight: bold;"></span>
+                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 30 30" style="display: inline-block;" th:if="${article.articleCanNew}">
+                            <circle cx="15" cy="15" r="12" fill="#ff6f61"/>
+                            <text x="15" y="16" font-size="10" fill="white" font-family="Arial, sans-serif" text-anchor="middle" dominant-baseline="middle"> N </text>
+                        </svg>
+                    </div>
+                    <div>
+                        <span class="tw-p-2" th:text="${#strings.abbreviate(article.body,30)}"></span>
+                    </div>
+                </a>
+                <div class="list_main_poot">
+                    <img class="list_main_poot_img" th:if="${article.poto != null}" th:src="${article.poto}" alt="image"
+                         contenteditable="false">
+                </div>
+            </div>
+
+            <!-- 게시글이 없는 경우 -->
+            <div th:if="${articles.size() == 0}">
+                <div class="tw-p-10" style="text-align: center;">게시글이 없습니다</td>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+<th:block th:replace="usr/common/mouseEffect"/>

@@ -4,9 +4,15 @@ import com.project.tailsroute.repository.ArticleRepository;
 import com.project.tailsroute.util.Ut;
 import com.project.tailsroute.vo.Article;
 import com.project.tailsroute.vo.ResultData;
+import org.jsoup.nodes.Element;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
 
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
 import java.util.List;
 
 @Service
@@ -14,6 +20,22 @@ public class ArticleService {
 
 	@Autowired
 	private ArticleRepository articleRepository;
+
+	public String extractFirstImageSrc(String html) {
+
+		Document document = Jsoup.parse(html); // HTML 파싱
+		Element firstImage = document.select("img").first(); // 첫 번째 <img> 태그 선택
+
+		if (firstImage != null) {
+			return firstImage.attr("src"); // src 속성 반환
+		}
+
+		return null; // <img> 태그가 없으면 null 반환
+	}
+
+	public String removeHtmlTags(String html) {
+		return html.replaceAll("<[^>]*>", "");
+	}
 
 	public ResultData writeArticle(int memberId, String title, String body, String boardId) {
 		articleRepository.writeArticle(memberId, title, body, boardId);
@@ -46,7 +68,7 @@ public class ArticleService {
 	}
 
 	public List<Article> getForPrintArticles(int boardId, int itemsInAPage, int page, String searchKeywordTypeCode,
-											 String searchKeyword) {
+											 String searchKeyword, int memberId, String sortOrder) {
 
 		int limitFrom = (page - 1) * itemsInAPage;
 		int limitTake = itemsInAPage;
@@ -58,7 +80,7 @@ public class ArticleService {
 		// System.err.println("searchKeyword : " + searchKeyword);
 
 		return articleRepository.getForPrintArticles(boardId, limitFrom, limitTake, searchKeywordTypeCode,
-				searchKeyword);
+				searchKeyword, memberId, sortOrder);
 	}
 
 	public List<Article> getArticles() {
@@ -95,8 +117,8 @@ public class ArticleService {
 		return ResultData.from("S-1", Ut.f("%d번 게시글을 수정했습니다", article.getId()), "수정된 게시글", article);
 	}
 
-	public int getArticlesCount(int boardId, String searchKeywordTypeCode, String searchKeyword) {
-		return articleRepository.getArticleCount(boardId, searchKeywordTypeCode, searchKeyword);
+	public int getArticlesCount(int boardId, String searchKeywordTypeCode, String searchKeyword, int memberId) {
+		return articleRepository.getArticleCount(boardId, searchKeywordTypeCode, searchKeyword, memberId);
 	}
 
 	public ResultData increaseHitCount(int id) {
@@ -162,4 +184,19 @@ public class ArticleService {
 		return articleRepository.getBadRP(relId);
 	}
 
+	public List<Article> getMainArticles(int boardId) {
+		return articleRepository.getMainArticles(boardId);
+	}
+
+	public boolean isNew(String regDateStr) {
+		try {
+			// 날짜만 파싱하도록 수정
+			String dateOnly = regDateStr.split(" ")[0]; // 시간 부분을 제거
+			LocalDate regDate = LocalDate.parse(dateOnly, DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+			return !regDate.isBefore(LocalDate.now()); // 오늘이거나 미래 날짜일 경우 true
+		} catch (DateTimeParseException e) {
+			System.err.println("Invalid date format for regDate: " + regDateStr);
+			return false;
+		}
+	}
 }

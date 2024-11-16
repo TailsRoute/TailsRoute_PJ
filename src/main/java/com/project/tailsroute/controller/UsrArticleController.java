@@ -48,7 +48,7 @@ public class UsrArticleController {
 		Article article = articleService.getForPrintArticle(rq.getLoginedMemberId(), id);
 
 		if (article == null) {
-			return "redirect:/usr/article/list";
+			return "redirect:/usr/article/main";
 		}
 
 		// System.err.println(id + "번 글");
@@ -107,7 +107,7 @@ public class UsrArticleController {
 
 
 		if (article == null || userCanModifyRd.isFail()) {
-			return "redirect:/usr/article/list";
+			return "redirect:/usr/article/main";
 		}
 
 		model.addAttribute("article", article);
@@ -161,7 +161,7 @@ public class UsrArticleController {
 			articleService.deleteArticle(id);
 		}
 
-		return Ut.jsReplace(userCanDeleteRd.getResultCode(), userCanDeleteRd.getMsg(), "../article/list");
+		return Ut.jsReplace(userCanDeleteRd.getResultCode(), userCanDeleteRd.getMsg(), "../article/main");
 	}
 
 	@GetMapping("/usr/article/write")
@@ -219,11 +219,37 @@ public class UsrArticleController {
 
 	}
 
+	@GetMapping("/usr/article/main")
+	public String showMain(Model model, @RequestParam(defaultValue = "0") int boardId ){
+
+		boolean isLogined = rq.isLogined();
+		if (isLogined) {
+			Member member = rq.getLoginedMember();
+			model.addAttribute("member", member);
+		}
+		model.addAttribute("isLogined", isLogined);
+
+		List<Article> articles = articleService.getMainArticles(boardId);
+
+		for (Article article : articles) {
+			article.setPoto(articleService.extractFirstImageSrc(article.getBody()));
+			article.setBody(articleService.removeHtmlTags(article.getBody()));
+			article.setArticleCanNew(articleService.isNew(article.getRegDate()));
+		}
+
+		model.addAttribute("articles", articles);
+		model.addAttribute("boardId", boardId);
+
+		return "usr/article/main";
+	}
+
 	@GetMapping("/usr/article/list")
 	public String showList(Model model, @RequestParam(defaultValue = "0") int boardId,
 						   @RequestParam(defaultValue = "1") int page,
 						   @RequestParam(defaultValue = "전체") String searchKeywordTypeCode,
-						   @RequestParam(defaultValue = "") String searchKeyword){
+						   @RequestParam(defaultValue = "") String searchKeyword,
+						   @RequestParam(defaultValue = "0") int memberId,
+						   @RequestParam(defaultValue = "regDate") String sortOrder){
 
 		boolean isLogined = rq.isLogined();
 		if (isLogined) {
@@ -234,7 +260,7 @@ public class UsrArticleController {
 
 		Board board = boardService.getBoardById(boardId);
 
-		int articlesCount = articleService.getArticlesCount(boardId, searchKeywordTypeCode, searchKeyword);
+		int articlesCount = articleService.getArticlesCount(boardId, searchKeywordTypeCode, searchKeyword, memberId);
 
 		// 한페이지에 글 10개
 		// 글 20개 -> 2page
@@ -244,7 +270,13 @@ public class UsrArticleController {
 		int pagesCount = (int) Math.ceil(articlesCount / (double) itemsInAPage);
 
 		List<Article> articles = articleService.getForPrintArticles(boardId, itemsInAPage, page, searchKeywordTypeCode,
-				searchKeyword);
+				searchKeyword, memberId, sortOrder);
+
+		for (Article article : articles) {
+			article.setPoto(articleService.extractFirstImageSrc(article.getBody()));
+			article.setBody(articleService.removeHtmlTags(article.getBody()));
+			article.setArticleCanNew(articleService.isNew(article.getRegDate()));
+		}
 
 		model.addAttribute("articles", articles);
 		model.addAttribute("articlesCount", articlesCount);
@@ -254,6 +286,8 @@ public class UsrArticleController {
 		model.addAttribute("searchKeywordTypeCode", searchKeywordTypeCode);
 		model.addAttribute("searchKeyword", searchKeyword);
 		model.addAttribute("boardId", boardId);
+		model.addAttribute("memberId", memberId);
+		model.addAttribute("sortOrder", sortOrder);
 
 		return "usr/article/list";
 	}
