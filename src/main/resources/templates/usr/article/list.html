@@ -1,34 +1,84 @@
 <th:block th:replace="usr/common/head"/>
 <head>
     <title>글 목록</title>
-    <link rel="stylesheet" href="/resource/css/article.css"/>
+    <link rel="stylesheet" href="/resource/css/article2.css"/>
 </head>
 <body>
-<div class="title">게시글 목록</div>
-<div class="tw-flex tw-justify-center article_body">
-    <div class="board_bar tw-flex tw-gap-2 tw-flex-col tw-p-2">
-        <div class="article_button" th:text="|total : ${articlesCount}개|"></div>
-        <div th:class="${boardId == 0 ? 'article_button tw-bg-[#4D3E3E] tw-text-white' : 'article_button'}">
-            <a href="../article/list?boardId=0&page=1">전체 게시판</a>
+<div class="tw-h-[100px]"></div>
+<div class="list_body">
+    <div class="list_sidebar">
+        <div class="list_profile">
+            <div class="" th:if="${member == null}">
+                <a class="list_profile_login button" href="../member/login" th:text="로그인"></a>
+            </div>
+            <div class="tw-flex tw-gap-[10px]" th:if="${member != null}">
+                <img class="list_profile_dogPoto" th:if="${member.extra__dogPoto != null}"
+                     th:src="@{${member.extra__dogPoto}}" alt="Profile Image"/>
+                <img class="list_profile_dogPoto" th:if="${member.extra__dogPoto == null}"
+                     th:src="@{/resource/photo/default.png}" alt="Default Profile Image"/>
+                <div class="tw-flex tw-flex-col tw-items-center tw-justify-center">
+                    <div class="list_profile_nickname" th:text="${member.nickname}"></div>
+                    <a th:class="${memberId != 0 ? 'link tw-text-[#ff6f61]' : 'link'}" th:href="'../article/list?memberId='+${member.id}">내가 작성한 글 보기</a>
+                </div>
+            </div>
         </div>
-        <div th:class="${boardId == 1 ? 'article_button tw-bg-[#4D3E3E] tw-text-white' : 'article_button'}">
-            <a href="../article/list?boardId=1&page=1">공지사항</a>
-        </div>
-        <div th:class="${boardId == 2 ? 'article_button tw-bg-[#4D3E3E] tw-text-white' : 'article_button'}">
-            <a href="../article/list?boardId=2&page=1">자유게시판</a>
-        </div>
-        <div th:class="${boardId == 3 ? 'article_button tw-bg-[#4D3E3E] tw-text-white' : 'article_button'}">
-            <a href="../article/list?boardId=3&page=1">Q & A</a>
-        </div>
-        <div th:class="${boardId == 4 ? 'article_button tw-bg-[#4D3E3E] tw-text-white' : 'article_button'}">
-            <a href="../article/list?boardId=4&page=1">추천합니다</a>
-        </div>
-        <div th:class="${boardId == 5 ? 'article_button tw-bg-[#4D3E3E] tw-text-white' : 'article_button'}">
-            <a href="../article/list?boardId=5&page=1">일상기록공유</a>
+        <div class="tw-w-full tw-pl-[50px]">
+            <div class="list_board_title">🐕 즐거운 소통방</div>
+            <div th:class="${boardId == 0 && memberId == 0 ? 'list_board tw-text-[#ff6f61]' : 'list_board'}">
+                <a class="a" href="../article/list?boardId=0&page=1">전체 게시판</a>
+            </div>
+            <div th:class="${boardId == 1 && memberId == 0 ? 'list_board tw-text-[#ff6f61]' : 'list_board'}">
+                <a class="a" href="../article/list?boardId=1&page=1">공지사항</a>
+            </div>
+            <div th:class="${boardId == 2 && memberId == 0 ? 'list_board tw-text-[#ff6f61]' : 'list_board'}">
+                <a class="a" href="../article/list?boardId=2&page=1">자유게시판</a>
+            </div>
+            <div th:class="${boardId == 3 && memberId == 0 ? 'list_board tw-text-[#ff6f61]' : 'list_board'}">
+                <a class="a" href="../article/list?boardId=3&page=1">Q & A</a>
+            </div>
+            <div th:class="${boardId == 4 && memberId == 0 ? 'list_board tw-text-[#ff6f61]' : 'list_board'}">
+                <a class="a" href="../article/list?boardId=4&page=1">추천합니다</a>
+            </div>
+            <div th:class="${boardId == 5 && memberId == 0 ? 'list_board tw-text-[#ff6f61]' : 'list_board'}">
+                <a class="a" href="../article/list?boardId=5&page=1">일상기록공유</a>
+            </div>
         </div>
     </div>
-    <div class="article_list tw-flex-grow tw-h-[500px]">
-        <form th:action="@{../article/list}" class="tw-p-2">
+    <div class="list_main">
+        <div class="tw-flex tw-justify-between tw-items-center tw-pl-[80px] tw-pb-[20px]">
+            <div th:if="${memberId != 0}" class="tw-flex tw-flex-col">
+                <div class="tw-font-bold tw-text-4xl tw-pb-[20px]">
+                    내가 작성한 글</div>
+                <div>회원님이 작성한 게시글을 한눈에 확인할 수 있는 공간입니다. 나의 활동을 돌아보고 관리해보세요!</div>
+            </div>
+            <div th:if="${boardId == 0 && memberId == 0}" class="tw-flex tw-flex-col">
+                <div class="tw-font-bold tw-text-4xl tw-pb-[20px]">
+                    전체게시판</div>
+                <div>모든 게시글을 한눈에 확인할 수 있는 공간입니다. 최신 소식과 다양한 주제를 만나보세요!</div>
+            </div>
+            <div th:if="${boardId == 1}" class="tw-flex tw-flex-col">
+                <div class="tw-font-bold tw-text-4xl tw-pb-[20px]">공지사항</div>
+                <div>중요한 소식과 공지사항을 확인하세요. 업데이트와 이벤트 정보가 여기에 게시됩니다.</div>
+            </div>
+            <div th:if="${boardId == 2}" class="tw-flex tw-flex-col">
+                <div class="tw-font-bold tw-text-4xl tw-pb-[20px]">자유게시판</div>
+                <div>우리 반려견의 일상과 고민을 나누는 공간, 자유롭게 소통하며 반려 생활을 함께 즐겨보세요!</div>
+            </div>
+            <div th:if="${boardId == 3}" class="tw-flex tw-flex-col">
+                <div class="tw-font-bold tw-text-4xl tw-pb-[20px]">Q & A</div>
+                <div>궁금한 점을 질문하고 답변을 공유하는 공간입니다. 서로 도와가며 지식을 나눠보세요!</div>
+            </div>
+            <div th:if="${boardId == 4}" class="tw-flex tw-flex-col">
+                <div class="tw-font-bold tw-text-4xl tw-pb-[20px]">추천합니다</div>
+                <div>다양한 제품을 소개하고 추천하는 공간입니다. 유용한 제품을 찾고 함께 공유해보세요!</div>
+            </div>
+            <div th:if="${boardId == 5}" class="tw-flex tw-flex-col">
+                <div class="tw-font-bold tw-text-4xl tw-pb-[20px]">일상기록공유</div>
+                <div>나의 일상과 특별한 순간들을 기록하고 공유하는 공간입니다. 소소한 일상의 이야기를 나눠보세요!</div>
+            </div>
+            <a class="link tw-pr-[100px]" th:href="@{../article/write}">작성하기</a>
+        </div>
+        <form th:action="@{../article/list}" class="tw-pl-[80px]">
             <div class="tw-flex tw-justify-between tw-items-center">
                 <div class="tw-flex tw-gap-2">
                     <input type="hidden" name="boardId" th:value="${param.boardId != null ? param.boardId : 0}"/>
@@ -41,7 +91,8 @@
                         <option value="작성자">작성자</option>
                     </select>
                     <label class="tw-flex tw-items-center tw-gap-2">
-                        <input type="text" placeholder="Search" name="searchKeyword" th:value="${param.searchKeyword}"
+                        <input class="tw-pl-2" type="text" placeholder="검색어를 입력해주세요" name="searchKeyword"
+                               th:value="${param.searchKeyword}"
                                style="height: 40px;"/>
                         <button type="submit" style="width: 30px; height: 30px;">
                             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" fill="currentColor"
@@ -54,12 +105,12 @@
                     </label>
                 </div>
 
-                <div class="tw-p-2" th:with="paginationLen=3,
-      startPage=${page - paginationLen >= 1 ? page - paginationLen : 1},
+                <div class="tw-p-2" th:with="paginationLen=3, startPage=${page - paginationLen >= 1 ? page - paginationLen : 1},
       endPage=${page + paginationLen <= pagesCount ? page + paginationLen : pagesCount},
       baseUri='?boardId=' + (${param.boardId != null ? param.boardId : 0})
               + '&searchKeywordTypeCode=' + (${param.searchKeywordTypeCode != null ? param.searchKeywordTypeCode : '전체'})
-              + '&searchKeyword=' + (${param.searchKeyword != null ? param.searchKeyword : ''})"
+              + '&searchKeyword=' + (${param.searchKeyword != null ? param.searchKeyword : ''})
+              + '&memberId=' + (${param.memberId != null ? param.memberId : ''})"
                      th:if="${articlesCount != 0}"
                      style="display: flex; justify-content: center; align-items: center;">
 
@@ -88,51 +139,58 @@
                            th:text="${pagesCount}"></a>
                     </div>
                 </div>
-
-                <a class="article_button" th:href="@{../article/write}">글 작성</a>
+                <select class="str tw-border-box tw-p-2" id="sortOrder" name="sortOrder"
+                        th:onchange="|location.href='list?page=1&boardId='+${boardId}+'&sortOrder=' + this.value|">
+                    <option th:value="${sortOrder}" th:text="${sortOrder == 'regDate' ? '최신순' :
+                         sortOrder == 'title' ? '제목순' :
+                         sortOrder == 'hitCount' ? '조회순' :
+                         sortOrder == 'goodReactionPoint' ? '추천순' : '정렬'}">
+                    </option>
+                    <option th:if="${sortOrder != 'regDate'}" value="regDate">최신순</option>
+                    <option th:if="${sortOrder != 'title'}" value="title">제목순</option>
+                    <option th:if="${sortOrder != 'hitCount'}" value="hitCount">조회순</option>
+                    <option th:if="${sortOrder != 'goodReactionPoint'}" value="goodReactionPoint">추천순</option>
+                </select>
             </div>
         </form>
         <div class="tw-p-10">
-            <table border="1" cellspacing="0" cellpadding="5" style="width: 100%; border-collapse: collapse;">
-                <thead>
-                <tr>
-                    <th style="text-align: center;">번호</th>
-                    <th style="text-align: center;">제목</th>
-                    <th style="text-align: center;">작성자</th>
-                    <th style="text-align: center;">작성일</th>
-                    <th style="text-align: center;">조회</th>
-                </tr>
-                </thead>
-                <tbody>
-                <!-- 게시글 목록이 있는 경우 -->
-                <tr th:each="article : ${articles}" class="hover" th:if="${articles != null}">
-                    <td style="text-align: center;" th:text="${article.id}"></td>
-                    <td style="text-align: center;">
-                        <a class="tw-hover:underline"
-                           th:href="@{'../article/detail?id=' + ${article.id}}"
-                           th:text="${article.title.substring(0, 35)}"
-                           th:if="${article.title.length()} > 35">
-                        </a>
-                        <a class="tw-hover:underline"
-                           th:href="@{'../article/detail?id=' + ${article.id}}"
-                           th:text="${article.title}"
-                           th:if="${article.title.length()} <= 35">
-                        </a>
-                        <span th:text="' [ ' + ${article.extra__repliesCount} + ' ]'" th:if="${article.extra__repliesCount} > 0"
+            <!-- 게시글 목록이 있는 경우 -->
+            <div class="tw-flex tw-items-center tw-w-full tw-p-5 underline" th:if="${articles != null}">
+                <button class="tw-w-[50px] tw-text-center" th:text="게시판"></button>
+                <button class="tw-flex-grow tw-text-center" th:text="제목"></button>
+                <button class="tw-w-[130px]" th:text="작성자"></button>
+                <button class="tw-w-[90px] tw-text-center" th:text="작성일"></button>
+                <button class="tw-w-[50px] tw-text-center" th:text="조회"></button>
+                <button class="tw-w-[50px] tw-text-center" th:text="추천"></button>
+            </div>
+            <div class="underline tw-flex tw-gap-5 tw-p-5" th:each="article : ${articles}" th:if="${articles != null}">
+                <a class="tw-flex tw-items-center tw-w-full" th:href="@{'../article/detail?id=' + ${article.id}}">
+                    <div class="tw-w-[50px] tw-text-center border" th:text="${article.boardId == 1 ? '공지' : article.boardId == 2 ? '자유' : article.boardId == 3 ? 'Q&A' : article.boardId == 4 ? '추천' : article.boardId == 5 ? '일상' : ''}"></div>
+                    <div class="tw-flex-grow">
+                        <span class="link tw-pl-5"
+                              th:text="${#strings.abbreviate(article.title,30)}"></span>
+                        <span th:text="' [ ' + ${article.extra__repliesCount} + ' ]'"
+                              th:if="${article.extra__repliesCount} > 0"
                               style="color: red; font-weight: bold;"></span>
-                    </td>
-                    <td style="text-align: center;" th:text="${article.extra__writer}"></td>
-                    <td style="text-align: center;" th:text="${article.regDate.substring(0, 10)}"></td>
-                    <td style="text-align: center;" th:text="${article.hitCount}"></td>
-                </tr>
+                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 30 30" style="display: inline-block;" th:if="${article.articleCanNew}">
+                            <circle cx="15" cy="15" r="12" fill="#ff6f61"/>
+                            <text x="15" y="16" font-size="10" fill="white" font-family="Arial, sans-serif" text-anchor="middle" dominant-baseline="middle"> N </text>
+                        </svg>
+                    </div>
+                    <div class="tw-w-[130px]" th:text="${article.extra__writer}"></div>
+                    <div class="tw-w-[90px] tw-text-center" th:text="${article.regDate.substring(0, 10)}"></div>
+                    <div class="tw-w-[50px] tw-text-center" th:text="${article.hitCount}"></div>
+                    <div class="tw-w-[50px] tw-text-center" th:text="${article.goodReactionPoint}"></div>
+                </a>
+            </div>
 
-                <!-- 게시글이 없는 경우 -->
-                <tr th:if="${articles.size() == 0}">
-                    <td colspan="6" style="text-align: center;">게시글이 없습니다</td>
-                </tr>
-                </tbody>
-            </table>
+            <!-- 게시글이 없는 경우 -->
+            <div th:if="${articles.size() == 0}">
+                <div class="tw-p-10" style="text-align: center;">게시글이 없습니다</td>
+                </div>
+            </div>
         </div>
     </div>
 </div>
 </body>
+<th:block th:replace="usr/common/mouseEffect"/>

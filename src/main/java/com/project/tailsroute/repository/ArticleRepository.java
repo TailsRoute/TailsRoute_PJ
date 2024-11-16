@@ -54,12 +54,14 @@ public interface ArticleRepository {
     public Article getArticleById(int id);
 
     @Select("""
-                SELECT A.*, M.nickname AS extra__writer, IFNULL(COUNT(R.id), 0) AS extra__repliesCount
+                SELECT A.*, M.nickname AS extra__writer, IFNULL(COUNT(R.id), 0) AS extra__repliesCount, D.photo AS extra__dogPoto
                 FROM article AS A
                 LEFT JOIN `member` AS M
                 ON A.memberId = M.id
                 LEFT JOIN `reply` AS R
                 ON A.id = R.relId
+                LEFT JOIN `dog` AS D
+                ON A.memberId = D.memberId
                 WHERE 1=1
                 AND (#{boardId} = 0 OR A.boardId = #{boardId})
                 AND (
@@ -74,11 +76,12 @@ public interface ArticleRepository {
                         ))
                     )
                 )
+                AND (#{memberId} = 0 OR A.memberId = #{memberId})
                 GROUP BY A.id
-                ORDER BY A.id DESC
+                ORDER BY A.${sortOrder} DESC
                 LIMIT #{limitFrom}, #{limitTake}
             """)
-    public List<Article> getForPrintArticles(int boardId, int limitFrom, int limitTake, String searchKeywordTypeCode, String searchKeyword);
+    public List<Article> getForPrintArticles(int boardId, int limitFrom, int limitTake, String searchKeywordTypeCode, String searchKeyword, int memberId, String sortOrder);
 
 
     @Select("""
@@ -112,8 +115,9 @@ public interface ArticleRepository {
                         ))
                     )
                 )
+            AND (#{memberId} = 0 OR A.memberId = #{memberId})
                 """)
-    public int getArticleCount(int boardId, String searchKeywordTypeCode, String searchKeyword);
+    public int getArticleCount(int boardId, String searchKeywordTypeCode, String searchKeyword, int memberId);
 
 
     @Select("""
@@ -178,4 +182,20 @@ public interface ArticleRepository {
             """)
     public Integer getCurrentArticleId();
 
+    @Select("""
+                SELECT A.*, M.nickname AS extra__writer, IFNULL(COUNT(R.id), 0) AS extra__repliesCount, D.photo AS extra__dogPoto
+                FROM article AS A
+                LEFT JOIN `member` AS M
+                ON A.memberId = M.id
+                LEFT JOIN `reply` AS R
+                ON A.id = R.relId
+                LEFT JOIN `dog` AS D
+                ON A.memberId = D.memberId
+                WHERE 1=1
+                AND (#{boardId} = 0 OR A.boardId = #{boardId})                
+                GROUP BY A.id        
+                ORDER BY A.regDate DESC
+                LIMIT 10;
+            """)
+    List<Article> getMainArticles(int boardId);
 }

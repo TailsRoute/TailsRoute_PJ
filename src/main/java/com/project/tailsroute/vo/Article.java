@@ -19,6 +19,8 @@ public class Article {
 	private int hitCount;
 	private int goodReactionPoint;
 	private int badReactionPoint;
+	private String poto;
+	private boolean articleCanNew;
 
 	private String extra__writer;
 

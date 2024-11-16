@@ -4,6 +4,7 @@
     <link rel="stylesheet" href="https://uicdn.toast.com/editor/latest/toastui-editor.min.css">
     <link rel="stylesheet" href="/resource/css/article.css"/>
     <script src="https://uicdn.toast.com/editor/latest/toastui-editor-all.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/browser-image-compression@1.0.0/dist/browser-image-compression.min.js"></script>
     <script>
         // Toast UI Editor 초기화
         function initializeEditor() {
@@ -15,11 +16,25 @@
                 initialValue: '',
                 hooks: {
                     addImageBlobHook: function (blob, callback) {
-                        const reader = new FileReader();
-                        reader.onload = function (e) {
-                            callback(e.target.result, 'image');
+                        // 이미지 압축 처리
+                        const options = {
+                            maxSizeMB: 1,          // 최대 크기: 1MB
+                            maxWidthOrHeight: 800, // 최대 크기: 800px (너비 또는 높이 중 가장 큰 값)
+                            useWebWorker: true     // 웹 워커를 사용하여 압축 처리
                         };
-                        reader.readAsDataURL(blob);
+
+                        // 이미지 압축
+                        imageCompression(blob, options).then(function (compressedBlob) {
+                            const reader = new FileReader();
+                            reader.onload = function (e) {
+                                callback(e.target.result, 'image'); // 압축된 이미지 Base64 데이터 반환
+                            };
+                            reader.readAsDataURL(compressedBlob);
+                        }).catch(function (error) {
+                            console.error('이미지 압축 실패:', error);
+                            callback(null); // 압축 실패 시 기본 동작 수행
+                        });
+
                         return false; // 기본 이미지 삽입 동작 방지
                     }
                 }
@@ -86,3 +101,4 @@
     <button class="article_button" type="button" onclick="history.back()">뒤로가기</button>
 </div>
 </body>
+<th:block th:replace="usr/common/mouseEffect"/>
