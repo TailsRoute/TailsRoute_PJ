@@ -139,7 +139,7 @@
                            th:text="${pagesCount}"></a>
                     </div>
                 </div>
-                <select class="str tw-border-box tw-p-2" id="sortOrder" name="sortOrder"
+                <select class="str tw-border-box tw-p-2 tw-mr-[80px]" id="sortOrder" name="sortOrder"
                         th:onchange="|location.href='list?page=1&boardId='+${boardId}+'&sortOrder=' + this.value|">
                     <option th:value="${sortOrder}" th:text="${sortOrder == 'regDate' ? '최신순' :
                          sortOrder == 'title' ? '제목순' :

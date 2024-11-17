@@ -685,6 +685,10 @@ video {
   margin-right: 30px;
 }
 
+.tw-mr-\[80px\] {
+  margin-right: 80px;
+}
+
 .tw-mt-10 {
   margin-top: 2.5rem;
 }
@@ -1123,6 +1127,10 @@ video {
 
 .tw-pt-2 {
   padding-top: 0.5rem;
+}
+
+.tw-pt-4 {
+  padding-top: 1rem;
 }
 
 .tw-text-center {
