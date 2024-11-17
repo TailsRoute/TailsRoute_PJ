@@ -41,29 +41,29 @@
 				previewStyle: 'vertical',
 				initialValue: processedContent, // 처리된 텍스트와 이미지 내용으로 초기화
 				hooks: {
-					addImageBlobHook: function (blob, callback) {
-						// 이미지 압축 처리
-						const options = {
-							maxSizeMB: 1,          // 최대 크기: 1MB
-							maxWidthOrHeight: 800, // 최대 크기: 800px (너비 또는 높이 중 가장 큰 값)
-							useWebWorker: true     // 웹 워커를 사용하여 압축 처리
-						};
+					// 이미지 업로드 훅 추가
+					addImageBlobHook: async (blob, callback) => {
+						const formData = new FormData();
+						formData.append('file', blob); // 파일 추가
 
-						// 이미지 압축
-						imageCompression(blob, options).then(function (compressedBlob) {
-							const reader = new FileReader();
-							reader.onload = function (e) {
-								callback(e.target.result, 'image'); // 압축된 이미지 Base64 데이터 반환
-							};
-							reader.readAsDataURL(compressedBlob);
-						}).catch(function (error) {
-							console.error('이미지 압축 실패:', error);
-							callback(null); // 압축 실패 시 기본 동작 수행
-						});
+						try {
+							const response = await fetch('/usr/article/uploadImage', {
+								method: 'POST',
+								body: formData,
+							});
 
-						return false; // 기본 이미지 삽입 동작 방지
-					}
-				}
+							if (response.ok) {
+								const data = await response.json();
+								callback(data.url); // 업로드된 이미지 URL 설정
+							} else {
+								alert('이미지 업로드에 실패했습니다.');
+							}
+						} catch (error) {
+							console.error('이미지 업로드 오류:', error);
+							alert('이미지 업로드 중 오류가 발생했습니다.');
+						}
+					},
+				},
 			});
 		}
 

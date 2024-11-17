@@ -1,5 +1,5 @@
 body {
-    background-color: #FFF3CD;
+    background: #f9f5eb;
     color: #4D3E3E;
     white-space: normal;
     word-break: keep-all;
@@ -21,6 +21,7 @@ input, select, textarea{
     text-align: center;
     padding-top: 70px;
     font-size: 50px;
+    margin: auto;
 }
 
 .article_body {

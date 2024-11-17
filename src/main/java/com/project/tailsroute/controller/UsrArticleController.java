@@ -4,291 +4,313 @@ import com.project.tailsroute.service.*;
 import com.project.tailsroute.util.Ut;
 import com.project.tailsroute.vo.*;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
-import org.springframework.web.multipart.MultipartRequest;
 
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.List;
 import java.util.Map;
 
 @Controller
 public class UsrArticleController {
 
-	private final Rq rq;
+    private final Rq rq;
 
-	public UsrArticleController(Rq rq) {
-		this.rq = rq;
-	}
+    public UsrArticleController(Rq rq) {
+        this.rq = rq;
+    }
 
-	@Autowired
-	private ArticleService articleService;
+    @Autowired
+    private ArticleService articleService;
 
-	@Autowired
-	private BoardService boardService;
+    @Autowired
+    private BoardService boardService;
 
-	@Autowired
-	private ReactionPointService reactionPointService;
+    @Autowired
+    private ReactionPointService reactionPointService;
 
-	@Autowired
-	private ReplyService replyService;
+    @Autowired
+    private ReplyService replyService;
 
-	@GetMapping("/usr/article/detail")
-	public String showDetail(Model model, int id) {
+    @PostMapping("/usr/article/uploadImage")
+    public ResponseEntity<?> uploadImage(@RequestParam("file") MultipartFile file) {
+        String UPLOAD_DIR = "uploads/photo/";
+        int id = articleService.getCurrentArticleId();
+        if (file.isEmpty()) {
+            return ResponseEntity.badRequest().body("파일이 비어 있습니다.");
+        }
 
-		boolean isLogined = rq.isLogined();
-		if (isLogined) {
-			Member member = rq.getLoginedMember();
-			model.addAttribute("member", member);
-		}
+        try {
+            // 저장 경로 확인 및 폴더 생성
+            File uploadDir = new File(UPLOAD_DIR);
+            if (!uploadDir.exists()) {
+                uploadDir.mkdirs();
+            }
 
-		model.addAttribute("isLogined", isLogined);
+            // 파일 저장
+            String fileName = System.currentTimeMillis() + "_" + "article" + id + ".png";
+            String filePath = UPLOAD_DIR + fileName;
+            Files.write(Paths.get(filePath), file.getBytes());
 
-		Article article = articleService.getForPrintArticle(rq.getLoginedMemberId(), id);
+            // URL 반환
+            String fileUrl = "/" + UPLOAD_DIR + fileName;
+            return ResponseEntity.ok().body(Map.of("url", fileUrl));
+        } catch (IOException e) {
+            e.printStackTrace();
+            return ResponseEntity.status(500).body("파일 업로드 중 오류 발생");
+        }
+    }
 
-		if (article == null) {
-			return "redirect:/usr/article/main";
-		}
+    @GetMapping("/usr/article/detail")
+    public String showDetail(Model model, int id) {
 
-		// System.err.println(id + "번 글");
-		// System.err.println(rq.getLoginedMemberId() + "번 회원 접속중");
-		// System.err.println("내용" + article);
+        boolean isLogined = rq.isLogined();
+        if (isLogined) {
+            Member member = rq.getLoginedMember();
+            model.addAttribute("member", member);
+        }
 
-		model.addAttribute("article", article);
+        model.addAttribute("isLogined", isLogined);
 
-		List<Reply> replies = replyService.getForPrintReplies(rq.getLoginedMemberId(), "article", id);
+        Article article = articleService.getForPrintArticle(rq.getLoginedMemberId(), id);
 
-		int repliesCount = replies.size();
-		model.addAttribute("replies", replies);
-		model.addAttribute("repliesCount", repliesCount);
+        if (article == null) {
+            return "redirect:/usr/article/main";
+        }
 
-		model.addAttribute("isAlreadyAddGoodRp",
-				reactionPointService.isAlreadyAddGoodRp(rq.getLoginedMemberId(), id, "article"));
-		model.addAttribute("isAlreadyAddBadRp",
-				reactionPointService.isAlreadyAddBadRp(rq.getLoginedMemberId(), id, "article"));
+        // System.err.println(id + "번 글");
+        // System.err.println(rq.getLoginedMemberId() + "번 회원 접속중");
+        // System.err.println("내용" + article);
 
-		return "usr/article/detail";
-	}
+        model.addAttribute("article", article);
 
-	@PostMapping("/usr/article/doIncreaseHitCountRd")
-	@ResponseBody
-	public ResultData doIncreaseHitCount(int id) {
+        List<Reply> replies = replyService.getForPrintReplies(rq.getLoginedMemberId(), "article", id);
 
-		ResultData increaseHitCountRd = articleService.increaseHitCount(id);
+        int repliesCount = replies.size();
+        model.addAttribute("replies", replies);
+        model.addAttribute("repliesCount", repliesCount);
 
-		if (increaseHitCountRd.isFail()) {
-			return increaseHitCountRd;
-		}
+        model.addAttribute("isAlreadyAddGoodRp",
+                reactionPointService.isAlreadyAddGoodRp(rq.getLoginedMemberId(), id, "article"));
+        model.addAttribute("isAlreadyAddBadRp",
+                reactionPointService.isAlreadyAddBadRp(rq.getLoginedMemberId(), id, "article"));
 
-		ResultData rd = ResultData.newData(increaseHitCountRd, "hitCount", articleService.getArticleHitCount(id));
+        return "usr/article/detail";
+    }
 
-		rd.setData2("조회수가 증가된 게시글의 id", id);
+    @PostMapping("/usr/article/doIncreaseHitCountRd")
+    @ResponseBody
+    public ResultData doIncreaseHitCount(int id) {
 
-		return rd;
-	}
+        ResultData increaseHitCountRd = articleService.increaseHitCount(id);
 
-	@GetMapping("/usr/article/modify")
-	public String showModify(Model model, int id) {
+        if (increaseHitCountRd.isFail()) {
+            return increaseHitCountRd;
+        }
 
-		boolean isLogined = rq.isLogined();
-		if (isLogined) {
-			Member member = rq.getLoginedMember();
-			model.addAttribute("member", member);
-		}else {
-			return "redirect:/usr/member/login";
-		}
-		model.addAttribute("isLogined", isLogined);
+        ResultData rd = ResultData.newData(increaseHitCountRd, "hitCount", articleService.getArticleHitCount(id));
 
-		Article article = articleService.getForPrintArticle(rq.getLoginedMemberId(), id);
+        rd.setData2("조회수가 증가된 게시글의 id", id);
 
+        return rd;
+    }
 
-		ResultData userCanModifyRd = articleService.userCanModify(rq.getLoginedMemberId(), article);
+    @GetMapping("/usr/article/modify")
+    public String showModify(Model model, int id) {
 
+        boolean isLogined = rq.isLogined();
+        if (isLogined) {
+            Member member = rq.getLoginedMember();
+            model.addAttribute("member", member);
+        } else {
+            return "redirect:/usr/member/login";
+        }
+        model.addAttribute("isLogined", isLogined);
 
-		if (article == null || userCanModifyRd.isFail()) {
-			return "redirect:/usr/article/main";
-		}
+        Article article = articleService.getForPrintArticle(rq.getLoginedMemberId(), id);
 
-		model.addAttribute("article", article);
 
-		return "/usr/article/modify";
-	}
+        ResultData userCanModifyRd = articleService.userCanModify(rq.getLoginedMemberId(), article);
 
-	// 로그인 체크 -> 유무 체크 -> 권한 체크 -> 수정
-	@PostMapping("/usr/article/doModify")
-	@ResponseBody
-	public String doModify(int boardId, int id, String title, String body) {
 
-		Article article = articleService.getArticleById(id);
+        if (article == null || userCanModifyRd.isFail()) {
+            return "redirect:/usr/article/main";
+        }
 
-		if (article == null) {
-			return Ut.jsHistoryBack("F-1", Ut.f("%d번 게시글은 없습니다", id));
-		}
+        model.addAttribute("article", article);
 
-		ResultData userCanModifyRd = articleService.userCanModify(rq.getLoginedMemberId(), article);
+        return "/usr/article/modify";
+    }
 
-		if (userCanModifyRd.isFail()) {
-			return Ut.jsHistoryBack(userCanModifyRd.getResultCode(), userCanModifyRd.getMsg());
-		}
+    // 로그인 체크 -> 유무 체크 -> 권한 체크 -> 수정
+    @PostMapping("/usr/article/doModify")
+    @ResponseBody
+    public String doModify(int boardId, int id, String title, String body) {
 
-		if (userCanModifyRd.isSuccess()) {
-			articleService.modifyArticle(boardId, id, title, body);
-		}
+        Article article = articleService.getArticleById(id);
 
-		article = articleService.getArticleById(id);
+        if (article == null) {
+            return Ut.jsHistoryBack("F-1", Ut.f("%d번 게시글은 없습니다", id));
+        }
 
-		return Ut.jsReplace(userCanModifyRd.getResultCode(), userCanModifyRd.getMsg(), "../article/detail?id=" + id);
-	}
+        ResultData userCanModifyRd = articleService.userCanModify(rq.getLoginedMemberId(), article);
 
-	@GetMapping("/usr/article/doDelete")
-	@ResponseBody
-	public String doDelete(int id) {
+        if (userCanModifyRd.isFail()) {
+            return Ut.jsHistoryBack(userCanModifyRd.getResultCode(), userCanModifyRd.getMsg());
+        }
 
-		Article article = articleService.getArticleById(id);
+        if (userCanModifyRd.isSuccess()) {
+            articleService.modifyArticle(boardId, id, title, body);
+        }
 
-		if (article == null) {
-			return Ut.jsHistoryBack("F-1", Ut.f("%d번 게시글은 없습니다", id));
-		}
+        return Ut.jsReplace(userCanModifyRd.getResultCode(), userCanModifyRd.getMsg(), "../article/detail?id=" + id);
+    }
 
-		ResultData userCanDeleteRd = articleService.userCanDelete(rq.getLoginedMemberId(), article);
+    @GetMapping("/usr/article/doDelete")
+    @ResponseBody
+    public String doDelete(int id) {
 
-		if (userCanDeleteRd.isFail()) {
-			return Ut.jsHistoryBack(userCanDeleteRd.getResultCode(), userCanDeleteRd.getMsg());
-		}
+        Article article = articleService.getArticleById(id);
 
-		if (userCanDeleteRd.isSuccess()) {
-			articleService.deleteArticle(id);
-		}
+        if (article == null) {
+            return Ut.jsHistoryBack("F-1", Ut.f("%d번 게시글은 없습니다", id));
+        }
 
-		return Ut.jsReplace(userCanDeleteRd.getResultCode(), userCanDeleteRd.getMsg(), "../article/main");
-	}
+        ResultData userCanDeleteRd = articleService.userCanDelete(rq.getLoginedMemberId(), article);
 
-	@GetMapping("/usr/article/write")
-	public String showWrite(Model model) {
+        if (userCanDeleteRd.isFail()) {
+            return Ut.jsHistoryBack(userCanDeleteRd.getResultCode(), userCanDeleteRd.getMsg());
+        }
 
-		boolean isLogined = rq.isLogined();
-		if (isLogined) {
-			Member member = rq.getLoginedMember();
-			model.addAttribute("member", member);
-		}else{
-			return "redirect:/usr/member/login";
-		}
-		model.addAttribute("isLogined", isLogined);
+        if (userCanDeleteRd.isSuccess()) {
+            articleService.deleteArticle(id);
+        }
 
-		Integer currentId = articleService.getCurrentArticleId();
-		if (currentId == null) {
-			currentId = 1;
-		}
+        return Ut.jsReplace(userCanDeleteRd.getResultCode(), userCanDeleteRd.getMsg(), "../article/main");
+    }
 
-		model.addAttribute("currentId", currentId);
+    @GetMapping("/usr/article/write")
+    public String showWrite(Model model) {
 
-		return "usr/article/write";
-	}
+        boolean isLogined = rq.isLogined();
+        if (isLogined) {
+            Member member = rq.getLoginedMember();
+            model.addAttribute("member", member);
+        } else {
+            return "redirect:/usr/member/login";
+        }
+        model.addAttribute("isLogined", isLogined);
 
-	@PostMapping("/usr/article/doWrite")
-	@ResponseBody
-	public String doWrite(String boardId, String title, String body, String replaceUri,
-						  MultipartRequest multipartRequest) {
+        Integer currentId = articleService.getCurrentArticleId();
+        if (currentId == null) {
+            currentId = 1;
+        }
 
-		if (Ut.isEmptyOrNull(title)) {
-			return Ut.jsHistoryBack("F-1", "제목을 입력해주세요");
-		}
-		if (Ut.isEmptyOrNull(body)) {
-			return Ut.jsHistoryBack("F-2", "내용을 입력해주세요");
-		}
-		if (Ut.isEmptyOrNull(boardId)) {
-			return Ut.jsHistoryBack("F-3", "게시판을 선택해주세요");
-		}
+        model.addAttribute("currentId", currentId);
 
-		System.err.println(boardId);
+        return "usr/article/write";
+    }
 
-		ResultData writeArticleRd = articleService.writeArticle(rq.getLoginedMemberId(), title, body, boardId);
+    @PostMapping("/usr/article/doWrite")
+    @ResponseBody
+    public String doWrite(String boardId, String title, String body) {
 
-		int id = (int) writeArticleRd.getData1();
+        if (Ut.isEmptyOrNull(title)) {
+            return Ut.jsHistoryBack("F-1", "제목을 입력해주세요");
+        }
+        if (Ut.isEmptyOrNull(body)) {
+            return Ut.jsHistoryBack("F-2", "내용을 입력해주세요");
+        }
+        if (Ut.isEmptyOrNull(boardId)) {
+            return Ut.jsHistoryBack("F-3", "게시판을 선택해주세요");
+        }
 
-		Article article = articleService.getArticleById(id);
+        // System.err.println(boardId);
 
-		Map<String, MultipartFile> fileMap = multipartRequest.getFileMap();
+        ResultData writeArticleRd = articleService.writeArticle(rq.getLoginedMemberId(), title, body, boardId);
 
-		for (String fileInputName : fileMap.keySet()) {
-			MultipartFile multipartFile = fileMap.get(fileInputName);
-		}
+        int id = (int) writeArticleRd.getData1();
 
-		return Ut.jsReplace(writeArticleRd.getResultCode(), writeArticleRd.getMsg(), "../article/detail?id=" + id);
+        return Ut.jsReplace(writeArticleRd.getResultCode(), writeArticleRd.getMsg(), "../article/detail?id=" + id);
 
-	}
+    }
 
-	@GetMapping("/usr/article/main")
-	public String showMain(Model model, @RequestParam(defaultValue = "0") int boardId ){
+    @GetMapping("/usr/article/main")
+    public String showMain(Model model, @RequestParam(defaultValue = "0") int boardId) {
 
-		boolean isLogined = rq.isLogined();
-		if (isLogined) {
-			Member member = rq.getLoginedMember();
-			model.addAttribute("member", member);
-		}
-		model.addAttribute("isLogined", isLogined);
+        boolean isLogined = rq.isLogined();
+        if (isLogined) {
+            Member member = rq.getLoginedMember();
+            model.addAttribute("member", member);
+        }
+        model.addAttribute("isLogined", isLogined);
 
-		List<Article> articles = articleService.getMainArticles(boardId);
+        List<Article> articles = articleService.getMainArticles(boardId);
 
-		for (Article article : articles) {
-			article.setPoto(articleService.extractFirstImageSrc(article.getBody()));
-			article.setBody(articleService.removeHtmlTags(article.getBody()));
-			article.setArticleCanNew(articleService.isNew(article.getRegDate()));
-		}
+        for (Article article : articles) {
+            article.setPoto(articleService.extractFirstImageSrc(article.getBody()));
+            article.setBody(articleService.removeHtmlTags(article.getBody()));
+            article.setArticleCanNew(articleService.isNew(article.getRegDate()));
+        }
 
-		model.addAttribute("articles", articles);
-		model.addAttribute("boardId", boardId);
+        model.addAttribute("articles", articles);
+        model.addAttribute("boardId", boardId);
 
-		return "usr/article/main";
-	}
+        return "usr/article/main";
+    }
 
-	@GetMapping("/usr/article/list")
-	public String showList(Model model, @RequestParam(defaultValue = "0") int boardId,
-						   @RequestParam(defaultValue = "1") int page,
-						   @RequestParam(defaultValue = "전체") String searchKeywordTypeCode,
-						   @RequestParam(defaultValue = "") String searchKeyword,
-						   @RequestParam(defaultValue = "0") int memberId,
-						   @RequestParam(defaultValue = "regDate") String sortOrder){
+    @GetMapping("/usr/article/list")
+    public String showList(Model model, @RequestParam(defaultValue = "0") int boardId,
+                           @RequestParam(defaultValue = "1") int page,
+                           @RequestParam(defaultValue = "전체") String searchKeywordTypeCode,
+                           @RequestParam(defaultValue = "") String searchKeyword,
+                           @RequestParam(defaultValue = "0") int memberId,
+                           @RequestParam(defaultValue = "regDate") String sortOrder) {
 
-		boolean isLogined = rq.isLogined();
-		if (isLogined) {
-			Member member = rq.getLoginedMember();
-			model.addAttribute("member", member);
-		}
-		model.addAttribute("isLogined", isLogined);
+        boolean isLogined = rq.isLogined();
+        if (isLogined) {
+            Member member = rq.getLoginedMember();
+            model.addAttribute("member", member);
+        }
+        model.addAttribute("isLogined", isLogined);
 
-		Board board = boardService.getBoardById(boardId);
+        Board board = boardService.getBoardById(boardId);
 
-		int articlesCount = articleService.getArticlesCount(boardId, searchKeywordTypeCode, searchKeyword, memberId);
+        int articlesCount = articleService.getArticlesCount(boardId, searchKeywordTypeCode, searchKeyword, memberId);
 
-		// 한페이지에 글 10개
-		// 글 20개 -> 2page
-		// 글 25개 -> 3page
-		int itemsInAPage = 10;
+        // 한페이지에 글 10개
+        // 글 20개 -> 2page
+        // 글 25개 -> 3page
+        int itemsInAPage = 10;
 
-		int pagesCount = (int) Math.ceil(articlesCount / (double) itemsInAPage);
+        int pagesCount = (int) Math.ceil(articlesCount / (double) itemsInAPage);
 
-		List<Article> articles = articleService.getForPrintArticles(boardId, itemsInAPage, page, searchKeywordTypeCode,
-				searchKeyword, memberId, sortOrder);
+        List<Article> articles = articleService.getForPrintArticles(boardId, itemsInAPage, page, searchKeywordTypeCode,
+                searchKeyword, memberId, sortOrder);
 
-		for (Article article : articles) {
-			article.setPoto(articleService.extractFirstImageSrc(article.getBody()));
-			article.setBody(articleService.removeHtmlTags(article.getBody()));
-			article.setArticleCanNew(articleService.isNew(article.getRegDate()));
-		}
+        for (Article article : articles) {
+            article.setPoto(articleService.extractFirstImageSrc(article.getBody()));
+            article.setBody(articleService.removeHtmlTags(article.getBody()));
+            article.setArticleCanNew(articleService.isNew(article.getRegDate()));
+        }
 
-		model.addAttribute("articles", articles);
-		model.addAttribute("articlesCount", articlesCount);
-		model.addAttribute("pagesCount", pagesCount);
-		model.addAttribute("board", board);
-		model.addAttribute("page", page);
-		model.addAttribute("searchKeywordTypeCode", searchKeywordTypeCode);
-		model.addAttribute("searchKeyword", searchKeyword);
-		model.addAttribute("boardId", boardId);
-		model.addAttribute("memberId", memberId);
-		model.addAttribute("sortOrder", sortOrder);
+        model.addAttribute("articles", articles);
+        model.addAttribute("articlesCount", articlesCount);
+        model.addAttribute("pagesCount", pagesCount);
+        model.addAttribute("board", board);
+        model.addAttribute("page", page);
+        model.addAttribute("searchKeywordTypeCode", searchKeywordTypeCode);
+        model.addAttribute("searchKeyword", searchKeyword);
+        model.addAttribute("boardId", boardId);
+        model.addAttribute("memberId", memberId);
+        model.addAttribute("sortOrder", sortOrder);
 
-		return "usr/article/list";
-	}
+        return "usr/article/list";
+    }
 }

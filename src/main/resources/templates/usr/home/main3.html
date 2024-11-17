@@ -11,10 +11,13 @@
 <script src="/resource/js/main.js"></script>
 <section class="content tw-bg-[#EDE0D4] tw-relative">
     <div class="main-missing-body">
-        <div class="tw-p-[100px]">
+        <div class="tw-p-[100px] tw-relative">
             <h2 class="tw-text-4xl tw-font-bold tw-text-gray-700">실종 신고 및 알림 서비스</h2>
-            <p class="main-missing-text-body tw-text-xl tw-mt-4">반려견이 실종되었을 때, 신고 포스터를 작성하여 주변 사용자와 사이트 방문자에게 도움을 요청하실 수
-                있습니다.</p>
+            <div class="tw-flex tw-justify-between">
+            <span class="main-missing-text-body tw-text-xl tw-pt-4">반려견이 실종되었을 때, 신고 포스터를 작성하여 주변 사용자와 사이트 방문자에게 도움을 요청하실 수
+                있습니다.</span>
+                <a href="../missing/list" class="tw-text-4xl">&#x279C;</a>
+            </div>
         </div>
         <div class="slider_wrapper">
             <button class="slider_btn left_btn">&#10094;</button>
@@ -24,7 +27,7 @@
                     <img th:src="@{${missing.photo}}" alt="Missing Image" class="misssing_image"/>
                     <div class="overlay">
                         <div class="tw-p-2 tw-text-[12px]" th:text="${missing.reportDate.substring(0, 13)}"></div>
-                        <div class="tw-p-2" th:text="${missing.name}"></div>
+                        <div class="tw-p-2 tw-font-bold" th:text="${missing.name}"></div>
                         <div class="tw-p-2"
                              th:text="${#strings.length(missing.missingLocation) >= 22 ? missing.missingLocation.substring(0, 22) + ' ...' : missing.missingLocation}"></div>
                         <div class="tw-pl-2 tw-pt-2"
@@ -67,19 +70,19 @@
             <div class="box3">
                 <div class="container">
                     <a href="../health/page" class="svg-box">
-                        <span class="svg-title tw-text-xl">실시간 피드백 제공</span>
+                        <span class="svg-title tw-text-xl tw-font-bold">실시간 피드백 제공</span>
                         <span class="svg-icon flat-filled" id="filled-message"></span>
-                        <span class="svg-text tw-text-xl">AI가 훈련 진행 사항을 실시간으로 피드백</span>
+                        <span class="svg-text tw-text-xl tw-font-bold">AI가 훈련 진행 사항을 실시간으로 피드백</span>
                     </a>
                     <a href="../health/page" class="svg-box">
-                        <span class="svg-title tw-text-xl">즉각적인 도움 제공</span>
+                        <span class="svg-title tw-text-xl tw-font-bold">즉각적인 도움 제공</span>
                         <span class="svg-icon flat-filled" id="filled-film"></span>
-                        <span class="svg-text tw-text-xl">맞춤형 영상을 추천하여 주인의 훈련 노력을 더 효과적으로 도움</span>
+                        <span class="svg-text tw-text-xl tw-font-bold">맞춤형 영상을 추천하여 주인의 훈련 노력을 더 효과적으로 도움</span>
                     </a>
                     <a href="../health/page" class="svg-box">
-                        <span class="svg-title tw-text-xl">행동 패턴 기록 및 분석</span>
+                        <span class="svg-title tw-text-xl tw-font-bold">행동 패턴 기록 및 분석</span>
                         <span class="svg-icon flat-filled" id="filled-magnify"></span>
-                        <span class="svg-text tw-text-xl">AI가 행동 데이터를 기록해 맞춤 훈련 적략 제공</span>
+                        <span class="svg-text tw-text-xl tw-font-bold">AI가 행동 데이터를 기록해 맞춤 훈련 적략 제공</span>
                     </a>
                 </div>
             </div>
