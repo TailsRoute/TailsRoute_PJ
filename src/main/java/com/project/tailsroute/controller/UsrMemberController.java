@@ -129,4 +129,20 @@ public class UsrMemberController {
 
         return "usr/member/myPage";
     }
+
+    @GetMapping("/usr/member/join")
+    public String showJoin(Model model) {
+        boolean isLogined = rq.isLogined();
+
+        if (isLogined) {
+            Member member = rq.getLoginedMember();
+            model.addAttribute("member", member);
+        }
+
+        model.addAttribute("isLogined", isLogined);
+
+
+        return "usr/member/join";
+    }
+
 }
