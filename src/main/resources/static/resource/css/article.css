@@ -40,14 +40,13 @@ input, select, textarea{
 }
 
 .article_button {
-    border: 1px solid #4D3E3E;
-    border-radius: 10px;
-    height: 40px;
-    width: 100px;
-    text-align: center;
+    background: #ff6f61;
+    color : #ffffff;
     display: flex;
     justify-content: center;
     align-items: center;
+    border-radius: 10px;
+    padding: 10px;
 }
 
 .reply_body{

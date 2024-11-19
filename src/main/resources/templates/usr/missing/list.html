@@ -58,10 +58,6 @@
 </div>
 
 <div class="pagination tw-flex tw-justify-center tw-items-center" th:if="${totalPage != 0}">
-    <a class="pagination_left tw-p-[10px]" th:href="@{'list?page=' + ${lpage} + '&str='+${str}}">
-        <i class="fa-solid fa-caret-left" style="font-size: 70px;"></i>
-    </a>
-
     <div class="tw-flex tw-justify-center tw-items-center" th:block
          th:with="paginationLen=3, startPage=${page - paginationLen >= 1} ? ${page - paginationLen} : 1, endPage=${page + paginationLen <= totalPage} ? ${page + paginationLen} : ${totalPage}">
         <!-- 처음 페이지로 이동 -->
@@ -94,9 +90,5 @@
                th:text="${totalPage}"></a>
         </div>
     </div>
-
-    <a class="pagination_right tw-p-[10px]" th:href="@{'list?page=' + ${rpage} + '&str='+${str}}">
-        <i class="fa-solid fa-caret-right" style="font-size: 70px;"></i>
-    </a>
 </div>
 </body>
