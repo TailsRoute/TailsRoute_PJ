@@ -113,7 +113,7 @@ public class UsrMemberController {
             GpsAlert gpsAlert = gpsAlertService.getGpsAlert(dog.getId());
             if (gpsAlert == null) {
                 locationChack = false;
-            }else {
+            } else {
                 locationChack = true;
 
                 String location = gpsAlertService.getPlaceName(gpsAlert.getLatitude(), gpsAlert.getLongitude());
@@ -129,4 +129,20 @@ public class UsrMemberController {
 
         return "usr/member/myPage";
     }
+
+    @GetMapping("/usr/member/join")
+    public String showJoin(Model model) {
+        boolean isLogined = rq.isLogined();
+
+        if (isLogined) {
+            Member member = rq.getLoginedMember();
+            model.addAttribute("member", member);
+        }
+
+        model.addAttribute("isLogined", isLogined);
+
+
+        return "usr/member/join";
+    }
+
 }
