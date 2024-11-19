@@ -93,7 +93,7 @@
         <div class="tw-p-5" th:utext="${article.body}"></div>
         <div class="tw-flex tw-justify-between">
             <div class="reply_title tw-p-5" th:text="|댓글 : ${replies.size()}|"></div>
-            <button th:class="${isAlreadyAddGoodRp ? 'tw-text-red-500 tw-p-5' : 'tw-p-5'}" id="likeButton" th:onclick="'doGoodReaction(\'article\', ' + ${article.id} + ')'">
+            <button th:class="${isAlreadyAddGoodRp ? 'tw-text-red-500 tw-font-bold tw-p-5' : 'tw-p-5'}" id="likeButton" th:onclick="'doGoodReaction(\'article\', ' + ${article.id} + ')'">
                 👍 추천
                 <span id="likeCount" th:text="${article.goodReactionPoint}"></span>
             </button>
@@ -240,9 +240,9 @@
                 if (relTypeCode == 'article') {
                     $('#likeCount').text(data.data1); // 응답에서 body 문자열을 사용
                     if ($('#likeButton').hasClass('tw-text-red-500')) {
-                        $('#likeButton').removeClass('tw-text-red-500');
+                        $('#likeButton').removeClass('tw-text-red-500 tw-font-bold');
                     } else {
-                        $('#likeButton').addClass('tw-text-red-500');
+                        $('#likeButton').addClass('tw-text-red-500 tw-font-bold');
                     }
                 } else if (relTypeCode == 'reply') {
                     $('#replylikeCount' + relId).text(data.data1);

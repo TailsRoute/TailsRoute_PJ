@@ -104,41 +104,6 @@
                         </button>
                     </label>
                 </div>
-
-                <div class="tw-p-2" th:with="paginationLen=3, startPage=${page - paginationLen >= 1 ? page - paginationLen : 1},
-      endPage=${page + paginationLen <= pagesCount ? page + paginationLen : pagesCount},
-      baseUri='?boardId=' + (${param.boardId != null ? param.boardId : 0})
-              + '&searchKeywordTypeCode=' + (${param.searchKeywordTypeCode != null ? param.searchKeywordTypeCode : '전체'})
-              + '&searchKeyword=' + (${param.searchKeyword != null ? param.searchKeyword : ''})
-              + '&memberId=' + (${param.memberId != null ? param.memberId : ''})"
-                     th:if="${articlesCount != 0}"
-                     style="display: flex; justify-content: center; align-items: center;">
-
-                    <!-- 처음 페이지로 이동 버튼 -->
-                    <div th:if="${startPage > 1}">
-                        <a class="tw-text-[30px] tw-pl-[10px] tw-pr-[10px]" th:href="@{${baseUri} + '&page=1'}">1</a>
-                    </div>
-                    <div th:if="${startPage > 2}">
-                        <button class="tw-text-[30px] tw-pl-[10px] tw-pr-[10px]">...</button>
-                    </div>
-
-                    <!-- 페이지 번호 반복 출력 -->
-                    <div th:each="i : ${#numbers.sequence(startPage, endPage)}">
-                        <a class="tw-text-[30px] tw-pl-[10px] tw-pr-[10px]"
-                           th:classappend="${page == i ? 'tw-bg-white tw-rounded-full' : ''}"
-                           th:href="@{${baseUri} + '&page=' + ${i}}" th:text="${i}"></a>
-                    </div>
-
-                    <!-- 마지막 페이지로 이동 버튼 -->
-                    <div th:if="${endPage < pagesCount - 1}">
-                        <button class="tw-text-[30px] tw-pl-[10px] tw-pr-[10px]">...</button>
-                    </div>
-                    <div th:if="${endPage < pagesCount && pagesCount != 0}">
-                        <a class="tw-text-[30px] tw-pl-[10px] tw-pr-[10px]"
-                           th:href="@{${baseUri} + '&page=' + ${pagesCount}}"
-                           th:text="${pagesCount}"></a>
-                    </div>
-                </div>
                 <select class="str tw-border-box tw-p-2 tw-mr-[80px]" id="sortOrder" name="sortOrder"
                         th:onchange="|location.href='list?page=1&boardId='+${boardId}+'&sortOrder=' + this.value|">
                     <option th:value="${sortOrder}" th:text="${sortOrder == 'regDate' ? '최신순' :
@@ -186,10 +151,44 @@
 
             <!-- 게시글이 없는 경우 -->
             <div th:if="${articles.size() == 0}">
-                <div class="tw-p-10" style="text-align: center;">게시글이 없습니다</td>
+                <div class="tw-p-10" style="text-align: center;">게시글이 없습니다</div>
                 </div>
             </div>
         </div>
+    </div>
+</div>
+<div class="tw-p-2" th:with="paginationLen=3, startPage=${page - paginationLen >= 1 ? page - paginationLen : 1},
+      endPage=${page + paginationLen <= pagesCount ? page + paginationLen : pagesCount},
+      baseUri='?boardId=' + (${param.boardId != null ? param.boardId : 0})
+              + '&searchKeywordTypeCode=' + (${param.searchKeywordTypeCode != null ? param.searchKeywordTypeCode : '전체'})
+              + '&searchKeyword=' + (${param.searchKeyword != null ? param.searchKeyword : ''})
+              + '&memberId=' + (${param.memberId != null ? param.memberId : ''})"
+     th:if="${articlesCount != 0}"
+     style="display: flex; justify-content: center; align-items: center;">
+
+    <!-- 처음 페이지로 이동 버튼 -->
+    <div th:if="${startPage > 1}">
+        <a class="tw-text-[30px] tw-pl-[10px] tw-pr-[10px]" th:href="@{${baseUri} + '&page=1'}">1</a>
+    </div>
+    <div th:if="${startPage > 2}">
+        <button class="tw-text-[30px] tw-pl-[10px] tw-pr-[10px]">...</button>
+    </div>
+
+    <!-- 페이지 번호 반복 출력 -->
+    <div th:each="i : ${#numbers.sequence(startPage, endPage)}">
+        <a class="tw-text-[30px] tw-pl-[10px] tw-pr-[10px]"
+           th:classappend="${page == i ? 'tw-bg-white tw-rounded-full' : ''}"
+           th:href="@{${baseUri} + '&page=' + ${i}}" th:text="${i}"></a>
+    </div>
+
+    <!-- 마지막 페이지로 이동 버튼 -->
+    <div th:if="${endPage < pagesCount - 1}">
+        <button class="tw-text-[30px] tw-pl-[10px] tw-pr-[10px]">...</button>
+    </div>
+    <div th:if="${endPage < pagesCount && pagesCount != 0}">
+        <a class="tw-text-[30px] tw-pl-[10px] tw-pr-[10px]"
+           th:href="@{${baseUri} + '&page=' + ${pagesCount}}"
+           th:text="${pagesCount}"></a>
     </div>
 </div>
 </body>
