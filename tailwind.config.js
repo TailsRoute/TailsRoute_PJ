@@ -8,5 +8,10 @@ module.exports = {
   theme: {
     extend: {},
   },
-  plugins: [],
-}
+  plugins: [
+    require('daisyui'), // DaisyUI 플러그인 추가
+  ],
+  daisyui: {
+    themes: ["light", "dark"], // DaisyUI 테마 설정 (필요에 따라 추가 가능)
+  },
+};

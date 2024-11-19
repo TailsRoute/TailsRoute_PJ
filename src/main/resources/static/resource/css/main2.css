@@ -1,28 +1,30 @@
 body {
-    background: #FFFEF0;
+    background: #ede0d4;
     color: #4D3E3E;
     white-space: normal;
     word-break: keep-all;
 }
 
-.left_box{
+.bo {
+    border: 1px solid;
+}
+
+.left_box, .right_box {
     top: 0;
-    left: 0;
     position: absolute;
     background-color: #FFF3CD;
     width: 50vw;
-    height: 805px;
     z-index: -1;
 }
 
-.right_box{
-    top: 0;
+.left_box {
+    left: 0;
+    height: 805px;
+}
+
+.right_box {
     right: 0;
-    position: absolute;
-    background-color: #FFF3CD;
-    width: 50vw;
     height: 718px;
-    z-index: -1;
 }
 
 .main_image, .main_box {
@@ -41,7 +43,7 @@ body {
     font-weight: bold;
 }
 
-.main_box_title{
+.main_box_title {
     left: 120px;
     top: 70px;
     width: 1200px;
@@ -50,7 +52,7 @@ body {
     font-weight: bold;
 }
 
-.main_box_body{
+.main_box_body {
     left: 120px;
     top: 150px;
     width: 1200px;
@@ -58,57 +60,51 @@ body {
     font-size: 19px;
 }
 
-.main_button{
+.main_button {
     background: white;
     margin-top: 100px;
-    padding : 20px 100px 20px 100px;
+    padding: 20px 100px;
     border-radius: 30px;
     display: inline-block;
 }
 
-.community{
-    background: url(https://framerusercontent.com/images/ubSuEXPWtpN56eHbnEnPHhIqg.jpg?scale-down-to=1024);
+.community, .records, .shopping, .health {
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;
+    border-radius: 20px;
+}
+
+.community {
+    background: url(https://framerusercontent.com/images/ubSuEXPWtpN56eHbnEnPHhIqg.jpg?scale-down-to=1024);
     width: 400px;
     height: 560px;
     left: 105px;
     bottom: 50px;
-    border-radius: 20px;
 }
-.records{
+
+.records {
     background: url(https://i0.pickpik.com/photos/867/398/408/diary-journal-pen-notebook-preview.jpg);
-    background-size: cover;
-    background-position: center;
-    background-repeat: no-repeat;
     width: 400px;
     height: 270px;
     left: 525px;
     bottom: 340px;
-    border-radius: 20px;
 }
-.shopping{
+
+.shopping {
     background: url(https://img.freepik.com/premium-photo/jack-russel-dog-puppy-looks-into-empty-shopping-trolley-cart-blue-wall_77190-4574.jpg?w=1380);
-    background-size: cover;
-    background-position: center;
-    background-repeat: no-repeat;
     width: 400px;
     height: 270px;
     left: 945px;
     bottom: 340px;
-    border-radius: 20px;
 }
-.health{
+
+.health {
     background: url(https://cdn.pixabay.com/photo/2022/04/25/15/50/dogs-7156260_1280.jpg);
-    background-size: cover;
-    background-position: center;
-    background-repeat: no-repeat;
     width: 820px;
     height: 270px;
     left: 525px;
     bottom: 50px;
-    border-radius: 20px;
 }
 
 .hover_text {
@@ -143,35 +139,35 @@ body {
 }
 
 .slider_wrapper {
+    position: absolute;
+    overflow: hidden;
+    width: 1260px;
+    height: 400px;
+    max-width: 1240px;
     left: 105px;
     bottom: 200px;
-    position: absolute;
-    overflow: hidden; /* 슬라이더 영역을 벗어난 부분을 숨김 */
-    width: 100%; /* 슬라이더를 화면에 맞추어 크기를 설정 */
-    max-width: 1240px; /* 최대 너비 설정 */
-    height: 380px; /* 슬라이더 높이 설정 (필요에 따라 조정 가능) */
 }
 
 .slider_container {
     display: flex;
-    transition: transform 0.5s ease; /* 슬라이드 이동 효과 */
+    transition: transform 0.5s ease;
 }
 
 .misssing_item {
-    min-width: 380px; /* 너비를 300px로 설정 */
-    height: 100%; /* 높이를 부모 컨테이너에 맞추어 설정 */
+    min-width: 380px;
+    height: 100%;
     border-radius: 20px;
-    overflow: hidden; /* 내부 요소가 영역을 넘지 않도록 설정 */
-    margin-right: 50px; /* 오른쪽 마진을 추가하여 간격 설정 */
+    overflow: hidden;
+    margin-right: 50px;
+    box-shadow: 8px 8px 15px rgba(0, 0, 0, 0.2);
 }
 
 .misssing_image {
-    width: 100%;  /* a 요소의 너비에 맞추어 설정 */
-    height: 100%; /* a 요소의 높이에 맞추어 설정 */
-    object-fit: cover; /* 이미지 비율 유지하면서 크기 조절 */
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
 }
 
-/* 슬라이더 버튼 스타일 */
 .slider_btn {
     position: absolute;
     top: 50%;
@@ -182,8 +178,8 @@ body {
     padding: 10px;
     cursor: pointer;
     z-index: 1;
-    width: 40px; /* 버튼의 너비 설정 */
-    height: 40px; /* 버튼의 높이 설정 */
+    width: 40px;
+    height: 40px;
 }
 
 .left_btn {
@@ -211,8 +207,7 @@ body {
     background-color: #FFFEF0;
 }
 
-
-.gps_popup_button{
+.gps_popup_button {
     padding: 10px;
     border: 1px solid #4D3E3E;
     border-radius: 10px;
@@ -224,80 +219,82 @@ body {
     align-items: center;
 }
 
-
-
-/*changeMain css*/
-
-.custom-card {
-    border-radius: 300px 30px 30px 30px; /* 왼쪽 위를 더 크게 둥글게 */
-}
-
-.scroll-downs {
+.overlay {
     position: absolute;
-    bottom: 16px; /* 화면 하단에서 약간의 여백 */
-    left: 50%; /* 수평 중앙 정렬 */
-    transform: translateX(-50%); /* 수평 중앙으로 이동 */
-    width: 34px;
-    height: 55px;
-    z-index: 10;
-    opacity: 1;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 50%;
+    background: rgba(255, 255, 255, 0.7);
 }
 
-.mousey {
-    width: 3px;
-    padding: 10px 15px;
-    height: 35px;
-    border: 2px solid #FF6F61;
-    border-radius: 25px;
-    opacity: 0.75;
-    box-sizing: content-box;
-}
-
-.scroller {
-    width: 3px;
-    height: 10px;
-    border-radius: 25%;
-    background-color: #FF6F61;
-    animation-name: scroll;
-    animation-duration: 2.2s;
-    animation-timing-function: cubic-bezier(.15, .41, .69, .94);
-    animation-iteration-count: infinite;
-}
-
-@keyframes scroll {
-    0% { opacity: 0; }
-    10% { transform: translateY(0); opacity: 1; }
-    100% { transform: translateY(15px); opacity: 0; }
-}
-
-/* 기본 스타일 */
-#login-button, #hospital-button {
-    transition: all 0.5s ease;
+.box3 {
     display: flex;
-    align-items: center;
     justify-content: center;
-    background-color: transparent;
+    position: relative;
 }
 
-#login-button i, #hospital-button i{
-    color: #7DAF82;
+.container {
+    padding-top: 100px;
+    display: flex;
+    justify-content: end;
 }
 
-/* 둥근 아이콘 상태 */
-#login-button.rounded, #hospital-button.rounded {
-    width: 64px;
-    height: 64px;
-    background-color: #7DAF82;
-    border-color: #7DAF82;
-    justify-content: center;
+.svg-box {
+    width: 350px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    background: white;
+    animation: pulse 5s infinite;
+    margin: 40px 30px;
+    box-shadow: 8px 0 15px rgba(0, 0, 0, 0.2);
+    transition: box-shadow 0.3s ease, transform 0.3s ease;
     align-items: center;
+    border-radius: 20px;
 }
 
-#login-button.rounded span, #hospital-button.rounded span {
-    display: none; /* 둥근 상태에서 텍스트 숨김 */
+.svg-box:hover {
+    animation: none;
 }
 
-#login-button.rounded i, #hospital-button.rounded i {
-    font-size: 1.5em;
-    color: white; /* 둥근 상태에서 아이콘 색상 */
+.svg-title {
+    width: 300px;
+    margin-top: 40px;
+    text-align: center;
+}
+
+.svg-icon {
+    display: inline-block;
+    width: 300px;
+    height: 300px;
+}
+
+.svg-text {
+    width: 300px;
+    height: 100px;
+    margin-bottom: 40px;
+}
+
+.flat-filled .icon > path,
+.flat-filled .icon > .lightning {
+    fill: #ff6f61;
+    transition: fill 0.3s ease;
+}
+
+.flat-filled:hover {
+    box-shadow: 0 15px 30px rgba(0, 0, 0, 0.4);
+    transform: scale(1.1);
+}
+
+@keyframes pulse {
+    0% {
+        transform: scale(1);
+    }
+    50% {
+        transform: scale(1.1);
+    }
+    100% {
+        transform: scale(1);
+    }
 }
