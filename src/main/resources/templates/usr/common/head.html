@@ -176,7 +176,6 @@
                      th:onclick="'this.nextElementSibling.classList.toggle(&quot;tw-hidden&quot;)'"/>
 
                 <div class="tw-hidden head_profile_bar tw-z-30 tw-cursor-default tw-mt-[15px] tw-absolute tw-w-[400px] tw-h-[350px] tw-bg-[#FFF3CD] tw-border tw-border-[#4D3E3E] tw-rounded-[30px] tw-flex tw-flex-col tw-items-center tw-justify-center tw-gap-2 tw-right-0">
-                    <div class="head_profile_id tw-text-[#4D3E3E]" th:text="${member.getLoginId}">user01</div>
                     <img th:if="${member.extra__dogPoto != null}" th:src="@{${member.extra__dogPoto}}" alt="Profile Image"
                          class="head_profile_image tw-w-[100px] tw-h-[100px] tw-border tw-border-[#4D3E3E] tw-rounded-full"/>
                     <img th:if="${member.extra__dogPoto == null}"
