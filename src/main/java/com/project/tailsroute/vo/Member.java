@@ -18,7 +18,6 @@ public class Member {
     private int authLevel;
     private String name;
     private String nickname;
-    private int gender;
     private String cellphoneNum;
     private boolean delStatus;
     private String delDate;

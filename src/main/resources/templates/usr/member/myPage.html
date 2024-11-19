@@ -16,13 +16,10 @@
             <div><label>회원번호</label><span class="myPage_text" th:text="${member.id} + '번'"></span></div>
             <div><label>등록일시</label><span class="myPage_text" th:text="${member.regDate}"></span></div>
             <div><label>수정일시</label><span class="myPage_text" th:text="${member.updateDate}"></span></div>
-            <div><label>아이디</label><span class="myPage_text" th:text="${member.loginId}"></span></div>
             <div><label>등급</label><span class="myPage_text"
                                         th:text="(${member.authLevel == 3 ? '일반회원' : '관리자'})"></span></div>
             <div><label>이름</label><span class="myPage_text" th:text="${member.name}"></span></div>
             <div><label>닉네임</label><span class="myPage_text" th:text="${member.nickname}"></span></div>
-            <div><label>성별</label><span class="myPage_text" th:text="(${member.gender == 0 ? '여자' : '남자'})"></span>
-            </div>
             <div><label>전화번호</label><span class="myPage_text" th:text="${member.cellphoneNum}"></span></div>
         </div>
         <div class="upload_button_wrapper">
