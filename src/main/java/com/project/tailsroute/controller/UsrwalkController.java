@@ -12,7 +12,9 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Controller
 public class UsrwalkController {
@@ -29,8 +31,8 @@ public class UsrwalkController {
         this.walkService = walkService;
     }
 
-    @Value("${GOOGLE_MAP_API_KEY}")
-    private String googleRouteApiKey;
+    @Value("${NAVER_API}")
+    private String NaverApiKey;
 
     @GetMapping("/usr/walk/page")
     public String showWalk(Model model) {
@@ -47,7 +49,7 @@ public class UsrwalkController {
             return "redirect:/usr/member/login";
         }
 
-        model.addAttribute("GOOGLE_ROUTE_API_KEY", googleRouteApiKey);
+        model.addAttribute("NAVER_API", NaverApiKey);
         model.addAttribute("isLogined", isLogined);
 
         return "usr/walk/page";
@@ -67,7 +69,7 @@ public class UsrwalkController {
             return "redirect:/usr/member/login";
         }
 
-        model.addAttribute("GOOGLE_ROUTE_API_KEY", googleRouteApiKey);
+        model.addAttribute("NAVER_API", NaverApiKey);
         model.addAttribute("isLogined", isLogined);
 
         return "usr/walk/write";
@@ -100,10 +102,14 @@ public class UsrwalkController {
     public List<Walk> getWalks(@RequestParam int memberId) {
         return walkService.findWalksByMemberId(memberId);
     }
-    @DeleteMapping("/usr/walk/delete")
-    public ResponseEntity<String> deleteWalks(@RequestParam int id) {
-        walkService.deleteWalks(id);
-        return ResponseEntity.ok("{\"message\":\"삭제 성공\"}"); // 성공 메시지 포함
+
+    @GetMapping("/usr/walk/getRoutePicture")
+    @ResponseBody
+    public ResponseEntity<Map<String, Object>> findRoutePicture(@RequestParam String routeName, @RequestParam String purchaseDate, @RequestParam Double routedistance) {
+        Map<String, Object> result = new HashMap<>();
+        result.put("path", walkService.findRoutePicture(routeName, purchaseDate, routedistance));
+        // JSON 형식으로 반환
+        return ResponseEntity.ok(result);
     }
     @PutMapping("/usr/walk/update")
     public ResponseEntity<String> updatedeleteWalks(@RequestBody Walk walk) {
@@ -111,6 +117,22 @@ public class UsrwalkController {
                 walk.getRouteName(),
                 walk.getPurchaseDate(),
                 walk.getId()
+        );
+        return ResponseEntity.ok("{\"message\":\"수정 성공\"}");
+    }
+
+    @DeleteMapping("/usr/walk/delete")
+    public ResponseEntity<String> deleteWalks(@RequestParam int id) {
+        walkService.deleteWalks(id);
+        return ResponseEntity.ok("{\"message\":\"삭제 성공\"}"); // 성공 메시지 포함
+    }
+    @PutMapping("/usr/walk/updateLikeStatus")
+    public ResponseEntity<String> updateIsLiked(@RequestBody Walk walk) {
+        walkService.updateIsLiked(
+                walk.getIsLiked(),
+                walk.getRouteName(),
+                walk.getPurchaseDate(),
+                walk.getRoutedistance()
         );
         return ResponseEntity.ok("{\"message\":\"수정 성공\"}");
     }

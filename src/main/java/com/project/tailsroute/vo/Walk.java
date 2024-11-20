@@ -18,4 +18,5 @@ public class Walk {
     private String routePicture;
     private double routedistance;
     private String location;
+    private int isLiked;
 }
