@@ -21,6 +21,7 @@ public class Member {
     private String cellphoneNum;
     private boolean delStatus;
     private String delDate;
+    private int socialLoginStatus;
 
     private String extra__dogPoto;
 

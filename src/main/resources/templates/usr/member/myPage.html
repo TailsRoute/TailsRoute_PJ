@@ -9,24 +9,44 @@
 <div class="container">
 
     <div class="myPage">
-        <div class="profile tw-p-5">
-            <div class="profile_title">사용자 정보</div>
-        </div>
-        <div class="page_body" th:if="${member != null}">
-            <div><label>회원번호</label><span class="myPage_text" th:text="${member.id} + '번'"></span></div>
-            <div><label>등록일시</label><span class="myPage_text" th:text="${member.regDate}"></span></div>
-            <div><label>수정일시</label><span class="myPage_text" th:text="${member.updateDate}"></span></div>
-            <div><label>등급</label><span class="myPage_text"
-                                        th:text="(${member.authLevel == 3 ? '일반회원' : '관리자'})"></span></div>
-            <div><label>이름</label><span class="myPage_text" th:text="${member.name}"></span></div>
-            <div><label>닉네임</label><span class="myPage_text" th:text="${member.nickname}"></span></div>
-            <div><label>전화번호</label><span class="myPage_text" th:text="${member.cellphoneNum}"></span></div>
-        </div>
-        <div class="upload_button_wrapper">
-            <button class="upload_button"
-                    th:onclick="'location.href=\'../member/modify?memberId=' + ${member.id} + '\''">수정
-            </button>
-        </div>
+        <form onsubmit="return MemberModify__submit(this);" th:action="@{/usr/member/modify}" method="post">
+            <div class="profile tw-p-5">
+                <div class="profile_title">사용자 정보</div>
+            </div>
+            <div class="page_body" th:if="${member != null}">
+                <div><label>회원번호</label><span class="myPage_text" th:text="${member.id} + '번'"></span></div>
+                <div><label>등록일시</label><span class="myPage_text" th:text="${member.regDate}"></span></div>
+                <div><label>수정일시</label><span class="myPage_text" th:text="${member.updateDate}"></span></div>
+                <div><label>등급</label><span class="myPage_text"
+                                            th:text="(${member.authLevel == 3 ? '일반회원' : '관리자'})"></span></div>
+                <div class="name1">
+                    <label>이름</label>
+                    <span class="myPage_text" th:text="${member.name}"></span></div>
+                <div class="name2" style="display: none">
+                    <label>이름</label>
+                    <input name="name" class="myPage_text" th:value="${member.name}"></div>
+                <div class="nickname1">
+                    <label>닉네임</label>
+                    <span class="myPage_text" th:text="${member.nickname}"></span>
+                </div>
+                <div class="nickname2" style="display: none">
+                    <label>닉네임</label>
+                    <input name="nickname" class="myPage_text" th:value="${member.nickname}">
+                </div>
+                <div class="cellphone1">
+                    <label>전화번호</label>
+                    <span class="myPage_text" th:text="${member.cellphoneNum}"></span>
+                </div>
+                <div class="cellphone2" style="display: none">
+                    <label>전화번호</label>
+                    <input name="cellphoneNum" class="myPage_text" th:value="${member.cellphoneNum}">
+                </div>
+            </div>
+            <div class="upload_button_wrapper">
+                <button type="button" class="upload_button myPage_modify_button" th:if="${member.socialLoginStatus == 0}">수정</button>
+                <button type="button" style="display: none" class="upload_button myPage_exit_button">취소</button>
+            </div>
+        </form>
     </div>
     <div class="dogPage">
         <div class="profile tw-p-5">
@@ -70,11 +90,13 @@
             <div th:if="${dog.comPortName != null}">
                 <button class="upload_button"
                         th:if="${gpsAlert != null && gpsAlert.getOnOff() == 0}"
-                        th:onclick="'location.href=\'/usr/gpsAlert/toggleOnOff?value=1&dogId=' + ${dog.id} + '\';'">GPS 끄기
+                        th:onclick="'location.href=\'/usr/gpsAlert/toggleOnOff?value=1&dogId=' + ${dog.id} + '\';'">GPS
+                    끄기
                 </button>
                 <button class="upload_button"
                         th:if="${gpsAlert != null && gpsAlert.getOnOff() == 1}"
-                        th:onclick="'location.href=\'/usr/gpsAlert/toggleOnOff?value=0&dogId=' + ${dog.id} + '\';'">GPS 켜기
+                        th:onclick="'location.href=\'/usr/gpsAlert/toggleOnOff?value=0&dogId=' + ${dog.id} + '\';'">GPS
+                    켜기
                 </button>
                 <button class="upload_button"
                         th:if="${locationChack == false}"
@@ -99,4 +121,67 @@
         </div>
     </div>
 </div>
+<div class="myPage_popup passwordCheck">
+    <label>
+        <div class="tw-p-[10px]">비밀번호 확인</div>
+        <input class="passwordCheck_input" type="text" placeholder="비밀번호를 입력해주세요">
+    </label>
+    <button class="passwordCheck_button">확인</button>
+</div>
+
+<script>
+    $(document).ready(function () {
+        const memberLoginPw = "[[${member.loginPw}]]";
+
+        $('.passwordCheck_button').click(function () {
+            const userInput = $('.passwordCheck_input').val();
+
+            if (userInput === memberLoginPw) {
+                $('.passwordCheck').hide();
+                $('.name1').hide();
+                $('.nickname1').hide();
+                $('.cellphone1').hide();
+                $('.name2').show();
+                $('.nickname2').show();
+                $('.cellphone2').show();
+                $('.myPage_exit_button').show();
+                $('.myPage_modify_button').attr('type', 'submit');
+            } else {
+                alert('비밀번호가 일치하지 않습니다.');
+            }
+        });
+
+        $('.myPage_exit_button').click(function (){
+            $('.name1').show();
+            $('.nickname1').show();
+            $('.cellphone1').show();
+            $('.name2').hide();
+            $('.nickname2').hide();
+            $('.cellphone2').hide();
+            $('.myPage_exit_button').hide();
+            $('.myPage_modify_button').attr('type', 'button');
+        })
+    });
+
+    function MemberModify__submit(form) {
+        const name = form.name.value.trim(); // 이름 입력값
+        const nickname = form.nickname.value.trim(); // 닉네임 입력값
+        const cellphoneNum = form.cellphoneNum.value.trim(); // 전화번호 입력값
+
+        if (!name) {
+            alert('이름을 입력해주세요.');
+            return false;
+        } else if (!nickname) {
+            alert('닉네임을 입력해주세요.');
+            return false;
+        } else if (!cellphoneNum) {
+            alert('전화번호를 입력해주세요.');
+            return false;
+        } else {
+            return true;
+        }
+    }
+
+</script>
+
 </body>

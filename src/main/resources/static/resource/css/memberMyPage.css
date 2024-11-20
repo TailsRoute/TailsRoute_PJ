@@ -48,8 +48,9 @@ body {
 }
 
 .myPage_text{
-    padding: 10px;
+    padding-left: 10px;
     font-weight: bold;
+    border-radius: 10px;
 }
 
 .page_body{
@@ -70,4 +71,21 @@ body {
     border-radius: 10px;
     height: 40px;
     width: 100px;
+}
+
+.myPage_popup {
+    display: none;
+    background: #f9f5eb;
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    padding: 10px;
+    border: 1px solid black;
+    border-radius: 10px;
+}
+
+.passwordCheck > label > input{
+    width: 200px;
+    padding: 10px;
 }

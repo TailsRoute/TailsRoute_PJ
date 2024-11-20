@@ -107,13 +107,13 @@ public class UsrDogController {
             number++;
 
             String uploadDir = "uploads" + File.separator + "photo"; // 저장할 디렉토리
-            String filePath = uploadDir + File.separator + "missing" + number + ".png"; // 저장할 파일 경로
+            String filePath = uploadDir + File.separator + "dog" + number + ".png"; // 저장할 파일 경로
             try {
                 // 파일 저장 전에 이미지 크기 조절
                 Thumbnails.of(file.getInputStream()).size(800, 800) // 원하는 사이즈로 조정
                         .toFile(new File(filePath));
 
-                photoPath = "/uploads/photo/missing" + number + ".png"; // 웹에서 접근할 수 있는 경로
+                photoPath = "/uploads/photo/dog" + number + ".png"; // 웹에서 접근할 수 있는 경로
             } catch (IOException e) {
                 return "redirect:/usr/dog/add";
             }
