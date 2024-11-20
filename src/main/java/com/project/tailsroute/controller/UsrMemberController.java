@@ -145,4 +145,11 @@ public class UsrMemberController {
         return "usr/member/join";
     }
 
+    @PostMapping("/usr/member/modify")
+    public String doModify(@RequestParam String name, @RequestParam String nickname, @RequestParam String cellphoneNum) {
+
+        memberService.memberModify(rq.getLoginedMemberId(), name, nickname, cellphoneNum);
+
+        return "redirect:/usr/member/myPage";
+    }
 }

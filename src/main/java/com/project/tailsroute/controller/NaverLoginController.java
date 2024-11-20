@@ -169,7 +169,7 @@ public class NaverLoginController {
                 // 새로운 회원인 경우 -> 회원가입 처리
                 String loginPw = generateRandomPassword();  // 랜덤 비밀번호 생성
 
-                memberService.signUp(loginId, loginPw, name, nickname, cellphoneNum);   // 세션에 로그인 정보 저장
+                memberService.signUp(loginId, loginPw, name, nickname, cellphoneNum, 1);   // 세션에 로그인 정보 저장
 
                 Member newMember = memberService.getMemberByLoginId(loginId);
                 rq.login(newMember);

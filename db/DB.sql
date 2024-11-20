@@ -13,12 +13,12 @@ CREATE TABLE `member`(
                          `name` CHAR(20) NOT NULL COMMENT '오프라인 이름',
                          nickname CHAR(20) NOT NULL COMMENT '온라인 이름',
                          cellphoneNum CHAR(20) NOT NULL COMMENT '전화번호',
+                         socialLoginStatus TINYINT(1) UNSIGNED NOT NULL DEFAULT 0 COMMENT '소셜 로그인 여부 (0=일반 회원, 1=소셜 로그인 회원)',
                          delStatus TINYINT(1) UNSIGNED NOT NULL DEFAULT 0 COMMENT '탈퇴 여부 (0=탈퇴 전, 1=탈퇴 후)',
                          delDate DATETIME COMMENT '탈퇴 날짜'
 );
 
 ## 회원정보 테이블 테스트 데이터
-
 INSERT INTO `member` SET
                          regDate = '2024-02-05 14:15:00',
                          updateDate = '2024-03-10 16:30:00',
@@ -167,7 +167,9 @@ updateDate = DATE_ADD(NOW(), INTERVAL (FLOOR(RAND() * 864000) - 864000) SECOND),
 memberId = FLOOR(1 + RAND() * 6),
 boardId = FLOOR(1 + RAND() * 3),
 title = CONCAT('제목', FLOOR(RAND() * 10000)),
-`body` = CONCAT('내용', FLOOR(RAND() * 10000));
+`body` = CONCAT('내용', FLOOR(RAND() * 10000)),
+hitCount = FLOOR(1 + RAND() * 100),
+goodReactionPoint = FLOOR(1 + RAND() * 100);
 
 ## 게시판 테이블
 CREATE TABLE board(

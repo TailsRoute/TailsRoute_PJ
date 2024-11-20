@@ -23,7 +23,7 @@ public class MemberService {
 
 
 
-    public ResultData<Integer> signUp(String loginId, String loginPw, String name, String nickname, String cellphoneNum) {
+    public ResultData<Integer> signUp(String loginId, String loginPw, String name, String nickname, String cellphoneNum, int socialLoginStatus) {
         Member existsMember = getMemberByLoginId(loginId);
 
         if (existsMember != null) {
@@ -31,7 +31,7 @@ public class MemberService {
         }
 
 
-        memberRepository.doSignUp(loginId, loginPw, name, nickname, cellphoneNum);
+        memberRepository.doSignUp(loginId, loginPw, name, nickname, cellphoneNum, socialLoginStatus);
 
         int id = memberRepository.getLastInsertId();
 
@@ -39,4 +39,7 @@ public class MemberService {
     }
 
 
+    public void memberModify(int loginedMemberId, String name, String nickname, String cellphoneNum) {
+        memberRepository.memberModify(loginedMemberId, name, nickname, cellphoneNum);
+    }
 }
