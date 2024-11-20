@@ -16,23 +16,3 @@ function deleteLocation(dogId) {
         }
     });
 }
-
-$(document).ready(function () {
-    $('.myPage_modify_button').click(function (event) {
-        if ($(event.target).attr('type') === 'button') {
-            event.stopPropagation();
-            $('.passwordCheck').fadeIn();
-        }
-    });
-
-    $(document).click(function (event) {
-        if (!$(event.target).closest('.passwordCheck').length && !$(event.target).closest('.myPage_modify_button').length) {
-            $('.passwordCheck').fadeOut();
-        }
-    });
-
-    $('.passwordCheck').click(function (event) {
-        event.stopPropagation();
-    });
-});
-

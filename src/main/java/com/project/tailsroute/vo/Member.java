@@ -19,6 +19,7 @@ public class Member {
     private String name;
     private String nickname;
     private String cellphoneNum;
+    private String email;
     private boolean delStatus;
     private String delDate;
     private int socialLoginStatus;
