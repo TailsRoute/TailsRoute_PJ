@@ -22,11 +22,18 @@ public class WalkService {
                 walk.getRouteName(),
                 walk.getPurchaseDate(),
                 walk.getRoutePicture(),
-                walk.getRoutedistance()
+                walk.getRoutedistance(),
+                walk.getIsLiked()
         );
     }
     public List<Walk> findWalksByMemberId(int memberId) {
         return walkRepository.findByMemberId(memberId);
+    }
+    public String findRoutePicture(String routeName, String purchaseDate, Double routedistance){
+        return walkRepository.findRoutePicture(routeName,purchaseDate,routedistance);
+    }
+    public void updateIsLiked (int isLiked,String routeName, String purchaseDate, double routedistance) {
+        walkRepository.updateIsLiked(isLiked,routeName, purchaseDate,routedistance);
     }
     public void updateWalks(String routeName, String purchaseDate, int id) {
         walkRepository.updateWalks(routeName, purchaseDate,id);
