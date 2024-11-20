@@ -76,17 +76,21 @@
         });
     });
 
+    $(document).ready(function () {
+        // 사이드 메뉴 클릭 시 부드럽게 이동
+        $('#sidebar a').on('click', function (e) {
+            e.preventDefault();
+            const target = $($(this).attr('href'));
+            if (target.length) {
+                $('html, body').animate({
+                    scrollTop: target.offset().top
+                }, 800);
+            }
+        });
 
-    function kakaoLogout() {
-        if (Kakao.Auth.getAccessToken()) {
-            Kakao.Auth.logout(function() {
-                alert("로그아웃 되었습니다.");
-                window.location.href = "/logout"; // 서버 로그아웃 처리
-            });
-        } else {
-            alert("이미 로그아웃 상태입니다.");
-        }
-    }
+        // 초기 스크롤 위치 설정
+        $("html").animate({scrollTop: 0}, 10);
+    });
 
 </script>
 
@@ -94,6 +98,7 @@
 <script src="/resource/js/main.js"></script>
 
 <main id="mainContent" class="tw-w-full tw-flex tw-flex-col">
+
 
     <!-- 로그인 팝업 -->
     <div id="loginModal"
@@ -146,23 +151,47 @@
             </div>
         </div>
     </div>
+    <!-- 사이드 메뉴 -->
+    <div id="sidebar"
+         class="tw-fixed tw-top-1/2 tw-left-4 tw-transform -tw-translate-y-1/2 tw-rounded-lg tw-w-56 tw-py-6 tw-flex tw-flex-col tw-items-start tw-space-y-6">
+        <a href="#section1"
+           class="tw-flex tw-items-center tw-w-full tw-py-3 tw-px-4 tw-text-[#3A3A3A] tw-font-medium tw-tracking-wider hover:tw-text-green-400 tw-transition-all">
+            <span class="tw-text-base"> 홈페이지</span>
+        </a>
+        <a href="#section2"
+           class="tw-flex tw-items-center tw-w-full tw-py-3 tw-px-4 tw-text-[#3A3A3A] tw-font-medium tw-tracking-wider hover:tw-text-green-400 tw-transition-all">
+            <span class="tw-text-base"> 훈련영상</span>
+        </a>
+        <a href="#section3"
+           class="tw-flex tw-items-center tw-w-full tw-py-3 tw-px-4 tw-text-[#3A3A3A] tw-font-medium tw-tracking-wider hover:tw-text-green-400 tw-transition-all">
+            <span class="tw-text-base"> 실종신고</span>
+        </a>
+        <a href="#section4"
+           class="tw-flex tw-items-center tw-w-full tw-py-3 tw-px-4 tw-text-[#3A3A3A] tw-font-medium tw-tracking-wider hover:tw-text-green-400 tw-transition-all">
+            <span class="tw-text-base"> Contact us</span>
+        </a>
+    </div>
 
-    <!-- 첫 번째 화면 (메인 화면) -->
     <section id="section1"
              class="content tw-w-full tw-h-screen tw-flex tw-items-center tw-justify-center tw-bg-[#F9F5EB]">
-        <div class="custom-card tw-bg-[#EDE0D4] tw-rounded-xl tw-shadow-md tw-flex tw-h-[80%] tw-w-[80%]">
-            <img class="tw-ml-10 tw-mt-10 tw-object-cover tw-rounded-lg" src="/resource/photo/main_dog.png"
+        <div class="custom-card tw-bg-[#EDE0D4] tw-rounded-xl tw-shadow-md tw-flex tw-flex-col md:tw-flex-row tw-h-[90%] md:tw-h-[80%] tw-w-[80%]">
+            <!-- 이미지 영역 -->
+            <img class="tw-mx-auto md:tw-ml-10 tw-mt-10 tw-object-cover tw-rounded-lg tw-max-h-64 md:tw-max-h-full"
+                 src="/resource/photo/main_dog.png"
                  alt="Dog Image">
-            <div class="tw-ml-8 tw-flex tw-flex-col tw-justify-center tw-h-full tw-mt-20">
-                <h1 class="tw-text-6xl md:tw-text-6xl tw-font-bold tw-mb-5">
+
+            <!-- 텍스트 영역 -->
+            <div class="tw-px-6 md:tw-ml-8 tw-flex tw-flex-col tw-justify-center tw-h-auto tw-text-center md:tw-text-left tw-mt-8 md:tw-mt-0">
+                <h1 class="tw-text-4xl md:tw-text-6xl tw-font-bold tw-mb-4">
                     반려견과 함께<br>반려견을 위한 공간
                 </h1>
-                <p class="tw-text-xl tw-mb-44">
+                <p class="tw-text-lg md:tw-text-xl tw-mb-10">
                     반려견 케어를 위한 종합 관리 플랫폼
                 </p>
             </div>
         </div>
     </section>
+
 
     <!-- 두 번째 화면 -->
     <section id="section2"
@@ -212,7 +241,8 @@
             <i class="bi bi-person-fill-check tw-text-gray-700 tw-text-2xl"></i>
             <span class="tw-text-gray-700 tw-font-medium" style="margin-left: 8px;"
                   th:text="'안녕하세요, ' + ${username} + '님!'"></span>
-            <a href="/usr/member/logout" onclick="kakaoLogout()" class="tw-text-sm tw-font-medium tw-text-red-500 hover:tw-underline"
+            <a href="/usr/member/logout" onclick="kakaoLogout()"
+               class="tw-text-sm tw-font-medium tw-text-red-500 hover:tw-underline"
                style="margin-left: auto;">로그아웃</a>
         </div>
 
@@ -228,7 +258,7 @@
 
 
     <!-- 알람 버튼 -->
-    <div class="button-style tw-flex tw-items-center tw-justify-center tw-w-20 tw-h-20 tw-rounded-full tw-bg-[#FF7F50] tw-cursor-pointer">
+    <div class="button-style tw-flex tw-items-center tw-justify-center tw-w-[70px] tw-h-[70px] tw-rounded-full tw-bg-[#FF7F50] tw-cursor-pointer">
         <i class="bi bi-bell-fill tw-text-white tw-text-2xl"></i>
     </div>
 </div>
@@ -241,4 +271,4 @@
 
 
 </body>
-</html>
+</html>x
