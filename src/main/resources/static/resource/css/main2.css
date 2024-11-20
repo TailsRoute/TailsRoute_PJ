@@ -1,300 +1,75 @@
-body {
-    background: #ede0d4;
-    color: #4D3E3E;
-    white-space: normal;
-    word-break: keep-all;
+/*changeMain css*/
+
+.custom-card {
+    border-radius: 300px 30px 30px 30px; /* 왼쪽 위를 더 크게 둥글게 */
 }
 
-.bo {
-    border: 1px solid;
-}
-
-.left_box, .right_box {
-    top: 0;
+.scroll-downs {
     position: absolute;
-    background-color: #FFF3CD;
-    width: 50vw;
-    z-index: -1;
-}
-
-.left_box {
-    left: 0;
-    height: 805px;
-}
-
-.right_box {
-    right: 0;
-    height: 718px;
-}
-
-.main_image, .main_box {
-    width: 1440px;
-    height: 924px;
-    margin: auto;
-    background: #FFFEF0;
-}
-
-.main_text {
-    left: 200px;
-    top: 200px;
-    width: 562px;
-    white-space: normal;
-    font-size: 27px;
-    font-weight: bold;
-}
-
-.main_box_title {
-    left: 120px;
-    top: 70px;
-    width: 1200px;
-    padding: 30px;
-    font-size: 30px;
-    font-weight: bold;
-}
-
-.main_box_body {
-    left: 120px;
-    top: 150px;
-    width: 1200px;
-    padding: 30px;
-    font-size: 19px;
-}
-
-.main_button {
-    background: white;
-    margin-top: 100px;
-    padding: 20px 100px;
-    border-radius: 30px;
-    display: inline-block;
-}
-
-.community, .records, .shopping, .health {
-    background-size: cover;
-    background-position: center;
-    background-repeat: no-repeat;
-    border-radius: 20px;
-}
-
-.community {
-    background: url(https://framerusercontent.com/images/ubSuEXPWtpN56eHbnEnPHhIqg.jpg?scale-down-to=1024);
-    width: 400px;
-    height: 560px;
-    left: 105px;
-    bottom: 50px;
-}
-
-.records {
-    background: url(https://i0.pickpik.com/photos/867/398/408/diary-journal-pen-notebook-preview.jpg);
-    width: 400px;
-    height: 270px;
-    left: 525px;
-    bottom: 340px;
-}
-
-.shopping {
-    background: url(https://img.freepik.com/premium-photo/jack-russel-dog-puppy-looks-into-empty-shopping-trolley-cart-blue-wall_77190-4574.jpg?w=1380);
-    width: 400px;
-    height: 270px;
-    left: 945px;
-    bottom: 340px;
-}
-
-.health {
-    background: url(https://cdn.pixabay.com/photo/2022/04/25/15/50/dogs-7156260_1280.jpg);
-    width: 820px;
-    height: 270px;
-    left: 525px;
-    bottom: 50px;
-}
-
-.hover_text {
-    width: 100%;
-    height: 100%;
-    left: 0;
-    top: 0;
-    border: 1px solid inherit;
-    border-radius: 20px;
-    background: rgba(19, 19, 19, 0.73);
-    color: white;
-    text-align: left;
-    opacity: 0;
-    visibility: hidden;
-    transition: opacity 0.5s ease, visibility 0.5s ease;
-}
-
-.hover_text_title {
-    font-size: 30px;
-    padding: 20px;
-    height: 50%;
-}
-
-.hover_text_body {
-    padding: 20px;
-    height: 50%;
-}
-
-.hover_view:hover .hover_text {
+    bottom: 16px; /* 화면 하단에서 약간의 여백 */
+    left: 50%; /* 수평 중앙 정렬 */
+    transform: translateX(-50%); /* 수평 중앙으로 이동 */
+    width: 34px;
+    height: 55px;
+    z-index: 10;
     opacity: 1;
-    visibility: visible;
 }
 
-.slider_wrapper {
-    position: absolute;
-    overflow: hidden;
-    width: 1260px;
-    height: 400px;
-    max-width: 1240px;
-    left: 105px;
-    bottom: 200px;
+.mousey {
+    width: 3px;
+    padding: 10px 15px;
+    height: 35px;
+    border: 2px solid #FF6F61;
+    border-radius: 25px;
+    opacity: 0.75;
+    box-sizing: content-box;
 }
 
-.slider_container {
+.scroller {
+    width: 3px;
+    height: 10px;
+    border-radius: 25%;
+    background-color: #FF7F50;
+    animation-name: scroll;
+    animation-duration: 2.2s;
+    animation-timing-function: cubic-bezier(.15, .41, .69, .94);
+    animation-iteration-count: infinite;
+}
+
+@keyframes scroll {
+    0% { opacity: 0; }
+    10% { transform: translateY(0); opacity: 1; }
+    100% { transform: translateY(15px); opacity: 0; }
+}
+
+/* 기본 스타일 */
+#login-button, #hospital-button {
+    transition: all 0.5s ease;
     display: flex;
-    transition: transform 0.5s ease;
-}
-
-.misssing_item {
-    min-width: 380px;
-    height: 100%;
-    border-radius: 20px;
-    overflow: hidden;
-    margin-right: 50px;
-    box-shadow: 8px 8px 15px rgba(0, 0, 0, 0.2);
-}
-
-.misssing_image {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-}
-
-.slider_btn {
-    position: absolute;
-    top: 50%;
-    transform: translateY(-50%);
-    background-color: rgba(0, 0, 0, 0.5);
-    color: white;
-    border: none;
-    padding: 10px;
-    cursor: pointer;
-    z-index: 1;
-    width: 40px;
-    height: 40px;
-}
-
-.left_btn {
-    left: 10px;
-    display: none;
-}
-
-.right_btn {
-    right: 10px;
-    display: none;
-}
-
-.gps_popup, .gps_popup2 {
-    border: 1px solid;
-    border-radius: 10px;
-    padding: 30px;
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    display: flex;
-    flex-direction: column;
     align-items: center;
     justify-content: center;
-    background-color: #FFFEF0;
+    background-color: transparent;
 }
 
-.gps_popup_button {
-    padding: 10px;
-    border: 1px solid #4D3E3E;
-    border-radius: 10px;
-    height: 40px;
-    width: 100px;
-    text-align: center;
-    display: flex;
+#login-button i, #hospital-button i{
+    color: #FF7F50;
+}
+
+/* 둥근 아이콘 상태 */
+#login-button.rounded, #hospital-button.rounded {
+    width: 70px;
+    height: 70px;
+    background-color: #FF7F50;
+    border-color: #FF7F50;
     justify-content: center;
     align-items: center;
 }
 
-.overlay {
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    width: 100%;
-    height: 50%;
-    background: rgba(255, 255, 255, 0.7);
+#login-button.rounded span, #hospital-button.rounded span {
+    display: none; /* 둥근 상태에서 텍스트 숨김 */
 }
 
-.box3 {
-    display: flex;
-    justify-content: center;
-    position: relative;
-}
-
-.container {
-    padding-top: 100px;
-    display: flex;
-    justify-content: end;
-}
-
-.svg-box {
-    width: 350px;
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-    background: white;
-    animation: pulse 5s infinite;
-    margin: 40px 30px;
-    box-shadow: 8px 0 15px rgba(0, 0, 0, 0.2);
-    transition: box-shadow 0.3s ease, transform 0.3s ease;
-    align-items: center;
-    border-radius: 20px;
-}
-
-.svg-box:hover {
-    animation: none;
-}
-
-.svg-title {
-    width: 300px;
-    margin-top: 40px;
-    text-align: center;
-}
-
-.svg-icon {
-    display: inline-block;
-    width: 300px;
-    height: 300px;
-}
-
-.svg-text {
-    width: 300px;
-    height: 100px;
-    margin-bottom: 40px;
-}
-
-.flat-filled .icon > path,
-.flat-filled .icon > .lightning {
-    fill: #ff6f61;
-    transition: fill 0.3s ease;
-}
-
-.flat-filled:hover {
-    box-shadow: 0 15px 30px rgba(0, 0, 0, 0.4);
-    transform: scale(1.1);
-}
-
-@keyframes pulse {
-    0% {
-        transform: scale(1);
-    }
-    50% {
-        transform: scale(1.1);
-    }
-    100% {
-        transform: scale(1);
-    }
+#login-button.rounded i, #hospital-button.rounded i {
+    font-size: 1.5em;
+    color: white; /* 둥근 상태에서 아이콘 색상 */
 }
