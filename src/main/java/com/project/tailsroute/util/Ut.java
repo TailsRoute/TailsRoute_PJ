@@ -68,6 +68,32 @@ public class Ut {
 				""", resultMsg, replaceUri);
     }
 
+    public static String rejoin(String resultCode, String msg, String trueUri, String falseUri) {
+        resultCode = (resultCode != null) ? resultCode : "";
+        msg = (msg != null) ? msg : "";
+        trueUri = (trueUri != null) ? trueUri : "/";
+        falseUri = (falseUri != null) ? falseUri : "/";
+
+        String resultMsg = resultCode + "/" + msg;
+
+        return Ut.f("""
+                <script>
+                    let resultMsg = '%s'.trim();
+
+                    if (resultMsg.length > 0) {
+                        let userConfirmed = confirm(resultMsg);
+                        if (userConfirmed) {
+                            location.replace('%s');
+                        } else {
+                            location.replace('%s');
+                        }
+                    } else {
+                        location.replace('%s');
+                    }
+                </script>
+                """, resultMsg, trueUri, falseUri, falseUri);
+    }
+
     public static String jsHistoryBack(String resultCode, String msg) {
         if (resultCode == null) {
             resultCode = "";

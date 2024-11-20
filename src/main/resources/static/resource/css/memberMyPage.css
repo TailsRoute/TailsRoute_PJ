@@ -85,7 +85,7 @@ body {
     border-radius: 10px;
 }
 
-.passwordCheck > label > input{
-    width: 200px;
+.checkInput{
+    width: 300px;
     padding: 10px;
 }

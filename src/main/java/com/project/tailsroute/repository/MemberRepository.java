@@ -29,8 +29,8 @@ public interface MemberRepository {
 			""")
     public Member getMemberByLoginId(String loginId);
 
-    @Insert("INSERT INTO `member` SET regDate = NOW(), updateDate = NOW(), loginId = #{loginId}, loginPw = #{loginPw}, `name` = #{name}, nickname = #{nickname}, cellphoneNum = #{cellphoneNum}, socialLoginStatus = #{socialLoginStatus}")
-    public void doSignUp(String loginId, String loginPw, String name, String nickname, String cellphoneNum, int socialLoginStatus);
+    @Insert("INSERT INTO `member` SET regDate = NOW(), updateDate = NOW(), loginId = #{loginId}, loginPw = #{loginPw}, `name` = #{name}, nickname = #{nickname}, cellphoneNum = #{cellphoneNum}, email = #{email}, socialLoginStatus = #{socialLoginStatus}")
+    public void doSignUp(String loginId, String loginPw, String name, String nickname, String cellphoneNum,String email, int socialLoginStatus);
 
     @Select("SELECT LAST_INSERT_ID();")
     public int getLastInsertId();
@@ -44,4 +44,21 @@ public interface MemberRepository {
             WHERE id = #{loginedMemberId}
             """)
     void memberModify(int loginedMemberId, String name, String nickname, String cellphoneNum);
+
+    @Update("""
+            UPDATE member
+            SET updateDate = NOW(),
+            delDate = NOW(),
+            delStatus = 1 
+            WHERE id = #{loginedMemberId}
+            """)
+    void memberDelStatus(int loginedMemberId);
+
+    @Update("""
+            UPDATE member
+            SET updateDate = NOW(),
+            delStatus = 0 
+            WHERE id = #{loginedMemberId}
+            """)
+    void memberReStatus(int loginedMemberId);
 }
