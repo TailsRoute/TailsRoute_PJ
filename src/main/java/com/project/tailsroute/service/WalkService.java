@@ -22,7 +22,8 @@ public class WalkService {
                 walk.getRouteName(),
                 walk.getPurchaseDate(),
                 walk.getRoutePicture(),
-                walk.getRoutedistance()
+                walk.getRoutedistance(),
+                walk.getIsLiked()
         );
     }
     public List<Walk> findWalksByMemberId(int memberId) {

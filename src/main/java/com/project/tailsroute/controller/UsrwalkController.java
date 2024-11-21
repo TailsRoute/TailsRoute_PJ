@@ -22,15 +22,15 @@ public class UsrwalkController {
     private final WalkService walkService;
 
     @Autowired
-    public UsrwalkController(Rq rq, GpsChackService gpsChackService, WeatherService weatherService,WalkService walkService) {
+    public UsrwalkController(Rq rq, GpsChackService gpsChackService, WeatherService weatherService, WalkService walkService) {
         this.rq = rq;
         this.gpsChackService = gpsChackService;
         this.weatherService = weatherService;
         this.walkService = walkService;
     }
 
-    @Value("${GOOGLE_MAP_API_KEY}")
-    private String googleRouteApiKey;
+    @Value("${NAVER_API}")
+    private String NaverApiKey;
 
     @GetMapping("/usr/walk/page")
     public String showWalk(Model model) {
@@ -47,11 +47,12 @@ public class UsrwalkController {
             return "redirect:/usr/member/login";
         }
 
-        model.addAttribute("GOOGLE_ROUTE_API_KEY", googleRouteApiKey);
+        model.addAttribute("NAVER_API", NaverApiKey);
         model.addAttribute("isLogined", isLogined);
 
         return "usr/walk/page";
     }
+
     @GetMapping("/usr/walk/write")
     public String showWalkwrite(Model model) {
         boolean isLogined = rq.isLogined();
@@ -67,11 +68,12 @@ public class UsrwalkController {
             return "redirect:/usr/member/login";
         }
 
-        model.addAttribute("GOOGLE_ROUTE_API_KEY", googleRouteApiKey);
+        model.addAttribute("NAVER_API", NaverApiKey);
         model.addAttribute("isLogined", isLogined);
 
         return "usr/walk/write";
     }
+
 
     // 날씨 정보 요청을 처리하는 메소드 추가
     @GetMapping("/usr/walk/getWeather")
@@ -82,10 +84,11 @@ public class UsrwalkController {
         gridCoordinate.setNy(ny); // 요청받은 ny 값 사용
 
         // 날씨 정보 가져오기
-        String weatherInfo = weatherService.getWeatherInfo(gridCoordinate,date, hour);
+        String weatherInfo = weatherService.getWeatherInfo(gridCoordinate, date, hour);
 
         return weatherInfo;
     }
+
     @PostMapping("/usr/walk/create") // POST 요청을 처리하는 메소드
     public ResponseEntity<String> createWalk(@RequestBody Walk walk) {
         try {
@@ -95,16 +98,19 @@ public class UsrwalkController {
             return new ResponseEntity<>("일정 생성 중 오류가 발생했습니다: " + e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
+
     @GetMapping("/usr/walk/get")
     @ResponseBody
     public List<Walk> getWalks(@RequestParam int memberId) {
         return walkService.findWalksByMemberId(memberId);
     }
+
     @DeleteMapping("/usr/walk/delete")
     public ResponseEntity<String> deleteWalks(@RequestParam int id) {
         walkService.deleteWalks(id);
         return ResponseEntity.ok("{\"message\":\"삭제 성공\"}"); // 성공 메시지 포함
     }
+
     @PutMapping("/usr/walk/update")
     public ResponseEntity<String> updatedeleteWalks(@RequestBody Walk walk) {
         walkService.updateWalks(
@@ -113,5 +119,33 @@ public class UsrwalkController {
                 walk.getId()
         );
         return ResponseEntity.ok("{\"message\":\"수정 성공\"}");
+    }
+
+    @GetMapping("/usr/walk/list")
+    public String showWalkList(Model model) {
+        boolean isLogined = rq.isLogined();
+
+        if (!isLogined) {
+            return "redirect:/usr/member/login"; // 로그인하지 않은 경우 로그인 페이지로 리다이렉트
+        }
+
+        // 로그인된 회원 정보 가져오기
+        Member member = rq.getLoginedMember();
+        int memberId = member.getId(); // 로그인된 회원의 ID 가져오기
+        model.addAttribute("member", member);
+        model.addAttribute("isLogined", isLogined);
+
+        // GPS 정보 가져오기 (필요한 경우 추가)
+        GpsChack gpsCheck = gpsChackService.chack(memberId);
+        model.addAttribute("gpsCheck", gpsCheck);
+
+        // 해당 회원의 경로 데이터 조회
+        List<Walk> walks = walkService.findWalksByMemberId(memberId);
+        model.addAttribute("walks", walks);
+
+        // Google Maps API 키 추가
+        model.addAttribute("NAVER_API", NaverApiKey);
+
+        return "usr/walk/list"; // 리스트 페이지로 이동
     }
 }

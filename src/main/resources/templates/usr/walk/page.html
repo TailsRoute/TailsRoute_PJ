@@ -7,7 +7,9 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Map Search</title>
-  <script async defer th:src="'https://maps.googleapis.com/maps/api/js?key=' + ${GOOGLE_ROUTE_API_KEY} + '&callback=initMap&libraries=places'"></script>
+  <script async defer
+          th:src="'https://openapi.map.naver.com/openapi/v3/maps.js?ncpClientId='+${NAVER_API}+'&submodules=geocoder&callback=initMap1'">
+  </script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
   <style>
     html {
