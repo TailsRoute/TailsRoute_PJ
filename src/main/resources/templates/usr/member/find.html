@@ -1,0 +1,188 @@
+<th:block th:replace="usr/common/head"/>
+<head>
+    <meta charset="UTF-8">
+    <title>아이디 / 비밀번호 찾기</title>
+    <style>
+        body {
+            background: #f9f5eb;
+            color: #4D3E3E;
+            white-space: normal;
+            word-break: keep-all;
+        }
+
+        .idPwPopup {
+            display: flex;
+            flex-direction: column;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            padding: 20px;
+            border: 1px solid black;
+            border-radius: 10px;
+            gap: 10px;
+        }
+
+        .idPwPopup_bar {
+            display: flex;
+            justify-content: center;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .idPwPopup_p {
+            height: 30px;
+        }
+
+        .button {
+            background: #ff6f61;
+            color: #ffffff;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            border-radius: 10px;
+            padding: 10px;
+        }
+    </style>
+</head>
+<body>
+<div class="idPwPopup">
+    <div class="idPwPopup_p">아이디 찾기</div>
+
+    <div class="idPwPopup_bar">
+        <!-- 이메일 입력 폼 -->
+        <form id="sendCodeForm">
+            <div class="tw-flex tw-w-full tw-gap-2">
+                <input class="idPwPopup_p" type="email" id="email" name="email" placeholder="이메일을 입력해주세요" required>
+                <button class="idPwPopup_p button" type="submit">인증 코드 요청</button>
+            </div>
+        </form>
+
+
+        <!-- 인증 코드 입력 폼 -->
+        <div class="idPwPopup_p">
+            <form id="verifyCodeForm" style="display: none;">
+                <div class="tw-flex tw-w-full tw-gap-2">
+                    <input class="idPwPopup_p" type="text" id="code" name="code" placeholder="인증코드를 입력해주세요" required>
+                    <button class="idPwPopup_p button" type="submit">확인</button>
+                </div>
+            </form>
+        </div>
+
+
+        <div class="idPwPopup_p" id="message"></div>
+    </div>
+
+    <div class="idPwPopup_p"></div>
+
+    <div class="idPwPopup_p">비밀번호 찾기</div>
+
+    <div class="idPwPopup_bar">
+        <!-- 아이디 입력 폼 -->
+        <form id="sendLoginIdForm">
+            <div class="tw-flex tw-w-full tw-gap-2">
+                <input class="idPwPopup_p" type="text" id="loginId" name="loginId" placeholder="아이디를 입력해주세요" required>
+                <button class="idPwPopup_p button" type="submit">인증 코드 요청</button>
+            </div>
+        </form>
+
+        <!-- 인증 코드 입력 폼 -->
+        <div class="idPwPopup_p">
+            <form id="verifyLoginIdForm" style="display: none;">
+                <div class="tw-flex tw-w-full tw-gap-2">
+                    <input class="idPwPopup_p" type="text" id="passwordCode" name="passwordCode"
+                           placeholder="인증코드를 입력해주세요" required>
+                    <button class="idPwPopup_p button" type="submit">확인</button>
+                </div>
+            </form>
+        </div>
+
+        <div class="idPwPopup_p" id="message2"></div>
+    </div>
+</div>
+<script>
+    // 아이디 찾기 인증 코드 요청
+    $('#sendCodeForm').on('submit', function (e) {
+        e.preventDefault();  // 폼이 제출되는 기본 동작을 막음
+
+        var email = $('#email').val();  // 입력된 이메일 값
+
+        $.ajax({
+            url: '/usr/member/send-code',  // 인증 코드 요청 URL
+            type: 'POST',
+            data: {email: email},  // 이메일을 데이터로 전송
+            success: function (response) {
+                $('#message').text(response);  // 서버로부터 받은 메시지를 그대로 출력
+                if (response == "인증코드가 전송되었습니다") {
+                    $('#verifyCodeForm').show();  // 인증 코드 입력 폼 표시
+                }
+            },
+            error: function (xhr, status, error) {
+                $('#message').text("인증 코드 요청에 실패했습니다.");  // 에러 메시지 표시
+            }
+        });
+    });
+
+    // 아이디 찾기 인증 코드 검증
+    $('#verifyCodeForm').on('submit', function (e) {
+        e.preventDefault();  // 폼이 제출되는 기본 동작을 막음
+
+        var email = $('#email').val();
+        var code = $('#code').val();  // 입력된 인증 코드 값
+
+        $.ajax({
+            url: '/usr/member/verify-code',  // 인증 코드 검증 URL
+            type: 'POST',
+            data: {email: email, code: code},  // 이메일과 인증 코드 전송
+            success: function (response) {
+                $('#message').text(response);  // 서버로부터 받은 메시지를 그대로 출력
+            },
+            error: function (xhr, status, error) {
+                $('#message').text("인증 코드 검증에 실패했습니다.");  // 에러 메시지 표시
+            }
+        });
+    });
+
+    // 비밀번호 찾기 인증 코드 요청
+    $('#sendLoginIdForm').on('submit', function (e) {
+        e.preventDefault();
+
+        var loginId = $('#loginId').val();
+
+        $.ajax({
+            url: '/usr/member/send-loginId',
+            type: 'POST',
+            data: {loginId: loginId},
+            success: function (response) {
+                $('#message2').text(response);
+                if (response == "인증코드가 전송되었습니다") {
+                    $('#verifyLoginIdForm').show();
+                }
+            },
+            error: function (xhr, status, error) {
+                $('#message2').text("인증 코드 요청에 실패했습니다.");
+            }
+        });
+    });
+
+    // 비밀번호 찾기 인증 코드 검증
+    $('#verifyLoginIdForm').on('submit', function (e) {
+        e.preventDefault();
+
+        var loginId = $('#loginId').val();
+        var passwordCode = $('#passwordCode').val();
+
+        $.ajax({
+            url: '/usr/member/verify-loginId',
+            type: 'POST',
+            data: {loginId: loginId, passwordCode: passwordCode},
+            success: function (response) {
+                $('#message2').text(response);
+            },
+            error: function (xhr, status, error) {
+                $('#message2').text("인증 코드 검증에 실패했습니다.");
+            }
+        });
+    });
+</script>
+</body>

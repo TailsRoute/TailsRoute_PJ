@@ -37,13 +37,14 @@ public interface MemberRepository {
 
     @Update("""
             UPDATE member
-            SET updateDate = NOW(),
+            SET updateDate = NOW(),            
+            loginPw = #{loginPw},
             name = #{name},
             nickname = #{nickname},
-            cellphoneNum = #{cellphoneNum} 
+            cellphoneNum = #{cellphoneNum}
             WHERE id = #{loginedMemberId}
             """)
-    void memberModify(int loginedMemberId, String name, String nickname, String cellphoneNum);
+    void memberModify(int loginedMemberId, String name, String nickname, String cellphoneNum, String loginPw);
 
     @Update("""
             UPDATE member
@@ -61,4 +62,21 @@ public interface MemberRepository {
             WHERE id = #{loginedMemberId}
             """)
     void memberReStatus(int loginedMemberId);
+
+    @Select("""
+			SELECT M.*, D.photo extra__dogPoto
+            FROM `member` M
+            LEFT JOIN dog D
+            ON D.memberId = M.id
+            WHERE email = #{email}
+			""")
+    Member getMemberByEmail(String email);
+
+    @Update("""
+            UPDATE member
+            SET updateDate = NOW(),
+            loginPw = #{loginPW}
+            WHERE id = #{id}
+            """)
+    void setTemporaryPassword(int id, String loginPW);
 }

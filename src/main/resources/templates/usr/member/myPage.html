@@ -41,6 +41,10 @@
                     <label>전화번호</label>
                     <input name="cellphoneNum" class="myPage_text" th:value="${member.cellphoneNum}">
                 </div>
+                <div class="loginPw" style="display: none">
+                    <label>새 비밀번호</label>
+                    <input name="loginPw" class="myPage_text">
+                </div>
                 <div class="accessKey_secret" th:if="${member.socialLoginStatus == 1}"><label>인증키</label><span
                         class="myPage_text" th:text="'**************'"></span>
                     <button type="button" class="accessKey_checkButton tw-pl-2" th:text="확인"></button>
@@ -167,6 +171,7 @@
                 $('.name1').hide();
                 $('.nickname1').hide();
                 $('.cellphone1').hide();
+                $('.loginPw').show();
                 $('.name2').show();
                 $('.nickname2').show();
                 $('.cellphone2').show();
@@ -211,6 +216,7 @@
             $('.name1').show();
             $('.nickname1').show();
             $('.cellphone1').show();
+            $('.loginPw').hide();
             $('.name2').hide();
             $('.nickname2').hide();
             $('.cellphone2').hide();

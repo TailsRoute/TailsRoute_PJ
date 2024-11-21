@@ -36,6 +36,7 @@ dependencies {
 	implementation 'net.coobird:thumbnailator:0.4.14'
 	implementation 'net.nurigo:sdk:4.3.0' // SMS 문자 서비스
 	implementation 'org.jsoup:jsoup:1.15.4'  // HTML 빌더
+	implementation 'org.springframework.boot:spring-boot-starter-mail' // 이메일 서비스
 	compileOnly 'org.projectlombok:lombok'
 	developmentOnly 'org.springframework.boot:spring-boot-devtools'
 	runtimeOnly 'com.mysql:mysql-connector-j'
