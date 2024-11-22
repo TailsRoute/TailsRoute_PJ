@@ -28,4 +28,17 @@ public interface WalkRepository {
 
     @Delete("DELETE FROM walk WHERE id = #{id}")
     public void deleteWalks(int id);
+
+    @Select("""
+    SELECT M.nickname extra__walker, COUNT(W.purchaseDate) extra__count, ROUND(SUM(W.routedistance), 1) extra__distance\s
+    FROM walk W
+    LEFT JOIN `member` M
+    ON W.memberId = M.id
+    WHERE MONTH(W.purchaseDate) = MONTH(CURRENT_DATE())
+    AND YEAR(W.purchaseDate) = YEAR(CURRENT_DATE())
+    GROUP BY W.memberId
+    ORDER BY extra__Count DESC, extra__distance DESC
+    LIMIT 0, 10;
+    """)
+    List<Walk> getWalksRanking();
 }

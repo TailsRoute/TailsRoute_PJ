@@ -511,6 +511,8 @@ CREATE TABLE gpsChack(
                          longitude DECIMAL(10, 7) COMMENT '현재 경도',
                          location VARCHAR(100) COMMENT '장소'
 );
+
+## 산책 테이블
 CREATE TABLE walk(
                      id INT(10) UNSIGNED NOT NULL PRIMARY KEY AUTO_INCREMENT COMMENT '식별번호',
                      memberId INT(10) UNSIGNED NOT NULL COMMENT '접속자 식별번호',
