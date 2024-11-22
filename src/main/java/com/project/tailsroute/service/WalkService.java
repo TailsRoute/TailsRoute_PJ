@@ -29,6 +29,9 @@ public class WalkService {
     public List<Walk> findWalksByMemberId(int memberId) {
         return walkRepository.findByMemberId(memberId);
     }
+    public List<Walk> countdate(int year,int memberId) {
+        return walkRepository.countdate(year,memberId);
+    }
     public String findRoutePicture(String routeName, String purchaseDate, Double routedistance){
         return walkRepository.findRoutePicture(routeName,purchaseDate,routedistance);
     }

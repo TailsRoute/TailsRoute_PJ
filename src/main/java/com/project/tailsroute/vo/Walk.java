@@ -9,7 +9,6 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class Walk {
     private int id;
-    private String regDate;
     private String updateDate;
     private int memberId;
     private String routeName;
@@ -19,4 +18,6 @@ public class Walk {
     private double routedistance;
     private String location;
     private int isLiked;
+    private String date;  // 날짜
+    private int extra__count;    // 날짜별 횟수
 }

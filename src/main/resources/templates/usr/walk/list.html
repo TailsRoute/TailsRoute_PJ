@@ -43,8 +43,20 @@
 <body>
 <div class="title">내 산책 경로 목록</div>
 <div id="routeList"></div> <!-- 경로 데이터를 표시할 컨테이너 -->
-
 <script>
+    const params = new URLSearchParams(window.location.search);
+
+    // 파라미터 값 가져오기
+    const routeName = params.get("routeName");
+    const purchaseDate = params.get("purchaseDate");
+    const routeDistance = parseFloat(params.get("routeDistance"));
+    const routeId = params.get("routeId");
+    const routePictureStr = params.get("routePicture");
+
+    // JSON 문자열을 객체로 변환
+    const routePicture = JSON.parse(decodeURIComponent(routePictureStr));
+
+    console.log(routeName, purchaseDate, routeDistance, routeId, routePicture);
     async function fetchWalkData() {
         try {
             const memberId = [[${member.id}]]; // 로그인된 사용자 ID
@@ -58,17 +70,14 @@
             console.error("오류 발생:", error);
         }
     }
-
     function initMaps() {
         fetchWalkData().then(walks => {
             const routeListContainer = document.getElementById("routeList");
             routeListContainer.innerHTML = ""; // 기존 컨테이너 초기화
-
             if (!walks || walks.length === 0) {
                 routeListContainer.innerHTML = "<p>등록된 경로가 없습니다.</p>";
                 return;
             }
-
             const uniqueIds = new Set();
             walks.forEach(walk => {
                 if (uniqueIds.has(walk.id)) {
@@ -83,34 +92,26 @@
             document.getElementById("routeList").innerHTML = "<p>경로 데이터를 가져오는 데 실패했습니다.</p>";
         });
     }
-
     function renderRoute(walk, container) {
-
         const routeElement = document.createElement("div");
         routeElement.className = "route-item";
-
         const routePicture = JSON.parse(walk.routePicture || "{}");
         const pathData = routePicture.path.map(coord => ({ lat: coord.y, lng: coord.x }));
-
         routeElement.innerHTML = `
             <p>산책경로명: ${walk.routeName}</p>
             <p>날짜: ${walk.purchaseDate}</p>
             <p>거리: ${walk.routedistance} km</p>
             <div id="map-${walk.id}" class="map-container"></div>
         `;
-
         container.appendChild(routeElement);
-
         if (pathData.length === 0) {
             document.getElementById(`map-${walk.id}`).innerHTML = "<p>유효한 경로 데이터가 없습니다.</p>";
             return;
         }
-
         const map = new naver.maps.Map(`map-${walk.id}`, {
             center: new naver.maps.LatLng(pathData[0].lat, pathData[0].lng),
             zoom: 14,
         });
-
         const linePath = pathData.map(coord => new naver.maps.LatLng(coord.lat, coord.lng));
         new naver.maps.Polyline({
             map: map,
@@ -119,19 +120,16 @@
             strokeOpacity: 1,
             strokeWeight: 2,
         });
-
         new naver.maps.Marker({
             position: new naver.maps.LatLng(pathData[0].lat, pathData[0].lng),
             map: map,
             title: "Start",
         });
-
         new naver.maps.Marker({
             position: new naver.maps.LatLng(pathData[pathData.length - 1].lat, pathData[pathData.length - 1].lng),
             map: map,
             title: "End",
         });
-
         if (pathData.length > 2) {
             pathData.slice(1, -1).forEach((point, index) => {
                 new naver.maps.Marker({
@@ -145,7 +143,6 @@
             });
         }
     }
-
     document.addEventListener("DOMContentLoaded", initMaps);
 </script>
 <a th:href="@{/usr/walk/page}" class="historyBackBtn">목록</a>
