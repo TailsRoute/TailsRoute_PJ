@@ -511,3 +511,13 @@ CREATE TABLE gpsChack(
                          longitude DECIMAL(10, 7) COMMENT '현재 경도',
                          location VARCHAR(100) COMMENT '장소'
 );
+CREATE TABLE walk(
+                     id INT(10) UNSIGNED NOT NULL PRIMARY KEY AUTO_INCREMENT COMMENT '식별번호',
+                     memberId INT(10) UNSIGNED NOT NULL COMMENT '접속자 식별번호',
+                     updateDate DATETIME NOT NULL COMMENT '수정 날짜',
+                     routeName TEXT NOT NULL COMMENT '산책이름',
+                     purchaseDate DATE NOT NULL COMMENT '산책 날짜',
+                     routePicture TEXT NOT NULL COMMENT '루트 사진',
+                     routedistance DOUBLE NOT NULL COMMENT '루트 거리',
+                     isLiked TINYINT(1) NOT NULL DEFAULT 0 COMMENT '즐겨찾기 여부 (0=즐겨찾기 전, 1=즐겨찾기 후)'
+);

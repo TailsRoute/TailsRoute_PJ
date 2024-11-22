@@ -44,7 +44,14 @@ public class UsrwalkController {
 
             // GPS 정보 가져오기
             GpsChack gpsCheck = gpsChackService.chack(member.getId());
-            model.addAttribute("gpsCheck", gpsCheck); // 가져온 GPS 정보 추가
+            if(gpsCheck != null) {
+                model.addAttribute("gpsCheck", gpsCheck);
+            } else{
+                gpsCheck = new GpsChack();
+                gpsCheck.setLatitude(37.5665);
+                gpsCheck.setLongitude(126.9780);
+                model.addAttribute("gpsCheck", gpsCheck);
+            }
         } else {
             return "redirect:/usr/member/login";
         }
@@ -64,7 +71,14 @@ public class UsrwalkController {
 
             // GPS 정보 가져오기
             GpsChack gpsCheck = gpsChackService.chack(member.getId());
-            model.addAttribute("gpsCheck", gpsCheck); // 가져온 GPS 정보 추가
+            if(gpsCheck != null) {
+                model.addAttribute("gpsCheck", gpsCheck);
+            } else{
+                gpsCheck = new GpsChack();
+                gpsCheck.setLatitude(37.5665);
+                gpsCheck.setLongitude(126.9780);
+                model.addAttribute("gpsCheck", gpsCheck);
+            }
         } else {
             return "redirect:/usr/member/login";
         }
@@ -88,6 +102,7 @@ public class UsrwalkController {
 
         return weatherInfo;
     }
+
     @PostMapping("/usr/walk/create") // POST 요청을 처리하는 메소드
     public ResponseEntity<String> createWalk(@RequestBody Walk walk) {
         try {

@@ -8,8 +8,8 @@ import java.util.List;
 @Mapper
 public interface WalkRepository {
     @Insert("INSERT INTO walk (updateDate, memberId, routeName, purchaseDate, routePicture, routedistance,isLiked) " +
-            "VALUES (NOW(), #{memberId}, #{routeName}, #{purchaseDate}, #{routePicture},#{routedistance},#{isLiked})")
-    public void addWalks(int memberId, String routeName, String purchaseDate, String routePicture,double routedistance,int isLiked);
+            "VALUES (NOW(), #{memberId}, #{routeName}, NOW(), #{routePicture},#{routedistance},#{isLiked})")
+    public void addWalks(int memberId, String routeName, String routePicture,double routedistance,int isLiked);
 
     @Select("SELECT * FROM walk WHERE memberId = #{memberId}")
     public List<Walk> findByMemberId(int memberId);
