@@ -20,7 +20,6 @@ public class WalkService {
         walkRepository.addWalks(
                 walk.getMemberId(),
                 walk.getRouteName(),
-                walk.getPurchaseDate(),
                 walk.getRoutePicture(),
                 walk.getRoutedistance(),
                 walk.getIsLiked()
