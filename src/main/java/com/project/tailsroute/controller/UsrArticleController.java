@@ -14,6 +14,8 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.time.LocalDate;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -37,6 +39,9 @@ public class UsrArticleController {
 
     @Autowired
     private ReplyService replyService;
+
+    @Autowired
+    private WalkService walkService;
 
     @PostMapping("/usr/article/uploadImage")
     public ResponseEntity<?> uploadImage(@RequestParam("file") MultipartFile file) {
@@ -261,6 +266,32 @@ public class UsrArticleController {
 
         model.addAttribute("articles", articles);
         model.addAttribute("boardId", boardId);
+
+        List<Walk> walks = walkService.getWalksRanking();
+
+        Map<Integer, String> monthTitles = new HashMap<Integer, String>();
+        monthTitles.put(1, "새해를 여는 산책왕");
+        monthTitles.put(2, "설렘 가득한 산책왕");
+        monthTitles.put(3, "환히 빛나는 산책왕");
+        monthTitles.put(4, "꽃길 걷는 산책왕");
+        monthTitles.put(5, "뭘 좀 아는 산책왕");
+        monthTitles.put(6, "초여름의 산책왕");
+        monthTitles.put(7, "여름 햇살 속 산책왕");
+        monthTitles.put(8, "자유로운 산책왕");
+        monthTitles.put(9, "산책을 즐기는 왕");
+        monthTitles.put(10, "단풍길 위 산책왕");
+        monthTitles.put(11, "늦가을 감성 산책왕");
+        monthTitles.put(12, "눈 내리는 산책왕");
+
+        int currentMonth = LocalDate.now().getMonthValue();
+        String monthlyTitle = monthTitles.getOrDefault(13, "이달의 산책왕");
+
+        model.addAttribute("monthlyTitle", monthlyTitle); // 현재 월의 제목 전달
+        model.addAttribute("walks", walks);
+        System.err.println("walks : " + walks);
+
+        String randomMotivation = articleService.getRandomMotivation();
+        model.addAttribute("randomMotivation", randomMotivation);
 
         return "usr/article/main";
     }

@@ -42,7 +42,6 @@ input, select, option{
 }
 
 .list_head{
-    padding-top: 100px;
     padding-bottom: 100px;
     max-width: 1440px;
     margin: auto;
@@ -93,6 +92,31 @@ input, select, option{
     white-space: normal;
 }
 
+.motivation_wrapper {
+    margin: auto;
+    width: 1440px;
+    height: 70px;
+    overflow: hidden;
+    position: relative;
+}
+
+.motivation_container {
+    position: absolute;
+    white-space: nowrap;
+    animation: slide 15s infinite linear;
+    font-size: 20px;
+    font-weight: bold;
+}
+
+@keyframes slide {
+    0% {
+        transform: translateX(1440px);
+    }
+    100% {
+        transform: translateX(-100%);
+    }
+}
+
 .list_body{
     max-width: 1440px;
     margin: auto;
@@ -135,6 +159,19 @@ input, select, option{
     width: 100%;
     padding-top: 30px;
     padding-left: 30px;
+}
+
+.list_walkRanking{
+    background: #ede0d4;
+    border-radius: 10px;
+    width: 240px;
+}
+
+.popup{
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
 }
 
 .list_main{

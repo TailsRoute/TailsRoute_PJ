@@ -43,4 +43,8 @@ public class WalkService {
     public void deleteWalks(int id) {
         walkRepository.deleteWalks(id);
     }
+
+    public List<Walk> getWalksRanking() {
+        return walkRepository.getWalksRanking();
+    }
 }

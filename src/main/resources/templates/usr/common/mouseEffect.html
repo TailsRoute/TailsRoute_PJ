@@ -3,9 +3,9 @@
 <body>
 <style>
     .mouse__follow-image {
-        left: 15px;
         position: absolute;
         pointer-events: none;
+        z-index: 100;
     }
 </style>
 <img class="mouse__follow-image mouse__basic" style="display: block;"
@@ -16,6 +16,16 @@
     const followImageBasic = document.querySelector('.mouse__basic'); // 기본 이미지 선택
     const followImageAction = document.querySelector('.mouse__action'); // 액션 이미지 선택
     let posX = 0, posY = 0;
+
+    // 페이지 로드 시 기본 이미지와 액션 이미지의 초기 위치 설정
+    window.addEventListener('load', () => {
+        posX = window.innerWidth / 2;
+        posY = window.innerHeight / 2;
+        followImageBasic.style.left = posX + 'px';
+        followImageBasic.style.top = posY + 'px';
+        followImageAction.style.left = posX + 'px';
+        followImageAction.style.top = posY + 'px';
+    });
 
     document.addEventListener('mousemove', (event) => {
         posX = event.pageX;
