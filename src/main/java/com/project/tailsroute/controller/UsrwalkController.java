@@ -102,6 +102,11 @@ public class UsrwalkController {
     public List<Walk> getWalks(@RequestParam int memberId) {
         return walkService.findWalksByMemberId(memberId);
     }
+    @GetMapping("/usr/walk/getcount")
+    @ResponseBody
+    public List<Walk> countdate(@RequestParam int year, @RequestParam int memberId) {
+        return walkService.countdate(year,memberId);
+    }
 
     @GetMapping("/usr/walk/getRoutePicture")
     @ResponseBody
@@ -139,28 +144,22 @@ public class UsrwalkController {
     @GetMapping("/usr/walk/list")
     public String showWalkList(Model model) {
         boolean isLogined = rq.isLogined();
-
         if (!isLogined) {
             return "redirect:/usr/member/login"; // 로그인하지 않은 경우 로그인 페이지로 리다이렉트
         }
-
         // 로그인된 회원 정보 가져오기
         Member member = rq.getLoginedMember();
         int memberId = member.getId(); // 로그인된 회원의 ID 가져오기
         model.addAttribute("member", member);
         model.addAttribute("isLogined", isLogined);
-
         // GPS 정보 가져오기 (필요한 경우 추가)
         GpsChack gpsCheck = gpsChackService.chack(memberId);
         model.addAttribute("gpsCheck", gpsCheck);
-
         // 해당 회원의 경로 데이터 조회
         List<Walk> walks = walkService.findWalksByMemberId(memberId);
         model.addAttribute("walks", walks);
-
         // Google Maps API 키 추가
         model.addAttribute("NAVER_API", NaverApiKey);
-
         return "usr/walk/list"; // 리스트 페이지로 이동
     }
 }

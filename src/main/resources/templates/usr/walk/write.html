@@ -11,7 +11,7 @@
     </script>
     <title>글 작성</title>
     <style>
-        html {
+        html,body {
             background-color: #FFFEF0;
             color: #4D3E3E;
         }
@@ -138,7 +138,6 @@
             naver.maps.Event.addListener(map, 'click', function (event) {
                 const latLng = event.coord;  // event.coord로 LatLng 객체 접근
                 if (latLng) {
-                    console.log('클릭한 위치:', latLng);  // 콘솔에 출력
                     addLatLng(latLng, waypoints, markers, map);
                 } else {
                     console.error('latLng 값이 없습니다.');
@@ -166,8 +165,6 @@
                 }
 
                 const data = JSON.stringify({ path: waypoints }); // 경로 데이터를 문자열화
-
-                console.log(scheduleDate);
 
                 const walkData = {
                     memberId: w1memberId,
@@ -218,7 +215,7 @@
         }
     }
 
-    window.totalDistance = 0;
+    let totalDistance = 0;
 
     function addLatLng(location, waypoints, markers, map) {
         const lat = location.lat();
@@ -245,48 +242,44 @@
             });
             markers.push(endMarker);
 
-            // 경로 요청
-            if (waypoints.length >= 2) {
-                const start = waypoints[waypoints.length - 2]; // 이전 지점
-                const end = waypoints[waypoints.length - 1];   // 현재 지점
+            // Polyline 그리기 (경로 요청 없이)
+            const start = waypoints[waypoints.length - 2]; // 이전 지점
+            const end = waypoints[waypoints.length - 1];   // 현재 지점
+            const path = [start, end]; // 두 점을 연결하는 경로
 
-                // 서버에서 경로를 받아오기
-                fetch(`/get-directions?startLat=${start.lat()}&startLng=${start.lng()}&endLat=${end.lat()}&endLng=${end.lng()}`)
-                    .then(response => response.json())
-                    .then(data => {
-                        if (data.features && data.features.length > 0) {
-                            const feature = data.features[0];
-                            const coordinates = feature.geometry.coordinates;
-                            path = coordinates.map(coord => new naver.maps.LatLng(coord[1], coord[0])); // path 배열에 경로 저장
+            const newPolyline = new naver.maps.Polyline({
+                map: map,
+                path: path,
+                strokeColor: '#FF0000',
+                strokeWeight: 5,
+                strokeOpacity: 0.8
+            });
 
-                            // 폴리라인 추가
-                            const newPolyline = new naver.maps.Polyline({
-                                map: map,
-                                path: path,
-                                strokeColor: '#FF0000',
-                                strokeWeight: 5,
-                                strokeOpacity: 0.8
-                            });
+            polyline.push(newPolyline); // 로컬 배열에 폴리라인 추가
 
-                            polyline.push(newPolyline); // 로컬 배열에 폴리라인 추가
-
-                            // 경로 거리 계산 (OpenRouteService의 경우 거리 정보는 속성에 포함될 수 있음)
-                            if (feature.properties && feature.properties.summary) {
-                                const distance = feature.properties.summary.distance / 1000; // 킬로미터로 변환
-
-                                // 총거리에 현재 거리를 추가
-                                window.totalDistance += distance;
-                                document.getElementById("routedistance").innerText = `${window.totalDistance.toFixed(2)} km`;
-                            } else {
-                                console.warn("거리 정보를 찾을 수 없습니다.");
-                            }
-                        } else {
-                            console.warn("경로 데이터를 찾을 수 없습니다.");
-                        }
-                    })
-                    .catch(error => console.error("경로 API 호출 실패:", error));
-            }
+            // 두 지점 간의 거리 계산 (km 단위)
+            const distance = calculateDistance(start, end);
+            totalDistance += distance; // 이전까지의 총 거리 누적
+            document.getElementById("routedistance").innerText = `${totalDistance.toFixed(2)} km`;
         }
+    }
+
+    function calculateDistance(point1, point2) {
+        const R = 6371; // 지구 반경(km)
+        const dLat = toRadian(point2.lat() - point1.lat());
+        const dLng = toRadian(point2.lng() - point1.lng());
+        const lat1 = toRadian(point1.lat());
+        const lat2 = toRadian(point2.lat());
+
+        const a = Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+            Math.sin(dLng / 2) * Math.sin(dLng / 2) * Math.cos(lat1) * Math.cos(lat2);
+        const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+        const distance = R * c; // km로 변환
+        return distance;
+    }
+
+    function toRadian(degree) {
+        return degree * (Math.PI / 180);
     }
 
     function clearPath() {
@@ -298,52 +291,37 @@
             const removedMarker = markers.pop(); // 마커 배열에서 마지막 마커 제거
             removedMarker.setMap(null); // 지도에서 마커 제거
 
-            // 기존 경로를 제거하고 새로운 경로를 다시 그림
+            // 총거리 계산: 기존 경로를 제거하고 새로 계산
+            totalDistance = 0;  // 거리 초기화
+
+            // 경로 계산 (다시 계산해야 하므로 waypoints의 모든 지점을 따라가며 거리 계산)
+            for (let i = 1; i < waypoints.length; i++) {
+                const start = waypoints[i - 1];
+                const end = waypoints[i];
+
+                // 두 점 사이의 거리 계산 (Haversine formula 사용)
+                const distance = calculateDistance(start, end);
+                totalDistance += distance;
+            }
+
+            // 총거리 표시
+            document.getElementById("routedistance").innerText = `${totalDistance.toFixed(2)} km`;
+
+            // 경유지가 1개 이하인 경우 지도에서 경로 제거 및 거리 초기화
             if (waypoints.length > 1) {
-                const start = waypoints[0];
-                const end = waypoints[waypoints.length - 1];
-
-                // 기존 경로를 다시 요청하여 표시
-                fetch(`/get-directions?startLat=${start.lat()}&startLng=${start.lng()}&endLat=${end.lat()}&endLng=${end.lng()}`)
-                    .then(response => response.json())
-                    .then(data => {
-                        if (data.features && data.features.length > 0) {
-                            const feature = data.features[0];
-
-                            // 가장 최근의 폴리라인만 제거 (로컬 배열에서 제거)
-                            if (polyline.length > 0) {
-                                const lastPolyline = polyline.pop(); // 배열에서 마지막 폴리라인 제거
-                                lastPolyline.setMap(null); // 지도에서 마지막 폴리라인 제거
-                            }
-
-                            // 경로 거리 계산 및 표시
-                            if (feature.properties && feature.properties.summary) {
-                                const distance = feature.properties.summary.distance / 1000; // 킬로미터로 변환
-
-                                // 총거리에서 해당 구간의 거리만큼 빼기
-                                window.totalDistance -= distance;
-                                if (window.totalDistance < 0) window.totalDistance = 0;  // 총거리가 음수가 되지 않도록 보정
-                                document.getElementById("routedistance").innerText = `${window.totalDistance.toFixed(2)} km`;
-                            } else {
-                                console.warn("거리 정보를 찾을 수 없습니다.");
-                            }
-                        } else {
-                            console.warn("경로 데이터를 찾을 수 없습니다.");
-                            // 모든 경유지가 사라진 경우 거리 초기화
-                            document.getElementById("routedistance").innerText = "0 km";
-                        }
-                    })
-                    .catch(error => console.error("경로 API 호출 실패:", error));
-            } else {
-                // 경유지가 1개 이하인 경우 지도에서 경로 제거 및 거리 초기화
+                // 폴리라인 제거 및 새로운 경로 그리기
                 if (polyline.length > 0) {
                     const lastPolyline = polyline.pop(); // 배열에서 마지막 폴리라인 제거
                     lastPolyline.setMap(null); // 지도에서 마지막 폴리라인 제거
-                    console.log("기존 폴리라인 제거 (1개 이하)");
                 }
+
+            } else {
+                if (polyline.length > 0) {
+                    const lastPolyline = polyline.pop(); // 배열에서 마지막 폴리라인 제거
+                    lastPolyline.setMap(null); // 지도에서 마지막 폴리라인 제거
+                }
+                // 경유지가 1개 이하인 경우 경로 제거
                 document.getElementById("routedistance").innerText = "0 km";
-                // 총거리가 0으로 설정
-                window.totalDistance = 0;
             }
         }
     }
@@ -424,7 +402,6 @@
             <td>${item.purchaseDate}</td>
             <td>${item.routedistance}Km</td>
             <td class="reaction">${icon}</td> <!-- 별 아이콘 표시 -->
-            <td>
         `;
 
             row.addEventListener("click", function () {
@@ -433,6 +410,11 @@
                 const routeDistance = parseFloat(this.getAttribute("data-route-distance"));
                 document.getElementById("routedistance").innerText = "0 km";
                 window.totalDistance = 0;
+                markers.forEach(marker => marker.setMap(null)); // 모든 마커를 지도에서 제거
+                polyline.forEach(line => line.setMap(null));   // 모든 폴리라인을 지도에서 제거
+                markers = []; // 마커 배열 초기화
+                polyline = []; // 폴리라인 배열 초기화
+                waypoints = []; // 경로 배열 초기화
 
                 // 서버로 데이터 요청
                 fetch(`/usr/walk/getRoutePicture?routeName=${routeName}&purchaseDate=${purchaseDate}&routedistance=${routeDistance}`)
@@ -443,12 +425,63 @@
                         return response.json();
                     })
                     .then(data => {
-                        // 지도 처리 코드 (기존 코드 그대로)
+                        // path 문자열을 JSON으로 파싱
+                        const pathData = JSON.parse(data.path).path; // 경로 배열을 얻음
+
+                        totalDistance = 0;
+
+                        // 각 좌표를 처리하여 경로 그리기
+                        pathData.forEach((point, index) => {
+                            const location = new naver.maps.LatLng(point.y, point.x);
+
+                            // 첫 번째 점은 시작 지점
+                            if (index === 0) {
+                                waypoints.push(location);
+                                const startMarker = new naver.maps.Marker({
+                                    position: location,
+                                    map: map,
+                                    title: "시작"
+                                });
+                                markers.push(startMarker);
+                                map.setCenter(location);
+                            } else {
+                                // 그 외의 점은 목적지
+                                waypoints.push(location);
+                                const endMarker = new naver.maps.Marker({
+                                    position: location,
+                                    map: map,
+                                    title: "목적지"
+                                });
+                                markers.push(endMarker);
+
+                                // 이전 점과 현재 점을 연결하는 경로를 그립니다
+                                const start = waypoints[waypoints.length - 2]; // 이전 지점
+                                const end = waypoints[waypoints.length - 1];   // 현재 지점
+                                const path = [start, end];
+
+                                const newPolyline = new naver.maps.Polyline({
+                                    map: map,
+                                    path: path,
+                                    strokeColor: '#FF0000', // 경로 색상
+                                    strokeWeight: 5, // 선 두께
+                                    strokeOpacity: 0.8 // 선 투명도
+                                });
+                                polyline.push(newPolyline);
+
+                                // 두 점 간 거리 계산
+                                const distance = calculateDistance(start, end);
+                                totalDistance += distance;
+
+                                // 전체 거리 업데이트
+                                document.getElementById("routedistance").innerText = `${totalDistance.toFixed(2)} km`;
+                            }
+                        });
                     })
                     .catch(error => {
                         console.error('Error fetching routePicture:', error);
                     });
             });
+
 
             // reaction (별 아이콘) 클릭 이벤트 추가
             const reactionCell = row.querySelector(".reaction");
@@ -493,92 +526,6 @@
                     })
                     .catch(error => {
                         console.error('Error updating like status:', error);
-                    });
-            });
-
-            row.addEventListener("click", function () {
-                // 데이터 속성에서 값을 가져옵니다.
-                const routeName = this.getAttribute("data-route-name");
-                const purchaseDate = this.getAttribute("data-purchase-date");
-                const routeDistance = parseFloat(this.getAttribute("data-route-distance"));
-                document.getElementById("routedistance").innerText = "0 km";
-                window.totalDistance = 0;
-
-                // 서버로 데이터 요청
-                fetch(`/usr/walk/getRoutePicture?routeName=${routeName}&purchaseDate=${purchaseDate}&routedistance=${routeDistance}`)
-                    .then(response => {
-                        if (!response.ok) {
-                            throw new Error('routePicture 데이터를 가져오는 데 실패했습니다.');
-                        }
-                        return response.json();
-                    })
-                    .then(data => {
-                        const mapContainer = document.getElementById('walkingTrailMap');
-                        const latitude = [[${gpsCheck.latitude}]] || 37.56661;  // 위도 값이 없으면 서울의 위도로 설정
-                        const longitude = [[${gpsCheck.longitude}]] || 126.978388;  // 경도 값이 없으면 서울의 경도로 설정
-                        const initialPosition = new naver.maps.LatLng(latitude, longitude); // 네이버 지도 좌표로 초기화
-
-                        // 이미 초기화된 지도 객체 사용
-                        const map = new naver.maps.Map(mapContainer, {
-                            center: initialPosition,
-                            zoom: 14,
-                        });
-
-                        const pathData = JSON.parse(data.path);
-
-                        // 데이터에서 path 가져오기
-                        const routePath = pathData.path.map(coord => {
-                            const lat = coord.y || coord._lat; // y 또는 _lat을 lat으로 사용
-                            const lng = coord.x || coord._lng; // x 또는 _lng을 lng으로 사용
-                            return new naver.maps.LatLng(lat, lng);
-                        });
-
-                        // 경로를 따라 폴리라인을 그리고 경로 데이터를 추가적으로 불러오기
-                        if (routePath.length >= 2) {
-                            for (let i = 1; i < routePath.length; i++) {
-                                const start = routePath[i - 1];
-                                const end = routePath[i];
-
-                                // 서버에서 경로를 받아오기
-                                fetch(`/get-directions?startLat=${start.lat()}&startLng=${start.lng()}&endLat=${end.lat()}&endLng=${end.lng()}`)
-                                    .then(response => response.json())
-                                    .then(data => {
-                                        if (data.features && data.features.length > 0) {
-                                            const feature = data.features[0];
-                                            const coordinates = feature.geometry.coordinates;
-
-                                            // 경로 데이터를 네이버 지도 LatLng 객체로 변환
-                                            const newPath = coordinates.map(coord => new naver.maps.LatLng(coord[1], coord[0]));
-
-                                            // 새로운 폴리라인 추가
-                                            const newPolyline = new naver.maps.Polyline({
-                                                map: map,
-                                                path: newPath,
-                                                strokeColor: '#FF0000',
-                                                strokeWeight: 4,
-                                                strokeOpacity: 0.7
-                                            });
-
-                                            newPolyline.setMap(map);
-
-                                            // 거리 정보 처리 (예시)
-                                            if (feature.properties && feature.properties.summary) {
-                                                const distance = feature.properties.summary.distance / 1000; // 킬로미터로 변환
-                                                window.totalDistance = (window.totalDistance || 0) + distance;
-                                                document.getElementById("routedistance").innerText = `${window.totalDistance.toFixed(2)} km`;
-                                            } else {
-                                                console.warn("거리 정보를 찾을 수 없습니다.");
-                                            }
-                                        } else {
-                                            console.warn("경로 데이터를 찾을 수 없습니다.");
-                                        }
-                                    })
-                                    .catch(error => console.error("경로 API 호출 실패:", error));
-                            }
-                        }
-                    })
-                    .catch(error => {
-                        console.error('Error fetching routePicture:', error);
                     });
             });
 
