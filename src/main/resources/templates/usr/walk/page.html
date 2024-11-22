@@ -6,7 +6,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Map Search</title>
+  <title>TailsRoute</title>
   <script async defer
           th:src="'https://openapi.map.naver.com/openapi/v3/maps.js?ncpClientId='+${NAVER_API}+'&callback=initMap'">
   </script>
@@ -16,13 +16,18 @@
       background-color: #FFFEF0;
       color: #4D3E3E;
     }
+    .title{
+      text-align: center;
+      padding-top: 70px;
+      font-size: 50px;
+    }
     .grass {
       padding-left: 10px;
       padding-top: 10px;
       border: 1px solid #ccc;
       border-radius: 10px;
       background-color: #F2F2EB;
-      width: 70%;
+      width: 1000px;
       height: 180px;
       margin-left: 3%;
       display: inline-block;
@@ -109,7 +114,7 @@
       margin-bottom: 5px; /* 박스와의 간격 */
     }
     .WalkingSchedule, .WalkingTrail {
-      margin-top: 90px;
+      margin-top: 10px;
       border: 1px solid #ccc;
       border-radius: 10px;
       background-color: #F2F2EB;
@@ -119,16 +124,13 @@
       margin-left: 3%;
     }
     .information{
-      position: relative;
       border: 1px solid #ccc;
       border-radius: 10px;
       background-color: #F2F2EB;
-      width: 10%;
-      height: 180px;
-      margin-top: 10px;
+      width: 100%;
+      height: 120px;
       display: inline-block;
-      top:-47px;
-      margin-left: 1%;
+      text-align: center;
     }
 
     #routePicture canvas {
@@ -151,24 +153,27 @@
       border-radius: 10px;
       text-align: center; /* 텍스트 가운데 정렬 */
     }
-    .buttonBox{
-      display: inline-block;
-      width: 10%;
-      height: 180px;
-      position: relative;
-      top:-140px;
-      margin-left: 1%;
-    }
     #writeWalkButton{
       border: 1px solid #ccc;
       border-radius: 10px;
       background-color: #F2F2EB;
       width: 100%;
       height: 50px;
+      margin-top: 10px;
+    }
+    .lowBox{
+      box-sizing: border-box;
+      height: 180px;
+      width: 180px;
+      display: inline-block;
+      position: relative;
+      float: right;
+      margin-right: 4%;
     }
   </style>
 </head>
 <body>
+<div class="title">반려견 산책 일지</div>
 <div class="WalkingTrail" id="walkingTrailMap"></div>
 <div class="WalkingSchedule">
   <table id="WalkingTable">
@@ -218,8 +223,8 @@
     로 표시됩니다
   </div>
 </div>
-<div class="information"></div>
-<div class="buttonBox">
+<div class="lowBox">
+  <div class="information"></div>
   <button id="writeWalkButton">산책 일정 생성</button>
 </div>
 
@@ -311,8 +316,7 @@
       const longitude = [[${gpsCheck.longitude}]] || 126.978388;  // 경도 값이 없으면 서울의 경도로 설정
       const initialPosition = new naver.maps.LatLng(latitude, longitude); // 네이버 지도 좌표로 초기화
       var gridCoordinates = convertLatLngToGrid(latitude, longitude);
-      getWeatherInfo(gridCoordinates.nx, gridCoordinates.ny); // 날씨 정보 요청
-
+      getWeatherInfo(gridCoordinates.nx, gridCoordinates.ny,latitude,longitude); // 날씨 정보 요청
 
       // 지도 객체 생성
       map = new naver.maps.Map(mapContainer, {
@@ -835,7 +839,7 @@
     // 2자리 형식으로 반환
     return String(adjustedHour).padStart(2, '0') + "00"; // 예: "0700", "0800"
   }
-  function getWeatherInfo(nx, ny) {
+  function getWeatherInfo(nx, ny,latitude,longitude) {
     // 현재 날짜와 시간 가져오기
     const date = getCurrentDate();
     const hour = getCurrentHour();
@@ -848,51 +852,61 @@
               return response.json(); // JSON 형태로 응답을 가져오기
             })
             .then(data => {
-              // obsrValue 값을 저장할 변수
-              let obsrValuePTY, obsrValueRN1, obsrValueT1H;
-              // items.item 배열이 있는지 확인하고 순회
-              const items = data.response.body.items.item; // item 배열 가져오기
-              if (Array.isArray(items)) {
-                items.forEach(item => {
-                  const category = item.category; // category 값을 가져옴
-                  const obsrValue = item.obsrValue; // obsrValue 값을 가져옴
-                  // category에 따라 obsrValue 값 할당
-                  if (category === "PTY") {
-                    obsrValuePTY = obsrValue;
-                  } else if (category === "RN1") {
-                    obsrValueRN1 = obsrValue;
-                  } else if (category === "T1H") {
-                    obsrValueT1H = obsrValue;
-                  }
-                });
-              }
-              // obsrValuePTY에 따라 아이콘 결정
-              const weatherIcon = {
-                "0": "🌞",  // 맑음
-                "1": "🌧",  // 비
-                "2": "🌧/🌨", // 비/눈
-                "3": "🌨",  // 눈
-                "4": "⛈",  // 천둥번개
-              };
-              // PTY에 따른 날씨 아이콘 출력
-              const weatherSymbol = weatherIcon[obsrValuePTY] || "❓"; // 기본 아이콘
-              const weatherSymbolElement = document.querySelector(".information"); // 날씨 아이콘을 표시할 요소
-              // "이 지역의 날씨" 멘트를 추가하고 아이콘을 다음 줄에 표시
-              weatherSymbolElement.innerHTML = `<br><br>이 지역의 날씨<br><span style="font-size: 1.5em;">${weatherSymbol}</span`; // 크기 조정 및 줄 바꿈 추가
-              // 기온 처리 및 표시
-              if (obsrValueT1H) {
-                const temperature = `${obsrValueT1H}°C`; // 섭씨 기호 붙이기
-                const temperatureElement = document.createElement('div');
-                temperatureElement.textContent = `기온: ${temperature}`;
-                weatherSymbolElement.appendChild(temperatureElement); // 날씨 아이콘 아래에 추가
-              }
-              // 강수량 처리 및 표시
-              if (obsrValueRN1 > 0) { // 강수량이 0 이상일 때만 표시
-                const rainfall = `${obsrValueRN1}mm`; // 강수량에 .mm 붙이기
-                const rainfallElement = document.createElement('div');
-                rainfallElement.textContent = `강수량: ${rainfall}`;
-                weatherSymbolElement.appendChild(rainfallElement); // 날씨 아이콘 아래에 추가
-              }
+              fetch(`/reverse-geocode?lat=${latitude}&lon=${longitude}`)
+                      .then(response => {
+                        if(!response.ok){
+                          throw new Error('Network response was not ok ' + response.statusText);
+                        }
+                        return response.text();
+                      })
+                      .then(data1 => {
+                        const cityName = data1.split(" ")[0];
+                        // obsrValue 값을 저장할 변수
+                        let obsrValuePTY, obsrValueRN1, obsrValueT1H;
+                        // items.item 배열이 있는지 확인하고 순회
+                        const items = data.response.body.items.item; // item 배열 가져오기
+                        if (Array.isArray(items)) {
+                          items.forEach(item => {
+                            const category = item.category; // category 값을 가져옴
+                            const obsrValue = item.obsrValue; // obsrValue 값을 가져옴
+                            // category에 따라 obsrValue 값 할당
+                            if (category === "PTY") {
+                              obsrValuePTY = obsrValue;
+                            } else if (category === "RN1") {
+                              obsrValueRN1 = obsrValue;
+                            } else if (category === "T1H") {
+                              obsrValueT1H = obsrValue;
+                            }
+                          });
+                        }
+                        // obsrValuePTY에 따라 아이콘 결정
+                        const weatherIcon = {
+                          "0": "🌞",  // 맑음
+                          "1": "🌧",  // 비
+                          "2": "🌧/🌨", // 비/눈
+                          "3": "🌨",  // 눈
+                          "4": "⛈",  // 천둥번개
+                        };
+                        // PTY에 따른 날씨 아이콘 출력
+                        const weatherSymbol = weatherIcon[obsrValuePTY] || "❓"; // 기본 아이콘
+                        const weatherSymbolElement = document.querySelector(".information"); // 날씨 아이콘을 표시할 요소
+                        // "이 지역의 날씨" 멘트를 추가하고 아이콘을 다음 줄에 표시
+                        weatherSymbolElement.innerHTML = `<br>${cityName}의 날씨<br><span style="font-size: 1.5em;">${weatherSymbol}</span>`; // 크기 조정 및 줄 바꿈 추가
+                        // 기온 처리 및 표시
+                        if (obsrValueT1H) {
+                          const temperature = `${obsrValueT1H}°C`; // 섭씨 기호 붙이기
+                          const temperatureElement = document.createElement('div');
+                          temperatureElement.textContent = `기온: ${temperature}`;
+                          weatherSymbolElement.appendChild(temperatureElement); // 날씨 아이콘 아래에 추가
+                        }
+                        // 강수량 처리 및 표시
+                        if (obsrValueRN1 > 0) { // 강수량이 0 이상일 때만 표시
+                          const rainfall = `${obsrValueRN1}mm`; // 강수량에 .mm 붙이기
+                          const rainfallElement = document.createElement('div');
+                          rainfallElement.textContent = `강수량: ${rainfall}`;
+                          weatherSymbolElement.appendChild(rainfallElement); // 날씨 아이콘 아래에 추가
+                        }
+                      });
             })
             .catch(error => {
               console.error('Error fetching weather data:', error);

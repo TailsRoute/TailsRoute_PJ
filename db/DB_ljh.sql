@@ -512,7 +512,6 @@ CREATE TABLE gpsChack(
 CREATE TABLE walk(
                      id INT(10) UNSIGNED NOT NULL PRIMARY KEY AUTO_INCREMENT COMMENT '식별번호',
                      memberId INT(10) UNSIGNED NOT NULL COMMENT '접속자 식별번호',
-                     regDate DATETIME NOT NULL COMMENT '등록 날짜',
                      updateDate DATETIME NOT NULL COMMENT '수정 날짜',
                      routeName TEXT NOT NULL COMMENT '산책이름',
                      purchaseDate DATE NOT NULL COMMENT '산책 날짜',

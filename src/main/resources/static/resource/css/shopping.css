@@ -1,15 +1,22 @@
-html {
+html,body {
     background-color: #FFFEF0;
+    color: #4D3E3E;
 }
 
 #heads {
     padding-bottom: 50px;
 }
 
+.title{
+    text-align: center;
+    padding-top: 20px;
+    font-size: 50px;
+}
+
 /* body 요소에 좌우 여백 추가 */
 #shopbody {
     margin: 0 100px;
-    margin-top: 50px;
+    margin-top: 10px;
 }
 
 /* 팝업 창 스타일 */
