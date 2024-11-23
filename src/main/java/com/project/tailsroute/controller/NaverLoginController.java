@@ -3,6 +3,7 @@ package com.project.tailsroute.controller;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.project.tailsroute.service.MemberService;
+import com.project.tailsroute.util.Ut;
 import com.project.tailsroute.vo.Member;
 import com.project.tailsroute.vo.Rq;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,6 +13,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
 
@@ -35,20 +37,6 @@ public class NaverLoginController {
     @Autowired
     private MemberService memberService;
 
-    @GetMapping("/usr/test/test")
-    public String test(Model model) {
-
-        boolean isLogined = rq.isLogined();
-        if (isLogined) {
-            Member member = rq.getLoginedMember();
-            model.addAttribute("member", member);
-        }
-
-        model.addAttribute("isLogined", isLogined);
-
-        return "usr/test/test";
-    }
-
     @GetMapping("/usr/member/naver-login")
     public String naverLoginRedirect() {
         String redirectUri = "http://localhost:8081/auth/naver/callback";  // 콜백 URL
@@ -65,6 +53,7 @@ public class NaverLoginController {
     }
 
     @GetMapping("/auth/naver/callback")
+    @ResponseBody
     public String naverLoginCallback(@RequestParam String code, @RequestParam String state, Model model) {
         String redirectUri = "http://localhost:8081/auth/naver/callback";
 
@@ -74,12 +63,18 @@ public class NaverLoginController {
         if (accessToken != null) {
             // 네이버 사용자 정보 요청
             Member member = getNaverUserInfo(accessToken);
+
+            if(member.isDelStatus()){
+                rq.logout();
+                return Ut.rejoin("F-1", Ut.f("탈퇴한 회원입니다, 복구하시겠습니까?"), "/usr/member/doRejoin?id="+member.getId(), "/usr/home/main");
+            }
+
             model.addAttribute("member", member);
             model.addAttribute("isLogined", true);
-            return "redirect:/usr/home/main"; // 메인 화면으로 리다이렉트
+            return Ut.jsReplace("S-1", Ut.f("%s님 환영합니다", member.getNickname()), "/usr/home/main");
         } else {
             model.addAttribute("isLogined", false);
-            return "redirect:/usr/home/main"; // 실패 시 다시 메인 화면
+            return Ut.jsReplace("F-2", Ut.f("로그인에 실패하였습니다"), "/usr/home/main");
         }
     }
 
@@ -159,7 +154,6 @@ public class NaverLoginController {
             String cellphoneNum = responseNode.get("mobile").asText();
             String email = responseNode.get("email").asText();
 
-
             // 회원 정보 확인
             Member existingMember = memberService.getMemberByLoginId(loginId);
 
@@ -169,9 +163,9 @@ public class NaverLoginController {
                 return existingMember;
             } else {
                 // 새로운 회원인 경우 -> 회원가입 처리
-                String loginPw = generateRandomPassword();  // 랜덤 비밀번호 생성
+                String loginPw = memberService.generateRandomPassword();  // 랜덤 비밀번호 생성
 
-                memberService.join(loginId, loginPw, name, nickname, cellphoneNum, email);   // 세션에 로그인 정보 저장
+                memberService.join(loginId, loginPw, name, nickname, cellphoneNum, email, 1);   // 세션에 로그인 정보 저장
 
                 Member newMember = memberService.getMemberByLoginId(loginId);
                 rq.login(newMember);
@@ -181,11 +175,5 @@ public class NaverLoginController {
             e.printStackTrace();
             return null;
         }
-    }
-
-    // 랜덤 비밀번호 생성 메서드
-    private String generateRandomPassword() {
-        // UUID를 사용해 랜덤 문자열 생성 (하이픈 제거)
-        return UUID.randomUUID().toString().replace("-", "").substring(0, 12); // 12자리 문자열 반환
     }
 }
