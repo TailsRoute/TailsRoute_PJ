@@ -63,7 +63,7 @@ INSERT INTO `member` SET
                          loginPw = 'qwe',
                          authLevel = 3,
                          `name` = '박도윤',
-                         nickname = '두부의행복전도사',
+                         nickname = '두부는나의행복',
                          cellphoneNum = '010-3333-4444',
                          email = "qwe@TailsRoute.site";
 
@@ -87,7 +87,7 @@ INSERT INTO `member` SET
                          `name` = '유은희',
                          nickname = '꾸미엄마',
                          cellphoneNum = '010-7698-1532',
-                         email = "asd@TailsRoute.site";
+                         email = "asd@naver.com";
 
 
 ## 반려견 테이블
@@ -163,16 +163,6 @@ INSERT INTO article SET regDate = DATE_ADD(NOW(), INTERVAL (FLOOR(RAND() * 86400
 INSERT INTO article SET regDate = DATE_ADD(NOW(), INTERVAL (FLOOR(RAND() * 864000) - 864000) SECOND), updateDate = DATE_ADD(NOW(), INTERVAL (FLOOR(RAND() * 864000) - 864000) SECOND), memberId = FLOOR(1 + RAND() * 6), boardId = 3, title = '강아지가 처음 만나는 사람을 너무 무서워해요 😢', `body` = '<p>우리 강아지가 처음 만나는 사람을 너무 무서워해서, 사회화가 걱정돼요. 어떻게 잘 적응시킬 수 있을까요?</p>', hitCount = FLOOR(1 + RAND() * 100), goodReactionPoint = FLOOR(1 + RAND() * 100);
 INSERT INTO article SET regDate = DATE_ADD(NOW(), INTERVAL (FLOOR(RAND() * 864000) - 864000) SECOND), updateDate = DATE_ADD(NOW(), INTERVAL (FLOOR(RAND() * 864000) - 864000) SECOND), memberId = FLOOR(1 + RAND() * 6), boardId = 2, title = '우리 강아지, 너무 잘 배워요!', `body` = '<p>우리 강아지가 "앉아", "기다려", "손" 같은 기본 명령어를 너무 빨리 배웠어요. 정말 똑똑하고 순종적이라 자랑스럽습니다!</p>', hitCount = FLOOR(1 + RAND() * 100), goodReactionPoint = FLOOR(1 + RAND() * 100);
 
-INSERT INTO article SET
-    regDate = DATE_ADD(NOW(), INTERVAL (FLOOR(RAND() * 864000) - 864000) SECOND),
-updateDate = DATE_ADD(NOW(), INTERVAL (FLOOR(RAND() * 864000) - 864000) SECOND),
-memberId = FLOOR(1 + RAND() * 6),
-boardId = FLOOR(1 + RAND() * 3),
-title = CONCAT('제목', FLOOR(RAND() * 10000)),
-`body` = CONCAT('내용', FLOOR(RAND() * 10000)),
-hitCount = FLOOR(1 + RAND() * 100),
-goodReactionPoint = FLOOR(1 + RAND() * 100);
-
 ## 게시판 테이블
 CREATE TABLE board(
                       id INT(10) UNSIGNED NOT NULL PRIMARY KEY AUTO_INCREMENT COMMENT '식별번호',
@@ -232,14 +222,6 @@ CREATE TABLE reply (
                        goodReactionPoint INT(10) UNSIGNED NOT NULL DEFAULT 0 COMMENT '좋아요',
                        badReactionPoint INT(10) UNSIGNED NOT NULL DEFAULT 0 COMMENT '싫어요'
 );
-
-INSERT INTO reply SET
-    regDate = DATE_ADD(NOW(), INTERVAL (FLOOR(RAND() * 864000) - 864000) SECOND),
-updateDate = DATE_ADD(NOW(), INTERVAL (FLOOR(RAND() * 864000) - 864000) SECOND),
-memberId = FLOOR(1 + RAND() * 6),
-relTypeCode = 'article',
-relId = FLOOR(1 + RAND() * 10),
-`body` = CONCAT('내용', FLOOR(RAND() * 10000));
 
 ## 알람 테이블
 CREATE TABLE alarm (

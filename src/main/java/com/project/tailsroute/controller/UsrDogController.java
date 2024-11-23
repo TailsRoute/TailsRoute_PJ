@@ -34,6 +34,13 @@ public class UsrDogController {
         if (isLogined) {
             Member member = rq.getLoginedMember();
             model.addAttribute("member", member);
+        } else {
+            return "redirect:/usr/home/main";
+        }
+
+        Dog dog = dogService.getDogfile(rq.getLoginedMemberId());
+        if (dog != null) {
+            return "redirect:/usr/home/main";
         }
 
         model.addAttribute("isLogined", isLogined);
@@ -123,5 +130,19 @@ public class UsrDogController {
         dogService.upload(rq.getLoginedMemberId(), dogName, dogWeight, dogType, photoPath);
 
         return "redirect:/usr/home/main"; // 메인 페이지로 리다이렉트
+    }
+
+    @GetMapping("/usr/dog/delete")
+    public String doDelete(@RequestParam("dogId") int dogId) {
+
+        Dog dog = dogService.getDogfileId(dogId);
+
+        if(dog == null || dog.getMemberId() != rq.getLoginedMemberId()) {
+            return "redirect:/usr/home/main";
+        }
+
+        dogService.delete(dogId);
+
+        return "redirect:/usr/member/myPage";
     }
 }
