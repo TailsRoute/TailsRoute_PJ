@@ -73,9 +73,11 @@
         <input type="hidden" th:value="${currentId}">
         <div class="tw-p-2 tw-flex tw-gap-2">
             <div class="tw-flex tw-gap-2">
-                <div>일상기록공유게시판</div>
+                <div>게시판</div>
                 <div style="text-align: center;">
-                        <input type="hidden" name="boardId" value="5"/> <!-- boardId 값을 고정 -->
+                    <select name="boardId">
+                        <option th:value="5" th:text="'일상기록공유'" th:selected="${boardId == 5}"></option>
+                    </select>
                 </div>
             </div>
             <div class="tw-flex tw-gap-2 tw-flex-grow">

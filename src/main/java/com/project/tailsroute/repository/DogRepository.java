@@ -1,10 +1,7 @@
 package com.project.tailsroute.repository;
 
 import com.project.tailsroute.vo.Dog;
-import org.apache.ibatis.annotations.Insert;
-import org.apache.ibatis.annotations.Mapper;
-import org.apache.ibatis.annotations.Select;
-import org.apache.ibatis.annotations.Update;
+import org.apache.ibatis.annotations.*;
 
 @Mapper
 public interface DogRepository {
@@ -54,4 +51,10 @@ public interface DogRepository {
 			WHERE id = #{dogId}
 			""")
     void modify(int dogId, String dogName, String dogWeight, String dogType, String photoPath);
+
+    @Delete("""
+            DELETE FROM dog
+            WHERE id = #{dogId}
+            """)
+    void delete(int dogId);
 }

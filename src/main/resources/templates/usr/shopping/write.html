@@ -71,8 +71,9 @@
             <div class="tw-flex tw-gap-2">
                 <div>게시판</div>
                 <div style="text-align: center;">
-                    <p>추천합니다</p> <!-- 추천합니다라는 텍스트 표시 -->
-                    <input type="hidden" name="boardId" value="4"/> <!-- boardId 값을 고정 -->
+                    <select name="boardId">
+                        <option th:value="4" th:text="'추천합니다'" th:selected="${boardId == 4}"></option>
+                    </select>
                 </div>
             </div>
             <div class="tw-flex tw-gap-2 tw-flex-grow">

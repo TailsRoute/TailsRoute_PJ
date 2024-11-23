@@ -33,4 +33,8 @@ public class DogService {
         if (dogWeight.isEmpty()) dogWeight = "불명";
         dogRepository.modify(dogId, dogName, dogWeight, dogType, photoPath);
     }
+
+    public void delete(int dogId) {
+        dogRepository.delete(dogId);
+    }
 }

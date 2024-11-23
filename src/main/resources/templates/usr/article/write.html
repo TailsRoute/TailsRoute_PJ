@@ -78,7 +78,7 @@
                 <div style="text-align: center;">
                     <select name="boardId">
                         <option value="" disabled th:selected="${boardId == null}">게시판을 선택해주세요.</option>
-                        <option th:value="1" th:text="'공지사항'" th:selected="${boardId == 1}"></option>
+                        <option th:value="1" th:text="'공지사항'" th:selected="${boardId == 1}" th:if="${member.isAdmin()}"></option>
                         <option th:value="2" th:text="'자유게시판'" th:selected="${boardId == 2}"></option>
                         <option th:value="3" th:text="'Q & A'" th:selected="${boardId == 3}"></option>
                     </select>

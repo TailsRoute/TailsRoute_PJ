@@ -104,7 +104,7 @@
 				<select name="boardId">
 					<option th:value="${article.boardId}"
 							th:text="${article.boardId == 1 ? '공지사항' : (article.boardId == 2 ? '자유게시판' : (article.boardId == 3 ? 'Q & A' : (article.boardId == 4 ? '추천합니다' : '일상기록공유')))}">게시판을 선택해주세요.</option>
-					<option th:value="1" th:text="'공지사항'" th:selected="${boardId == 1}"></option>
+					<option th:value="1" th:text="'공지사항'" th:selected="${boardId == 1}" th:if="${member.isAdmin()}"></option>
 					<option th:value="2" th:text="'자유게시판'" th:selected="${boardId == 2}"></option>
 					<option th:value="3" th:text="'Q & A'" th:selected="${boardId == 3}"></option>
 					<option th:value="4" th:text="'추천합니다'" th:selected="${boardId == 4}"></option>

@@ -130,6 +130,8 @@
         <div class="upload_button_wrapper" th:if="${dog != null}">
             <button class="upload_button" th:onclick="'location.href=\'../dog/modify?dogId=' + ${dog.id} + '\''">수정
             </button>
+            <button class="upload_button" th:onclick="'location.href=\'../dog/delete?dogId=' + ${dog.id} + '\''">삭제
+            </button>
         </div>
         <div class="upload_button_wrapper" th:if="${dog == null}">
             <button class="upload_button" th:onclick="'location.href=\'../dog/add\''">등록</button>
