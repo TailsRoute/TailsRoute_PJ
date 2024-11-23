@@ -2,13 +2,24 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <th:block th:replace="usr/common/head"/>
-    <title>회원 가입</title>
-    <link rel="stylesheet" href="/resource/css/main2.css"/>
+    <title>TailsRoute</title>
+    <link rel="stylesheet" href="/resource/css/join.css"/>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
+    <style>
+        .success-message {
+            color: #22c55e;
+        }
+
+        .error-message {
+            color: #ef4444;
+        }
+    </style>
 </head>
 
-<body class="tw-min-h-screen tw-flex tw-flex-col bg-[#FAF3E0]" onload="initializeKakao()">
+<script src="/resource/js/join.js"></script>
+
+<body>
 
 <!-- 회원 가입 타이틀 -->
 <header class="tw-pt-16 tw-bg-transparent tw-text-center tw-translate-y-12">
@@ -20,73 +31,117 @@
     <div class="tw-flex tw-flex-col lg:tw-flex-row tw-w-full tw-max-w-6xl">
         <!-- 회원 가입 폼 -->
         <section class="tw-flex-1 tw-px-4 tw-py-6 lg:tw-p-8">
-            <form class="tw-space-y-4 tw-max-w-md tw-mx-auto">
+            <form class="join-form tw-space-y-4" action="/usr/member/doJoin" method="POST" name="join">
                 <!-- 아이디 -->
                 <div class="tw-form-control">
                     <label class="tw-label">
-                        <span class="tw-label-text tw-text-gray-700">아이디</span>
+                        <span class="tw-label-text tw-font-medium">아이디</span>
                     </label>
-                    <input type="text" placeholder="아이디"
-                           class="tw-input tw-input-bordered tw-w-full tw-rounded-lg tw-border tw-border-gray-300 focus:tw-ring-2 focus:tw-ring-[#7DAF82] focus:tw-outline-none"
-                           required/>
+                    <input id="loginId" type="text" placeholder="아이디"
+                           class="tw-input tw-w-full tw-border tw-rounded-md focus:tw-ring-2 focus:tw-ring-[#7DAF82]"
+                           name="loginId" required/>
+                    <p class="tw-text-sm" id="loginId-message"></p>
                 </div>
 
                 <!-- 비밀번호 -->
                 <div class="tw-form-control">
                     <label class="tw-label">
-                        <span class="tw-label-text tw-text-gray-700">비밀번호</span>
+                        <span class="tw-label-text tw-font-medium">비밀번호</span>
                     </label>
-                    <input type="password" placeholder="비밀번호"
-                           class="tw-input tw-input-bordered tw-w-full tw-rounded-lg tw-border tw-border-gray-300 focus:tw-ring-2 focus:tw-ring-[#7DAF82] focus:tw-outline-none"
-                           required/>
+                    <input id="loginPw" type="password" placeholder="비밀번호"
+                           class="tw-input tw-w-full tw-border tw-rounded-md focus:tw-ring-2 focus:tw-ring-[#7DAF82]"
+                           name="loginPw" required/>
+                    <p class="tw-text-sm" id="loginPw-message"></p>
                 </div>
 
-                <!-- 비밀번호 -->
+                <!-- 비밀번호 확인 -->
                 <div class="tw-form-control">
                     <label class="tw-label">
-                        <span class="tw-label-text tw-text-gray-700">비밀번호 확인</span>
+                        <span class="tw-label-text tw-font-medium">비밀번호 확인</span>
                     </label>
-                    <input type="password" placeholder="비밀번호 확인"
-                           class="tw-input tw-input-bordered tw-w-full tw-rounded-lg tw-border tw-border-gray-300 focus:tw-ring-2 focus:tw-ring-[#7DAF82] focus:tw-outline-none"
-                           required/>
+                    <input id="confirmPw" type="password" placeholder="비밀번호 확인"
+                           class="tw-input tw-w-full tw-border tw-rounded-md focus:tw-ring-2 focus:tw-ring-[#7DAF82]"
+                           name="confirmPw" required/>
+                    <p class="tw-text-sm" id="confirmPw-message"></p>
+                </div>
+                <!-- 사용자 이름 -->
+                <div class="tw-form-control">
+                    <label class="tw-label">
+                        <span class="tw-label-text tw-font-medium">이름</span>
+                    </label>
+                    <input id="name" type="text" placeholder="이름"
+                           class="tw-input tw-w-full tw-border tw-rounded-md focus:tw-ring-2 focus:tw-ring-[#7DAF82]"
+                           name="name" required/>
+                    <p class="tw-text-sm" id="name-message"></p>
                 </div>
 
-                <!-- 이름 -->
-                <div class="tw-form-control">
+                <!-- 이메일 -->
+                <div class="tw-form-control tw-flex tw-items-start tw-gap-2">
                     <label class="tw-label">
-                        <span class="tw-label-text tw-text-gray-700">이름</span>
+                        <span class="tw-label-text tw-font-medium">이메일</span>
                     </label>
-                    <input type="text" placeholder="이름"
-                           class="tw-input tw-input-bordered tw-w-full tw-rounded-lg tw-border tw-border-gray-300 focus:tw-ring-2 focus:tw-ring-[#7DAF82] focus:tw-outline-none"
-                           required/>
+                    <div class="tw-flex tw-items-center tw-w-full">
+                        <input id="email" type="text" placeholder="이메일"
+                               class="tw-input tw-border tw-rounded-md focus:tw-ring-2 focus:tw-ring-[#7DAF82] tw-flex-1"
+                               style="max-width: calc(100% - 100px);" name="email" required/>
+                        <button type="button"
+                                class="sendMail tw-btn tw-bg-[#7DAF82] tw-text-white tw-font-bold tw-rounded-md tw-ml-2"
+                                style="width: 80px;">
+                            요청
+                        </button>
+                    </div>
+                    <p class="tw-text-sm tw-w-full" id="email-message"></p>
                 </div>
+
+                <!-- 인증번호 입력 -->
+                <div class="tw-form-control tw-flex tw-items-start tw-gap-2" id="auth-code-container" style="display: none;">
+                    <label class="tw-label">
+                        <span class="tw-label-text tw-font-medium">인증 번호</span>
+                    </label>
+                    <div class="tw-flex tw-items-center tw-w-full">
+                        <input id="authCode" type="text" placeholder="인증 번호 입력"
+                               class="tw-input tw-border tw-rounded-md focus:tw-ring-2 focus:tw-ring-[#7DAF82] tw-flex-1"
+                               style="max-width: calc(100% - 100px);"/>
+                        <button type="button"
+                                class="verifyAuthCode tw-btn tw-bg-[#7DAF82] tw-text-white tw-font-bold tw-rounded-md tw-ml-2"
+                                style="width: 80px;">
+                            확인
+                        </button>
+                    </div>
+                    <span id="authCode-check" style="display: none; margin-left: 10px;">✅</span>
+                    <span id="authCode-error" style="display: none; margin-left: 10px; color: red;">❌</span>
+                    <p class="tw-text-sm tw-w-full" id="authCode-message"></p>
+                </div>
+
+
 
                 <!-- 닉네임 -->
                 <div class="tw-form-control">
                     <label class="tw-label">
-                        <span class="tw-label-text tw-text-gray-700">닉네임</span>
+                        <span class="tw-label-text tw-font-medium">닉네임</span>
                     </label>
-                    <input type="text" placeholder="닉네임을 입력하세요"
-                           class="tw-input tw-input-bordered tw-w-full tw-rounded-lg tw-border tw-border-gray-300 focus:tw-ring-2 focus:tw-ring-[#7DAF82] focus:tw-outline-none"
-                           required/>
+                    <input id="nickname" type="text" placeholder="닉네임"
+                           class="tw-input tw-w-full tw-border tw-rounded-md focus:tw-ring-2 focus:tw-ring-[#7DAF82]"
+                           name="nickname" required/>
+                    <p class="tw-text-sm" id="nickname-message"></p>
                 </div>
 
-                <!-- 번호 -->
+                <!-- 전화번호 -->
                 <div class="tw-form-control">
                     <label class="tw-label">
-                        <span class="tw-label-text tw-text-gray-700">번호</span>
+                        <span class="tw-label-text tw-font-medium">전화번호</span>
                     </label>
-                    <input type="text" placeholder="전화번호"
-                           class="tw-input tw-input-bordered tw-w-full tw-rounded-lg tw-border tw-border-gray-300 focus:tw-ring-2 focus:tw-ring-[#7DAF82] focus:tw-outline-none"
-                           required/>
+                    <input id="cellphoneNum" type="text" placeholder="전화번호"
+                           class="tw-input tw-w-full tw-border tw-rounded-md focus:tw-ring-2 focus:tw-ring-[#7DAF82]"
+                           name="cellphoneNum" oninput="autoHyphen(this)" required/>
+                    <p class="tw-text-sm" id="cellphoneNum-message"></p>
                 </div>
-                <div>
-                    <!-- 회원가입 버튼 -->
-                    <button type="submit"
-                            class="tw-btn tw-mt-10 tw-w-full tw-bg-button tw-bg-[#7DAF82] tw-text-white tw-font-bold hover:tw-bg-buttonHover">
-                        회원 가입
-                    </button>
-                </div>
+
+                <!-- 회원가입 버튼 -->
+                <button type="submit"
+                        class="join-button tw-btn tw-w-full tw-bg-green-500 tw-text-white tw-font-bold tw-rounded-md hover:tw-bg-[#7DAF82]">
+                    회원 가입
+                </button>
             </form>
         </section>
 
@@ -105,7 +160,6 @@
                         onclick="window.location.href='/usr/member/naver-login';">
                     네이버 계정으로 가입
                 </button>
-
                 <button class="tw-btn tw-btn-outline tw-w-full tw-text-buttonHover tw-border-buttonHover hover:tw-bg-buttonHover hover:tw-text-white">
                     Google 계정으로 가입
                 </button>
