@@ -26,6 +26,7 @@ public class Member {
 
     private String extra__dogPoto;
 
+    private boolean emailVerified;
 
     public boolean isAdmin() {
         return this.authLevel == 7;
