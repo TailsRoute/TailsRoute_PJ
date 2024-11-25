@@ -1,7 +1,7 @@
 @import url('https://fonts.googleapis.com/css2?family=Quicksand:wght@400;600&family=Nunito:wght@400;700&display=swap');
 
 body {
-    background-color: #fdf6e3;
+    background-color: #F9F5EB;
     color: #4D3E3E;
     font-family: 'Quicksand', sans-serif; /* 따뜻하고 친근한 느낌의 기본 폰트 */
     transition: background-color 0.3s ease;

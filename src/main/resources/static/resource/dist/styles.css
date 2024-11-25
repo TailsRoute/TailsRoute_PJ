@@ -1770,6 +1770,10 @@ html {
   height: 10px;
 }
 
+.tw-h-\[30px\] {
+  height: 30px;
+}
+
 .tw-h-\[350px\] {
   height: 350px;
 }

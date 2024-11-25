@@ -3,8 +3,8 @@
     <meta charset="UTF-8">
     <title>TailsRoute</title>
     <style>
-        body {
-            background: #f9f5eb;
+        html, body {
+            background: #f9f5eb !important;
             color: #4D3E3E;
             white-space: normal;
             word-break: keep-all;
@@ -12,27 +12,28 @@
 
         .idPwPopup {
             display: flex;
-            flex-direction: column;
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            padding: 20px;
-            border: 1px solid black;
-            border-radius: 10px;
-            gap: 10px;
+            padding: 0 40px;
+            gap: 100px;
+            width: 100%;
+            max-width: 1440px;
+            margin: auto;
         }
 
         .idPwPopup_bar {
             display: flex;
-            justify-content: center;
             flex-direction: column;
             gap: 10px;
+            width: 50%;
         }
 
         .idPwPopup_p {
-            height: 30px;
+            padding: 14px 7px;
+            border-radius: 5px;
+            margin: 0;
+            width: 100%;
+            max-width: 700px;
         }
+
 
         .button {
             background: #ff6f61;
@@ -41,64 +42,62 @@
             justify-content: center;
             align-items: center;
             border-radius: 10px;
-            padding: 10px;
+            padding: 0 16px;
+            width: 80px;
         }
     </style>
 </head>
 <body>
+<div class="tw-h-[60px]"></div>
+<div class="tw-text-center tw-text-[50px] tw-p-[20px] tw-border-b-2 tw-border-[#DADADA] tw-max-w-[1440px] tw-mx-auto">
+    아이디 / 비밀번호 찾기
+</div>
+<div class="tw-h-[30px]"></div>
 <div class="idPwPopup">
-    <div class="idPwPopup_p">아이디 찾기</div>
 
     <div class="idPwPopup_bar">
+        <div class="idPwPopup_p">아이디 찾기</div>
         <!-- 이메일 입력 폼 -->
         <form id="sendCodeForm">
             <div class="tw-flex tw-w-full tw-gap-2">
                 <input class="idPwPopup_p" type="email" id="email" name="email" placeholder="이메일을 입력해주세요" required>
-                <button class="idPwPopup_p button" type="submit">인증 코드 요청</button>
+                <button class="button" type="submit">요청</button>
             </div>
         </form>
-
-
         <!-- 인증 코드 입력 폼 -->
-        <div class="idPwPopup_p">
-            <form id="verifyCodeForm" style="display: none;">
+        <form id="verifyCodeForm" style="display: none;">
+            <div class="tw-flex tw-w-full tw-gap-2">
                 <div class="tw-flex tw-w-full tw-gap-2">
                     <input class="idPwPopup_p" type="text" id="code" name="code" placeholder="인증코드를 입력해주세요" required>
-                    <button class="idPwPopup_p button" type="submit">확인</button>
+                    <button class="button" type="submit">확인</button>
                 </div>
-            </form>
-        </div>
-
-
+            </div>
+        </form>
         <div class="idPwPopup_p" id="message"></div>
     </div>
 
-    <div class="idPwPopup_p"></div>
-
-    <div class="idPwPopup_p">비밀번호 찾기</div>
 
     <div class="idPwPopup_bar">
+        <div class="idPwPopup_p">비밀번호 찾기</div>
         <!-- 아이디 입력 폼 -->
         <form id="sendLoginIdForm">
             <div class="tw-flex tw-w-full tw-gap-2">
                 <input class="idPwPopup_p" type="text" id="loginId" name="loginId" placeholder="아이디를 입력해주세요" required>
-                <button class="idPwPopup_p button" type="submit">인증 코드 요청</button>
+                <button class="button" type="submit">요청</button>
             </div>
         </form>
-
         <!-- 인증 코드 입력 폼 -->
-        <div class="idPwPopup_p">
-            <form id="verifyLoginIdForm" style="display: none;">
-                <div class="tw-flex tw-w-full tw-gap-2">
-                    <input class="idPwPopup_p" type="text" id="passwordCode" name="passwordCode"
-                           placeholder="인증코드를 입력해주세요" required>
-                    <button class="idPwPopup_p button" type="submit">확인</button>
-                </div>
-            </form>
-        </div>
-
+        <form id="verifyLoginIdForm" style="display: none">
+            <div class="tw-flex tw-w-full tw-gap-2">
+                <input class="idPwPopup_p" type="text" id="passwordCode" name="passwordCode"
+                       placeholder="인증코드를 입력해주세요" required>
+                <button class="button" type="submit">확인</button>
+            </div>
+        </form>
         <div class="idPwPopup_p" id="message2"></div>
     </div>
+
+
 </div>
 <script>
     // 아이디 찾기 인증 코드 요청
@@ -112,6 +111,9 @@
             type: 'POST',
             data: {email: email},  // 이메일을 데이터로 전송
             success: function (response) {
+                if (response == "아이디 찾기 기능을 사용할 수 없습니다.") {
+                    alert("소셜 로그인 회원은 아이디 찾기 기능을 사용할 수 없습니다. 로그인 시 사용한 소셜 계정으로 로그인해 주세요.")
+                }
                 $('#message').text(response);  // 서버로부터 받은 메시지를 그대로 출력
                 if (response == "인증코드가 전송되었습니다") {
                     $('#verifyCodeForm').show();  // 인증 코드 입력 폼 표시
@@ -154,6 +156,9 @@
             type: 'POST',
             data: {loginId: loginId},
             success: function (response) {
+                if (response == "비밀번호 찾기 기능을 사용할 수 없습니다.") {
+                    alert("소셜 로그인 회원은 비밀번호 찾기 기능을 사용할 수 없습니다. 로그인 시 사용한 소셜 계정으로 로그인해 주세요.")
+                }
                 $('#message2').text(response);
                 if (response == "인증코드가 전송되었습니다") {
                     $('#verifyLoginIdForm').show();

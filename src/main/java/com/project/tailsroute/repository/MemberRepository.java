@@ -26,6 +26,7 @@ public interface MemberRepository {
             LEFT JOIN dog D
             ON D.memberId = M.id
             WHERE loginId = #{loginId}
+            LIMIT 1
 			""")
     public Member getMemberByLoginId(String loginId);
 
@@ -69,6 +70,7 @@ public interface MemberRepository {
             LEFT JOIN dog D
             ON D.memberId = M.id
             WHERE email = #{email}
+            LIMIT 1
 			""")
     Member getMemberByEmail(String email);
 

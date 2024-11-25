@@ -79,7 +79,8 @@
                  class="head_profile_image tw-w-[50px] tw-h-[50px] tw-border tw-border-[#4D3E3E] tw-rounded-full"/>
             <div>
                 <div th:text="${article.extra__writer}"></div>
-                <div th:text="|${article.regDate} / 조회수 ${article.hitCount}|"></div>
+                <span th:text="|${article.regDate} / 조회수 |"></span>
+                <span class="article-detail__hit-count" th:text="${article.hitCount}"></span>
             </div>
         </div>
         <div class="tw-flex tw-gap-2" th:if="${member != null}">

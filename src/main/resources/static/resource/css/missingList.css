@@ -1,8 +1,12 @@
-body {
-    background: #f9f5eb;
+html, body {
+    background: #f9f5eb !important;
     color: #4D3E3E;
     white-space: normal;
     word-break: keep-all;
+}
+
+.link:hover {
+    text-decoration: underline;
 }
 
 .title {
@@ -12,7 +16,7 @@ body {
 }
 
 .profile {
-    border-bottom: 1px solid;
+    border-bottom: 2px solid #DADADA;
     margin: auto;
     max-width: 1340px;
     font-weight: bold;

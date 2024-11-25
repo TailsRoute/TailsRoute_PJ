@@ -200,7 +200,7 @@ public class UsrMemberController {
         if(member == null){
             return "해당 회원은 존재하지 않습니다";
         }else if(member.getSocialLoginStatus() == 1){
-            return "소셜 로그인 회원은 아이디 찾기 기능을 사용할 수 없습니다. 로그인 시 사용한 소셜 계정으로 로그인해 주세요.";
+            return "아이디 찾기 기능을 사용할 수 없습니다.";
         }
 
         String authCode = memberService.generateAuthCode();
@@ -236,7 +236,7 @@ public class UsrMemberController {
         if(member == null){
             return "해당 회원은 존재하지 않습니다";
         }else if(member.getSocialLoginStatus() == 1){
-            return "소셜 로그인 회원은 비밀번호 찾기 기능을 사용할 수 없습니다. 로그인 시 사용한 소셜 계정으로 로그인해 주세요.";
+            return "비밀번호 찾기 기능을 사용할 수 없습니다.";
         }
 
         authCodes.put(member.getEmail(), authCode);

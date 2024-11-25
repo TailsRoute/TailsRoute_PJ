@@ -7,13 +7,16 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+
 @Service
 public class WalkService {
     private final WalkRepository walkRepository;
+
     @Autowired
     public WalkService(WalkRepository walkRepository) {
         this.walkRepository = walkRepository;
     }
+
     public void addWalk(Walk walk) {
         walkRepository.addWalks(
                 walk.getMemberId(),

@@ -505,3 +505,12 @@ CREATE TABLE walk(
                      routedistance DOUBLE NOT NULL COMMENT '루트 거리',
                      isLiked TINYINT(1) NOT NULL DEFAULT 0 COMMENT '즐겨찾기 여부 (0=즐겨찾기 전, 1=즐겨찾기 후)'
 );
+
+CREATE TABLE webpush (
+                         id INT AUTO_INCREMENT PRIMARY KEY,
+                         memberId INT NOT NULL,
+                         `endpoint` VARCHAR(255) NOT NULL,
+                         p256dh VARCHAR(255) NOT NULL,
+                         auth VARCHAR(255) NOT NULL,
+                         createdAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
