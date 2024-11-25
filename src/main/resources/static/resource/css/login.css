@@ -32,7 +32,6 @@ body {
     margin: auto;
 }
 
-/* 회원가입 섹션 (왼쪽) */
 .left-section {
     flex: 1;
     display: flex;
@@ -87,7 +86,7 @@ body {
     text-decoration: underline;
 }
 
-.join-button {
+.login-button {
     width: 100%;
     height: 48px;
     background-color: #7DAF82;
@@ -100,18 +99,11 @@ body {
     transition: background-color 0.3s, transform 0.2s;
 }
 
-.join-button:hover {
+.login-button:hover {
     background-color: #5C8D6D;
     transform: translateY(-2px);
 }
 
-.sendMail{
-    background-color: #7DAF82;
-}
-.sendMail:hover{
-    background-color: #5C8D6D;
-    transform: translateY(-2px);
-}
 
 
 /* 소셜 로그인 섹션 */
@@ -141,7 +133,6 @@ body {
     cursor: pointer;
     transition: background-color 0.3s, transform 0.2s;
 }
-
 
 .social-button.kakao {
     background-color: #F7E600;

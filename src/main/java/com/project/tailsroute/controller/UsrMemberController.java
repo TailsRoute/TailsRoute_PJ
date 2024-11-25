@@ -22,6 +22,7 @@ import java.util.Random;
 @Controller
 public class UsrMemberController {
 
+    @Autowired
     private final Rq rq;
 
     private final Map<String, String> authCodes = new HashMap<>();
@@ -61,38 +62,31 @@ public class UsrMemberController {
 
     @PostMapping("/usr/member/doLogin")
     @ResponseBody
-    public Map<String, Object> doLogin(HttpServletRequest req, @RequestParam("loginId") String loginId, @RequestParam("loginPw") String loginPw) {
-        Map<String, Object> response = new HashMap<>();
+    public String doLogin( @RequestParam("loginId") String loginId, @RequestParam("loginPw") String loginPw) {
+
+        System.err.println(loginId);
 
         if (Ut.isEmptyOrNull(loginId)) {
-            response.put("resultCode", "F-1");
-            response.put("jsAction", "history.back(); alert('loginId 입력 x');");
-            return response;
+            return Ut.jsHistoryBack("F-1", "loginId 입력 x");
         }
-
         if (Ut.isEmptyOrNull(loginPw)) {
-            response.put("resultCode", "F-2");
-            response.put("jsAction", "history.back(); alert('loginPw 입력 x');");
-            return response;
+            return Ut.jsHistoryBack("F-2", "loginPw 입력 x");
         }
 
         Member member = memberService.getMemberByLoginId(loginId);
+
         if (member == null) {
-            response.put("resultCode", "F-3");
-            response.put("jsAction", String.format("history.back(); alert('%s는(은) 존재하지 않습니다.');", loginId));
-            return response;
+            return Ut.jsHistoryBack("F-3", Ut.f("%s는(은) 존재 x", loginId));
         }
 
-        if (!member.getLoginPw().equals(loginPw)) {
-            response.put("resultCode", "F-4");
-            response.put("jsAction", "history.back(); alert('비밀번호가 틀렸습니다.');");
-            return response;
+        if (member.getLoginPw().equals(loginPw) == false) {
+            return Ut.jsHistoryBack("F-4", Ut.f("비밀번호 틀림"));
         }
 
         rq.login(member);
-        response.put("resultCode", "S-1");
-        response.put("jsAction", String.format("location.href = '/usr/home/main'; alert('%s님 환영합니다.');", member.getNickname()));
-        return response;
+
+        return Ut.jsReplace("S-1", Ut.f("%s님 환영합니다", member.getNickname()), "/usr/home/main");
+
     }
 
 
