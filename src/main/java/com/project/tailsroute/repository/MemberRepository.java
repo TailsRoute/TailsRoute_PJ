@@ -82,13 +82,7 @@ public interface MemberRepository {
             """)
     void setTemporaryPassword(int id, String loginPW);
 
-    @Select("""
-			SELECT *
-			FROM `member`
-			WHERE name = #{name}
-			AND email = #{email}
-			""")
-    Member getMemberByNameAndEmail(String name, String email);
+
 
     @Select("""
 			SELECT *

@@ -22,7 +22,7 @@
 <body>
 
 <!-- 회원 가입 타이틀 -->
-<header class="tw-pt-16 tw-bg-transparent tw-text-center tw-translate-y-12">
+<header class="tw-pt-16 tw-text-center tw-translate-y-12">
     <h4 class="tw-text-4xl tw-font-bold tw-text-[#3A3A3A]">회원가입</h4>
 </header>
 <!-- 메인 콘텐츠 -->
@@ -85,7 +85,7 @@
                                class="tw-input tw-border tw-rounded-md focus:tw-ring-2 focus:tw-ring-[#7DAF82] tw-flex-1"
                                style="max-width: calc(100% - 100px);" name="email" required/>
                         <button type="button"
-                                class="sendMail tw-btn tw-bg-[#7DAF82] tw-text-white tw-font-bold tw-rounded-md tw-ml-2"
+                                class="sendMail tw-btn tw-text-white tw-font-bold tw-rounded-md tw-ml-2"
                                 style="width: 80px;">
                             요청
                         </button>
@@ -139,7 +139,7 @@
 
                 <!-- 회원가입 버튼 -->
                 <button type="submit"
-                        class="join-button tw-btn tw-w-full tw-bg-green-500 tw-text-white tw-font-bold tw-rounded-md hover:tw-bg-[#7DAF82]">
+                        class="join-button tw-btn tw-w-full tw-text-white tw-font-bold tw-rounded-md ">
                     회원 가입
                 </button>
             </form>
@@ -153,16 +153,14 @@
         <!-- 소셜 로그인 -->
         <section class="tw-flex-1 tw-flex tw-flex-col tw-justify-center tw-px-4 tw-py-6 lg:tw-p-8">
             <div class="tw-space-y-4 tw-max-w-md tw-mx-auto">
-                <button class="tw-btn tw-btn-outline tw-w-full tw-text-iconAccent tw-border-iconAccent hover:tw-bg-iconAccent hover:tw-text-white">
+                <button class="social-button kakao tw-btn-outline tw-w-full tw-text-iconAccent tw-border-iconAccent hover:tw-bg-iconAccent hover:tw-text-white">
                     카카오 계정으로 가입
                 </button>
-                <button class="tw-btn tw-btn-outline tw-w-full tw-text-button tw-border-button hover:tw-bg-button hover:tw-text-white"
+                <button class="social-button naver tw-btn tw-btn-outline tw-w-full tw-text-button tw-border-button hover:tw-bg-button hover:tw-text-white"
                         onclick="window.location.href='/usr/member/naver-login';">
                     네이버 계정으로 가입
                 </button>
-                <button class="tw-btn tw-btn-outline tw-w-full tw-text-buttonHover tw-border-buttonHover hover:tw-bg-buttonHover hover:tw-text-white">
-                    Google 계정으로 가입
-                </button>
+
             </div>
         </section>
 
