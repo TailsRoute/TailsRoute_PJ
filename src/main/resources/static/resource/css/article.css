@@ -1,5 +1,5 @@
-body {
-    background: #f9f5eb;
+html, body {
+    background: #f9f5eb !important;
     color: #4D3E3E;
     white-space: normal;
     word-break: keep-all;
@@ -25,7 +25,7 @@ input, select, textarea{
 }
 
 .article_body {
-    border-top: 1px solid;
+    border-top: 2px solid #dadada;
     margin: auto;
     width: 1340px;
 }
@@ -51,5 +51,5 @@ input, select, textarea{
 
 .reply_body{
     padding: 20px;
-    border-top: 1px solid;
+    border-top: 2px solid #dadada;
 }

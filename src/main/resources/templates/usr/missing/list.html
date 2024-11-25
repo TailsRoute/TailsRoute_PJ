@@ -32,7 +32,7 @@
         <option th:if="${str != '제주특별자치도'}" value="제주특별자치도">제주특별자치도</option>
     </select>
     </div>
-    <a class="misssing_write" href="../missing/write">글 작성</a>
+    <a class="misssing_write link" href="../missing/write">글 작성</a>
 </div>
 <div class="misssing_list">
     <a class="misssing_item tw-ml-[12px] tw-mb-[12px]" th:href="@{'../missing/detail?missingId='+${missing.id}}" th:each="missing : ${missings}">

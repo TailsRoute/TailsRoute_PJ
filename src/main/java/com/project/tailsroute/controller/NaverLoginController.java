@@ -167,7 +167,7 @@ public class NaverLoginController {
 
                 memberService.join(loginId, loginPw, name, nickname, cellphoneNum, email, 1);   // 세션에 로그인 정보 저장
 
-                Member newMember = memberService.getMemberByLoginId(loginId);
+                Member newMember = memberService.getMemberByEmail(email);
                 rq.login(newMember);
                 return newMember;
             }

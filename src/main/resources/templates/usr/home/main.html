@@ -54,8 +54,10 @@
     </script>
 </div>
 <script src="/resource/js/main.js"></script>
+<div class="left_box"></div>
+<div class="right_box"></div>
 <div class="main_box tw-relative">
-    <img class="main_image" th:src="@{/resource/photo/main.png}" alt="">
+    <img class="main_image" th:src="@{/resource/photo/main2.png}" alt="">
     <div class="main_text tw-absolute">
         <div>TailsRoute는 반려견의 실종 신고, 건강 관리, 훈련 추천, 커뮤니티 정보 교환 등을 제공하는 종합 케어 플랫폼입니다.</div>
         <button class="main_button ">24시간 병원 안내</button>
@@ -107,8 +109,6 @@
         <button class="slider_btn right_btn">&#10095;</button>
     </div>
 </div>
-<div class="left_box"></div>
-<div class="right_box"></div>
 
 <div class="gps_popup tw-gap-5" th:if="${isLogined && gpsChack == null}">
     <div class="tw-p-2 tw-text-3xl">GPS 정보 수신에 동의 하시겠습니까? (1)</div>

@@ -1,5 +1,5 @@
-body {
-    background: #f9f5eb;
+html, body {
+    background: #f9f5eb !important;
     color: #4D3E3E;
     white-space: normal;
     word-break: keep-all;
@@ -9,6 +9,10 @@ input, select, textarea{
     border: 2px solid #ccc; /* 점선 테두리 */
     border-radius: 5px; /* 모서리 둥글게 */
     padding-left: 10px; /* 왼쪽 여백 10px 추가 */
+}
+
+.link:hover {
+    text-decoration: underline;
 }
 
 /* 드롭 영역 스타일 */
@@ -38,11 +42,11 @@ input, select, textarea{
 
 .image_button {
     margin-top: 10px;
-    background: RGB(105, 105, 105);
-    color: white;
-    border-radius: 10px;
-    height: 50px;
     width: 150px;
+    background: #ff6f61;
+    color : #ffffff;
+    border-radius: 10px;
+    padding: 10px;
 }
 
 .upload_text {
@@ -56,14 +60,14 @@ input, select, textarea{
 }
 
 .profile {
-    border-bottom: 1px solid;
+    border-bottom: 2px solid #dadada;
     margin: auto;
     width: 1340px;
     font-weight: bold;
 }
 
 .dogAdd_body {
-    border-top: 1px solid;
+    border-top: 2px solid #DADADA;
     margin: auto;
     width: 1340px;
 }
@@ -87,11 +91,11 @@ input, select, textarea{
 }
 
 .upload_button {
-    background: RGB(105, 105, 105);
-    color: white;
-    border-radius: 10px;
-    height: 40px;
     width: 100px;
+    background: #ff6f61;
+    color : #ffffff;
+    border-radius: 10px;
+    padding: 10px;
 }
 
 .trait {
@@ -108,13 +112,17 @@ input, select, textarea{
 .misssing_button{
     display: inline-block;
     margin-left: 10px;
+    background: #ff6f61;
+    color : #ffffff;
+    border-radius: 10px;
+    padding: 10px;
 }
 
 .image_clear{
-    background: RGB(105, 105, 105);
-    color: white;
+    background: #ff6f61;
+    color : #ffffff;
     border-radius: 10px;
-    height: 40px;
+    padding: 10px;
     width: 100px;
     right: -120px;
     top: 0;
