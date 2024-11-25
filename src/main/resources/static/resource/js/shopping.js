@@ -40,7 +40,7 @@ fetch(`/usr/essential/get?memberId=` + member.id) // memberId를 쿼리 파라�
                 start: startDate.toISOString().split('T')[0], // 시작 날짜
                 end: endDate.toISOString().split('T')[0], // 종료 날짜 (주기에 따라)
                 allDay: true, // 하루 종일 일정
-                color: '#4D3E3E',
+                color: '#7daf82',
                 extendedProps: {
                     selecteDate: event.selecteDate,
                     usageCycle: event.usageCycle, // 구매 주기

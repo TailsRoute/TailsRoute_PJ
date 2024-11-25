@@ -1,0 +1,175 @@
+html,body {
+    background-color: #F9F5EB !important;
+    color: #4D3E3E;
+}
+.grass {
+    padding-left: 10px;
+    padding-top: 10px;
+    border: 1px solid #ccc;
+    border-radius: 10px;
+    background-color: #F2F2EB;
+    width: 850px;
+    height: 160px;
+    margin-left: 10px;
+    display: inline-block;
+}
+.labels {
+    display: flex;
+}
+.row-labels {
+    display: flex;
+    flex-direction: column;
+    margin-right: 5px;
+    margin-top: 20px;
+    font-size: 10px;
+    text-align: right;
+}
+.grid-container {
+    display: flex;
+    flex-direction: column;
+}
+.month-labels {
+    display: grid;
+    grid-template-columns: repeat(12, 65px); /* 45px: 칸 너비 */
+    gap: 2px;
+    justify-content: start;
+    font-size: 10px;
+    margin-bottom: 5px;
+}
+.grid {
+    display: grid;
+    grid-template-rows: repeat(7, 15px);
+    grid-template-columns: repeat(54, 15px);
+}
+.box {
+    position: relative; /* 툴팁 표시를 위한 기준 */
+    width: 12px;
+    height: 12px;
+    background-color: #E0E0E0;
+    border: 1px solid #ccc;
+    border-radius: 2px;
+    transition: background-color 0.3s;
+}
+.box.count-0 {
+    background-color: #D3D3D3; /* 0개일 때 회색 */
+}
+.box.count-1 {
+    background-color: #A8D08D; /* 1개일 때 연한 녹색 */
+}
+.box.count-2 {
+    background-color: #4CAF50; /* 2개일 때 녹색 */
+}
+.box.count-3 {
+    background-color: #388E3C; /* 3개일 때 진한 녹색 */
+}
+.box.count-4-plus {
+    background-color: #2C6B2F; /* 4개 이상일 때 완전 진한 녹색 */
+}
+.box:hover::after {
+    content: attr(data-date); /* 날짜 데이터 표시 */
+    position: absolute;
+    background: #333; /* 툴팁 배경색 */
+    color: #fff; /* 툴팁 글자색 */
+    padding: 3px 6px;
+    border-radius: 3px;
+    font-size: 10px;
+    bottom: 100%; /* 박스 위쪽에 표시 */
+    left: 50%; /* 가로 중앙 정렬 */
+    transform: translateX(-50%);
+    white-space: nowrap;
+    pointer-events: none; /* 마우스 이벤트 비활성화 */
+    z-index: 10;
+    margin-bottom: 5px; /* 박스와의 간격 */
+}
+.WalkingSchedule{
+    margin-top: 10px;
+    border: 1px solid #ccc;
+    border-radius: 10px;
+    background-color: #F2F2EB;
+    display: inline-block;
+    width: 550px;
+    height: 690px;
+    margin-left: 10px;
+}
+.WalkingTrail {
+    margin-top: 10px;
+    border: 1px solid #ccc;
+    border-radius: 10px;
+    background-color: #F2F2EB;
+    display: inline-block;
+    width: 850px;
+    height: 690px;
+    margin-left: 10px;
+}
+.information{
+    border: 1px solid #ccc;
+    border-radius: 10px;
+    background-color: #F2F2EB;
+    width: 100%;
+    height: 110px;
+    display: inline-block;
+    text-align: center;
+    padding: 10px;
+    margin-top: 10px;
+}
+#routePicture canvas {
+    width: 200px;
+    height: auto;
+}
+#WalkingTable{
+    width: 100%;
+}
+th{
+    padding: 10px;
+    text-align: center;
+    border: 1px solid #ccc;
+    border-radius: 10px;
+    font-size: 14px;
+}
+th#modifyHeader,th#deleteHeader{
+    width: 50px;
+}
+th#likeHeader{
+    width: 80px;
+}
+th#purchaseDateHeader,th#routedistanceHeader{
+    width: 100px;
+}
+td {
+    padding: 10px; /* 각 td 요소의 내부 여백 */
+    border: 1px solid #ccc; /* 셀 경계선 */
+    border-radius: 10px;
+    text-align: center; /* 텍스트 가운데 정렬 */
+    font-size: 14px;
+}
+td.ellipsis{
+    max-width: 150px; /* 적절한 최대 너비 설정 */
+    white-space: nowrap; /* 텍스트 줄바꿈 방지 */
+    overflow: hidden; /* 넘치는 텍스트 숨기기 */
+    text-overflow: ellipsis;
+}
+#writeWalkButton{
+    width: 100%;
+    height: 40px;
+}
+.lowBox{
+    height: 160px;
+    width: 180px;
+    display: inline-block;
+    position: relative;
+    float: right;
+    margin-right: 13px;
+}
+.topWalk{
+    width: 1440px;
+    position: absolute;
+    left: 50%;
+    transform: translate(-50%);
+}
+.lowWalk{
+    width: 1440px;
+    position: absolute;
+    left: 50%;
+    top: 890px;
+    transform: translate(-50%);
+}
