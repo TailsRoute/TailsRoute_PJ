@@ -14,3 +14,14 @@ CREATE TABLE hospital(
 );
 
 select * from hospital;
+
+CREATE TABLE `temp_hospital` (
+                                 `id` int(10) unsigned NOT NULL AUTO_INCREMENT COMMENT '고유 병원 ID',
+                                 `name` text NOT NULL COMMENT '병원 이름',
+                                 `callNumber` varchar(20) DEFAULT NULL COMMENT '소재지전화번호',
+                                 `jibunAddress` text DEFAULT NULL COMMENT '병원의 지번 주소',
+                                 `roadAddress` text DEFAULT NULL COMMENT '병원의 도로명 주소',
+                                 `type` enum('일반','24시간') NOT NULL DEFAULT '일반' COMMENT '병원 타입',
+                                 PRIMARY KEY (`id`),
+                                 UNIQUE KEY `callNumber` (`callNumber`)
+);
