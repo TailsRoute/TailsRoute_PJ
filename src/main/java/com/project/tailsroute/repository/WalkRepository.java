@@ -2,7 +2,6 @@ package com.project.tailsroute.repository;
 
 import com.project.tailsroute.vo.Walk;
 import org.apache.ibatis.annotations.*;
-
 import java.util.List;
 
 @Mapper
@@ -23,11 +22,21 @@ public interface WalkRepository {
     @Update("UPDATE walk SET isLiked= #{isLiked} WHERE routeName= #{routeName} AND purchaseDate=#{purchaseDate} AND routedistance=#{routedistance}")
     public void updateIsLiked(int isLiked,String routeName, String purchaseDate, double routedistance);
 
-    @Update("UPDATE walk SET routeName = #{routeName}, purchaseDate = #{purchaseDate} WHERE id = #{id}")
-    public void updateWalks(String routeName, String purchaseDate, int id);
+    @Update("UPDATE walk SET routeName = #{routeName}, purchaseDate = #{purchaseDate},routePicture = #{routePicture},routedistance = #{routedistance} WHERE id = #{id}")
+    public void updateWalks(@Param("routeName") String routeName,
+                            @Param("purchaseDate") String purchaseDate,
+                            @Param("routePicture") String routePicture,
+                            @Param("routedistance") double routedistance,
+                            @Param("id") int id);
 
     @Delete("DELETE FROM walk WHERE id = #{id}")
     public void deleteWalks(int id);
+
+    @Select("SELECT * FROM walk WHERE id = #{id}")
+    Walk findById(@Param("id") int id);
+
+    @Select("SELECT * FROM walk WHERE memberId = #{memberId} AND isLiked = 1")
+    List<Walk> findFavoritesByMemberId(@Param("memberId") int memberId);
 
     @Select("""
     SELECT M.nickname extra__walker, COUNT(W.purchaseDate) extra__count, ROUND(SUM(W.routedistance), 1) extra__distance\s
