@@ -24,7 +24,7 @@ public class UsrwalkController {
     private final WalkService walkService;
 
     @Autowired
-    public UsrwalkController(Rq rq, GpsChackService gpsChackService, WeatherService weatherService,WalkService walkService) {
+    public UsrwalkController(Rq rq, GpsChackService gpsChackService, WeatherService weatherService, WalkService walkService) {
         this.rq = rq;
         this.gpsChackService = gpsChackService;
         this.weatherService = weatherService;
@@ -61,6 +61,7 @@ public class UsrwalkController {
 
         return "usr/walk/page";
     }
+
     @GetMapping("/usr/walk/write")
     public String showWalkwrite(Model model) {
         boolean isLogined = rq.isLogined();
@@ -112,11 +113,13 @@ public class UsrwalkController {
             return new ResponseEntity<>("일정 생성 중 오류가 발생했습니다: " + e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
+
     @GetMapping("/usr/walk/get")
     @ResponseBody
     public List<Walk> getWalks(@RequestParam int memberId) {
         return walkService.findWalksByMemberId(memberId);
     }
+
     @GetMapping("/usr/walk/getcount")
     @ResponseBody
     public List<Walk> countdate(@RequestParam int year, @RequestParam int memberId) {
@@ -136,6 +139,8 @@ public class UsrwalkController {
         walkService.updateWalks(
                 walk.getRouteName(),
                 walk.getPurchaseDate(),
+                walk.getRoutePicture(),
+                walk.getRoutedistance(),
                 walk.getId()
         );
         return ResponseEntity.ok("{\"message\":\"수정 성공\"}");
@@ -176,5 +181,52 @@ public class UsrwalkController {
         // Google Maps API 키 추가
         model.addAttribute("NAVER_API", NaverApiKey);
         return "usr/walk/list"; // 리스트 페이지로 이동
+    }
+
+    @GetMapping("/usr/walk/modify")
+    public String showWalkModify(
+            @RequestParam String routeName,
+            @RequestParam String purchaseDate,
+            @RequestParam double routedistance,
+            @RequestParam int id,
+            Model model) {
+        boolean isLogined = rq.isLogined();
+
+        if (!isLogined) {
+            return "redirect:/usr/member/login"; // 로그인하지 않은 경우 로그인 페이지로 리다이렉트
+        }
+
+        Member member = rq.getLoginedMember();
+        int memberId = member.getId();
+
+        // GPS 정보 가져오기
+        GpsChack gpsCheck = gpsChackService.chack(memberId);
+
+        // 저장된 경로 정보 가져오기
+        String routePicture = walkService.findRoutePicture(routeName, purchaseDate, routedistance);
+        Walk walk = walkService.findWalk(id);
+
+        if (routePicture == null) {
+            return "error/noRoute"; // 경로 정보가 없는 경우 에러 페이지로 이동
+        }
+
+        model.addAttribute("member", member);
+        model.addAttribute("isLogined", isLogined);
+        model.addAttribute("gpsCheck", gpsCheck);
+
+        // 수정할 데이터 전달
+        model.addAttribute("routeName", routeName);
+        model.addAttribute("purchaseDate", purchaseDate);
+        model.addAttribute("routedistance", routedistance);
+        model.addAttribute("routePicture", routePicture);
+        model.addAttribute("walkId", walk.getId()); // walkId 추가
+        model.addAttribute("NAVER_API", NaverApiKey);
+
+        return "usr/walk/modify"; // 수정 페이지로 이동
+    }
+    @GetMapping("/usr/walk/favorites")
+    @ResponseBody
+    public List<Walk> getFavoriteWalks(@RequestParam int memberId) {
+        return walkService.findFavoritesByMemberId(memberId);
     }
 }
