@@ -270,6 +270,38 @@ function updateSidebar(hospitals) {
         listContainer.appendChild(listItem);
     });
 
+    // hospitals.forEach((hospital, index) => {
+    //     const listItem = document.createElement('li');
+    //     listItem.classList.add('border-b', 'p-4'); // TailwindCSS 클래스 추가
+    //     listItem.innerHTML = `
+    //         <p class="font-semibold">${hospital.name}</p>
+    //         <p class="text-sm text-gray-600">${hospital.roadAddress || hospital.jibunAddress}</p>
+    //         <p class="text-sm text-gray-600">${hospital.callNumber || '전화번호 정보 없음'}</p>
+    //     `;
+    //
+    //     // 클릭 이벤트 추가
+    //     listItem.addEventListener('click', () => {
+    //         if (markers[index]) {
+    //             console.log("index: " + index);
+    //             const position = markers[index].getPosition();
+    //             map.setCenter(position); // 지도 중심 이동
+    //             map.setZoom(16); // 줌 레벨 조정
+    //             new google.maps.InfoWindow({
+    //                 content: `
+    //                     <h3>${hospital.name}</h3>
+    //                     <p>주소: ${hospital.roadAddress || '주소 정보 없음'}</p>
+    //                     <p>전화번호: ${hospital.callNumber || '전화번호 정보 없음'}</p>
+    //                 `
+    //             }).open(map, markers[index]);
+    //         }
+    //
+    //         // 사이드바 접기
+    //         sidebar.classList.remove('open');
+    //         toggleButton.innerHTML = '&#9654;'; // 화살표를 왼쪽으로
+    //     });
+    //
+    //     listContainer.appendChild(listItem); // 리스트 항목 추가
+    // });
 }
 
 // 검색 버튼 클릭 이벤트 리스너
