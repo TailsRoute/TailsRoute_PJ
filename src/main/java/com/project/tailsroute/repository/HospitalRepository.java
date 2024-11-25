@@ -23,4 +23,30 @@ public interface HospitalRepository {
 
     @Update("UPDATE hospital SET latitude = #{latitude}, longitude = #{longitude} WHERE id = #{id}")
     void updateHospitalCoordinates(@Param("id") int id, @Param("latitude") String latitude, @Param("longitude") String longitude);
+
+    @Select("SELECT * FROM hospital WHERE type = #{type}")
+    List<Hospital> findHospitalsByType(@Param("type") String type);
+
+
+    @Select("SELECT * FROM hospital WHERE type = #{type} AND roadAddress LIKE CONCAT('%', #{region}, '%')")
+    List<Hospital> findByTypeAndRegion(@Param("type") String type, @Param("region") String region);
+
+    @Select("SELECT * FROM hospital WHERE type = #{type}")
+    List<Hospital> findByType(@Param("type") String type);
+
+    @Select("SELECT * FROM hospital WHERE roadAddress LIKE CONCAT('%', #{region}, '%')")
+    List<Hospital> findByRegion(@Param("region") String region);
+
+    @Select("SELECT * FROM hospital")
+    List<Hospital> findAll();
+
+    @Select("""
+            SELECT * 
+            FROM hospital
+            WHERE 
+            (#{type} = '일반' OR type = #{type})
+            AND (roadAddress LIKE CONCAT('%', #{region}, '%')
+                 OR jibunAddress LIKE CONCAT('%', #{region}, '%'))
+            """)
+    List<Hospital> findHospitalsByTypeAndRegion(@Param("type") String type, @Param("region") String region);
 }

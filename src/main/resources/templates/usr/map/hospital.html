@@ -3,7 +3,7 @@
 <html xmlns:th="http://www.thymeleaf.org" lang="ko">
 <head>
     <meta charset="UTF-8">
-    <title>24 hour hospital</title>
+    <title>TailsRoute</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href="/resource/dist/styles.css" th:href="@{/resource/dist/styles.css}" rel="stylesheet">
     <link rel="stylesheet" href="/resource/css/hospital.css"/>
@@ -27,41 +27,9 @@
 <!-- 전체 레이아웃 컨테이너 -->
 <div class="flex-grow" style="height: calc(100vh - 61px);">
     <!-- 내부 레이아웃 컨테이너: 지도 영역 -->
-    <div class="w-full h-full p-6">
-        <!-- 지역별 검색 -->
-        <div class="mb-4">
-            <h2 class="text-xl font-semibold mb-4">지역별 동물병원 검색</h2>
-            <div class="flex space-x-4">
-                <div class="flex items-center space-x-2">
-                    <label for="city-select" class="font-medium">시/도를 선택하세요 : </label>
-                    <select id="city-select" onchange="loadCounties()" class="p-2 border border-gray-300 rounded">
-                        <option value="">시/도 선택</option>
-                    </select>
-                </div>
-                <div class="flex items-center space-x-2">
-                    <label for="county-select" class="font-medium">시/군/구를 선택하세요 : </label>
-                    <select id="county-select" class="p-2 border border-gray-300 rounded">
-                        <option value="">시/군/구 선택</option>
-                    </select>
-                </div>
-                <div>
-                    <button class="p-2 border border-gray-300 bg-white rounded"
-                            onclick="toggleSidebar(); geocodeAddress();">검색
-                    </button>
-                </div>
-            </div>
-        </div>
-
-        <!-- 24시간 병원만 보기 토글 -->
-        <div class="mb-4 flex items-center">
-            <label class="flex items-center space-x-2">
-                <input role="switch" type="checkbox"/>
-                <span>24시간 병원만 보기</span>
-            </label>
-        </div>
-
+    <div class="w-full h-full">
         <!-- 지도 영역 -->
-        <div class="bg-gray-200 flex items-center justify-center" style="height: calc(100% - 150px);">
+        <div class="bg-gray-200 flex items-center justify-center" style="height: 100%">
             <div id="map" style="width: 100%; height: 100%;"></div>
         </div>
     </div>
@@ -71,21 +39,54 @@
 <div id="sidebar">
     <!-- 헤더에 가려지지 않도록 공간을 확보하는 역할 -->
     <div class="tw-bg-blue-500 w-full text-white flex items-center justify-center" style="height: 60px;"></div>
-    <div class="p-4">
-        <h2 class="text-xl font-semibold mb-4">검색 결과</h2>
-        <ul>
-            <!-- 병원 리스트 항목 -->
-            <li class="mb-4 border-b pb-4">
-                <p class="font-semibold">오아시스 정형외과 신경외과 동물병원</p>
-                <p class="text-sm text-gray-600">동물병원 | 광교 센터블럭로 107</p>
-                <div class="flex space-x-2 mt-2 text-sm text-blue-600">
-                    <a href="#" class="hover:underline">웹사이트</a>
-                    <a href="#" class="hover:underline">경로</a>
+    <div class="search-container p-4">
+        <!-- 지역별 검색 -->
+        <div class="mb-4">
+            <div class="flex space-x-4">
+                <h2 class="text-xl font-semibold mb-4">지역별 동물병원 검색</h2>
+            </div>
+            <div class="flex space-x-4">
+                <div class="flex items-center space-x-2">
+                    <select id="city-select" onchange="loadCounties()"
+                            class="p-2 border border-gray-300 rounded bg-white">
+                        <option value="">시/도 선택</option>
+                    </select>
                 </div>
-            </li>
+                <div class="flex items-center space-x-2">
+                    <select id="county-select" class="p-2 border border-gray-300 rounded bg-white">
+                        <option value="">시/군/구 선택</option>
+                    </select>
+                </div>
+                <div>
+                    <button id="search-button" class="border rounded">
+                        검색
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- 24시간 병원만 보기 토글 -->
+        <div class="mb-4 flex items-center space-x-4 justify-end">
+            <label class="flex items-center space-x-2">
+                <input role="switch" type="checkbox"/>
+                <span>24시간 병원만 보기</span>
+            </label>
+        </div>
+    </div>
+    <div class="results-container">
+        <ul>
+            <div class="text-gray-500 p-4">검색 결과가 없습니다.</div>
+            <!-- 병원 리스트 항목 -->
+            <!--            <li class="mb-4 border-b pb-4">-->
+            <!--                <p class="font-semibold">오아시스 정형외과 신경외과 동물병원</p>-->
+            <!--                <p class="text-sm text-gray-600">동물병원 | 광교 센터블럭로 107</p>-->
+            <!--                <div class="flex space-x-2 mt-2 text-sm text-blue-600">-->
+            <!--                </div>-->
+            <!--            </li>-->
             <!-- 추가적인 병원 리스트 항목 반복 -->
         </ul>
     </div>
+
 </div>
 
 <!-- 토글 버튼 -->

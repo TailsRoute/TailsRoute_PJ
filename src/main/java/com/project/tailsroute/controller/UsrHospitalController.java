@@ -17,6 +17,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.client.RestTemplate;
 
@@ -71,19 +72,44 @@ public class UsrHospitalController {
         return "usr/map/hospital";
     }
 
-    @GetMapping("/hospitals")
-    @ResponseBody
-    public List<Hospital> getAllHospitals() {
-        // DB에서 모든 병원 데이터를 가져와 반환
-        return hospitalService.getAllHospitals();
-    }
-
     // DB 데이터 조회하는 테스트 코드
     @RequestMapping("/usr/hospital/hospitalList")
     public String showHospitals(Model model) {
         List<Hospital> hospitals = hospitalService.getAllHospitals();
         model.addAttribute("hospitals", hospitals);
         return "usr/hospital/hospitals";
+    }
+
+//    @GetMapping("/hospitals")
+//    @ResponseBody
+//    public List<Hospital> getAllHospitals() {
+//        // DB에서 모든 병원 데이터를 가져와 반환
+//        return hospitalService.getAllHospitals();
+//    }
+
+    @GetMapping("/hospitals")
+    @ResponseBody
+    public List<Hospital> getHospitals(@RequestParam(value = "type", required = false) String type) {
+        if ("24시간".equals(type)) {
+            return hospitalService.get24HourHospitals();
+        }
+        return hospitalService.getAllHospitals();
+    }
+
+    @GetMapping("/hospitals/filter")
+    @ResponseBody
+    public List<Hospital> getFilteredHospitals(
+            @RequestParam(required = false, defaultValue = "일반") String type,
+            @RequestParam(required = false) String region
+    ) {
+
+        // System.out.println("Filter type: " + type + ", Region: " + region);
+
+        if (region == null || region.isEmpty()) {
+            throw new IllegalArgumentException("Region parameter is required.");
+        }
+
+        return hospitalService.getHospitalsByTypeAndRegion(type, region);
     }
 
     // 주소 클린징 함수 추가
@@ -131,48 +157,6 @@ public class UsrHospitalController {
 
         return "Coordinates updated for hospitals without latitude/longitude " + count;
     }
-
-//    @GetMapping("/usr/hospital/updateCoordinatesGoogle")
-//    @ResponseBody
-//    public String updateHospitalCoordinates() {
-//        List<Hospital> hospitals = hospitalService.getHospitalsWithoutCoordinates();
-//        String apiKey = API_KEY;
-//
-//        int count = 0;
-//
-//        for (Hospital hospital : hospitals) {
-//            String address = null;
-//
-//            // 도로명 주소가 빈 문자열이 아닌지 확인
-//            if (hospital.getRoadAddress() != null && !hospital.getRoadAddress().trim().isEmpty()) {
-//                address = hospital.getRoadAddress();
-//            }
-//            // 지번 주소가 빈 문자열이 아닌지 확인
-//            else if (hospital.getJibunAddress() != null && !hospital.getJibunAddress().trim().isEmpty()) {
-//                address = hospital.getJibunAddress();
-//            } else {
-//                System.out.println("주소 정보가 없는 병원 ID: " + hospital.getId());
-//                continue; // 주소가 없으면 다음 병원으로 넘어감
-//            }
-//
-//            // 좌표를 가져와서 업데이트
-//            String coordinates = getCoordinatesFromAddress(address, apiKey);
-//            if (coordinates != null) {
-//                String[] latLng = coordinates.split(",");
-//                hospitalService.updateHospitalCoordinates(hospital.getId(), latLng[0], latLng[1]);
-//                System.out.println("좌표 업데이트 성공: 병원 ID " + hospital.getId());
-//            } else {
-//                System.out.println("좌표를 가져오지 못한 병원 ID: " + hospital.getId());
-//            }
-//
-//            count++;
-//
-//            if (count > 3)
-//                break;
-//        }
-//
-//        return "Coordinates updated for hospitals without latitude/longitude";
-//    }
 
     private String getCoordinatesFromAddress_NAVER(String address) {
 
