@@ -15,68 +15,69 @@
     <meta charset="UTF-8">
     <title>PetdiaryList</title>
 </head>
+
 <body>
-
 <!-- 페이지 명 -->
-<div style="height: 60px"></div>
-<div style="text-align: center; font-size: 50px; padding: 20px; border-bottom: 2px solid #DADADA; max-width: 1440px; margin: auto">
-    반려견 성장기록
-</div>
+<div class="tw-pb-[30px] pt-12">
+    <div class="tw-text-center tw-text-[50px] tw-p-[20px] tw-border-b-2 tw-border-[#DADADA] tw-max-w-[1440px] tw-mx-auto">
+        반려견 성장일지
+    </div>
 
-<!-- 메인컨테이너-->
-<section class="container pt-2 mx-auto flex flex-col justify-between h-screen">
-    <!-- 필터 -->
-    <form action="list" method="get" id="sortForm">
-        <script src="/resource/js/diary/DiaryList.js"></script>
+    <!-- 메인컨테이너-->
+    <section class="container pt-20 mx-auto flex flex-col justify-between h-screen">
+        <!-- 필터 -->
+        <form action="list" method="get" id="sortForm">
+            <script src="/resource/js/diary/DiaryList.js"></script>
 
-        <input id="keywordInput" class="searchBox w-full py-1 pl-10 pr-4 text-black rounded-lg focus:outline-none " type="text"
-               name="keyword" th:value="${keyword}" placeholder="검색">
-        <button id="searchButton" type="submit">
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" fill="currentColor"
-                 class="h-5 w-5 text-gray-600">
-                <path fill-rule="evenodd"
-                      d="M9.965 11.026a5 5 0 1 1 1.06-1.06l2.755 2.754a.75.75 0 1 1-1.06 1.06l-2.755-2.754ZM10.5 7a3.5 3.5 0 1 1-7 0 3.5 3.5 0 0 1 7 0Z"
-                      clip-rule="evenodd"/>
-            </svg>
-        </button>
+            <input id="keywordInput" class="searchBox w-full py-1 pl-10 pr-4 text-black rounded-lg focus:outline-none "
+                   type="text"
+                   name="keyword" th:value="${keyword}" placeholder="검색">
+            <button id="searchButton" type="submit">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" fill="currentColor"
+                     class="h-5 w-5 text-gray-600">
+                    <path fill-rule="evenodd"
+                          d="M9.965 11.026a5 5 0 1 1 1.06-1.06l2.755 2.754a.75.75 0 1 1-1.06 1.06l-2.755-2.754ZM10.5 7a3.5 3.5 0 1 1-7 0 3.5 3.5 0 0 1 7 0Z"
+                          clip-rule="evenodd"/>
+                </svg>
+            </button>
 
-        <select id="sortSelect" name="sort" onchange="saveSortValue(); document.getElementById('sortForm').submit();">
-            <option value="newest">최신순</option>
-            <option value="oldest">오래된순</option>
-        </select>
-    </form>
+            <select id="sortSelect" name="sort"
+                    onchange="saveSortValue(); document.getElementById('sortForm').submit();">
+                <option value="newest">최신순</option>
+                <option value="oldest">오래된순</option>
+            </select>
+        </form>
 
-    <div class="flex flex-grow justify-center items-start space-x-20">
-
-
-        <!-- 켈린더 -->
-        <div id="calendar"></div>
-        <script src="/resource/js/calender.js"></script>
+        <div class="flex flex-grow justify-center items-start space-x-20">
 
 
-        <!-- 기록 리스트 페이지-->
-        <div class="diaryList flex flex-col w-full">
-            <table class="min-w-full table-auto">
-                <thead>
-                <tr class="listType">
-                    <th class="py-4 ">날짜</th>
-                    <th>제목</th>
-                </tr>
-                </thead>
-                <tbody>
-                <tr th:each="diary : ${diaries}">
-                    <td class="px-20 py-2 font-bold py-4" th:text="${diary.regDate}">작성일</td>
-                    <td class="px-20 py-2 hover:underline font-bold">
-                        <a th:href="@{/usr/diary/detail(id=${diary.id})}" th:text="${diary.title}">제목</a>
-                    </td>
-                </tr>
-                </tbody>
-            </table>
-            <div class="pagination ">
+            <!-- 켈린더 -->
+            <div id="calendar"></div>
+            <script src="/resource/js/calender.js"></script>
+
+            <!-- 기록 리스트 페이지-->
+            <div class="diaryList flex flex-col w-full">
+                <table class="min-w-full table-auto">
+                    <thead>
+                    <tr class="listType">
+                        <th class="py-4 ">날짜</th>
+                        <th>제목</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr th:each="diary : ${diaries}">
+                        <td class="px-20 py-2 font-bold py-4" th:text="${diary.regDate}">작성일</td>
+                        <td class="px-20 py-2 hover:underline font-bold">
+                            <a th:href="@{/usr/diary/detail(id=${diary.id})}" th:text="${diary.title}">제목</a>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+                <div class="pagination ">
     <span th:if="${totalPages == 0}">
         <span>1</span> <!-- 데이터가 없을 때 1만 표시 -->
     </span>
-                <span th:if="${totalPages > 0}">
+                    <span th:if="${totalPages > 0}">
         <span th:if="${currentPage > 1}">
             <a class="pagination-link" th:href="@{|list?page=1&sort=${sort}|}">처음</a>
             <a class="pagination-link" th:href="@{|list?page=${currentPage - 1}&sort=${sort}|}">이전</a>
@@ -118,15 +119,15 @@
             <a class="pagination-link" th:href="@{|list?page=${totalPages}&sort=${sort}|}">마지막</a>
         </span>
     </span>
+                </div>
             </div>
         </div>
-    </div>
 
-    <button id="writeButton" onclick="window.location.href='/usr/diary/write'"
-            class="px-4 py-2     text-white font-semibold rounded mt-4">
-        새 글 작성
-    </button>
-</section>
+        <button id="writeButton" onclick="window.location.href='/usr/diary/write'"
+                class="px-4 py-2     text-white font-semibold rounded mt-4">
+            새 글 작성
+        </button>
+    </section>
 
-</body>
+   </body>
 </html>

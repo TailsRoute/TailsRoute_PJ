@@ -1,5 +1,5 @@
-body {
-    background-color: #F9F5EB;
+html,body {
+    background-color: #f9f5eb !important;
     color: #4D3E3E;
 }
 
@@ -136,7 +136,7 @@ body {
 }
 /* 버튼 스타일 */
 #fileBtn, .remove-btn {
-    background-color: #4D3E3E; /* 따뜻한 배경색 */
+    background-color: #7daf82; /* 따뜻한 배경색 */
     color: white; /* 텍스트 색상 */
     font-weight: bold; /* 폰트 굵기 */
     padding: 10px 20px; /* 버튼 패딩 */
@@ -148,11 +148,11 @@ body {
 
 /* 호버 스타일 */
 #fileBtn:hover, .remove-btn:hover {
-    background-color: #3b302e; /* 호버 시 배경색 */
+    background-color: #5c8d6d; /* 호버 시 배경색 */
 }
 
 #SubmitButton {
-    background-color: #4D3E3E; /* 따뜻한 배경색 */
+    background-color: #7daf82; /* 따뜻한 배경색 */
     color: white;
     border-radius: 8px; /* 둥근 모서리 */
     transition: background-color 0.3s ease; /* 배경색 변화 애니메이션 */
@@ -163,7 +163,7 @@ body {
     padding-bottom: 10px;
 }
 .historyBack{
-    background-color: #4D3E3E; /* 따뜻한 배경색 */
+    background-color: #7daf82; /* 따뜻한 배경색 */
     color: white;
     border-radius: 8px; /* 둥근 모서리 */
     transition: background-color 0.3s ease; /* 배경색 변화 애니메이션 */
@@ -174,11 +174,12 @@ body {
     padding-bottom: 12px;
     padding-right: 40px;
     padding-left: 40px;
+    margin-left: 10px;
 }
 #SubmitButton:hover {
-    background-color: #3b302e; /* 호버 시 배경색 */
+    background-color: #5c8d6d; /* 호버 시 배경색 */
 }
 .historyBack:hover {
-    background-color: #3b302e; /* 호버 시 배경색 */
+    background-color: #5c8d6d; /* 호버 시 배경색 */
 }
 

@@ -2,6 +2,7 @@ document.addEventListener('DOMContentLoaded', function () {
     var calendarEl = document.getElementById('calendar');
 
     var calendar = new FullCalendar.Calendar(calendarEl, {
+        locale: 'ko',
         initialView: 'dayGridMonth',
         events: 'calendar', // API 엔드포인트
         eventClick: function(info) {

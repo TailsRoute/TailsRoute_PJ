@@ -86,28 +86,24 @@
         }
 
         button {
-            background: linear-gradient(to bottom right, #FFDAB9, #FFCCB3);
+            background: #7daf82;
             border: none;
             border-radius: 8px;
             padding: 12px 30px;
             font-size: 18px;
             font-weight: bold;
-            color: #5D4037;
+            color: white;
             cursor: pointer;
             transition: all 0.3s ease;
             box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
         }
 
         button:hover {
-            background: linear-gradient(to bottom right, #FFCCB3, #FFB59B);
+            background: #5c8d6d;
             transform: translateY(-3px);
             box-shadow: 0 8px 15px rgba(0, 0, 0, 0.2);
         }
 
-        button:active {
-            background: #FFE4C4;
-            transform: translateY(1px);
-        }
     </style>
 </head>
 <body>
@@ -145,6 +141,7 @@
     <div class="buttons">
         <button id="updateRouteButton">경로 수정</button>
         <button id="deleteLastPoint">경로 점 삭제</button>
+        <button id="restoreLastPoint">경로 점 복구</button>
         <button id="resetMapButton">초기화</button>
     </div>
 </div>
@@ -152,6 +149,8 @@
         let map;
         let waypoints = [];
         let markers = []; // 마커를 저장
+        let removedWaypoints = [];
+        let removedMarkers = [];
         let polyline = null;
 
 
@@ -225,7 +224,6 @@
             fetch(`/usr/walk/getRoutePicture?routeName=${encodeURIComponent(routeName)}&purchaseDate=${encodeURIComponent(purchaseDate)}&routedistance=${routedistance}`)
                 .then(response => response.json())
                 .then(data => {
-                    console.log("API 응답 데이터:", data);
 
                     // `data.path`를 JSON으로 파싱
                     let pathData;
@@ -246,7 +244,6 @@
 
                     // LatLng로 변환
                     const waypoints = pathData.map(coord => new naver.maps.LatLng(coord.y, coord.x));
-                    console.log("waypoints:", waypoints);
 
                     // 폴리라인 생성
                     if (polyline) {
@@ -306,6 +303,12 @@
                     // 드롭다운에서 경로를 선택했을 때 이벤트 처리
                     favoriteRoutesDropdown.addEventListener('change', function () {
                         const selectedRoute = JSON.parse(this.value);
+
+                        // 선택한 경로의 산책명 설정
+                        const routeNameInput = document.getElementById('routeName'); // 산책명을 표시하는 입력 필드
+                        if (routeNameInput) {
+                            routeNameInput.value = selectedRoute.routeName;
+                        }
 
                         // 선택한 경로의 거리 값을 그대로 사용
                         document.getElementById('routedistance').textContent = selectedRoute.routedistance;
@@ -388,16 +391,21 @@
                 })
                 .catch(error => console.error('경로 수정 중 오류 발생:', error));
         });
+        // 경로 지점 삭제 함수
         document.getElementById('deleteLastPoint').addEventListener('click', function () {
             if (waypoints.length > 0) {
-                waypoints.pop();
+                // 마지막 지점을 삭제하고 저장
+                const removedPoint = waypoints.pop();
+                removedWaypoints.push(removedPoint);
 
-                // 마지막 마커 제거
+                // 마지막 마커도 삭제하고 저장
                 const lastMarker = markers.pop();
                 if (lastMarker) {
                     lastMarker.setMap(null); // 지도에서 제거
+                    removedMarkers.push(lastMarker);
                 }
 
+                // 폴리라인 다시 그리기
                 if (polyline) {
                     polyline.setMap(null);
                 }
@@ -412,7 +420,45 @@
             } else {
                 alert('삭제할 경로가 없습니다.');
             }
+        });
 
+        // 경로 지점 복구 함수
+        document.getElementById('restoreLastPoint').addEventListener('click', function () {
+            if (removedWaypoints.length > 0) {
+                // 저장된 마지막 지점을 복구
+                const restoredPoint = removedWaypoints.pop();
+                waypoints.push(restoredPoint);
+
+                // 저장된 마지막 마커를 복구
+                const restoredMarker = removedMarkers.pop();
+                if (restoredMarker) {
+                    restoredMarker.setMap(map); // 지도에 다시 표시
+                    markers.push(restoredMarker);
+                } else {
+                    // 마커가 없을 경우 새로 생성
+                    const marker = new naver.maps.Marker({
+                        position: restoredPoint,
+                        map: map,
+                        title: `Restored Point ${waypoints.length}`
+                    });
+                    markers.push(marker);
+                }
+
+                // 폴리라인 다시 그리기
+                if (polyline) {
+                    polyline.setMap(null);
+                }
+
+                polyline = new naver.maps.Polyline({
+                    map: map,
+                    path: waypoints,
+                    strokeColor: '#FF0000',
+                    strokeWeight: 5,
+                    strokeOpacity: 0.8
+                });
+            } else {
+                alert('복구할 지점이 없습니다.');
+            }
         });
         document.getElementById('resetMapButton').addEventListener('click', function () {
             resetMap(); // 초기화 함수 호출
