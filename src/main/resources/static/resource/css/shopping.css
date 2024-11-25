@@ -84,12 +84,14 @@ html,body {
     position: relative; /* 자식 요소의 절대 위치를 위한 상대 위치 */
 }
 .fc-toolbar .fc-button {
-    background-color: #4D3E3E; /* 원하는 색상으로 변경 */
+    border : none;
+    background-color: #7daf82; /* 원하는 색상으로 변경 */
     color: white; /* 글자 색상 */
 }
 .fc-toolbar .fc-button:hover {
-    background-color: #FFF3CD; /* 호버 시 색상 변경 */
-    color: #4D3E3E;
+    border : none;
+    background-color: #5c8d6d; /* 호버 시 색상 변경 */
+    color: white;
 }
 
 /* list 스타일 */
@@ -231,4 +233,7 @@ td.ellipsis {
 h2 {
     margin-bottom: 10px; /* 제목과 달력/리스트 사이의 간격 조정 */
     text-align: left;    /* 왼쪽 정렬 */
+}
+#wishlistButton{
+    margin-right: 10px;
 }
