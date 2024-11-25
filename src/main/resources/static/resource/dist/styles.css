@@ -1738,6 +1738,10 @@ html {
   margin-top: 30px;
 }
 
+.tw-mb-20 {
+  margin-bottom: 5rem;
+}
+
 .tw-block {
   display: block;
 }
@@ -1824,6 +1828,10 @@ html {
 
 .tw-min-h-screen {
   min-height: 100vh;
+}
+
+.tw-min-h-\[80vh\] {
+  min-height: 80vh;
 }
 
 .tw-w-48 {
@@ -2192,6 +2200,11 @@ html {
   background-color: rgb(255 255 255 / var(--tw-bg-opacity));
 }
 
+.tw-bg-green-500 {
+  --tw-bg-opacity: 1;
+  background-color: rgb(34 197 94 / var(--tw-bg-opacity));
+}
+
 .tw-object-cover {
   -o-object-fit: cover;
      object-fit: cover;
@@ -2342,6 +2355,14 @@ html {
 
 .tw-pt-4 {
   padding-top: 1rem;
+}
+
+.tw-pb-14 {
+  padding-bottom: 3.5rem;
+}
+
+.tw-pb-60 {
+  padding-bottom: 15rem;
 }
 
 .tw-text-center {
@@ -2560,6 +2581,16 @@ html {
 .hover\:tw-bg-\[\#FFDE00\]:hover {
   --tw-bg-opacity: 1;
   background-color: rgb(255 222 0 / var(--tw-bg-opacity));
+}
+
+.hover\:tw-bg-\[\#FF7F50\]:hover {
+  --tw-bg-opacity: 1;
+  background-color: rgb(255 127 80 / var(--tw-bg-opacity));
+}
+
+.hover\:tw-bg-\[\#7DAF82\]:hover {
+  --tw-bg-opacity: 1;
+  background-color: rgb(125 175 130 / var(--tw-bg-opacity));
 }
 
 .hover\:tw-text-\[\#7DAF82\]:hover {

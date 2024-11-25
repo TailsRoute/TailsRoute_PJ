@@ -1,3 +1,4 @@
+
 html{
     background: #f9f5eb !important;
 }
@@ -113,6 +114,15 @@ body {
     transform: translateY(-2px);
 }
 
+
+.verifyAuthCode{
+    background-color: #7DAF82;
+}
+
+.verifyAuthCode:hover{
+    background-color: #5C8D6D;
+    transform: translateY(-2px);
+}
 
 /* 소셜 로그인 섹션 */
 .right-section {

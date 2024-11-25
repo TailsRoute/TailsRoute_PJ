@@ -64,7 +64,10 @@ public class UsrMemberController {
     @ResponseBody
     public String doLogin( @RequestParam("loginId") String loginId, @RequestParam("loginPw") String loginPw) {
 
-        System.err.println(loginId);
+        // 로그인 상태 확인
+        if(rq.isLogined()){
+            return Ut.jsReplace("F-0", "이미 로그인된 상태입니다.", "/usr/home/main");
+        }
 
         if (Ut.isEmptyOrNull(loginId)) {
             return Ut.jsHistoryBack("F-1", "loginId 입력 x");
