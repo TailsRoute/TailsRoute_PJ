@@ -16,20 +16,15 @@
       background-color: #F9F5EB;
       color: #4D3E3E;
     }
-    .title{
-      text-align: center;
-      padding-top: 70px;
-      font-size: 50px;
-    }
     .grass {
       padding-left: 10px;
       padding-top: 10px;
       border: 1px solid #ccc;
       border-radius: 10px;
       background-color: #F2F2EB;
-      width: 1000px;
-      height: 180px;
-      margin-left: 3%;
+      width: 850px;
+      height: 160px;
+      margin-left: 10px;
       display: inline-block;
     }
 
@@ -42,7 +37,7 @@
       flex-direction: column;
       margin-right: 5px;
       margin-top: 20px;
-      font-size: 12px;
+      font-size: 10px;
       text-align: right;
     }
 
@@ -53,10 +48,10 @@
 
     .month-labels {
       display: grid;
-      grid-template-columns: repeat(12, 80px); /* 45px: 칸 너비 */
+      grid-template-columns: repeat(12, 65px); /* 45px: 칸 너비 */
       gap: 2px;
       justify-content: start;
-      font-size: 12px;
+      font-size: 10px;
       margin-bottom: 5px;
     }
 
@@ -64,13 +59,12 @@
       display: grid;
       grid-template-rows: repeat(7, 15px);
       grid-template-columns: repeat(54, 15px);
-      gap: 3px;
     }
 
     .box {
       position: relative; /* 툴팁 표시를 위한 기준 */
-      width: 15px;
-      height: 15px;
+      width: 12px;
+      height: 12px;
       background-color: #E0E0E0;
       border: 1px solid #ccc;
       border-radius: 2px;
@@ -113,24 +107,36 @@
       z-index: 10;
       margin-bottom: 5px; /* 박스와의 간격 */
     }
-    .WalkingSchedule, .WalkingTrail {
+    .WalkingSchedule{
       margin-top: 10px;
       border: 1px solid #ccc;
       border-radius: 10px;
       background-color: #F2F2EB;
       display: inline-block;
-      width: 45%;
+      width: 550px;
       height: 690px;
-      margin-left: 3%;
+      margin-left: 10px;
+    }
+    .WalkingTrail {
+      margin-top: 10px;
+      border: 1px solid #ccc;
+      border-radius: 10px;
+      background-color: #F2F2EB;
+      display: inline-block;
+      width: 850px;
+      height: 690px;
+      margin-left: 10px;
     }
     .information{
       border: 1px solid #ccc;
       border-radius: 10px;
       background-color: #F2F2EB;
       width: 100%;
-      height: 120px;
+      height: 110px;
       display: inline-block;
       text-align: center;
+      padding: 10px;
+      margin-top: 10px;
     }
 
     #routePicture canvas {
@@ -145,30 +151,58 @@
       text-align: center;
       border: 1px solid #ccc;
       border-radius: 10px;
-      width: 16%;
+
+      font-size: 14px;
+    }
+    th#modifyHeader,th#deleteHeader{
+      width: 50px;
+    }
+    th#likeHeader{
+      width: 80px;
+    }
+    th#purchaseDateHeader,th#routedistanceHeader{
+      width: 100px;
     }
     td {
       padding: 10px; /* 각 td 요소의 내부 여백 */
       border: 1px solid #ccc; /* 셀 경계선 */
       border-radius: 10px;
       text-align: center; /* 텍스트 가운데 정렬 */
+      font-size: 14px;
+    }
+    td.ellipsis{
+      max-width: 150px; /* 적절한 최대 너비 설정 */
+      white-space: nowrap; /* 텍스트 줄바꿈 방지 */
+      overflow: hidden; /* 넘치는 텍스트 숨기기 */
+      text-overflow: ellipsis;
     }
     #writeWalkButton{
       border: 1px solid #ccc;
       border-radius: 10px;
       background-color: #F2F2EB;
       width: 100%;
-      height: 50px;
-      margin-top: 10px;
+      height: 40px;
     }
     .lowBox{
-      box-sizing: border-box;
-      height: 180px;
+      height: 160px;
       width: 180px;
       display: inline-block;
       position: relative;
       float: right;
-      margin-right: 4%;
+      margin-right: 13px;
+    }
+    .topWalk{
+      width: 1440px;
+      position: absolute;
+      left: 50%;
+      transform: translate(-50%);
+    }
+    .lowWalk{
+      width: 1440px;
+      position: absolute;
+      left: 50%;
+      top: 890px;
+      transform: translate(-50%);
     }
   </style>
 </head>
@@ -177,58 +211,62 @@
 <div class="tw-text-center tw-text-[50px] tw-p-[20px] tw-border-b-2 tw-border-[#DADADA] tw-max-w-[1440px] tw-mx-auto">
   반려견 산책 일지
 </div>
-<div class="WalkingTrail" id="walkingTrailMap"></div>
-<div class="WalkingSchedule">
-  <table id="WalkingTable">
-    <thead>
-    <tr>
-      <th id="routeNameHeader">산책명<span class="sort-arrow" id="routeNameArrow"></span></th>
-      <th id="purchaseDateHeader">산책 날짜<span class="sort-arrow" id="purchaseDateArrow">▲</span></th>
-      <th id="routedistanceHeader">산책 거리<span class="sort-arrow" id="routedistanceArrow"></span></th>
-      <th id="likeHeader">즐겨찾기</th>
-      <th id="modifyHeader">수정</th>
-      <th id="deleteHeader">삭제</th>
-    </tr>
-    </thead>
-    <tbody>
-    <!-- 데이터가 여기에 추가됩니다. -->
-    </tbody>
-  </table>
+<div class="topWalk">
+  <div class="WalkingTrail" id="walkingTrailMap"></div>
+  <div class="WalkingSchedule">
+    <table id="WalkingTable">
+      <thead>
+      <tr>
+        <th id="routeNameHeader">산책명<span class="sort-arrow" id="routeNameArrow"></span></th>
+        <th id="purchaseDateHeader">산책 날짜<span class="sort-arrow" id="purchaseDateArrow">▲</span></th>
+        <th id="routedistanceHeader">산책 거리<span class="sort-arrow" id="routedistanceArrow"></span></th>
+        <th id="likeHeader">즐겨찾기</th>
+        <th id="modifyHeader">수정</th>
+        <th id="deleteHeader">삭제</th>
+      </tr>
+      </thead>
+      <tbody>
+      <!-- 데이터가 여기에 추가됩니다. -->
+      </tbody>
+    </table>
+  </div>
 </div>
-<div class="grass">
-  <div class="labels">
-    <!-- 세로축 (요일) -->
-    <div class="row-labels">
-      <div>일</div>
-      <div>월</div>
-      <div>화</div>
-      <div>수</div>
-      <div>목</div>
-      <div>금</div>
-      <div>토</div>
-    </div>
-    <!-- 가로축 (월별) -->
-    <div class="grid-container">
-      <div class="month-labels">
-        <span>1월</span><span>2월</span><span>3월</span><span>4월</span>
-        <span>5월</span><span>6월</span><span>7월</span><span>8월</span>
-        <span>9월</span><span>10월</span><span>11월</span><span>12월</span>
+<div class ="lowWalk">
+  <div class="grass">
+    <div class="labels">
+      <!-- 세로축 (요일) -->
+      <div class="row-labels">
+        <div>일</div>
+        <div>월</div>
+        <div>화</div>
+        <div>수</div>
+        <div>목</div>
+        <div>금</div>
+        <div>토</div>
       </div>
-      <div class="grid"></div>
+      <!-- 가로축 (월별) -->
+      <div class="grid-container">
+        <div class="month-labels">
+          <span>1월</span><span>2월</span><span>3월</span><span>4월</span>
+          <span>5월</span><span>6월</span><span>7월</span><span>8월</span>
+          <span>9월</span><span>10월</span><span>11월</span><span>12월</span>
+        </div>
+        <div class="grid"></div>
+      </div>
+    </div>
+    <div style="margin-left: 10px; font-size: 10px; margin-top: 3px; position: relative;">
+      # 산책횟수가 0회는 <div class="box count-0" style="display: inline-block; position: absolute;"></div>&nbsp;&nbsp;&nbsp;&nbsp;
+      1회는 <div class="box count-1" style="display: inline-block; position: absolute;"></div>&nbsp;&nbsp;&nbsp;&nbsp;
+      2회는 <div class="box count-2" style="display: inline-block; position: absolute;"></div>&nbsp;&nbsp;&nbsp;&nbsp;
+      3회는 <div class="box count-3" style="display: inline-block; position: absolute;"></div>&nbsp;&nbsp;&nbsp;&nbsp;
+      4회 이상은 <div class="box count-4-plus" style="display: inline-block; position: absolute;"></div>&nbsp;&nbsp;&nbsp;&nbsp;
+      로 표시됩니다
     </div>
   </div>
-  <div style="margin-left: 10px; font-size: 10px; margin-top: 3px; position: relative;">
-    # 산책횟수가 0회는 <div class="box count-0" style="display: inline-block; position: absolute;"></div>&nbsp;&nbsp;&nbsp;&nbsp;
-    1회는 <div class="box count-1" style="display: inline-block; position: absolute;"></div>&nbsp;&nbsp;&nbsp;&nbsp;
-    2회는 <div class="box count-2" style="display: inline-block; position: absolute;"></div>&nbsp;&nbsp;&nbsp;&nbsp;
-    3회는 <div class="box count-3" style="display: inline-block; position: absolute;"></div>&nbsp;&nbsp;&nbsp;&nbsp;
-    4회 이상은 <div class="box count-4-plus" style="display: inline-block; position: absolute;"></div>&nbsp;&nbsp;&nbsp;&nbsp;
-    로 표시됩니다
+  <div class="lowBox">
+    <button id="writeWalkButton">산책 일정 생성</button>
+    <div class="information"></div>
   </div>
-</div>
-<div class="lowBox">
-  <div class="information"></div>
-  <button id="writeWalkButton">산책 일정 생성</button>
 </div>
 
 <script>
@@ -354,7 +392,7 @@
 
         const box = document.createElement('div');
         box.className = 'box';
-        box.dataset.date = dateKey; // 툴팁 표시 날짜
+        box.dataset.date = dateKey+'('+dailyCount+'회)'; // 툴팁 표시 날짜
 
         // 색상 변경 로직: 카운트 값에 따라 색상 다르게 적용
         if (dailyCount === 0) {
@@ -553,7 +591,7 @@
                     }).toString();
 
                     // URL에 쿼리 파라미터를 추가하여 페이지 이동
-                    window.location.href = `../walk/list?${queryParams}`;
+                    window.location.href = `../walk/modify?${queryParams}`;
                   })
                   .catch(error => {
                     console.error('Error fetching routePicture:', error);
@@ -894,7 +932,7 @@
                         const weatherSymbol = weatherIcon[obsrValuePTY] || "❓"; // 기본 아이콘
                         const weatherSymbolElement = document.querySelector(".information"); // 날씨 아이콘을 표시할 요소
                         // "이 지역의 날씨" 멘트를 추가하고 아이콘을 다음 줄에 표시
-                        weatherSymbolElement.innerHTML = `<br>${cityName}의 날씨<br><span style="font-size: 1.5em;">${weatherSymbol}</span>`; // 크기 조정 및 줄 바꿈 추가
+                        weatherSymbolElement.innerHTML = `${cityName}의 날씨<br><span style="font-size: 1.5em;">${weatherSymbol}</span>`; // 크기 조정 및 줄 바꿈 추가
                         // 기온 처리 및 표시
                         if (obsrValueT1H) {
                           const temperature = `${obsrValueT1H}°C`; // 섭씨 기호 붙이기

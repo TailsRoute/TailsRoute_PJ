@@ -15,17 +15,14 @@
             background-color: #F9F5EB;
             color: #4D3E3E;
         }
-        .title{
-            text-align: center;
-            padding-top: 70px;
-            font-size: 50px;
-        }
         .writewalk{
             border: 1px solid #ccc;
             border-radius: 10px;
-            width: 80%;
-            margin-left: 10%;
+            width: 1440px;
             padding: 20px;
+            position: absolute;
+            left: 50%;
+            transform: translate(-50%);
         }
         .enterMap {
             padding-left: 10px;
@@ -48,7 +45,7 @@
         .buttons{
             margin-left: 80%;
         }
-        #clearPathButton, #showlist{
+        #clearPathButton, #showlist, #savePathButton, #goBack{
             border: 1px solid #ccc;
             border-radius: 10px;
             width: 110px;
@@ -96,11 +93,10 @@
     <!-- 산책 거리 -->
     <label for="routedistance">산책 거리</label>
     <span id="routedistance" style="display: inline-block;"></span><br/><br/>
-</div><br/>
-<!-- 버튼들 -->
-<div class="buttons">
-    <button id="savePathButton">일정 생성</button>
-    <button id="updateScheduleBtn" style="display: none">일정 수정</button>
+    <div class="buttons">
+        <button id="savePathButton">일정 생성</button>
+        <button id="goBack">뒤로가기</button>
+    </div>
 </div>
 <script>
     let markers = [];
@@ -193,7 +189,7 @@
                     .then(data => {
                         console.log('성공:', data);
                         alert('일정이 추가되었습니다.');
-                        window.location.reload();
+                        window.location.href = "../walk/page";
                     })
                     .catch((error) => {
                         console.error('실패:', error.message, error.stack);
@@ -217,6 +213,9 @@
             });
         }
     }
+    document.getElementById("goBack").addEventListener("click", function() {
+        window.location.href = "../walk/page";
+    });
 
     let totalDistance = 0;
 
