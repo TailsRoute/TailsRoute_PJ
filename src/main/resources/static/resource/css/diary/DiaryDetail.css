@@ -1,13 +1,11 @@
-@import url('https://fonts.googleapis.com/css2?family=Quicksand:wght@400;600&family=Nunito:wght@400;700&display=swap');
 
 /* 기본 스타일 */
-body {
-    background-color: #F9F5EB;
+html,body {
+    background-color: #f9f5eb !important;
     color: #4D3E3E;
     font-family: 'Quicksand', sans-serif;
     transition: background-color 0.3s ease;
 }
-
 .header {
     padding-bottom: 4px;
 }
@@ -135,7 +133,7 @@ body {
 
 .btn {
     padding: 12px 24px; /* 버튼 크기 조정 */
-    background-color: #4D3E3E;
+    background-color: #7daf82;
     color: white;
     border: none;
     border-radius: 5px;
@@ -148,7 +146,7 @@ body {
 }
 
 .btn:hover {
-    background-color: #3b302e;
+    background-color: #5c8d6d;
     transform: scale(1.05);
 }
 

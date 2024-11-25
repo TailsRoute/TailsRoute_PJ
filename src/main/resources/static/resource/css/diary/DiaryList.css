@@ -1,9 +1,6 @@
-@import url('https://fonts.googleapis.com/css2?family=Quicksand:wght@400;600&family=Nunito:wght@400;700&display=swap');
-
 body {
-    background-color: #F9F5EB;
+    background-color: #f9f5eb;
     color: #4D3E3E;
-    font-family: 'Quicksand', sans-serif; /* 따뜻하고 친근한 느낌의 기본 폰트 */
     transition: background-color 0.3s ease;
 }
 
@@ -88,7 +85,7 @@ body {
 
 /* 캘린더 네비게이션 버튼 */
 .fc-next-button, .fc-prev-button {
-    background-color: #4D3E3E !important;
+    background-color: #7daf82 !important;
     border-radius: 5px;
     padding: 5px 12px;
     color: white !important;
@@ -96,7 +93,7 @@ body {
     transition: background-color 0.3s ease;
 }
 .fc-prev-button:hover, .fc-next-button:hover {
-    background-color: #3b302e !important;
+    background-color: #5c8d6d !important;
     color: white !important;
 }
 
@@ -188,13 +185,13 @@ body {
     margin-right: 30px;
     font-weight: bold;
     font-size: large;
-    background-color: #4D3E3E; /* 버튼 색상 */
+    background-color: #7daf82; /* 버튼 색상 */
     border-radius: 5px; /* 둥글게 */
     transition: background-color 0.3s; /* 배경색 변화 애니메이션 */
 }
 
 #writeButton:hover {
-    background-color: #3b302e; /* 호버 시 색상 변경 */
+    background-color: #5c8d6d; /* 호버 시 색상 변경 */
 }
 
 .header {
@@ -256,16 +253,15 @@ body {
     margin: 0 5px;
     padding: 8px 16px; /* 패딩을 더 넓게 설정 */
     text-decoration: none;
-    background-color: #4D3E3E; /* 페이지 링크 배경색 */
+    background-color: #7daf82; /* 페이지 링크 배경색 */
     color: white; /* 링크 색상 */
-    border: 1px solid #4D3E3E; /* 테두리 색상 */
     border-radius: 4px;
     transition: background-color 0.3s, color 0.3s; /* 배경색 및 글자색 변화 애니메이션 */
 }
 
 .pagination-link:hover {
-    background-color: #fdf6e3; /* 마우스 오버 시 배경색 */
-    color: #4D3E3E; /* 마우스 오버 시 글자색 */
+    background-color: #5c8d6d; /* 마우스 오버 시 배경색 */
+    color: white; /* 마우스 오버 시 글자색 */
 }
 
 .pagination-link.active {
