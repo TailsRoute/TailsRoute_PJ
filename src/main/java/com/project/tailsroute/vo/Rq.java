@@ -5,14 +5,13 @@ import java.util.Map;
 
 import com.project.tailsroute.service.MemberService;
 import com.project.tailsroute.util.Ut;
+import jakarta.servlet.http.Cookie;
 import org.springframework.context.annotation.Scope;
 import org.springframework.context.annotation.ScopedProxyMode;
 import org.springframework.stereotype.Component;
 
-
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import jakarta.servlet.http.HttpSession;
 import lombok.Getter;
 
 @Component
@@ -30,23 +29,28 @@ public class Rq {
     private HttpServletRequest req;
     private HttpServletResponse resp;
 
-    private HttpSession session;
-
     private Map<String, String> paramMap;
 
     public Rq(HttpServletRequest req, HttpServletResponse resp, MemberService memberService) {
         this.req = req;
         this.resp = resp;
-        this.session = req.getSession();
-
-        HttpSession httpSession = req.getSession();
 
         paramMap = Ut.getParamMap(req);
 
-        if (httpSession.getAttribute("loginedMemberId") != null) {
-            isLogined = true;
-            loginedMemberId = (int) httpSession.getAttribute("loginedMemberId");
-            loginedMember = memberService.getMemberById(loginedMemberId);
+        Cookie[] cookies = req.getCookies();
+        if (cookies != null) {
+            for (Cookie cookie : cookies) {
+                if ("loginedMemberId".equals(cookie.getName())) {
+                    try {
+                        loginedMemberId = Integer.parseInt(cookie.getValue());
+                        isLogined = true;
+                        loginedMember = memberService.getMemberById(loginedMemberId);
+                    } catch (NumberFormatException e) {
+                        loginedMemberId = 0;
+                        isLogined = false;
+                    }
+                }
+            }
         }
 
         this.req.setAttribute("rq", this);
@@ -93,13 +97,25 @@ public class Rq {
     }
 
     public void logout() {
-        session.removeAttribute("loginedMemberId");
-        session.removeAttribute("loginedMember");
+        removeCookie("loginedMemberId");
+    }
+
+    public void removeCookie(String cookieName) {
+        Cookie cookie = new Cookie(cookieName, null);
+        cookie.setMaxAge(0);
+        cookie.setPath("/");
+        resp.addCookie(cookie);
     }
 
     public void login(Member member) {
-        session.setAttribute("loginedMemberId", member.getId());
-        session.setAttribute("loginedMember", member);
+        setCookie("loginedMemberId", String.valueOf(member.getId()));
+    }
+
+    public void setCookie(String cookieName, String value) {
+        Cookie cookie = new Cookie(cookieName, value);
+        cookie.setMaxAge(60 * 60 * 24);
+        cookie.setPath("/");
+        resp.addCookie(cookie);
     }
 
     public void initBeforeActionInterceptor() {
