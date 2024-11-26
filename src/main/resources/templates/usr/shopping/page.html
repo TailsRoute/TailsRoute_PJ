@@ -92,7 +92,7 @@
         <!-- 버튼 추가 -->
         <div id="sortButtons">
             <button id="wishlistButton">관심목록</button>
-            <input type="text" id="searchInput" class="tw-border-box tw-w-[190px] tw-text-center tw-rounded-[5px] tw-border" placeholder="검색어를 입력하세요" onkeydown="if(event.key === 'Enter') searchItems()"/>
+            <input type="text" id="searchInput" class="tw-border-box tw-w-[190px] tw-text-center tw-border tw-rounded-md focus:tw-ring-2 focus:tw-ring-[#7DAF82] tw-input tw-h-[25px]" placeholder="검색어를 입력하세요" onkeydown="if(event.key === 'Enter') searchItems()"/>
             <button onclick="searchItems()">검색</button>
             <button id="sortByAccuracy" class="active">정확도순</button>
             <button id="sortByPrice">최저가순</button>
