@@ -57,6 +57,12 @@ public class NaverLoginController {
     public String naverLoginCallback(@RequestParam String code, @RequestParam String state, Model model) {
         String redirectUri = "http://localhost:8081/auth/naver/callback";
 
+        Member loginedMember = rq.getLoginedMember();
+
+        if(loginedMember != null) {
+            return Ut.jsReplace(loginedMember.getNickname() + "님 이미 로그인 중입니다!", "/usr/home/main");
+        }
+
         // 네이버 액세스 토큰 요청
         String accessToken = getNaverAccessToken(code, redirectUri);
 
@@ -69,6 +75,7 @@ public class NaverLoginController {
                 return Ut.rejoin("F-1", Ut.f("탈퇴한 회원입니다, 복구하시겠습니까?"), "/usr/member/doRejoin?id="+member.getId(), "/usr/home/main");
             }
 
+            rq.login(member); // rq 객체를 통해 세션에 로그인 정보 저장
             model.addAttribute("member", member);
             model.addAttribute("isLogined", true);
             return Ut.jsReplace("S-1", Ut.f("%s님 환영합니다", member.getNickname()), "/usr/home/main");
@@ -158,8 +165,6 @@ public class NaverLoginController {
             Member existingMember = memberService.getMemberByLoginId(loginId);
 
             if (existingMember != null) {
-                // 이미 회원인 경우 -> 로그인 처리
-                rq.login(existingMember); // rq 객체를 통해 세션에 로그인 정보 저장
                 return existingMember;
             } else {
                 // 새로운 회원인 경우 -> 회원가입 처리
@@ -168,7 +173,6 @@ public class NaverLoginController {
                 memberService.join(loginId, loginPw, name, nickname, cellphoneNum, email, 1);   // 세션에 로그인 정보 저장
 
                 Member newMember = memberService.getMemberByEmail(email);
-                rq.login(newMember);
                 return newMember;
             }
         } catch (IOException e) {

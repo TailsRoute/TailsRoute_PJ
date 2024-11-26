@@ -5,7 +5,7 @@ html, body {
     word-break: keep-all;
 }
 
-.left_box{
+.left_box {
     top: 0;
     left: 0;
     position: absolute;
@@ -14,7 +14,7 @@ html, body {
     height: 805px;
 }
 
-.right_box{
+.right_box {
     top: 0;
     right: 0;
     position: absolute;
@@ -39,7 +39,7 @@ html, body {
     font-weight: bold;
 }
 
-.main_box_title{
+.main_box_title {
     left: 120px;
     top: 70px;
     width: 1200px;
@@ -48,7 +48,7 @@ html, body {
     font-weight: bold;
 }
 
-.main_box_body{
+.main_box_body {
     left: 120px;
     top: 150px;
     width: 1200px;
@@ -56,15 +56,20 @@ html, body {
     font-size: 19px;
 }
 
-.main_button{
-    background: #ff6f61;
+.main_button {
+    background-color: #7DAF82;
     color: white;
     margin-top: 100px;
-    padding : 20px 100px 20px 100px;
+    padding: 20px 100px 20px 100px;
     border-radius: 30px;
 }
 
-.community{
+.main_button:hover {
+    background-color: #5C8D6D;
+    transform: translateY(-2px);
+}
+
+.community {
     background: url(https://framerusercontent.com/images/ubSuEXPWtpN56eHbnEnPHhIqg.jpg?scale-down-to=1024);
     background-size: cover;
     background-position: center;
@@ -75,7 +80,8 @@ html, body {
     bottom: 50px;
     border-radius: 20px;
 }
-.records{
+
+.records {
     background: url(https://i0.pickpik.com/photos/867/398/408/diary-journal-pen-notebook-preview.jpg);
     background-size: cover;
     background-position: center;
@@ -86,7 +92,8 @@ html, body {
     bottom: 340px;
     border-radius: 20px;
 }
-.shopping{
+
+.shopping {
     background: url(https://img.freepik.com/premium-photo/jack-russel-dog-puppy-looks-into-empty-shopping-trolley-cart-blue-wall_77190-4574.jpg?w=1380);
     background-size: cover;
     background-position: center;
@@ -97,7 +104,8 @@ html, body {
     bottom: 340px;
     border-radius: 20px;
 }
-.health{
+
+.health {
     background: url(https://cdn.pixabay.com/photo/2022/04/25/15/50/dogs-7156260_1280.jpg);
     background-size: cover;
     background-position: center;
@@ -164,7 +172,7 @@ html, body {
 }
 
 .misssing_image {
-    width: 100%;  /* a 요소의 너비에 맞추어 설정 */
+    width: 100%; /* a 요소의 너비에 맞추어 설정 */
     height: 100%; /* a 요소의 높이에 맞추어 설정 */
     object-fit: cover; /* 이미지 비율 유지하면서 크기 조절 */
 }
@@ -210,7 +218,7 @@ html, body {
 }
 
 
-.gps_popup_button{
+.gps_popup_button {
     padding: 10px;
     border: 1px solid #4D3E3E;
     border-radius: 10px;

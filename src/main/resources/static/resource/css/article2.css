@@ -4,17 +4,17 @@ html, body {
     white-space: nowrap;
 }
 
-.bo{
+.bo {
     border: 1px solid red;
 }
 
-input, select, option{
+input, select, option {
     border-radius: 10px;
 }
 
-.button{
-    background: #ff6f61;
-    color : #ffffff;
+.button {
+    background-color: #7DAF82;
+    color: #ffffff;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -22,13 +22,19 @@ input, select, option{
     padding: 10px;
 }
 
-.a{
+.button:hover {
+    background-color: #5C8D6D;
+    transform: translateY(-2px);
+}
+
+
+.a {
     width: 100%;
     height: 100%;
     display: block;
 }
 
-.border{
+.border {
     border: 1px solid #DADADA;
     border-radius: 10px;
 }
@@ -37,11 +43,11 @@ input, select, option{
     text-decoration: underline;
 }
 
-.underline{
-    border-bottom :1px solid #DADADA;
+.underline {
+    border-bottom: 1px solid #DADADA;
 }
 
-.list_head{
+.list_head {
     padding-bottom: 100px;
     max-width: 1440px;
     margin: auto;
@@ -50,20 +56,20 @@ input, select, option{
     gap: 50px;
 }
 
-.list_head_a{
+.list_head_a {
     background: #000;
     width: 350px;
     height: 450px;
     border-radius: 10px;
     box-shadow: 8px 8px 15px rgba(0, 0, 0, 0.7);
-    color:white;
+    color: white;
 }
 
-.list_head_a:hover{
+.list_head_a:hover {
     transform: scale(1.1);
 }
 
-.list_head_a_img{
+.list_head_a_img {
     width: 100%;
     height: 100%;
     border-radius: 10px;
@@ -72,7 +78,7 @@ input, select, option{
     filter: brightness(0.5);
 }
 
-.list_head_a_title{
+.list_head_a_title {
     top: 0;
     left: 0;
     width: 100%;
@@ -83,7 +89,8 @@ input, select, option{
     font-weight: bold;
     font-size: 2rem;
 }
-.list_head_a_body{
+
+.list_head_a_body {
     top: 50%;
     width: 100%;
     height: 50%;
@@ -117,13 +124,13 @@ input, select, option{
     }
 }
 
-.list_body{
+.list_body {
     max-width: 1440px;
     margin: auto;
     display: flex;
 }
 
-.list_sidebar{
+.list_sidebar {
     width: 350px;
     display: flex;
     align-items: center;
@@ -132,60 +139,60 @@ input, select, option{
     gap: 15px;
 }
 
-.list_profile_login{
+.list_profile_login {
     width: 150px;
     height: 50px;
     font-size: 2rem;
 }
 
-.list_profile_dogPoto{
+.list_profile_dogPoto {
     width: 100px;
     height: 100px;
     border-radius: 10px;
 }
 
-.list_profile_nickname{
+.list_profile_nickname {
     font-size: 1.5rem;
 }
 
-.list_board_title{
+.list_board_title {
     font-size: 1.5em;
     border-bottom: 1px solid #DADADA;
     padding: 10px;
     width: 80%;
 }
 
-.list_board{
+.list_board {
     width: 100%;
     padding-top: 30px;
     padding-left: 30px;
 }
 
-.list_walkRanking{
+.list_walkRanking {
     background: #ede0d4;
     border-radius: 10px;
     width: 240px;
 }
 
-.popup{
+.popup {
     position: fixed;
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
 }
 
-.list_main{
+.list_main {
     flex-grow: 1;
     border-left: 1px solid #DADADA;
 }
 
-.list_main_dogPoto{
+.list_main_dogPoto {
     width: 70px;
     height: 70px;
     border-radius: 100%;
 }
 
-.list_main_body{
+.list_main_body {
     flex-grow: 1;
     height: 70px;
 }
@@ -198,7 +205,7 @@ input, select, option{
     object-position: center;
 }
 
-.new-icon{
+.new-icon {
     border-radius: 100%;
     background: #ff6f61;
     color: white;

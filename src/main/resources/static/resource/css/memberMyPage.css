@@ -27,7 +27,7 @@ html, body {
     box-sizing: border-box; /* 패딩과 보더를 포함한 전체 크기 계산 */
 }
 
-.profile_title{
+.profile_title {
     display: inline-block;
 }
 
@@ -38,7 +38,7 @@ html, body {
     font-weight: bold;
 }
 
-.dogPage_image{
+.dogPage_image {
     border-radius: 10px;
     margin-top: 10px;
     width: 100px;
@@ -47,13 +47,13 @@ html, body {
     margin-right: auto;
 }
 
-.myPage_text{
+.myPage_text {
     padding-left: 10px;
     font-weight: bold;
     border-radius: 10px;
 }
 
-.page_body{
+.page_body {
     display: flex;
     flex-direction: column;
     gap: 20px;
@@ -67,10 +67,15 @@ html, body {
 
 .upload_button {
     width: 100px;
-    background: #ff6f61;
-    color : #ffffff;
+    background-color: #7DAF82;
+    color: #ffffff;
     border-radius: 10px;
     padding: 10px;
+}
+
+.upload_button:hover {
+    background-color: #5C8D6D;
+    transform: translateY(-2px);
 }
 
 .myPage_popup {
@@ -85,7 +90,7 @@ html, body {
     border-radius: 10px;
 }
 
-.checkInput{
+.checkInput {
     width: 300px;
     padding: 10px;
 }
