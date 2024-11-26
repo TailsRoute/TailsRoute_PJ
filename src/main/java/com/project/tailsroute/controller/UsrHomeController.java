@@ -50,12 +50,7 @@ public class UsrHomeController {
     }
 
     @GetMapping("/usr/home/main2")
-    public String showMain_ver2() {
-
-        return "usr/home/main2";
-    }
-    @GetMapping("/usr/home/main3")
-    public String showMain3(Model model) {
+    public String showMain_ver2(Model model) {
         boolean isLogined = rq.isLogined();
         if (isLogined) {
             Member member = rq.getLoginedMember();
@@ -64,9 +59,11 @@ public class UsrHomeController {
         }
         model.addAttribute("isLogined", isLogined);
         model.addAttribute("API_KEY", API_KEY);
+
         List<Missing> missings = missingService.list(0, 10, "전체");
 
         model.addAttribute("missings", missings);
-        return "usr/home/main3";
+
+        return "usr/home/main2";
     }
 }

@@ -133,25 +133,22 @@
 <div class="tw-fixed tw-h-[60px] tw-w-full tw-z-20" style="background-color: transparent;">
     <div class="tw-container tw-mx-auto tw-flex tw-justify-between tw-items-baseline">
         <a href="../home/main" class="tw-text-2xl tw-pl-[20px]" style="color: #4B5D67;">TailsRoute</a>
-    </div>
-</div>
-<div class="alarm_profile tw-cursor-pointer tw-text-white tw-text-lg tw-relative" th:if="${isLogined}">
-    <!-- 알림 아이콘을 클릭했을 때 sidebar로 이동 -->
-    <i class="fa-solid fa-bell"></i>
-    <!-- 알람 수를 표시하는 배지 -->
-    <span id="alarmCount"
-          class="tw-absolute tw-top-[-7px] tw-right-[-5px] tw-text-l-[10px] tw-text-[10px] tw-bg-red-500 tw-text-white tw-rounded-full tw-w-[10px] tw-h-[10px] tw-text-center tw-flex tw-items-center tw-justify-center tw-hidden"></span>
-    <!-- 사이드 바 -->
-    <div id="sidebar"
-         class="alarm_profile_bar tw-hidden tw-z-30 tw-cursor-default tw-mt-[30px] tw-ml-[200px] tw-absolute tw-w-[400px] tw-h-[350px] tw-bg-[#FFFEF0] tw-border tw-border-[#4D3E3E] tw-rounded-[30px] tw-flex tw-flex-col tw-items-center tw-justify-center tw-gap-2 tw-right-[-5px]">
-        <h3 class="tw-text-lg tw-text-[#4D3E3E] tw-font-bold">알람 메시지</h3>
-        <div id="alarmMessages"
-             class="tw-flex tw-flex-col tw-items-start tw-w-full tw-h-full tw-overflow-auto tw-p-2 tw-mh-[250px]">
-            <!-- 알람 메시지가 여기에 동적으로 추가됩니다. -->
+        <div class="alarm_profile tw-cursor-pointer tw-text-white tw-text-lg tw-relative" th:if="${isLogined}">
+            <!-- 알림 아이콘을 클릭했을 때 sidebar로 이동 -->
+            <i class="fa-solid fa-bell"></i>
+            <!-- 알람 수를 표시하는 배지 -->
+            <span id="alarmCount"
+                  class="tw-absolute tw-top-[-7px] tw-right-[-5px] tw-text-l-[10px] tw-text-[10px] tw-bg-red-500 tw-text-white tw-rounded-full tw-w-[10px] tw-h-[10px] tw-text-center tw-flex tw-items-center tw-justify-center tw-hidden"></span>
+            <!-- 사이드 바 -->
+            <div id="sidebar"
+                 class="alarm_profile_bar tw-hidden tw-z-30 tw-cursor-default tw-mt-[30px] tw-ml-[200px] tw-absolute tw-w-[400px] tw-h-[350px] tw-bg-[#FFFEF0] tw-border tw-border-[#4D3E3E] tw-rounded-[30px] tw-flex tw-flex-col tw-items-center tw-justify-center tw-gap-2 tw-right-[-5px]">
+                <h3 class="tw-text-lg tw-text-[#4D3E3E] tw-font-bold">알람 메시지</h3>
+                <div id="alarmMessages"
+                     class="tw-flex tw-flex-col tw-items-start tw-w-full tw-h-full tw-overflow-auto tw-p-2 tw-mh-[250px]">
+                    <!-- 알람 메시지가 여기에 동적으로 추가됩니다. -->
+                </div>
+            </div>
         </div>
     </div>
-</div>
-</div>
-</div>
 </div>
 </body>

@@ -52,19 +52,11 @@ public class KakaoLoginController {
     @ResponseBody
     public String handleKakaoCallback(@RequestParam String code, HttpServletRequest request) {
 
-        // 세션 확인
-        HttpSession session = request.getSession(false);
-        if (session != null && session.getAttribute("member") != null) {
-            // 이미 로그인된 상태라면 로그인 시도를 막음
-            Member loggedInMember = (Member) session.getAttribute("member");
-            return Ut.jsReplace(loggedInMember.getNickname() + "님 이미 로그인 중입니다!", "/usr/home/main");
-        }
+        Member loginedMember = rq.getLoginedMember();
 
-        // 세션 초기화 및 재생성
-        if (session != null) {
-            session.invalidate(); // 기존 세션 무효화
+        if(loginedMember != null) {
+            return Ut.jsReplace(loginedMember.getNickname() + "님 이미 로그인 중입니다!", "/usr/home/main");
         }
-        session = request.getSession(true); // 새로운 세션 생성
 
         // 기존 로직
         String accessToken = getAccessTokenFromKakao(code);
@@ -85,7 +77,6 @@ public class KakaoLoginController {
 
         // 로그인 성공: 세션에 사용자 정보 저장
         rq.login(member);
-        session.setAttribute("member", member); // 새로운 세션에 사용자 정보 저장
         return Ut.jsReplace(member.getNickname() + "님 환영합니다!", "/usr/home/main");
     }
 
