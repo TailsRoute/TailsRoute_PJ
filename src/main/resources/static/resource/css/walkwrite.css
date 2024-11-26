@@ -1,0 +1,48 @@
+html,body {
+    background-color: #F9F5EB !important;
+    color: #4D3E3E;
+}
+.writewalk{
+    border: 1px solid #ccc;
+    border-radius: 10px;
+    width: 1440px;
+    padding: 20px;
+    position: absolute;
+    left: 50%;
+    margin-top: 10px;
+    transform: translate(-50%);
+}
+.enterMap {
+    padding-left: 10px;
+    padding-top: 10px;
+    border: 1px solid #ccc;
+    border-radius: 10px;
+    background-color: #F2F2EB;
+    width: 400px;
+    height: 50px;
+    display: inline-block;
+}
+.WalkingTrail, .WalkingSchedule {
+    border: 1px solid #ccc;
+    border-radius: 10px;
+    background-color: #F2F2EB;
+    display: inline-block;
+    width: 400px;
+    height: 400px;
+}
+.buttons{
+    margin-left: 80%;
+}
+#clearPathButton, #showlist, #savePathButton, #goBack{
+    width: 110px;
+    height: 40px;
+}
+th{
+    width: 24%;
+}
+td.ellipsis{
+    max-width: 50px; /* 적절한 최대 너비 설정 */
+    white-space: nowrap; /* 텍스트 줄바꿈 방지 */
+    overflow: hidden; /* 넘치는 텍스트 숨기기 */
+    text-overflow: ellipsis;
+}
