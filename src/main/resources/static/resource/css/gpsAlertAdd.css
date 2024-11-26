@@ -28,12 +28,12 @@ html, body {
 .upload_map {
     width: 100%;
     max-width: 1340px;
-    display: flex;              /* Flexbox 활성화 */
+    display: flex; /* Flexbox 활성화 */
     justify-content: space-between; /* 양쪽 끝으로 정렬 */
     padding: 10px;
 }
 
-.upload_input{
+.upload_input {
     border-radius: 10px;
     height: 40px;
     width: 300px;
@@ -42,8 +42,13 @@ html, body {
 
 .upload_button {
     width: 100px;
-    background: #ff6f61;
-    color : #ffffff;
+    background-color: #7DAF82;
+    color: #ffffff;
     border-radius: 10px;
     padding: 10px;
+}
+
+.upload_button:hover {
+    background-color: #5C8D6D;
+    transform: translateY(-2px);
 }
