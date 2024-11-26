@@ -3,8 +3,8 @@ $(document).ready(function () {
     loadCities();
 
     // 사이드바 열기
-    const sidebar = document.getElementById('sidebar');
-    const toggleButton = document.getElementById('toggle-button');
+    const sidebar = document.getElementById('hospital-sidebar');
+    const toggleButton = document.getElementById('hospital-toggle-button');
     sidebar.classList.add('open');
     toggleButton.innerHTML = '&#9664;'; // 화살표를 오른쪽으로
 });
@@ -85,7 +85,7 @@ async function initMap() {
     let center = new google.maps.LatLng(37.5665, 126.9780);
 
     // 지도를 초기화합니다.
-    map = new Map(document.getElementById("map"), {
+    map = new Map(document.getElementById("hospital-map"), {
         center: center, zoom: 14, mapId: google_mapId,
     });
 
@@ -224,9 +224,9 @@ function fetchHospitalsWithFilters(filterType, city, region) {
 
 // 사이드바 업데이트
 function updateSidebar(hospitals) {
-    const sidebar = document.getElementById('sidebar');
+    const sidebar = document.getElementById('hospital-sidebar');
     const listContainer = sidebar.querySelector('ul');
-    const toggleButton = document.getElementById('toggle-button'); // 토글 버튼 참조
+    const toggleButton = document.getElementById('hospital-toggle-button'); // 토글 버튼 참조
 
     listContainer.innerHTML = ''; // 기존 리스트 항목 초기화
 
@@ -273,11 +273,11 @@ function updateSidebar(hospitals) {
 }
 
 // 검색 버튼 클릭 이벤트 리스너
-document.getElementById('search-button').addEventListener('click', () => {
+document.getElementById('hospital-search-button').addEventListener('click', () => {
     const filterType = document.querySelector('input[role="switch"]').checked ? "24시간" : "";
     const selectedCity = document.getElementById('city-select').value;
     const selectedRegion = document.getElementById('county-select').value;
-    const toggleButton = document.getElementById('toggle-button');
+    const toggleButton = document.getElementById('hospital-toggle-button');
 
     // 검색 조건 검증
     if (!selectedCity || (selectedCity !== "세종특별자치시" && !selectedRegion)) {
@@ -333,8 +333,8 @@ function geocodeAddress() {
 
 // CSS javascript
 function toggleSidebar() {
-    const sidebar = document.getElementById('sidebar');
-    const toggleButton = document.getElementById('toggle-button');
+    const sidebar = document.getElementById('hospital-sidebar');
+    const toggleButton = document.getElementById('hospital-toggle-button');
 
     sidebar.classList.toggle('open');
 

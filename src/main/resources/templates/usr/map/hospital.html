@@ -7,12 +7,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href="/resource/dist/styles.css" th:href="@{/resource/dist/styles.css}" rel="stylesheet">
     <link rel="stylesheet" href="/resource/css/hospital.css"/>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/2.1.4/tailwind.min.css">
 </head>
 <body>
-
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
 
 <!-- 서버에서 전달받은 mapId 변수를 JavaScript 변수로 전달 -->
 <script th:inline="javascript">
@@ -25,21 +22,21 @@
 </div>
 
 <!-- 전체 레이아웃 컨테이너 -->
-<div class="flex-grow" style="height: calc(100vh - 61px);">
+<div class="flex-grow" style="height: calc(100vh - 60px);">
     <!-- 내부 레이아웃 컨테이너: 지도 영역 -->
     <div class="w-full h-full">
         <!-- 지도 영역 -->
         <div class="bg-gray-200 flex items-center justify-center" style="height: 100%">
-            <div id="map" style="width: 100%; height: 100%;"></div>
+            <div id="hospital-map" style="width: 100%; height: 100%;"></div>
         </div>
     </div>
 </div>
 
 <!-- 사이드바 -->
-<div id="sidebar">
+<div id="hospital-sidebar">
     <!-- 헤더에 가려지지 않도록 공간을 확보하는 역할 -->
     <div class="tw-bg-blue-500 w-full text-white flex items-center justify-center" style="height: 60px;"></div>
-    <div class="search-container p-4">
+    <div class="hospital-search-container p-4">
         <!-- 지역별 검색 -->
         <div class="mb-4">
             <div class="flex space-x-4">
@@ -58,7 +55,7 @@
                     </select>
                 </div>
                 <div>
-                    <button id="search-button" class="border rounded">
+                    <button id="hospital-search-button" class="border rounded">
                         검색
                     </button>
                 </div>
@@ -73,7 +70,7 @@
             </label>
         </div>
     </div>
-    <div class="results-container">
+    <div class="hospital-results-container">
         <ul>
             <div class="text-gray-500 p-4">검색 결과가 없습니다.</div>
             <!-- 병원 리스트 항목 -->
@@ -90,7 +87,7 @@
 </div>
 
 <!-- 토글 버튼 -->
-<div id="toggle-button" onclick="toggleSidebar()">&#9654;</div>
+<div id="hospital-toggle-button" onclick="toggleSidebar()">&#9654;</div>
 
 <!-- JavaScript 파일 불러오기 -->
 <script src="/resource/js/hospital.js"></script>
