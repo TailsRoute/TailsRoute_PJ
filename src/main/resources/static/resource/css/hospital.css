@@ -5,7 +5,7 @@ body {
 }
 
 /* 지도의 크기를 설정합니다 */
-#map {
+#hospital-map {
     height: 100%;
     width: 100%;
 }
@@ -41,8 +41,8 @@ label {
 }
 
 [type="checkbox"]:checked {
-    background-color: #4D3E3E;
-    border-color: #4D3E3E;
+    background-color: #7DAF82;
+    border-color: #7DAF82;
 }
 
 [type="checkbox"]:checked::before {
@@ -67,7 +67,7 @@ label {
 
 [type="checkbox"]:focus-visible {
     outline-offset: max(2px, 0.1em);
-    outline: max(2px, 0.1em) solid #4D3E3E;
+    outline: max(2px, 0.1em) solid #7DAF82;
 }
 
 [type="checkbox"]:enabled:hover {
@@ -76,7 +76,7 @@ label {
 
 /*****************/
 /* 사이드바 스타일 */
-#sidebar {
+#hospital-sidebar {
     position: fixed;
     top: 0;
     left: -430px; /* 화면 밖으로 숨김 */
@@ -92,12 +92,12 @@ label {
 }
 
 /* 사이드바가 열렸을 때 */
-#sidebar.open {
+#hospital-sidebar.open {
     left: 0;
 }
 
 /* 독립된 토글 버튼 스타일 */
-#toggle-button {
+#hospital-toggle-button {
     position: fixed;
     top: 50%;
     left: 0;
@@ -105,7 +105,7 @@ label {
     width: 25px;
     height: 60px;
     background-color: white;
-    color: #4D3E3E;
+    color: #7DAF82;
     font-size: 14px;
     font-weight: bold;
     display: flex;
@@ -119,39 +119,39 @@ label {
 }
 
 /* 사이드바가 열렸을 때 토글 버튼 위치 */
-#sidebar.open + #toggle-button {
+#hospital-sidebar.open + #hospital-toggle-button {
     left: 430px;
 }
 
 /*****************/
 
 /* 리스트 항목 기본 스타일 */
-#sidebar ul li {
+#hospital-sidebar ul li {
     background-color: white; /* 기본 배경색 */
     cursor: default;
     transition: background-color 0.3s ease; /* 부드러운 전환 효과 */
 }
 
 /* 마우스를 가져다댔을 때 */
-#sidebar ul li:hover {
+#hospital-sidebar ul li:hover {
     background-color: #f0f0f0; /* 살짝 어두운 배경색 */
 }
 
-#sidebar::-webkit-scrollbar {
+#hospital-sidebar::-webkit-scrollbar {
     display: none; /* Chrome, Safari, Edge에서 스크롤바 숨김 */
 }
 
 /*****************/
 /* 검색 버튼 스타일 */
-#search-button {
-    background-color: #4D3E3E;
+#hospital-search-button {
+    background-color: #7DAF82;
     color: white;
     padding: 8px 20px;
 }
 
 /*****************/
 /* 검색창 고정 */
-.search-container {
+.hospital-search-container {
     position: sticky;
     top: 0;
     background-color: white;
@@ -161,7 +161,7 @@ label {
 }
 
 /* 검색 결과 스크롤 가능 */
-.results-container {
+.hospital-results-container {
     max-height: calc(100vh - 260px); /* 검색창 제외한 높이 */
     scroll-padding-bottom: 1rem; /* 스크롤 끝 부분에 여백 추가 */
     padding-bottom: 1rem; /* 시각적 여백 추가 */
@@ -171,13 +171,13 @@ label {
 }
 
 /* 검색 결과 리스트 스타일 */
-.results-container ul {
+.hospital-results-container ul {
     list-style: none;
     padding: 0;
     margin: 0;
 }
 
-.results-container li {
+.hospital-results-container li {
     padding: 1rem;
     border-bottom: 1px solid #ddd;
 }
