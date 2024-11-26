@@ -5,11 +5,11 @@ html, body {
     word-break: keep-all;
 }
 
-.bo{
+.bo {
     border: 10px solid;
 }
 
-input, select, textarea{
+input, select, textarea {
     border: 2px solid #ccc; /* 점선 테두리 */
     border-radius: 5px; /* 모서리 둥글게 */
     padding-left: 10px; /* 왼쪽 여백 10px 추가 */
@@ -34,14 +34,14 @@ input, select, textarea{
     border-left: 1px solid;
 }
 
-.article_write{
+.article_write {
     display: inline-block;
     margin-left: auto;
 }
 
 .article_button {
-    background: #ff6f61;
-    color : #ffffff;
+    background-color: #7DAF82;
+    color: #ffffff;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -49,7 +49,12 @@ input, select, textarea{
     padding: 10px;
 }
 
-.reply_body{
+.article_button:hover {
+    background-color: #5C8D6D;
+    transform: translateY(-2px);
+}
+
+.reply_body {
     padding: 20px;
     border-top: 2px solid #dadada;
 }

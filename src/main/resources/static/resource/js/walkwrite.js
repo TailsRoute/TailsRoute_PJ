@@ -54,7 +54,7 @@ function initMap1() {
             }
             const data = JSON.stringify({ path: waypoints }); // 경로 데이터를 문자열화
             const walkData = {
-                memberId: wmemberId,
+                memberId: w1memberId,
                 routeName: routeName,
                 purchaseDate: scheduleDate,
                 routePicture: data,
