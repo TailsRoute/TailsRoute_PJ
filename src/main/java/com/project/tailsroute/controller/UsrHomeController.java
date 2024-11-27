@@ -52,8 +52,17 @@ public class UsrHomeController {
     @GetMapping("/usr/home/main2")
     public String showMain_ver2(Model model) {
         boolean isLogined = rq.isLogined();
+        Member member = rq.getLoginedMember();
+
+        if(member == null) {
+            model.addAttribute("isLogined", false);
+            model.addAttribute("nickname","");
+        }else{
+            model.addAttribute("isLogined", true);
+            model.addAttribute("nickname", member.getNickname());
+        }
+
         if (isLogined) {
-            Member member = rq.getLoginedMember();
             GpsChack gpsChack = gpsChackService.chack(member.getId());
             model.addAttribute("gpsChack", gpsChack);
         }

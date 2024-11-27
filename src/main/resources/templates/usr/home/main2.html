@@ -2,7 +2,7 @@
 <!--<!DOCTYPE html>-->
 <!--<html lang="en" xmlns:th="http://www.thymeleaf.org">-->
 <head>
-<!-- <th:block th:replace="usr/common/head2"/> -->
+    <!-- <th:block th:replace="usr/common/head2"/> -->
     <title>Main</title>
     <link rel="stylesheet" href="/resource/css/main2.css"/>
     <script src="https://cdn.jsdelivr.net/npm/smooth-scrollbar@8.5.3/dist/smooth-scrollbar.js"></script>
@@ -39,13 +39,16 @@
         // 스크롤 이벤트 추가
         document.addEventListener("scroll", () => {
             const loginButton = document.getElementById("login-button");
+            const loginStatus = document.getElementById("welcome-button")
             const hospitalButton = document.getElementById("hospital-button");
             if (window.scrollY > 100) {
                 // 스크롤이 100px 이상일 때 둥근 아이콘으로 변경
                 loginButton?.classList.add("rounded");
+                loginStatus?.classList.add("rounded");
                 hospitalButton?.classList.add("rounded");
             } else {
                 loginButton?.classList.remove("rounded");
+                loginStatus?.classList.remove("rounded");
                 hospitalButton?.classList.remove("rounded");
             }
         });
@@ -91,6 +94,7 @@
         $("html").animate({scrollTop: 0}, 10);
     });
 
+
 </script>
 
 
@@ -112,17 +116,17 @@
             <form class="login-form" action="/usr/member/doLogin" method="POST" name="Login">
                 <!-- 아이디 입력 -->
                 <div class="tw-mb-4">
-                    <label for="loginUsername"
+                    <label for="loginId"
                            class="tw-block tw-text-sm tw-font-medium tw-text-gray-700 tw-tracking-wider">아이디</label>
-                    <input type="text" id="loginUsername" name="username"
+                    <input type="text" id="loginId" name="loginId"
                            class="tw-input tw-w-full tw-h-10 tw-px-4 tw-rounded-lg tw-border tw-border-gray-300 focus:tw-ring-2 focus:tw-ring-[#7DAF82] focus:tw-outline-none"
                            placeholder="아이디를 입력하세요" required/>
                 </div>
                 <!-- 비밀번호 입력 -->
                 <div class="tw-mb-6">
-                    <label for="loginPassword"
+                    <label for="loginPw"
                            class="tw-block tw-text-sm tw-font-medium tw-text-gray-700 tw-tracking-wider">비밀번호</label>
-                    <input type="password" id="loginPassword" name="password"
+                    <input type="password" id="loginPw" name="loginPw"
                            class="tw-input tw-w-full tw-h-10 tw-px-4 tw-rounded-lg tw-border tw-border-gray-300 focus:tw-ring-2 focus:tw-ring-[#7DAF82] focus:tw-outline-none"
                            placeholder="비밀번호를 입력하세요" required/>
                 </div>
@@ -134,6 +138,20 @@
                     </button>
                 </div>
             </form>
+            <div class="tw-flex tw-items-center tw-my-4">
+                <div class="tw-flex-grow tw-h-px tw-bg-gray-300"></div>
+                <span class="tw-mx-4 tw-text-gray-500 tw-text-sm">소셜 로그인</span>
+                <div class="tw-flex-grow tw-h-px tw-bg-gray-300"></div>
+            </div>
+            <div class="tw-text-center tw-flex tw-items-center tw-justify-center tw-text-sm tw-tracking-wider tw-p-2">
+                <img class="tw-w-10 tw-h-10 tw-m-2 tw-cursor-pointer"
+                     onclick="window.location.href='/usr/member/naver-login';"
+                     src="/resource/photo/naver_icon.png"
+                     alt="naver_icon">
+                <img class="tw-w-10 tw-h-10 tw-m-2 tw-cursor-pointer"
+                     onclick="window.location.href='/usr/member/kakao-login';" src="/resource/photo/kakao_icon.png"
+                     alt="kakao_icon">
+            </div>
             <!-- 아이디 / 비밀번호 찾기 -->
             <div class="tw-text-center tw-text-sm tw-tracking-wider tw-p-2">
                 <p class="tw-text-gray-500">
@@ -159,7 +177,7 @@
     </div>
     <!-- 사이드 메뉴 -->
     <div id="sidebar"
-         class="tw-fixed tw-top-1/2 tw-left-4 tw-transform -tw-translate-y-1/2 tw-rounded-lg tw-w-56 tw-py-6 tw-flex tw-flex-col tw-items-start tw-space-y-6">
+         class="tw-fixed tw-top-1/2 tw-left-4 tw-transform -tw-translate-y-1/2 tw-rounded-lg tw-w-56 tw-py-6 tw-flex tw-flex-col tw-items-start tw-space-y-6" style="z-index: 1000;">
         <a href="#section1"
            class="tw-flex tw-items-center tw-w-full tw-py-3 tw-px-4 tw-text-[#3A3A3A] tw-font-medium tw-tracking-wider hover:tw-text-green-400 tw-transition-all">
             <span class="tw-text-base"> 홈페이지</span>
@@ -194,6 +212,7 @@
                 <p class="tw-text-lg md:tw-text-xl tw-mb-10">
                     반려견 케어를 위한 종합 관리 플랫폼
                 </p>
+                <button class="community">커뮤니티</button>
             </div>
         </div>
     </section>
@@ -225,7 +244,8 @@
                             <div class="tw-pl-2 tw-pt-2"
                                  th:text="${#strings.length(missing.trait) >= 22 ? missing.trait.substring(0, 22) : missing.trait}"></div>
                             <span class="tw-pl-2" th:if="${#strings.length(missing.trait) >= 22}" th:text="..."></span>
-                            <span class="tw-absolute tw-right-5" th:href="@{'../missing/detail?missingId='+${missing.id}}"
+                            <span class="tw-absolute tw-right-5"
+                                  th:href="@{'../missing/detail?missingId='+${missing.id}}"
                                   th:text="'자세히보기 ' + '&#10095;'"></span>
                         </div>
                     </a>
@@ -244,17 +264,17 @@
                 <h2 class="tw-text-4xl tw-font-bold tw-text-gray-700">AI 기반 훈련 지원</h2>
                 <div class="box3">
                     <div class="container">
-                        <a href="../health/page" class="svg-box">
+                        <a href="../behaviorAnalysis/videoAnalysis" class="svg-box">
                             <span class="svg-title tw-text-xl tw-font-bold">실시간 피드백 제공</span>
                             <span class="svg-icon flat-filled" id="filled-message"></span>
                             <span class="svg-text tw-text-xl tw-font-bold">AI가 훈련 진행 사항을 실시간으로 피드백</span>
                         </a>
-                        <a href="../health/page" class="svg-box">
+                        <a href="../behaviorAnalysis/videoAnalysis" class="svg-box">
                             <span class="svg-title tw-text-xl tw-font-bold">즉각적인 도움 제공</span>
                             <span class="svg-icon flat-filled" id="filled-film"></span>
                             <span class="svg-text tw-text-xl tw-font-bold">맞춤형 영상을 추천하여 주인의 훈련 노력을 더 효과적으로 도움</span>
                         </a>
-                        <a href="../health/page" class="svg-box">
+                        <a href="../behaviorAnalysis/videoAnalysis" class="svg-box">
                             <span class="svg-title tw-text-xl tw-font-bold">행동 패턴 기록 및 분석</span>
                             <span class="svg-icon flat-filled" id="filled-magnify"></span>
                             <span class="svg-text tw-text-xl tw-font-bold">AI가 행동 데이터를 기록해 맞춤 훈련 적략 제공</span>
@@ -265,14 +285,6 @@
         </div>
     </section>
 
-    <!-- 네 번째 화면 -->
-    <section id="section4"
-             class="content tw-w-full tw-h-screen tw-bg-[#E3DAC9] tw-flex tw-items-center tw-justify-center">
-        <div class="tw-text-center">
-            <h2 class="tw-text-4xl tw-font-bold tw-text-gray-700">24시 병원 정보</h2>
-            <p class="tw-text-xl tw-mt-4">반려견의 긴급 상황을 위한 병원 정보를 안내합니다.</p>
-        </div>
-    </section>
 </main>
 
 <!-- 오른쪽 고정 버튼 -->
@@ -281,7 +293,7 @@
     <div id="Button" class="tw-flex tw-flex-col tw-items-end tw-gap-4">
 
         <!-- 로그인/회원가입 버튼: username이 null일 때만 표시 -->
-        <div th:if="${username == null}" id="login-button"
+        <div th:if="${!isLogined}" id="login-button"
              class="icon button-style tw-flex tw-items-center tw-justify-center tw-p-4 tw-rounded-full tw-shadow-md tw-border tw-cursor-pointer hover:tw-shadow-lg tw-h-16 tw-w-48 transition-all"
              style="border-color: #FF7F50;">
             <i class="bi bi-person-fill tw-text-gray-700 tw-text-2xl"></i>
@@ -289,15 +301,13 @@
         </div>
 
         <!-- 로그인 상태 표시: username이 null이 아닐 때만 표시 -->
-        <div th:if="${username != null}" id="logged-in-info"
+        <div th:if="${isLogined}" id="welcome-button"
              class="icon button-style tw-flex tw-items-center tw-justify-between tw-p-4 tw-rounded-full tw-shadow-md tw-border tw-cursor-pointer hover:tw-shadow-lg tw-h-16 tw-w-48 transition-all"
-             style="border-color: #FF7F50;">
-            <i class="bi bi-person-fill-check tw-text-gray-700 tw-text-2xl"></i>
-            <span class="tw-text-gray-700 tw-font-medium" style="margin-left: 8px;"
-                  th:text="'안녕하세요, ' + ${username} + '님!'"></span>
-            <a href="/usr/member/logout" onclick="kakaoLogout()"
-               class="tw-text-sm tw-font-medium tw-text-red-500 hover:tw-underline"
-               style="margin-left: auto;">로그아웃</a>
+             style="border-color: #FF7F50;"  onclick="window.location.href='/usr/member/myPage';">
+            <i class="bi bi-person-fill tw-text-gray-700 tw-text-2xl "></i>
+            <span class="tw-text-gray-700 tw-font-medium" style="margin-left: 8px;">
+        안녕하세요,<br th:utext="${nickname + '님!'}"/>
+    </span>
         </div>
 
     </div>
@@ -336,7 +346,7 @@
         <button class="gps_popup_button" onclick="gpsChackCancel()">거부</button>
     </div>
 </div>
-</div>
+
 
 <!-- 푸터 -->
 <footer class="tw-w-full tw-bg-gray-200 tw-py-6 tw-shadow-inner tw-flex tw-items-center tw-justify-center">
