@@ -70,20 +70,20 @@ public class UsrMemberController {
         }
 
         if (Ut.isEmptyOrNull(loginId)) {
-            return Ut.jsHistoryBack("F-1", "loginId 입력 x");
+            return Ut.jsHistoryBack("F-1", "loginId를 입력해주세요.");
         }
         if (Ut.isEmptyOrNull(loginPw)) {
-            return Ut.jsHistoryBack("F-2", "loginPw 입력 x");
+            return Ut.jsHistoryBack("F-2", "loginPw를 입력해주세요.");
         }
 
         Member member = memberService.getMemberByLoginId(loginId);
 
         if (member == null) {
-            return Ut.jsHistoryBack("F-3", Ut.f("%s는(은) 존재 x", loginId));
+            return Ut.jsHistoryBack("F-3", Ut.f("%s는(은) 존재하지 않습니다.", loginId));
         }
 
         if (member.getLoginPw().equals(loginPw) == false) {
-            return Ut.jsHistoryBack("F-4", Ut.f("비밀번호 틀림"));
+            return Ut.jsHistoryBack("F-4", Ut.f("비밀번호가 올바르지 않습니다."));
         }
 
         rq.login(member);
@@ -99,7 +99,7 @@ public class UsrMemberController {
 
         rq.logout();
 
-        return Ut.jsReplace("S-1", Ut.f("로그아웃 되었습니다"), "/usr/home/main");
+        return Ut.jsReplace("S-1", Ut.f("로그아웃 되었습니다"), "/usr/home/main2");
     }
 
     @GetMapping("/usr/member/myPage")
