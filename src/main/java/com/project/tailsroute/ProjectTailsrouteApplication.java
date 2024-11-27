@@ -13,7 +13,6 @@ public class ProjectTailsrouteApplication {
 		// BouncyCastle 프로바이더 등록
 		Security.addProvider(new BouncyCastleProvider());
 
-		System.out.println("안녕하세요 제발 통과시켜주세요.");
 		SpringApplication.run(ProjectTailsrouteApplication.class, args);
 	}
 }

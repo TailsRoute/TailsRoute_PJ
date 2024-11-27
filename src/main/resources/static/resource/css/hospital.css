@@ -149,6 +149,10 @@ label {
     padding: 8px 20px;
 }
 
+#hospital-search-button:hover {
+    background-color: #5C8D6D;
+}
+
 /*****************/
 /* 검색창 고정 */
 .hospital-search-container {
