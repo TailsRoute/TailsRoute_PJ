@@ -14,6 +14,7 @@
         const gpsCheck1 = {latitude: '[[${gpsCheck.latitude}]]', longitude: '[[${gpsCheck.longitude}]]'};
         let w1memberId = [[${member.id}]];
     </script>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
     <link rel="stylesheet" href="/resource/css/walkwrite.css"/>
 </head>
 <body>
@@ -22,41 +23,49 @@
     산책 일지 작성
 </div>
 <div class="writewalk">
-    <label for="routeName">산책명</label>
-    <input type="text" id="routeName" class="tw-rounded-md focus:tw-ring-2 focus:tw-ring-[#7DAF82] tw-w-[190px] tw-text-center tw-border tw-input tw-h-[25px]" required/><br/><br/>
-    <label for="scheduleDate">산책 날짜</label>
-    <span id="scheduleDate" class="tw-w-[190px] tw-text-center"></span><br/><br/>
     <div class="enterMap">
         <input type="text" id="locationInput" placeholder="주소를 입력해주세요" class="tw-rounded-md focus:tw-ring-2 focus:tw-ring-[#7DAF82] tw-text-center tw-border tw-input tw-h-[25px]"/>
-        <button onclick="searchLocation()">찿기</button>
-    </div><br/><br/>
-    <div style="margin-left: 10px; font-size: 10px;"># 위치정보 동의를 하지 않을시 기본 좌표가 서울로 고정됩니다.</div>
-    <div class="WalkingTrail" id="walkingTrailMap"></div>
-    <div class="WalkingSchedule" id="WalkingSchedule" style="display: none">
-        <table id="WalkingTable">
-            <thead>
-            <tr>
-                <th id="routeNameHeader">산책명<span class="sort-arrow" id="routeNameArrow"></span></th>
-                <th id="purchaseDateHeader">산책 날짜<span class="sort-arrow" id="purchaseDateArrow">▲</span></th>
-                <th id="routedistanceHeader">산책 거리<span class="sort-arrow" id="routedistanceArrow"></span></th>
-                <th id="modifyHeader">즐겨찾기</th>
-            </tr>
-            </thead>
-            <tbody>
-            <!-- 데이터가 여기에 추가됩니다. -->
-            </tbody>
-        </table>
-    </div><br/><br/>
-    <button id="clearPathButton" class="tw-w-full tw-bg-[#7DAF82] tw-text-white tw-font-medium tw-h-10 tw-rounded-lg hover:tw-bg-[#6A9F72] tw-tracking-wider transition-all">이전 루트</button>
-    <button id="showlist" class="tw-w-full tw-bg-[#7DAF82] tw-text-white tw-font-medium tw-h-10 tw-rounded-lg hover:tw-bg-[#6A9F72] tw-tracking-wider transition-all">리스트 보기</button>
-    <br/><br/>
-    <!-- 산책 거리 -->
-    <label for="routedistance">산책 거리</label>
-    <span id="routedistance" style="display: inline-block;"></span><br/><br/>
-    <div class="buttons">
-        <button id="savePathButton" class="tw-w-full tw-bg-[#7DAF82] tw-text-white tw-font-medium tw-h-10 tw-rounded-lg hover:tw-bg-[#6A9F72] tw-tracking-wider transition-all">일정 생성</button>
-        <button id="goBack" class="tw-w-full tw-bg-[#7DAF82] tw-text-white tw-font-medium tw-h-10 tw-rounded-lg hover:tw-bg-[#6A9F72] tw-tracking-wider transition-all">뒤로가기</button>
+        <button onclick="searchLocation()" type="submit">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" fill="currentColor"
+                 class="h-5 w-5 text-gray-600">
+                <path fill-rule="evenodd"
+                      d="M9.965 11.026a5 5 0 1 1 1.06-1.06l2.755 2.754a.75.75 0 1 1-1.06 1.06l-2.755-2.754ZM10.5 7a3.5 3.5 0 1 1-7 0 3.5 3.5 0 0 1 7 0Z"
+                      clip-rule="evenodd"/>
+            </svg>
+        </button>
     </div>
+    <button id="clearPathButton" class="tw-w-full tw-bg-[#7DAF82] tw-text-white tw-font-medium tw-h-10 tw-rounded-lg hover:tw-bg-[#6A9F72] tw-tracking-wider transition-all tw-mr-[10px]">이전 루트</button>
+    <button id="showlist" class="tw-w-full tw-bg-[#7DAF82] tw-text-white tw-font-medium tw-h-10 tw-rounded-lg hover:tw-bg-[#6A9F72] tw-tracking-wider transition-all">리스트 보기</button>
+    <div class="tw-inline-block tw-ml-[170px]">
+        <label for="routeName">산책명</label>
+        <input type="text" id="routeName" class="tw-rounded-md focus:tw-ring-2 focus:tw-ring-[#7DAF82] tw-w-[190px] tw-text-center tw-border tw-input tw-h-[25px] tw-mr-[10px]" required/>
+        <label for="scheduleDate">산책 날짜</label>
+        <span id="scheduleDate" class="tw-inline-block tw-w-[190px] tw-rounded-md tw-text-center tw-mr-[10px] tw-bg-white"></span>
+        <label for="routedistance">산책 거리</label>
+        <span id="routedistance" class="tw-inline-block tw-w-[100px] tw-rounded-md tw-text-center tw-bg-white"></span>
+    </div><br/><br/>
+    <div class="mapList">
+        <div class="WalkingTrail" id="walkingTrailMap"></div>
+        <div class="WalkingSchedule" id="WalkingSchedule" style="display: none">
+            <table id="WalkingTable">
+                <thead>
+                <tr>
+                    <th id="routeNameHeader">산책명<span class="sort-arrow" id="routeNameArrow"></span></th>
+                    <th id="purchaseDateHeader">산책 날짜<span class="sort-arrow" id="purchaseDateArrow">▲</span></th>
+                    <th id="routedistanceHeader">산책 거리<span class="sort-arrow" id="routedistanceArrow"></span></th>
+                    <th id="modifyHeader">즐겨찾기</th>
+                </tr>
+                </thead>
+                <tbody>
+                <!-- 데이터가 여기에 추가됩니다. -->
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <div style="margin-left: 10px; font-size: 10px;"># 위치정보 동의를 하지 않을시 기본 좌표가 서울로 고정됩니다.</div>
+    <br/><br/>
+    <button id="goBack" class="tw-w-full tw-text-white tw-font-medium tw-h-10 tw-rounded-lg hover:tw-bg-[#6A9F72] tw-tracking-wider transition-all tw-ml-[20px]">뒤로가기</button>
+    <button id="savePathButton" class="tw-w-full tw-bg-[#7DAF82] tw-text-white tw-font-medium tw-h-10 tw-rounded-lg hover:tw-bg-[#6A9F72] tw-tracking-wider transition-all tw-ml-[1130px]">일정 생성</button>
 </div>
 <script src="/resource/js/walkwrite.js"></script>
 </body>

@@ -25,7 +25,7 @@
 <div id="cartPopup" class="modal cart-popup" style="display: none;">
     <div class="modal-content" style="height: 500px; overflow-y: auto;">
         <span class="close" id="closeCartPopup">&times;</span>
-        <h2>관심목록</h2>
+        <div style="font-size: x-large; font-weight: bold;  margin-left: 181px; margin-right: 181px;">관심목록</div>
         <ul id="cartItems">
             <!-- 장바구니 아이템들이 여기에 추가됩니다. -->
         </ul>
@@ -35,39 +35,39 @@
 <div id="schedulePopup" class="modal" style="display: none;">
     <div class="modal-content">
         <span class="close" id="closeSchedulePopup">&times;</span>
-        <h2>생필품 일정 관리</h2>
+        <div style="font-size: x-large; font-weight: bold;  margin-left: 136px; margin-right: 136px; margin-bottom: 20px;">생필품 일정 관리</div>
 
         <!-- 일정 날짜 입력-->
-        <label for="scheduleDate">일정 날짜 선택</label>
+        <label for="scheduleDate" style="font-weight: bold;" class="tw-mr-[10px]">일정 날짜 선택</label>
         <input type="date" id="scheduleDate" class="tw-border-box tw-w-[190px] tw-text-center tw-rounded-[5px] tw-border" /><br/><br/>
 
         <!-- 생필품 이름 -->
-        <label for="itemName">생필품 이름</label>
-        <span id="itemName" style="display: inline-block;"></span><br/><br/>
+        <label for="itemName" style="font-weight: bold; float: left;" class="tw-mr-[10px]">생필품 이름</label>
+        <span id="itemName" style="display: inline-block; max-width: 350px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;"></span><br/><br/>
 
         <!-- 구매 주기 선택 -->
-        <label for="purchaseCycle">사용기한(일)</label>
+        <label for="purchaseCycle" style="font-weight: bold;" class="tw-mr-[10px]">사용기한(일)</label>
         <input type="number" id="purchaseCycle" class="tw-border-box tw-w-[190px] tw-text-center tw-rounded-[5px] tw-border" placeholder="구매 주기를 입력하세요" min="1"/><br/><br/>
 
         <!-- 알람 설정 -->
-        <label for="alarmDays">알람(사용 안 할시에는 0)</label>
+        <label for="alarmDays" style="font-weight: bold;" class="tw-mr-[10px]">알람(사용 안 할시에는 0)</label>
         <input type="number" id="alarmDays" class="tw-border-box tw-w-[190px] tw-text-center tw-rounded-[5px] tw-border" placeholder="몇일 전 알람" min="0"/><br/><br/>
 
         <!-- 버튼들 -->
-        <button id="createScheduleBtn">일정 생성</button>
-        <button id="updateScheduleBtn">일정 수정</button>
+        <button id="createScheduleBtn" class="tw-w-full tw-bg-[#7DAF82] tw-text-white tw-font-medium tw-h-10 tw-rounded-lg hover:tw-bg-[#6A9F72] tw-tracking-wider transition-all">일정 생성</button>
+        <button id="updateScheduleBtn" class="tw-w-full tw-bg-[#7DAF82] tw-text-white tw-font-medium tw-h-10 tw-rounded-lg hover:tw-bg-[#6A9F72] tw-tracking-wider transition-all">일정 수정</button>
     </div>
 </div>
 <!-- Flexbox 컨테이너 추가 -->
 <div id="shopbody">
     <div class="flex-container">
         <div style="flex: 1; padding-right: 20px;">
-            <h2 style="text-align: left;">생필품 주기 달력</h2>
+            <div style="text-align: left;" class="tw-font-bold tw-h-[30px]">생필품 주기 달력</div>
             <div id="calendar"></div> <!-- 달력 영역 -->
         </div>
         <!-- 생필품 리스트 -->
         <div style="flex: 1; padding-left: 20px;">
-            <h2 style="text-align: left;">생필품 리스트</h2>
+            <div style="text-align: left;" class="tw-font-bold tw-h-[30px]">생필품 리스트</div>
             <div id="List">
                 <table id="essentialTable">
                     <thead>
@@ -99,7 +99,7 @@
         </div>
 
         <!-- 검색어를 포함한 제목 -->
-        <h2 id="searchTitle">쇼핑 추천 리스트 - 검색 결과: </h2>
+        <div style="text-align: left;" class="tw-font-bold tw-h-[30px]" id="searchTitle">쇼핑 추천 리스트 - 검색 결과: </div>
 
         <!-- 검색 결과를 표시할 곳 -->
         <ul id="resultContainer"></ul> <!-- ul로 변경 -->
