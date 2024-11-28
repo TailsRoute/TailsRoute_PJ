@@ -543,7 +543,7 @@ function getCurrentHour() {
     // 2자리 형식으로 반환
     return String(adjustedHour).padStart(2, '0') + "00"; // 예: "0700", "0800"
 }
-function getWeatherInfo(nx, ny,latitude,longitude) {
+function getWeatherInfo(nx, ny, latitude, longitude) {
     // 현재 날짜와 시간 가져오기
     const date = getCurrentDate();
     const hour = getCurrentHour();
@@ -583,19 +583,19 @@ function getWeatherInfo(nx, ny,latitude,longitude) {
                             }
                         });
                     }
-                    // obsrValuePTY에 따라 아이콘 결정
+                    // weatherIcon 객체를 이미지 파일로 수정
                     const weatherIcon = {
-                        "0": "🌞",  // 맑음
-                        "1": "🌧",  // 비
-                        "2": "🌧/🌨", // 비/눈
-                        "3": "🌨",  // 눈
-                        "4": "⛈",  // 천둥번개
+                        "0": "/resource/photo/sun-icon.png",  // 맑음
+                        "1": "/resource/photo/rain-icon.png",  // 비
+                        "2": "/resource/photo/rain-snow-icon.png", // 비/눈
+                        "3": "/resource/photo/snow-icon.png",  // 눈
+                        "4": "/resource/photo/storm-icon.png", // 천둥번개
                     };
                     // PTY에 따른 날씨 아이콘 출력
                     const weatherSymbol = weatherIcon[obsrValuePTY] || "❓"; // 기본 아이콘
                     const weatherSymbolElement = document.querySelector(".information"); // 날씨 아이콘을 표시할 요소
                     // "이 지역의 날씨" 멘트를 추가하고 아이콘을 다음 줄에 표시
-                    weatherSymbolElement.innerHTML = `${cityName}의 날씨<br><span style="font-size: 1.5em;">${weatherSymbol}</span>`; // 크기 조정 및 줄 바꿈 추가
+                    weatherSymbolElement.innerHTML = `${cityName}의 날씨<br><img src="${weatherSymbol}" alt="Weather Icon" style="width: 21px; height: 21px;">`; // 아이콘을 이미지로 표시하고 크기 조정
                     // 기온 처리 및 표시
                     if (obsrValueT1H) {
                         const temperature = `${obsrValueT1H}°C`; // 섭씨 기호 붙이기

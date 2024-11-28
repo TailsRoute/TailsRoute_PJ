@@ -22,27 +22,7 @@
 <div class="tw-text-center tw-text-[50px] tw-p-[20px] tw-border-b-2 tw-border-[#DADADA] tw-max-w-[1440px] tw-mx-auto">
   반려견 산책 일지
 </div>
-<div class="topWalk">
-  <div class="WalkingTrail" id="walkingTrailMap"></div>
-  <div class="WalkingSchedule">
-    <table id="WalkingTable">
-      <thead>
-      <tr>
-        <th id="routeNameHeader">산책명<span class="sort-arrow" id="routeNameArrow"></span></th>
-        <th id="purchaseDateHeader">산책 날짜<span class="sort-arrow" id="purchaseDateArrow">▲</span></th>
-        <th id="routedistanceHeader">산책 거리<span class="sort-arrow" id="routedistanceArrow"></span></th>
-        <th id="likeHeader">즐겨찾기</th>
-        <th id="modifyHeader">수정</th>
-        <th id="deleteHeader">삭제</th>
-      </tr>
-      </thead>
-      <tbody>
-      <!-- 데이터가 여기에 추가됩니다. -->
-      </tbody>
-    </table>
-  </div>
-</div>
-<div class ="lowWalk">
+<div class ="topWalk">
   <div class="grass">
     <div class="labels">
       <!-- 세로축 (요일) -->
@@ -75,8 +55,28 @@
     </div>
   </div>
   <div class="lowBox">
-    <button id="writeWalkButton" class="tw-w-full tw-bg-[#7DAF82] tw-text-white tw-font-medium tw-h-10 tw-rounded-lg hover:tw-bg-[#6A9F72] tw-tracking-wider transition-all">산책 일정 생성</button>
     <div class="information"></div>
+    <button id="writeWalkButton" class="tw-w-full tw-bg-[#7DAF82] tw-text-white tw-font-medium tw-h-10 tw-rounded-lg hover:tw-bg-[#6A9F72] tw-tracking-wider transition-all">산책 일정 생성</button>
+  </div>
+</div>
+<div class="lowWalk">
+  <div class="WalkingTrail" id="walkingTrailMap"></div>
+  <div class="WalkingSchedule">
+    <table id="WalkingTable">
+      <thead>
+      <tr>
+        <th id="routeNameHeader">산책명<span class="sort-arrow" id="routeNameArrow"></span></th>
+        <th id="purchaseDateHeader">산책 날짜<span class="sort-arrow" id="purchaseDateArrow">▲</span></th>
+        <th id="routedistanceHeader">산책 거리<span class="sort-arrow" id="routedistanceArrow"></span></th>
+        <th id="likeHeader">즐겨찾기</th>
+        <th id="modifyHeader">수정</th>
+        <th id="deleteHeader">삭제</th>
+      </tr>
+      </thead>
+      <tbody>
+      <!-- 데이터가 여기에 추가됩니다. -->
+      </tbody>
+    </table>
   </div>
 </div>
 <script src="/resource/js/walkpage.js"></script>

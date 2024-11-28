@@ -1,5 +1,5 @@
 html,body {
-    background-color: #F9F5EB;
+    background-color: #F9F5EB !important;
     color: #4D3E3E;
 }
 
@@ -15,8 +15,31 @@ html,body {
 
 /* body 요소에 좌우 여백 추가 */
 #shopbody {
-    margin: 0 100px;
     margin-top: 10px;
+    width: 1440px;
+    position: absolute;
+    left: 50%;
+    transform: translate(-50%);
+}
+
+.fc-event {
+    border-radius: 10px;
+    padding: 1px;
+    font-weight: bold;
+    text-align: center;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    font-family: 'Nunito', sans-serif; /* 강조된 폰트 */
+    background-color: #F5D8B5; /* 이벤트 색상 */
+    color: #4D3E3E;
+    border-color: #E0C097;
+}
+
+.fc-event-title{
+    color: #4D3E3E;
+}
+
+.fc-event:hover {
+    transform: scale(1.05); /* 호버 시 크기 증가 */
 }
 
 /* 팝업 창 스타일 */
@@ -33,19 +56,19 @@ html,body {
 }
 
 .modal-content {
-    background-color: #F2F2EB;
+    background-color: white;
     margin: 15% auto;
     padding: 20px;
-    border: 1px solid #888;
+    border: 1px solid white;
     width: 500px;
     border-radius: 10px;
 }
 
 .cart-popup .modal-content {
-    background-color: #F2F2EB;
+    background-color: white;
     margin: 15% auto;
     padding: 20px;
-    border: 1px solid #888;
+    border: 1px solid white;
     width: 500px;
     border-radius: 10px;
     max-height: 80%; /* 최대 높이 설정 */
@@ -75,34 +98,46 @@ html,body {
 
 /* calendar 스타일 */
 #calendar {
-    border: 1px solid #ccc;
+    border: 1px solid #ddd;
+    border-radius: 15px;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+    background-color: #FFF9E6;
+    animation: fadeIn 0.5s;
     height: 600px; /* 자동 높이 설정 */
     width: 100%; /* 적절한 너비 설정 */
-    border-radius: 5px;
-    background-color: #F2F2EB;
     padding: 10px; /* 내부 여백 추가 */
     position: relative; /* 자식 요소의 절대 위치를 위한 상대 위치 */
 }
 .fc-toolbar .fc-button {
     border : none;
-    background-color: #7daf82; /* 원하는 색상으로 변경 */
-    color: white; /* 글자 색상 */
+    background-color: #FFF9E6;
+    color: #4D3E3E;
 }
 .fc-toolbar .fc-button:hover {
     border : none;
-    background-color: #5c8d6d; /* 호버 시 색상 변경 */
-    color: white;
+    background-color: #FFF9E6;
+    color: #4D3E3E;
+}
+
+.fc-toolbar .fc-button:active {
+    border : none;
+    background-color: #FFF9E6 !important;
+    color: #4D3E3E !important;
 }
 
 /* list 스타일 */
 #List {
-    border: 1px solid #ccc;
+    border: 1px solid #ddd; /* 테두리 설정 */
+    border-radius: 10px; /* 모서리를 둥글게 */
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1); /* 그림자 효과 추가 */
+    background-color: #FFF9E6; /* 부드러운 배경색 */
+    animation: fadeIn 0.5s;
     height: 600px;
     width: 100%;
-    border-radius: 5px; /* 네모박스에 모서리 둥글게 */
-    background-color: #F2F2EB;
     max-height: 600px; /* 스크롤을 적용할 최대 높이 설정 */
     overflow-y: auto;  /* 세로 스크롤 활성화 */
+    padding-right: 20px;
+    padding-left: 20px;
 }
 
 /* 이미지 크기를 150px로 설정 */
@@ -115,10 +150,12 @@ html,body {
 #resultContainer {
     list-style-type: none; /* 기본 리스트 스타일 제거 */
     padding: 0; /* 패딩 제거 */
-    border: 1px solid #ccc; /* 전체 리스트에 테두리 추가 */
-    border-radius: 5px; /* 네모박스에 모서리 둥글게 */
+    border: 1px solid #ddd; /* 테두리 설정 */
+    border-radius: 10px; /* 모서리를 둥글게 */
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1); /* 그림자 효과 추가 */
+    background-color: #FFF9E6; /* 부드러운 배경색 */
+    animation: fadeIn 0.5s;
     overflow: hidden; /* 내부 내용이 넘치지 않게 설정 */
-    background-color: #F2F2EB;
 }
 
 /* 리스트 항목 스타일 */
@@ -190,7 +227,7 @@ button {
 }
 
 table {
-    width: 100%; /* 테이블 너비 설정 */
+    width: 650px; /* 테이블 너비 설정 */
     border-collapse: collapse; /* 경계선 겹침 제거 */
 }
 
@@ -205,7 +242,7 @@ table {
 th{
     padding: 10px;
     text-align: center;
-    border: 1px solid #ccc;
+    border-bottom: 2px solid #ccc;
 }
 
 th#purchaseDateHeader,
@@ -220,7 +257,7 @@ th#recommendHearder {
 
 td {
     padding: 10px; /* 각 td 요소의 내부 여백 */
-    border: 1px solid #ccc; /* 셀 경계선 */
+    border-bottom: 2px solid #ccc;
     text-align: center; /* 텍스트 가운데 정렬 */
 }
 

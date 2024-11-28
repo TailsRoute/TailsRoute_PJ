@@ -5,9 +5,10 @@ html,body {
 .grass {
     padding-left: 10px;
     padding-top: 10px;
-    border: 1px solid #ccc;
-    border-radius: 10px;
-    background-color: #F2F2EB;
+    background: #FFF7E5;
+    border: 1px solid #E0C097;
+    border-radius: 20px;
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15);
     width: 850px;
     height: 160px;
     margin-left: 10px;
@@ -83,48 +84,53 @@ html,body {
 }
 .WalkingSchedule{
     margin-top: 10px;
-    border: 1px solid #ccc;
-    border-radius: 10px;
-    background-color: #F2F2EB;
+    background: #FFF7E5;
+    border: 1px solid #E0C097;
+    border-radius: 20px;
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15);
     display: inline-block;
     width: 550px;
-    height: 690px;
+    height: 560px;
     margin-left: 10px;
+    padding-left: 10px;
+    padding-right: 10px;
 }
 .WalkingTrail {
     margin-top: 10px;
-    border: 1px solid #ccc;
-    border-radius: 10px;
-    background-color: #F2F2EB;
+    background: #FFF7E5;
+    border: 1px solid #E0C097;
+    border-radius: 20px;
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15);
     display: inline-block;
     width: 850px;
-    height: 690px;
+    height: 560px;
     margin-left: 10px;
 }
 .information{
-    border: 1px solid #ccc;
-    border-radius: 10px;
-    background-color: #F2F2EB;
+    background: #FFF7E5;
+    border: 1px solid #E0C097;
+    border-radius: 20px;
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15);
     width: 100%;
     height: 110px;
     display: inline-grid;
     place-items: center;
-    margin-top: 10px;
+    margin-bottom: 10px;
 }
 #routePicture canvas {
     width: 200px;
     height: auto;
 }
 #WalkingTable{
-    width: 100%;
+    width: 520px;
 }
 th{
     padding: 10px;
     text-align: center;
-    border: 1px solid #ccc;
-    border-radius: 10px;
+    border-bottom: 2px solid #888888;
     font-size: 14px;
 }
+
 th#modifyHeader,th#deleteHeader{
     width: 50px;
 }
@@ -136,8 +142,7 @@ th#purchaseDateHeader,th#routedistanceHeader{
 }
 td {
     padding: 10px; /* 각 td 요소의 내부 여백 */
-    border: 1px solid #ccc; /* 셀 경계선 */
-    border-radius: 10px;
+    border-bottom: 2px solid #888888;
     text-align: center; /* 텍스트 가운데 정렬 */
     font-size: 14px;
 }
@@ -164,11 +169,13 @@ td.ellipsis{
     position: absolute;
     left: 50%;
     transform: translate(-50%);
+    margin-top: 20px;
 }
 .lowWalk{
     width: 1440px;
-    position: absolute;
+    position: relative;
     left: 50%;
-    top: 890px;
+    top:170px;
+    margin-top: 20px;
     transform: translate(-50%);
 }

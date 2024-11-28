@@ -1733,12 +1733,28 @@ html {
   margin-left: 12px;
 }
 
+.tw-ml-\[20px\]{
+  margin-left: 20px;
+}
+
+.tw-ml-\[170px\] {
+  margin-left: 170px;
+}
+
 .tw-ml-\[200px\] {
   margin-left: 200px;
 }
 
+.tw-ml-\[1130px\] {
+  margin-left: 1130px;
+}
+
 .tw-ml-auto {
   margin-left: auto;
+}
+
+.tw-mr-\[10px\]{
+  margin-right: 10px;
 }
 
 .tw-mr-\[30px\] {
