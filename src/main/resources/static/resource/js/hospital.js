@@ -153,9 +153,19 @@ function fetchHospitalsAndUpdateMarkers(filterType = "") {
             // 새로운 마커 추가
             data.forEach((hospital) => {
                 if (hospital.latitude && hospital.longitude) {
+
+                    // 사용자 지정 아이콘 경로
+                    const customIcon = {
+                        url: "/resource/photo/hospital_marker.png", // 정적 리소스 URL
+                        scaledSize: new google.maps.Size(40, 40), // 크기 조정
+                        origin: new google.maps.Point(0, 0),
+                        anchor: new google.maps.Point(20, 40) // 중심점 조정
+                    };
+
                     const marker = new google.maps.Marker({
                         position: {lat: parseFloat(hospital.latitude), lng: parseFloat(hospital.longitude)},
                         map: map,
+                        icon: customIcon, // 사용자 지정 아이콘 설정
                         title: hospital.name,
                     });
 
