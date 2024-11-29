@@ -1,0 +1,25 @@
+<th:block th:replace="~{usr/common/head}"/>
+<head>
+    <title>TailsRoute</title>
+    <link rel="stylesheet" href="/resource/css/videoAnalysis.css"/>
+</head>
+<body>
+<div class="container ">
+    <!-- 헤더 -->
+    <h1>비디오 업로드 및 분석</h1>
+
+    <!-- 업로드 폼 -->
+    <form action="/usr/behaviorAnalysis/videoAnalysis" method="post" enctype="multipart/form-data">
+        <label for="video">비디오 파일 선택:</label>
+        <input type="file" id="video" name="file" accept="video/*" required>
+        <button type="submit">업로드 및 분석</button>
+    </form>
+
+    <!-- 분석 결과 -->
+    <div class="result">
+        <h2>분석 결과</h2>
+        <pre th:text="${result != null} ? result : '분석 결과가 없습니다.'"></pre>
+    </div>
+</div>
+</body>
+</html>
