@@ -167,7 +167,7 @@ document.getElementById("createScheduleBtn").addEventListener("click", function 
     sendEssentialInfo(essential, startDate, endDate, itemName);
 
     // 알람이 설정된 경우에만 알람 정보를 전송
-    if (alarmDays) {
+    if (alarmDays>0) {
         sendAlarmInfo(selectedDate, productTitle, alarmDays);
     }
     location.reload();
@@ -777,7 +777,8 @@ function displayResults(data) {
             `<img src="${item.image}" alt="${item.title}" class="product-image">
                         <div class="product-info" style="display: flex; justify-content: space-between; align-items: center; width: 100%">
                         <div>
-                            <a href="${item.link}" class="product-item">${item.title}</a>
+                        <div class="product-category"> ${item.category4}</div>
+                            <div style="display: inline-block; border-bottom: 1px solid #ccc;"><a href="${item.link}" class="product-item">${item.title}</a></div>
                             <br>
                             <a href="${item.link}" class="product-price">가격: ${item.lprice} 원</a>
                             </div>

@@ -86,7 +86,7 @@ function initMap() {
         // 지도 객체 생성
         map = new naver.maps.Map(mapContainer, {
             center: initialPosition,
-            zoom: 14,
+            zoom: 15,
         });
     }
 }
