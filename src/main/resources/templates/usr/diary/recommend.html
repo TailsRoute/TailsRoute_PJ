@@ -23,7 +23,7 @@
 
             editor = new toastui.Editor({
                 el: document.querySelector('#editor'),
-                height: '400px',
+                height: '600px',
                 initialEditType: 'wysiwyg', // WYSIWYG 모드로 설정
                 previewStyle: 'vertical',
                 initialValue: initialContent,
@@ -65,13 +65,13 @@
     </script>
 </head>
 <body>
-<div class="title">게시글 작성</div>
+<div class="title">반려견 일상기록 공유</div>
 <div class="article_body">
     <form onsubmit="return ArticleWrite__submit(this);" th:action="@{/usr/article/doWrite}" method="post"
           enctype="multipart/form-data">
         <input type="hidden" name="body"/>
         <input type="hidden" th:value="${currentId}">
-        <div class="tw-p-2 tw-flex tw-gap-2">
+        <div class="tw-p-2 tw-flex tw-gap-2 tw-text-2xl">
             <div class="tw-flex tw-gap-2">
                 <div>게시판</div>
                 <div style="text-align: center;">
@@ -89,11 +89,11 @@
 
         <!-- Toast UI Editor 영역 -->
         <div id="editor" style="height: 400px;"></div>
-
+        <div class="tw-flex ">
+        <button class="article_backButton tw-mt-5" type="button" onclick="history.back()">뒤로가기</button>
         <button class="article_button tw-ml-auto tw-mt-5">작성</button>
-
+        </div>
     </form>
 
-    <button class="article_button" type="button" onclick="history.back()">뒤로가기</button>
 </div>
 </body>
