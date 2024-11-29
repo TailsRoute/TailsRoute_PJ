@@ -47,6 +47,7 @@ public interface HospitalRepository {
             (#{type} = '일반' OR type = #{type})
             AND (roadAddress LIKE CONCAT('%', #{region}, '%')
                  OR jibunAddress LIKE CONCAT('%', #{region}, '%'))
+            ORDER BY name ASC
             """)
     List<Hospital> findHospitalsByTypeAndRegion(@Param("type") String type, @Param("region") String region);
 }
