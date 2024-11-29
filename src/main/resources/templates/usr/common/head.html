@@ -3,6 +3,27 @@
 <head>
     <link href="/resource/dist/styles.css" th:href="@{/resource/dist/styles.css}" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
+    <style>
+        /* 카페24 */
+        @font-face {
+            font-family: 'Cafe24Ssurround';
+            src: url('https://fastly.jsdelivr.net/gh/projectnoonnu/noonfonts_2105_2@1.0/Cafe24Ssurround.woff') format('woff');
+            font-weight: normal;
+            font-style: normal;
+        }
+
+        /* 프리텐다드 */
+        @font-face {
+            font-family: 'Pretendard-Regular';
+            src: url('https://fastly.jsdelivr.net/gh/Project-Noonnu/noonfonts_2107@1.1/Pretendard-Regular.woff') format('woff');
+            font-weight: 400;
+            font-style: normal;
+        }
+
+        html, body{
+            font-family: 'Pretendard-Regular', sans-serif;
+        }
+    </style>
 </head>
 <body>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
@@ -130,7 +151,11 @@
 </script>
 <div class="tw-fixed tw-h-[60px] tw-w-full tw-z-20" style="background-color: #EDE0D4;">
     <div class="tw-container tw-mx-auto tw-flex tw-justify-between tw-items-baseline">
-        <a href="../home/main" class="tw-text-[#4D3E3E] tw-text-2xl tw-pl-[20px]">TailsRoute</a>
+        <a href="../home/main"
+           class="tw-text-[#4D3E3E] tw-text-2xl tw-pl-[20px]"
+           style="font-family: 'Cafe24Ssurround', sans-serif;">
+            TailsRoute
+        </a>
         <div class="tw-w-[700px] tw-h-[60px]">
             <ul class="tw-flex tw-h-[60px] tw-items-center">
                 <li class="tw-flex-1 tw-h-full">
