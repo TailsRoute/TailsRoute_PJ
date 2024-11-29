@@ -13,7 +13,7 @@
 <body >
 <div class="tw-h-[60px]"></div>
 <div class="tw-text-center tw-text-[50px] tw-p-[20px] tw-border-b-2 tw-border-[#DADADA] tw-max-w-[1440px] tw-mx-auto">
-    제목
+    반려견 성장일지 작성
 </div>
 
 <form  id = "diaryContent" action="/usr/diary/write" method="post" enctype="multipart/form-data">
@@ -32,13 +32,13 @@
             </div>
             <img id="imagePreview" class="absolute inset-0 hidden w-full h-full object-cover" alt="Image Preview" />
             <!-- 이미지 지우기 버튼 추가 -->
-            <button type="button" id="removeImageBtn" class="remove-btn absolute top-2 right-2 hidden">이미지 지우기</button>
+            <button type="button" id="removeImageBtn" class="remove-btn absolute top-2 right-2 hidden">지우기</button>
         </div>
     </div>
 
 
         <div class="textarea-container ">
-            <textarea name="body" id="body" placeholder="내용을 입력하세요" class="w-full p-4 border border-gray-300 rounded-lg mb-6 text-center" rows="10" required></textarea>
+            <textarea name="body" id="body" placeholder="내용을 입력하세요" class="w-full p-4 tw-bg-white border border-gray-300 rounded-lg mb-6 text-center" rows="10" required></textarea>
         </div>
 
         <nav class="medicine">
@@ -48,24 +48,24 @@
 
             <div>
                 <label for="startDate">복용 시작일</label>
-                <input type="date" name="startDate" id="startDate" required>
+                <input class = "tw-bg-white" type="date" name="startDate" id="startDate" required>
             </div>
             <div>
                 <label for="endDate">복용 종료일</label>
-                <input type="date" name="endDate" id="endDate" required>
+                <input  class = "tw-bg-white" type="date" name="endDate" id="endDate" required>
             </div>
             <div>
                 <label for="TakingTime"> 복용 시간 </label>
-                <input type="time" name="takingTime" id="takingTime" required>
+                <input  class = "tw-bg-white" type="time" name="takingTime" id="takingTime" required>
             </div>
 
             <div>
                 <label for="information">복용약 정보 및 특이사항 </label>
-                <textarea id="information" placeholder="복용약 정보 및 특이사항" name="information" class="w-full p-4 border border-gray-300 rounded-lg mb-6 text-center" rows="10" required></textarea>
+                <textarea id="information" placeholder="복용약 정보 및 특이사항" name="information" class="w-full p-4 tw-bg-white border border-gray-300 rounded-lg mb-6 text-center" rows="10" required></textarea>
             </div>
             <div style="display: flex; justify-content: center; align-items: center;">
                 <button id="SubmitButton" type="submit" class="text-white px-4 py-2 rounded-lg mb-2" >작성</button>
-                <a th:href="@{/usr/diary/list}" class="historyBack">돌아가기</a>
+                <a th:href="@{/usr/diary/list}" class="historyBack">뒤로가기</a>
             </div>
         </nav>
 </form>

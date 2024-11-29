@@ -62,41 +62,21 @@ body {
     box-shadow: 0 5px 10px rgba(0, 0, 0, 0.15); /* 호버 시 그림자 효과 */
 }
 
-/* 일지 작성 이벤트 */
-.diaryEvent {
-    background-color: #F5D8B5; /* 기존 색상 유지 */
-    color: #4D3E3E;
-    border: 1px solid #E3B089;
-    font-size: 14px;
-}
-
-.diaryEvent:hover {
-    transform: translateY(-3px); /* 호버 시 약간 위로 이동 */
-    box-shadow: 0 5px 10px rgba(0, 0, 0, 0.15); /* 호버 시 그림자 효과 */
-}
-
-/* 오늘 날짜 스타일 */
-.fc-day-today {
-    border: 2px solid #4D3E3E !important;
-    background-color: #FFF9E6 !important;
-    color: #888888;
-    border-radius: 8px;
-}
-
 /* 캘린더 네비게이션 버튼 */
 .fc-next-button, .fc-prev-button {
-    background-color: #7daf82 !important;
-    border-radius: 5px;
+    background-color: transparent !important;
+    border: none !important;
     padding: 5px 12px;
-    color: white !important;
+    color: black !important;
     font-weight: bold;
-    transition: background-color 0.3s ease;
+    outline: none !important;
 }
-.fc-prev-button:hover, .fc-next-button:hover {
-    background-color: #5c8d6d !important;
-    color: white !important;
+/* 버튼 클릭 시 상태 (focus 및 active) */
+.fc-next-button:focus, .fc-prev-button:focus,
+.fc-next-button:active, .fc-prev-button:active {
+    outline: none !important; /* 포커스 테두리 제거 */
+    box-shadow: none !important; /* 클릭 시 그림자 효과 제거 */
 }
-
 /* 캘린더 툴바 */
 .fc-toolbar {
     background-color: #FFF9E6;
@@ -112,11 +92,6 @@ body {
     to { transform: translateY(0); opacity: 1; }
 }
 
-.fc-day-today {
-    border: 2px solid #4D3E3E !important;
-    background-color: #FFF9E6 !important; /* 오늘 날짜 배경색 */
-    color: #888888;
-}
 
 /* 이벤트 스타일 */
 .fc-event {
@@ -192,6 +167,7 @@ body {
 
 #writeButton:hover {
     background-color: #5c8d6d; /* 호버 시 색상 변경 */
+    transform: translateY(-2px);
 }
 
 .header {
@@ -199,6 +175,7 @@ body {
 }
 
 .listType {
+    color: #3A3A3A;
     font-size: x-large;
     font-family: 'Nunito', sans-serif;
 }
@@ -217,7 +194,8 @@ body {
 }
 
 #sortSelect {
-    background-color: #fdf6e3; /* 정렬 선택 박스 배경색 */
+    color:#3A3A3A;
+    background-color:white; /* 정렬 선택 박스 배경색 */
     border: 2px solid #4D3E3E; /* 테두리 색상 */
     padding: 8px 12px; /* 내부 여백 */
     margin-right: 30px; /* 우측 여백 */
@@ -286,10 +264,10 @@ body {
 }
 
 .searchBox {
-    background-color: #fdf6e3; /* 검색 박스 배경색 */
+    color: #3A3A3A !important;
+    background-color: white; /* 검색 박스 배경색 */
     border: solid 2px #4D3E3E; /* 검색 박스 테두리 색상 */
     transition: border-color 0.3s; /* 테두리 색상 변화 애니메이션 */
-    font-family: 'Quicksand', sans-serif;
 }
 
 .searchBox:focus {

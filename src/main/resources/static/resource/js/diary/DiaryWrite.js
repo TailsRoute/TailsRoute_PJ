@@ -42,3 +42,21 @@ document.getElementById('removeImageBtn').addEventListener('click', function() {
     // 파일 입력 초기화
     document.getElementById('fileInput').value = '';
 });
+// 마우스 오버 시 삭제 버튼 표시
+imagePreview.addEventListener('mouseenter', function() {
+    removeImageBtn.classList.remove('hidden');
+});
+// 마우스 오버 시 삭제 버튼 표시
+removeImageBtn.addEventListener('mouseenter', function() {
+    removeImageBtn.classList.remove('hidden');
+});
+
+// 마우스가 이미지에서 벗어나면 삭제 버튼 숨기기
+removeImageBtn.addEventListener('mouseleave', function() {
+    removeImageBtn.classList.add('hidden');
+});
+
+// 마우스가 이미지에서 벗어나면 삭제 버튼 숨기기
+imagePreview.addEventListener('mouseleave', function() {
+    removeImageBtn.classList.add('hidden');
+});

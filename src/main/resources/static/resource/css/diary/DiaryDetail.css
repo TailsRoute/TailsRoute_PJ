@@ -37,9 +37,11 @@ html,body {
     display: flex;
     justify-content: space-between;
     align-items: center;
+    padding-bottom: 20px;
     margin-bottom: 24px;
     font-size: 1rem;
     color: #4D3E3E;
+    border-bottom: solid 2px #DADADA;
 }
 
 .author {
@@ -58,6 +60,7 @@ html,body {
 
 /* 다이어리 이미지 스타일 */
 .diary-image {
+    padding-top: 20px;
     margin-bottom: 24px;
     display: flex;
     justify-content: center;
@@ -76,6 +79,7 @@ html,body {
     transform: scale(1.02);
 }
 
+
 /* 본문 텍스트 스타일 */
 .body-text {
     font-size: 1.3rem; /* 본문 텍스트 크기 */
@@ -83,7 +87,6 @@ html,body {
     margin-bottom: 32px;
     padding: 0 16px;
     animation: slideIn 1s ease-out;
-    font-weight: bold;
 }
 
 
@@ -116,12 +119,12 @@ html,body {
 .info-label {
     font-weight: 500;
     padding: 8px;
-    font-size: 1rem; /* 라벨 텍스트 크기 */
+    font-size: 1.3rem; /* 라벨 텍스트 크기 */
 }
 
 .info-value {
     padding: 8px;
-    font-size: 1rem; /* 값 텍스트 크기 */
+    font-size: 1.3rem; /* 값 텍스트 크기 */
 }
 
 /* 버튼 스타일 */
@@ -131,7 +134,7 @@ html,body {
     gap: 16px;
 }
 
-.btn {
+.modifyBtn {
     padding: 12px 24px; /* 버튼 크기 조정 */
     background-color: #7daf82;
     color: white;
@@ -143,11 +146,31 @@ html,body {
     text-decoration: none;
     cursor: pointer;
     transition: background-color 0.3s ease, transform 0.2s ease;
+
+}
+.removeBtn {
+    padding: 12px 24px; /* 버튼 크기 조정 */
+    background-color: #FF6F61;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    font-weight: bold;
+    font-size: 1rem; /* 버튼 텍스트 크기 */
+    font-family: 'Nunito', sans-serif;
+    text-decoration: none;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+
 }
 
-.btn:hover {
-    background-color: #5c8d6d;
-    transform: scale(1.05);
+
+.modifyBtn:hover {
+    background-color: #5C8D6D;
+    transform: translateY(-2px);
+}
+.removeBtn:hover {
+    background-color: #D95A50;;
+    transform: translateY(-2px);
 }
 
 /* 애니메이션 */
@@ -169,6 +192,10 @@ html,body {
         opacity: 1;
         transform: translateY(0);
     }
-
+}
+#butn{
+    display: flex;
+    justify-content: flex-end;
+    gap:16px;
 }
 

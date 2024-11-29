@@ -14,13 +14,18 @@
 
 <!-- 메인 콘텐츠 -->
 <div class="container">
-    <!-- 제목 -->
-    <div class="tw-text-center tw-text-[50px] tw-p-[20px] tw-border-b-2 tw-border-[#DADADA] tw-max-w-[1440px] tw-mx-auto" th:text="${diary.title}"></div>
 
     <!-- 다이어리 상세정보 -->
-    <div class="diary-details">
+    <div class="diary-details ">
         <p><strong th:text="${diary.extra__writer}"></strong> | <span th:text="${diary.regDate}"></span></p>
+       <div class="butn">
+        <a th:href="@{/usr/diary/list}" >목록 <i class="fas fa-list"></i></a>
+        <a th:href="@{/usr/diary/recommend(id=${diary.id})}"class="shareButton" onclick="return confirm('커뮤니티 게시판 일상기록공유메뉴로 저장됩니다.')">공유 <i class="fas fa-share-alt"></i></a>
+       </div>
     </div>
+
+    <!-- 제목 -->
+    <div class="tw-text-center tw-text-[50px] tw-pb-[20px] tw-border-b-2 tw-border-[#DADADA] tw-max-w-[1440px] tw-mx-auto " th:text="${diary.title}"></div>
 
     <!-- 다이어리 이미지 -->
     <div class="diary-image">
@@ -55,15 +60,12 @@
 
     <!-- 행동 버튼들 -->
     <div class="action-buttons">
-        <a th:href="@{/usr/diary/modify(id=${diary.id})}" class="btn">수정</a>
+        <a th:href="@{/usr/diary/modify(id=${diary.id})}" class="modifyBtn">수정</a>
         <form th:action="@{/usr/diary/delete(id=${diary.id})}" method="post">
-            <button type="submit" class="btn" onclick="return confirm('정말 삭제하시겠습니까?');">삭제</button>
+            <button type="submit" class="removeBtn" onclick="return confirm('정말 삭제하시겠습니까?');">삭제</button>
         </form>
-        <a th:href="@{/usr/diary/list}" class="btn">목록</a>
-        <a th:href="@{/usr/diary/recommend(id=${diary.id})}" class="btn">공유</a>
     </div>
 </div>
-
 <script src="/resource/js/diary/DiaryDetail.js"></script>
 </body>
 </html>

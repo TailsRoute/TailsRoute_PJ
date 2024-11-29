@@ -11,8 +11,6 @@ document.addEventListener('DOMContentLoaded', function () {
             // eventData의 title이나 다른 속성을 기반으로 className을 설정
             if (eventData.title && eventData.title.includes("약 복용")) {
                 eventData.className = "medicineEvent"; // 약 복용 이벤트에 대한 스타일 설정
-            } else {
-                eventData.className = "diaryEvent"; // 기본 일기 이벤트에 대한 스타일 설정
             }
             return eventData;
         },
