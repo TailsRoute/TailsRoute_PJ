@@ -73,8 +73,8 @@
         </div>
         <div class="list_walkRanking">
             <div class="tw-flex tw-justify-between underline">
-                <div class="tw-p-2" th:text="${monthlyTitle}"></div>
-                <button class="tw-p-2 walkRanking_button" onclick="$('.popup').fadeIn();" th:if="${walks.size() > 0}">
+                <div class="tw-font-bold tw-p-2" th:text="${monthlyTitle}"></div>
+                <button class="tw-p-2 walkRanking_button" onclick="$('.popup_bg').fadeIn();" th:if="${walks.size() > 0}">
                     더보기
                 </button>
             </div>
@@ -145,17 +145,19 @@
         </div>
     </div>
 </div>
-<div class="list_walkRanking popup" th:if="${walks != null}" style="display: none">
-    <div class="tw-flex tw-justify-between underline">
-        <div class="tw-p-2" th:text="${monthlyTitle}"></div>
-        <button class="tw-p-2" onclick="$('.popup').fadeOut();">X</button>
-    </div>
-    <div th:each="walk, iterStat : ${walks}" class="tw-flex tw-flex-col tw-p-2">
-        <div class="tw-w-[20px]" th:text="${iterStat.index + 1} + '등'"></div>
-        <div class="tw-flex">
-            <div class="tw-w-[120px]" th:text="${walk.getExtra__walker()}"></div>
-            <div class="tw-w-[50px]" th:text="|${walk.getExtra__count()}회|"></div>
-            <div class="tw-w-[60px]" th:text="|${walk.getExtra__distance()}km|"></div>
+<div class="popup_bg tw-w-full tw-h-full" style="display: none">
+    <div class="list_walkRanking popup" th:if="${walks != null}">
+        <div class="tw-flex tw-items-center underline">
+            <div class="tw-ml-[30px] tw-font-bold tw-p-2 tw-w-[300px] tw-text-center" th:text="${monthlyTitle}"></div>
+            <button class="tw-p-2" onclick="$('.popup_bg').fadeOut();">&times;</button>
+        </div>
+        <div th:each="walk, iterStat : ${walks}" class="tw-flex tw-flex-col tw-p-2">
+            <div class="tw-w-[20px]" th:text="${iterStat.index + 1} + '등'"></div>
+            <div class="tw-flex">
+                <div class="tw-w-[120px]" th:text="${walk.getExtra__walker()}"></div>
+                <div class="tw-w-[50px]" th:text="|${walk.getExtra__count()}회|"></div>
+                <div class="tw-w-[60px]" th:text="|${walk.getExtra__distance()}km|"></div>
+            </div>
         </div>
     </div>
 </div>

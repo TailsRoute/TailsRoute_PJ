@@ -113,7 +113,7 @@ public class Rq {
 
     public void setCookie(String cookieName, String value) {
         Cookie cookie = new Cookie(cookieName, value);
-        cookie.setMaxAge(60 * 60 * 24);
+        cookie.setMaxAge(60 * 60 * 12);
         cookie.setPath("/");
         resp.addCookie(cookie);
     }

@@ -10,6 +10,17 @@
             word-break: keep-all;
         }
 
+        input, select, textarea {
+            border-radius: 5px;
+            padding-left: 10px;
+            background: #ffffff;
+        }
+
+        input:focus, select:focus, textarea:focus {
+            outline: none;
+            box-shadow: 0 0 0 2px #7DAF82;
+        }
+
         .idPwPopup {
             display: flex;
             padding: 0 40px;
@@ -66,7 +77,7 @@
         <form id="sendCodeForm">
             <div class="tw-flex tw-w-full tw-gap-2">
                 <input class="idPwPopup_p" type="email" id="email" name="email" placeholder="이메일을 입력해주세요" required>
-                <button class="button" type="submit">요청</button>
+                <button class="button" type="submit">찾기</button>
             </div>
         </form>
         <!-- 인증 코드 입력 폼 -->
@@ -88,7 +99,7 @@
         <form id="sendLoginIdForm">
             <div class="tw-flex tw-w-full tw-gap-2">
                 <input class="idPwPopup_p" type="text" id="loginId" name="loginId" placeholder="아이디를 입력해주세요" required>
-                <button class="button" type="submit">요청</button>
+                <button class="button" type="submit">찾기</button>
             </div>
         </form>
         <!-- 인증 코드 입력 폼 -->
@@ -142,7 +153,7 @@
             type: 'POST',
             data: {email: email, code: code},  // 이메일과 인증 코드 전송
             success: function (response) {
-                $('#message').text(response);  // 서버로부터 받은 메시지를 그대로 출력
+                $('#message').html(response);  // 서버로부터 받은 메시지를 그대로 출력
             },
             error: function (xhr, status, error) {
                 $('#message').text("인증 코드 검증에 실패했습니다.");  // 에러 메시지 표시

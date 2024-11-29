@@ -17,7 +17,8 @@
                 <div><label>회원번호</label><span class="myPage_text" th:text="${member.id} + '번'"></span></div>
                 <div><label>등록일시</label><span class="myPage_text" th:text="${member.regDate}"></span></div>
                 <div><label>수정일시</label><span class="myPage_text" th:text="${member.updateDate}"></span></div>
-                <div><label>등급</label><span class="myPage_text" th:text="(${member.authLevel == 3 ? '일반회원' : '관리자'})"></span></div>
+                <div><label>등급</label><span class="myPage_text"
+                                            th:text="(${member.authLevel == 3 ? '일반회원' : '관리자'})"></span></div>
                 <div><label>이메일</label><span class="myPage_text" th:text="${member.email}"></span></div>
                 <div class="name1">
                     <label>이름</label>
@@ -58,8 +59,8 @@
                 <button type="button" class="upload_button myPage_modify_button"
                         th:if="${member.socialLoginStatus == 0}">수정
                 </button>
-                <button type="button" class="upload_button myPage_delete_button">탈퇴</button>
                 <button type="button" style="display: none" class="upload_button myPage_exit_button">취소</button>
+                <button type="button" class="upload_cancelButton myPage_delete_button">탈퇴</button>
             </div>
         </form>
     </div>
@@ -121,7 +122,7 @@
                         th:if="${locationChack == true && gpsAlert != null && gpsAlert.getOnOff() == 0}"
                         th:onclick="'location.href=\'/usr/gpsAlert/modify?dogId=' + ${dog.id} + '\';'">위치 수정
                 </button>
-                <button class="upload_button"
+                <button class="upload_cancelButton"
                         th:if="${locationChack == true && gpsAlert != null && gpsAlert.getOnOff() == 0}"
                         th:onclick="'deleteLocation(' + ${dog.id} + ')'">위치 삭제
                 </button>
@@ -130,7 +131,12 @@
         <div class="upload_button_wrapper" th:if="${dog != null}">
             <button class="upload_button" th:onclick="'location.href=\'../dog/modify?dogId=' + ${dog.id} + '\''">수정
             </button>
-            <button class="upload_button" th:onclick="'location.href=\'../dog/delete?dogId=' + ${dog.id} + '\''">삭제
+            <button class="upload_cancelButton"
+                    th:onclick="
+            |if (confirm('정말로 삭제하시겠습니까?')) {
+                location.href='../dog/delete?dogId=' + ${dog.id};
+            }|">
+                삭제
             </button>
         </div>
         <div class="upload_button_wrapper" th:if="${dog == null}">
@@ -138,29 +144,34 @@
         </div>
     </div>
 </div>
-<div class="myPage_popup passwordCheck">
-    <label>
-        <div class="tw-p-[10px]">비밀번호 확인</div>
-        <input class="passwordCheck_input checkInput" type="text" placeholder="비밀번호를 입력해주세요">
-    </label>
-    <button class="passwordCheck_button">확인</button>
-</div>
-<form onsubmit="return MemberDelStatus__submit(this);" th:action="@{/usr/member/delStatus}" method="post">
-    <div class="myPage_popup accessKeyCheck">
-        <label>
-            <div class="tw-p-[10px]" th:if="${member.socialLoginStatus == 0}">비밀번호 확인</div>
-            <div class="tw-p-[10px]" th:if="${member.socialLoginStatus == 1}">인증키 확인</div>
-            <div class="tw-pb-[10px]" th:if="${member.socialLoginStatus == 1}">인증키는 내 정보 페이지 하단에서 확인 가능합니다</div>
-            <input class="checkInput" name="passwordCheck" th:if="${member.socialLoginStatus == 0}" type="text"
-                   placeholder="비밀번호를 입력해주세요">
-            <input class="checkInput" name="accessKeyCheck" th:if="${member.socialLoginStatus == 1}" type="text"
-                   placeholder="인증키를 입력해주세요">
-            <div class="tw-pb-[10px]">닉네임을 입력해주세요</div>
-            <input class="checkInput" name="textCheck" type="text" th:placeholder="${member.nickname}">
-        </label>
-        <button type="submit" class="accessKeyCheck_button">확인</button>
+<div class="passwordCheck_bg tw-fixed tw-left-0 tw-top-0 tw-w-full tw-h-full tw-bg-gray-900/70 tw-z-50" style="display:none;">
+    <div class="myPage_popup passwordCheck tw-p-8">
+        <div class="tw-pl-[10px] tw-pr-[10px] tw-pt-[10px] tw-pb-[50px] tw-text-2xl tw-font-extrabold tw-text-center">본인인증</div>
+        <div>비밀번호 확인</div>
+        <input class="passwordCheck_input checkInput tw-border tw-border-gray-300 tw-rounded-lg focus:tw-ring-2 focus:tw-ring-[#7DAF82] focus:tw-outline-none tw-block tw-mb-6" type="text" placeholder="비밀번호를 입력해주세요">
+        <button class="passwordCheck_button tw-mb-6 tw-w-full tw-text-[#ffffff] tw-p-[10px] tw-rounded-lg tw-bg-[#7DAF82] hover:tw-bg-[#5C8D6D] hover:tw--translate-y-0.5">확인</button>
     </div>
-</form>
+</div>
+<div class="accessKeyCheck_bg tw-fixed tw-left-0 tw-top-0 tw-w-full tw-h-full tw-bg-gray-900/70 tw-z-50"
+     style="display:none;">
+    <form onsubmit="return MemberDelStatus__submit(this);" th:action="@{/usr/member/delStatus}" method="post">
+        <div class="myPage_popup accessKeyCheck tw-p-8">
+            <label>
+                <div class="tw-pl-[10px] tw-pr-[10px] tw-pt-[10px] tw-pb-[50px] tw-text-2xl tw-font-extrabold tw-text-center">정말로 탈퇴하시겠습니까?</div>
+                <div th:if="${member.socialLoginStatus == 0}">비밀번호 확인</div>
+                <div th:if="${member.socialLoginStatus == 1}">인증키 확인</div>
+                <div class="tw-pb-[10px]" th:if="${member.socialLoginStatus == 1}">인증키는 내 정보 페이지 하단에서 확인 가능합니다</div>
+                <input class="checkInput tw-border tw-border-gray-300 tw-rounded-lg focus:tw-ring-2 focus:tw-ring-[#7DAF82] focus:tw-outline-none tw-block tw-mb-6" name="passwordCheck" th:if="${member.socialLoginStatus == 0}" type="text"
+                       placeholder="비밀번호를 입력해주세요">
+                <input class="checkInput tw-border tw-border-gray-300 tw-rounded-lg focus:tw-ring-2 focus:tw-ring-[#7DAF82] focus:tw-outline-none tw-block tw-mb-6" name="accessKeyCheck" th:if="${member.socialLoginStatus == 1}" type="text"
+                       placeholder="인증키를 입력해주세요">
+                <div class="tw-pb-[10px]">닉네임을 입력해주세요</div>
+                <input class="checkInput tw-border tw-border-gray-300 tw-rounded-lg focus:tw-ring-2 focus:tw-ring-[#7DAF82] focus:tw-outline-none tw-block tw-mb-6" name="textCheck" type="text" th:placeholder="${member.nickname}">
+            </label>
+            <button class="accessKeyCheck_button tw-mb-6 tw-w-full tw-text-[#ffffff] tw-p-[10px] tw-rounded-lg tw-bg-[#7DAF82] hover:tw-bg-[#5C8D6D] hover:tw--translate-y-0.5">확인</button>
+        </div>
+    </form>
+</div>
 
 <script>
     $(document).ready(function () {
@@ -169,7 +180,7 @@
             const checkPw = $('.passwordCheck_input').val();
 
             if (checkPw === memberLoginPw) {
-                $('.passwordCheck').hide();
+                $('.passwordCheck_bg').hide();
                 $('.name1').hide();
                 $('.nickname1').hide();
                 $('.cellphone1').hide();
@@ -188,23 +199,23 @@
         $('.myPage_modify_button').click(function (event) {
             if ($(event.target).attr('type') === 'button') {
                 event.stopPropagation();
-                $('.passwordCheck').fadeIn();
+                $('.passwordCheck_bg').fadeIn();
             }
         });
 
-        // .myPage_delete_button 클릭 시 .accessKeyCheck 보이기
+        // .myPage_delete_button 클릭 시 .accessKeyCheck_bg 보이기
         $('.myPage_delete_button').click(function (event) {
             event.stopPropagation();
-            $('.accessKeyCheck').fadeIn(); // .accessKeyCheck 보이기
+            $('.accessKeyCheck_bg').fadeIn(); // .accessKeyCheck_bg 보이기
         });
 
-        // 문서 내 다른 부분 클릭 시, .passwordCheck와 .accessKeyCheck 숨기기
+        // 문서 내 다른 부분 클릭 시, .passwordCheck_bg와 .accessKeyCheck_bg 숨기기
         $(document).click(function () {
-            $('.passwordCheck').fadeOut(); // .passwordCheck 숨기기
-            $('.accessKeyCheck').fadeOut(); // .accessKeyCheck 숨기기
+            $('.passwordCheck_bg').fadeOut(); // .passwordCheck_bg 숨기기
+            $('.accessKeyCheck_bg').fadeOut(); // .accessKeyCheck_bg 숨기기
         });
 
-        // .passwordCheck와 .myPage_modify_button 영역에서의 클릭은 문서의 클릭 이벤트를 막음
+        // .passwordCheck_bg와 .myPage_modify_button 영역에서의 클릭은 문서의 클릭 이벤트를 막음
         $('.passwordCheck, .myPage_modify_button').click(function (event) {
             event.stopPropagation();
         });
@@ -214,7 +225,7 @@
             event.stopPropagation();
         });
 
-        $('.myPage_exit_button').click(function (){
+        $('.myPage_exit_button').click(function () {
             $('.name1').show();
             $('.nickname1').show();
             $('.cellphone1').show();
@@ -251,13 +262,13 @@
     }
 
     function MemberDelStatus__submit(del) {
-        const memberLoginPw =  "[[${member.loginPw}]]";
-        const memberSocialLoginStatus =  "[[${member.socialLoginStatus}]]";
-        const memberNickname =  "[[${member.nickname}]]";
-        if(memberSocialLoginStatus == 0){
+        const memberLoginPw = "[[${member.loginPw}]]";
+        const memberSocialLoginStatus = "[[${member.socialLoginStatus}]]";
+        const memberNickname = "[[${member.nickname}]]";
+        if (memberSocialLoginStatus == 0) {
             var passwordCheck = del.passwordCheck.value.trim();
         }
-        if(memberSocialLoginStatus == 1){
+        if (memberSocialLoginStatus == 1) {
             var accessKeyCheck = del.accessKeyCheck.value.trim();
         }
         const textCheck = del.textCheck.value.trim();

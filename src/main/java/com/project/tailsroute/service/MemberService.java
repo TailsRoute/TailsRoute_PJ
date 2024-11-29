@@ -61,14 +61,6 @@ public class MemberService {
         return memberRepository.getMemberByEmail(email);
     }
 
-    public void sendLoginId(String email, String loginId) {
-        SimpleMailMessage message = new SimpleMailMessage();
-        message.setTo(email);
-        message.setSubject("TailsRoute");
-        message.setText("회원님의 아이디는 다음과 같습니다 : " + loginId);
-        mailSender.send(message);
-    }
-
     public void sendLoginPW(String email, String loginPW) {
         SimpleMailMessage message = new SimpleMailMessage();
         message.setTo(email);

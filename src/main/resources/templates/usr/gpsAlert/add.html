@@ -18,10 +18,18 @@
         반려견이 제한구역에서 50m 이상 벗어나면 핸드폰 문자서비스를 보내드립니다.
     </div>
     <div class="upload_map tw-p-2">
-        <span>
+        <span class="tw-flex tw-justify-center">
             <label for="searchInput"></label>
             <input class="upload_input" type="text" id="searchInput" placeholder="주소를 입력해주세요">
-            <button class="upload_button" onclick="searchPlace()">검색</button>
+            <button class="tw-text-[#4D3E3E] tw-flex tw-justify-center" onclick="searchPlace()" style="width: 30px; height: 30px;">
+                <svg xmlns="http://www.w3.org/2000/svg"
+                     viewBox="0 0 16 16" fill="currentColor"
+                     class="h-4 w-4 opacity-70">
+                     <path fill-rule="evenodd"
+                           d="M9.965 11.026a5 5 0 1 1 1.06-1.06l2.755 2.754a.75.75 0 1 1-1.06 1.06l-2.755-2.754ZM10.5 7a3.5 3.5 0 1 1-7 0 3.5 3.5 0 0 1 7 0Z"
+                           clip-rule="evenodd"/>
+                </svg>
+            </button>
         </span>
         <button class="upload_button" th:onclick="'getCenterCoordinates(' + ${dogId} + ',true)'">등록</button>
     </div>

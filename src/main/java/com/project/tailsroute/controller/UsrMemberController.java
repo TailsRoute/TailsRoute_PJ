@@ -139,7 +139,7 @@ public class UsrMemberController {
     @PostMapping("/usr/member/modify")
     public String doModify(@RequestParam String name, @RequestParam String nickname, @RequestParam String cellphoneNum, @RequestParam String loginPw) {
 
-        if(loginPw.isBlank()){
+        if (loginPw.isBlank()) {
             // System.err.println("전 : " + loginPw);
             loginPw = rq.getLoginedMember().getLoginPw();
             // System.err.println("후 : " + loginPw);
@@ -194,9 +194,9 @@ public class UsrMemberController {
 
         Member member = memberService.getMemberByEmail(email);
 
-        if(member == null){
+        if (member == null) {
             return "해당 회원은 존재하지 않습니다";
-        }else if(member.getSocialLoginStatus() == 1){
+        } else if (member.getSocialLoginStatus() == 1) {
             return "아이디 찾기 기능을 사용할 수 없습니다.";
         }
 
@@ -215,8 +215,7 @@ public class UsrMemberController {
 
         if (savedCode != null && savedCode.equals(code)) {
             authCodes.remove(email);
-            memberService.sendLoginId(email, member.getLoginId());
-            return "인증성공! 아이디가 메일로 전송되었습니다.";
+            return "인증성공! 회원님의 아이디는 \"<span class=\"tw-font-bold\">" + member.getLoginId() + "</span>\" 입니다.";
         } else {
             return "인증실패";
         }
@@ -230,9 +229,9 @@ public class UsrMemberController {
 
         Member member = memberService.getMemberByLoginId(loginId);
 
-        if(member == null){
+        if (member == null) {
             return "해당 회원은 존재하지 않습니다";
-        }else if(member.getSocialLoginStatus() == 1){
+        } else if (member.getSocialLoginStatus() == 1) {
             return "비밀번호 찾기 기능을 사용할 수 없습니다.";
         }
 
@@ -337,6 +336,7 @@ public class UsrMemberController {
 
         return response;
     }
+
     @PostMapping("/usr/member/verifyCode")
     public ResponseEntity<Map<String, Object>> verifyCode2(
             @RequestParam String mail,
