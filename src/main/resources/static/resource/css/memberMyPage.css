@@ -27,6 +27,7 @@ input:focus {
     text-align: center;
     font-size: 50px;
     padding-top: 70px;
+    font-family: 'Cafe24Ssurround', sans-serif;
 }
 
 .myPage, .dogPage {

@@ -47,6 +47,7 @@ input:focus, select:focus, textarea:focus {
     text-align: center;
     padding-top: 70px;
     font-size: 50px;
+    font-family: 'Cafe24Ssurround', sans-serif;
 }
 
 .image_button {

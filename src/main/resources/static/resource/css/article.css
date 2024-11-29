@@ -36,6 +36,7 @@ input:focus, select:focus, textarea:focus {
     padding-top: 70px;
     font-size: 50px;
     margin: auto;
+    font-family: 'Cafe24Ssurround', sans-serif;
 }
 
 .article_body {

@@ -32,6 +32,11 @@ window.initMap = function() { // 전역으로 설정
     marker = new google.maps.Marker({
         position: initialLocation,
         map: map,
+        icon: {
+            url: '/resource/photo/GPS_marker.png', // 마커 이미지 경로
+            scaledSize: new google.maps.Size(40, 40), // 이미지 크기 설정
+            anchor: new google.maps.Point(20, 40) // 마커 중심을 이미지 중앙으로 설정
+        },
     });
 
     // 반경 100m 원 생성
@@ -52,6 +57,11 @@ window.initMap = function() { // 전역으로 설정
     // 지도 클릭 시 마커를 클릭한 위치로 이동시키는 이벤트 리스너 추가
     map.addListener("click", (event) => {
         marker.setPosition(event.latLng); // 클릭한 위치로 마커 이동
+        marker.setIcon({
+            url: '/resource/photo/GPS_marker.png', // 마커 이미지 경로
+            scaledSize: new google.maps.Size(40, 40), // 크기 설정
+            anchor: new google.maps.Point(20, 40) // 중심을 이미지 중앙으로 설정
+        });
         circle.setCenter(event.latLng); // 원의 중심도 마커 위치로 이동
         updateCenter(); // 중앙 좌표 업데이트
     });
@@ -70,6 +80,11 @@ function searchPlace() {
             const place = results[0]; // 첫 번째 결과 사용
             map.setCenter(place.geometry.location); // 지도 중심을 결과 위치로 변경
             marker.setPosition(place.geometry.location); // 마커 위치 변경
+            marker.setIcon({
+                url: '/resource/photo/GPS_marker.png', // 마커 이미지 경로
+                scaledSize: new google.maps.Size(40, 40), // 크기 설정
+                anchor: new google.maps.Point(20, 40) // 중심을 이미지 중앙으로 설정
+            });
             circle.setCenter(place.geometry.location); // 원의 중심 위치도 변경
             map.setZoom(19); // 원하는 확대 수준으로 설정
 
