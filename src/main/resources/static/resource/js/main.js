@@ -74,7 +74,7 @@ function gpsChackOn() {
                 },
                 success: function (response) {
                     if (response.success) {
-                        $('.gps_popup').fadeOut();
+                        $('.gps_popup_bg1').fadeOut();
                         alert('위치 정보가 저장되었습니다.');
                     } else {
                         alert('위치 정보를 저장하지 못했습니다.');
@@ -100,7 +100,7 @@ function gpsChackOff() {
         type: 'POST',
         success: function (response) {
             if (response.success) {
-                $('.gps_popup').fadeOut();
+                $('.gps_popup_bg1').fadeOut();
                 alert('정보 수신을 거절하였습니다');
             }
         },
@@ -127,7 +127,7 @@ function gpsChackUpdate() {
                 },
                 success: function (response) {
                     if (response.success) {
-                        $('.gps_popup2').fadeOut();
+                        $('.gps_popup_bg2').fadeOut();
                         alert('위치 정보가 저장되었습니다.');
                     } else {
                         alert('위치 정보를 저장하지 못했습니다.');
@@ -148,6 +148,6 @@ function gpsChackUpdate() {
 }
 
 function gpsChackCancel() {
-    $('.gps_popup2').fadeOut();
+    $('.gps_popup_bg2').fadeOut();
     alert('정보 수신을 거절하였습니다');
 }

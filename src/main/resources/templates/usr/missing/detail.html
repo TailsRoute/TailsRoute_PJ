@@ -9,11 +9,11 @@
 <div class="profile tw-p-5 tw-flex tw-justify-between">
     <div class="profile_title" th:if="${member != null}" th:text="${member.nickname}">사용자 정보</div>
     <div class="tw-font-thin">
-        <form th:action="@{'../missing/doDelete'}" method="post" th:if="${member != null}">
-            <a class="link tw-pr-[10px]" th:href="@{'../missing/modify?missingId='+${missing.id}}"
-               th:if="${member.id == missing.memberId}">수정</a>
+        <form th:action="@{'../missing/doDelete'}" method="post" th:if="${member != null && member.id == missing.memberId}" class="tw-flex">
             <input type="hidden" name="missingId" th:value="${missing.id}">
-            <button type="submit" class="link" th:if="${member.id == missing.memberId}"
+            <a class="link tw-pr-[15px]" th:href="@{'../missing/modify?missingId='+${missing.id}}">수정</a>
+            <div>|</div>
+            <button type="submit" class="link tw-pl-[15px] tw-text-[#D95A50]" th:if="${member.id == missing.memberId}"
                     onclick="return confirm('정말로 삭제하시겠습니까?');">삭제</button>
         </form>
     </div>

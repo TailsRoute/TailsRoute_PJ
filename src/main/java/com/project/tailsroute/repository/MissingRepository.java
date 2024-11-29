@@ -35,10 +35,14 @@ public interface MissingRepository {
 
     @Select("""
   			SELECT COUNT(*)
-    		FROM missing
-    		WHERE #{str} = '전체' OR missingLocation LIKE CONCAT('%', #{str}, '%')
+    		FROM missing S
+    		WHERE (
+                S.missingLocation LIKE CONCAT('%', #{str}, '%') 
+                OR S.missingLocation LIKE CONCAT('%', #{str2}, '%')
+            ) 
+        	OR #{str} = '전체'
 				""")
-    int totalCnt(String str);
+    int totalCnt(String str, String str2);
 
     @Select("""        
 			SELECT S.*, M.name AS extra__ownerName, M.cellphoneNum AS extra__ownerCellphoneNum

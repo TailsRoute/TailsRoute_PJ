@@ -11,15 +11,6 @@
         let isAlreadyAddGoodRp = [[${isAlreadyAddGoodRp}]];
         let isAlreadyAddBadRp = [[${isAlreadyAddBadRp}]];
 
-        <!-- 좋아요 싫어요 처리 -->
-        function checkRP() {
-            if (isAlreadyAddGoodRp) {
-                $('#likeButton').toggleClass('btn-outline');
-            } else if (isAlreadyAddBadRp) {
-                $('#DislikeButton').toggleClass('btn-outline');
-            }
-        }
-
         $(document).ready(function () {
             checkRP();
             setTimeout(ArticleDetail__doIncreaseHitCount, 2000);
@@ -83,19 +74,20 @@
                 <span class="article-detail__hit-count" th:text="${article.hitCount}"></span>
             </div>
         </div>
-        <div class="tw-flex tw-gap-2" th:if="${member != null}">
-            <a class="article_button" th:href="|@{../article/modify?id=}${article.id}|"
-               th:if="${member.id == article.memberId}">수정</a>
-            <a class="article_button" th:href="|@{../article/doDelete?id=}${article.id}|"
-               th:if="${member.id == article.memberId}">삭제</a>
+        <div class="tw-flex tw-gap-2" th:if="${member != null && member.id == article.memberId}">
+            <a class="link tw-pr-[5px]" th:href="|@{../article/modify?id=}${article.id}|">수정</a>
+            <div>|</div>
+            <a class="link tw-pl-[5px] tw-text-[#D95A50]" th:href="|@{../article/doDelete?id=}${article.id}|"
+               onclick="return confirm('정말로 삭제하시겠습니까?');">삭제</a>
         </div>
     </div>
     <div class="article_body">
         <div class="tw-p-5" th:utext="${article.body}"></div>
         <div class="tw-flex tw-justify-between">
             <div class="reply_title tw-p-5" th:text="|댓글 : ${replies.size()}|"></div>
-            <button th:class="${isAlreadyAddGoodRp ? 'tw-text-red-500 tw-font-bold tw-p-5' : 'tw-p-5'}" id="likeButton" th:onclick="'doGoodReaction(\'article\', ' + ${article.id} + ')'">
-                👍 추천
+            <button th:class="${isAlreadyAddGoodRp ? 'tw-bg-[#FF6F61] tw-text-white tw-font-bold tw-rounded-[10px] tw-p-2 tw-m-3' : 'tw-p-2 tw-m-3'}" id="likeButton"
+                    th:onclick="'doGoodReaction(\'article\', ' + ${article.id} + ')'">
+                <i class="fa-regular fa-heart"></i>
                 <span id="likeCount" th:text="${article.goodReactionPoint}"></span>
             </button>
         </div>
@@ -104,17 +96,20 @@
                 <input type="hidden" name="relTypeCode" value="article"/>
                 <input type="hidden" name="relId" th:value="${article.id}"/>
                 <div>
-                    <textarea name="body" class="tw-w-full tw-p-2" placeholder="댓글을 작성해주세요"></textarea>
+                    <textarea name="body" class="tw-w-[1300px] tw-p-2" placeholder="댓글을 작성해주세요"></textarea>
                 </div>
                 <button class="article_button tw-ml-auto">작성하기</button>
             </form>
         </div>
 
         <div class="reply_body" th:if="${!isLogined}">
-            댓글 작성을 위해 <a class="article_button" th:href="${rq.loginUri}">로그인</a>이 필요합니다
+            <div class="tw-pr-2">댓글 작성을 위해</div>
+            <a class="article_button" th:href="${rq.loginUri}">로그인</a>
+            <div class="tw-pl-2">이 필요합니다</div>
         </div>
         <div class="tw-mx-auto">
-            <div class="tw-p-5 tw-flex tw-items-center tw-justify-between tw-border-b tw-border-gray-500" th:each="reply : ${replies}">
+            <div class="tw-p-5 tw-flex tw-items-center tw-justify-between tw-border-b-2 tw-border-gray-[#dadada]"
+                 th:each="reply : ${replies}">
                 <div class="tw-flex tw-gap-2 tw-flex-1">
                     <img th:if="${reply.extra__dogPhoto != null}" th:src="@{${reply.extra__dogPhoto}}"
                          alt="Profile Image"
@@ -130,7 +125,7 @@
                             <div th:id="'replylikeCount' + ${reply.id}" th:text="${reply.goodReactionPoint}"></div>
                             <div th:id="'reply-body-' + ${reply.id}" class="tw-flex tw-justify-center tw-items-center">
                                 <button th:onclick="'doGoodReaction(\'reply\', ' + ${reply.id} + ')'">
-                                    <i th:class="${reply.extra__reactionPoint == null ? 'fa-solid fa-heart' : 'fa-solid fa-heart tw-text-red-500'}"></i>
+                                    <i th:class="${reply.extra__reactionPoint == null ? 'fa-solid fa-heart' : 'fa-solid fa-heart tw-text-[#FF6F61]'}"></i>
                                 </button>
                             </div>
                         </div>
@@ -146,16 +141,17 @@
                 </div>
                 <div class="tw-flex tw-gap-2" th:if="|${member != null && reply.memberId == member.id}|">
                     <div>
-                        <button th:id="'modify-btn-' + ${reply.id}" class="article_button"
+                        <button th:id="'modify-btn-' + ${reply.id}" class="link tw-pr-[5px]"
                                 th:text="'수정'"
                                 th:onclick="'toggleModifybtn(' + ${reply.id} + ')'"></button>
                         <input type="hidden" th:name="'reply-text-'+${reply.id}" th:value="${reply.body}"/>
-                        <button th:id="'save-btn-' + ${reply.id}" class="article_button" style="display:none;"
+                        <button th:id="'save-btn-' + ${reply.id}" class="link tw-pr-[5px]" style="display:none;"
                                 th:text="'저장'" type="button"
                                 th:onclick="'doModifyReply(' + ${reply.id} + ')'"></button>
                     </div>
+                    <div>|</div>
                     <div>
-                        <button class="article_button" th:text="삭제" th:onclick="'doDeleteReply(' + ${reply.id} + ')'">
+                        <button class="link tw-pl-[5px] tw-text-[#D95A50]" th:text="삭제" th:onclick="'doDeleteReply(' + ${reply.id} + ')'">
                         </button>
                     </div>
                 </div>
@@ -180,7 +176,7 @@
         let form = $('#modify-form-' + replyId);
         let text = form.find('input[name="reply-text-' + replyId + '"]').val();
 
-        if(text.length <= 3){
+        if (text.length < 3) {
             confirm("내용이 너무 짧습니다");
             return;
         }
@@ -209,6 +205,11 @@
 
     // 댓글 삭제 버튼 클릭 시 실행되는 함수
     function doDeleteReply(replyId) {
+
+        if (!confirm('정말로 삭제하시겠습니까?')) {
+            return;
+        }
+
         $.ajax({
             url: '/usr/reply/doDelete',
             type: 'POST',                                // HTTP 메서드를 POST로 변경
@@ -240,17 +241,17 @@
             success: function (data) {// 성공 시 콜백
                 if (relTypeCode == 'article') {
                     $('#likeCount').text(data.data1); // 응답에서 body 문자열을 사용
-                    if ($('#likeButton').hasClass('tw-text-red-500')) {
-                        $('#likeButton').removeClass('tw-text-red-500 tw-font-bold');
+                    if ($('#likeButton').hasClass('tw-bg-[#FF6F61]')) {
+                        $('#likeButton').removeClass('tw-bg-[#FF6F61] tw-text-white tw-font-bold tw-rounded-[10px]');
                     } else {
-                        $('#likeButton').addClass('tw-text-red-500 tw-font-bold');
+                        $('#likeButton').addClass('tw-bg-[#FF6F61] tw-text-white tw-font-bold tw-rounded-[10px]');
                     }
                 } else if (relTypeCode == 'reply') {
                     $('#replylikeCount' + relId).text(data.data1);
-                    if ($('#reply-body-' + relId).find('i').hasClass('tw-text-red-500')) {
-                        $('#reply-body-' + relId).find('i').removeClass('tw-text-red-500');
+                    if ($('#reply-body-' + relId).find('i').hasClass('tw-text-[#FF6F61]')) {
+                        $('#reply-body-' + relId).find('i').removeClass('tw-text-[#FF6F61]');
                     } else {
-                        $('#reply-body-' + relId).find('i').addClass('tw-text-red-500');
+                        $('#reply-body-' + relId).find('i').addClass('tw-text-[#FF6F61]');
                     }
 
                 }

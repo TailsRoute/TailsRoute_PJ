@@ -175,27 +175,27 @@
                      class="tw-w-[45px] tw-h-[45px] tw-rounded-full tw-mr-[30px] tw-mb-[5px] tw-inline-block tw-border tw-border-transparent hover:tw-border-white"
                      th:onclick="'this.nextElementSibling.classList.toggle(&quot;tw-hidden&quot;)'"/>
 
-                <div class="tw-hidden head_profile_bar tw-z-30 tw-cursor-default tw-mt-[15px] tw-absolute tw-w-[400px] tw-h-[350px] tw-bg-[#F9F5EB] tw-border tw-border-[#4D3E3E] tw-rounded-[30px] tw-flex tw-flex-col tw-items-center tw-justify-center tw-gap-2 tw-right-0">
+                <div class="tw-hidden tw-bg-white head_profile_bar tw-z-30 tw-cursor-default tw-mt-[15px] tw-absolute tw-w-[400px] tw-h-[350px] tw-rounded-[30px] tw-flex tw-flex-col tw-items-center tw-justify-center tw-gap-2 tw-right-0 tw-shadow tw-shadow-[#4D3E3E]/30">
                     <img th:if="${member.extra__dogPoto != null}" th:src="@{${member.extra__dogPoto}}" alt="Profile Image"
-                         class="head_profile_image tw-w-[100px] tw-h-[100px] tw-border tw-border-[#4D3E3E] tw-rounded-full"/>
+                         class="head_profile_image tw-w-[100px] tw-h-[100px] tw-rounded-full"/>
                     <img th:if="${member.extra__dogPoto == null}"
                          th:src="@{/resource/photo/default.png}"
                          alt="Default Profile Image"
-                         class="head_profile_image tw-w-[100px] tw-h-[100px] tw-border tw-border-[#4D3E3E] tw-rounded-full"/>
+                         class="head_profile_image tw-w-[100px] tw-h-[100px] tw-rounded-full"/>
                     <div class="head_profile_text tw-text-[#4D3E3E]" th:text="|안녕하세요, ${member.getNickname}님|">안녕하세요, 콩이의
                         대장님.
                     </div>
                     <a href="../member/myPage"
-                       class="tw-no-underline tw-border tw-border-[#4D3E3E] tw-text-[#4D3E3E] tw-p-2.5 tw-px-5 tw-rounded-full tw-transition-colors tw-duration-300 tw-mb-2 hover:tw-bg-[#E6DCA8]">내
+                       class="tw-no-underline tw-p-2.5 tw-px-5 tw-transition-colors tw-duration-300 tw-mb-2 tw-rounded-full tw-text-[#4D3E3E] hover:tw-bg-[#E6DCA8] hover:tw--translate-y-0.5 tw-shadow tw-shadow-[#4D3E3E]/30">내
                         정보</a>
                     <div class="tw-flex tw-gap-2 tw-mb-[10px]">
                         <a href="../dog/add"
-                           class="tw-no-underline tw-text-center tw-border tw-border-[#4D3E3E] tw-text-[#4D3E3E] tw-w-[170px] tw-p-2.5 tw-px-5 tw-rounded-l-full tw-transition-colors tw-duration-300 hover:tw-bg-[#E6DCA8]">
+                           class="tw-no-underline tw-text-center tw-w-[170px] tw-p-2.5 tw-px-5 tw-rounded-[10px] tw-transition-colors tw-duration-300 tw-text-[#4D3E3E] hover:tw-bg-[#5C8D6D] hover:tw--translate-y-0.5 tw-shadow tw-shadow-[#4D3E3E]/30 hover:tw-text-white">
                             <i class="fa-solid fa-circle-plus"></i> 반려견 추가
                         </a>
                         <!--로그아웃 주소 http://localhost:8081/usr/member/doLogout 이걸로 했는데 바꿀거면 아래 href 수정하면돼-->
                         <a href="../member/doLogout"
-                           class="tw-no-underline tw-text-center tw-border tw-border-[#4D3E3E] tw-text-[#4D3E3E] tw-w-[170px] tw-p-2.5 tw-px-5 tw-rounded-r-full tw-transition-colors tw-duration-300 hover:tw-bg-[#E6DCA8]">
+                           class="tw-no-underline tw-text-center tw-w-[170px] tw-p-2.5 tw-px-5 tw-rounded-[10px] tw-transition-colors tw-duration-300 tw-text-[#4D3E3E] hover:tw-bg-[#D95A50] hover:tw--translate-y-0.5 tw-shadow tw-shadow-[#4D3E3E]/30 hover:tw-text-white">
                             <i class="fa-solid fa-arrow-right-from-bracket"></i> 로그아웃
                         </a>
                     </div>
