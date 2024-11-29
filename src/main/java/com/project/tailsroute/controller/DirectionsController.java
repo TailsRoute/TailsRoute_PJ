@@ -5,10 +5,14 @@ import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.*;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
+
+import java.util.HashMap;
+import java.util.Map;
 
 @RestController
 public class DirectionsController {
@@ -21,6 +25,9 @@ public class DirectionsController {
 
     @Value("${NAVER_SECRET}")
     private String apiKey;    // 네이버 API Key
+
+    @Value("${TMAP_KEY}")
+    private String mapKey;
 
     // 주소를 받아 위도, 경도 정보를 반환하는 메소드
     @GetMapping("/reverse-geocode")
@@ -84,6 +91,40 @@ public class DirectionsController {
         ResponseEntity<String> response = restTemplate.exchange(url, HttpMethod.GET, entity, String.class);
         // 결과 반환
         return ResponseEntity.ok(response.getBody());
+    }
+    @GetMapping("/get-route")
+    public ResponseEntity<String> getRoute(
+            @RequestParam double startLat,
+            @RequestParam double startLng,
+            @RequestParam double endLat,
+            @RequestParam double endLng) {
+
+        String url = "https://apis.openapi.sk.com/tmap/routes/pedestrian?version=1";
+
+        // 요청 바디 생성
+        Map<String, Object> requestBody = new HashMap<>();
+        requestBody.put("startX", startLng);
+        requestBody.put("startY", startLat);
+        requestBody.put("endX", endLng);
+        requestBody.put("endY", endLat);
+        requestBody.put("startName", "시작");
+        requestBody.put("endName", "끝");
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_JSON);
+        headers.set("Accept", "application/json");
+        headers.set("appKey", mapKey);
+
+        HttpEntity<Map<String, Object>> entity = new HttpEntity<>(requestBody, headers);
+
+        RestTemplate restTemplate = new RestTemplate();
+        try {
+            ResponseEntity<String> response = restTemplate.exchange(url, HttpMethod.POST, entity, String.class);
+            return ResponseEntity.ok(response.getBody());
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body("Failed to fetch route: " + e.getMessage());
+        }
     }
     @GetMapping("/get-directions")
     public ResponseEntity<String> getDirections(

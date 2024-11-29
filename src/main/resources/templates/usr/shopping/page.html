@@ -39,7 +39,7 @@
 
         <!-- 일정 날짜 입력-->
         <label for="scheduleDate" style="font-weight: bold;" class="tw-mr-[10px]">일정 날짜 선택</label>
-        <input type="date" id="scheduleDate" class="tw-border-box tw-w-[190px] tw-text-center tw-rounded-[5px] tw-border" /><br/><br/>
+        <input type="date" id="scheduleDate" class="tw-border-box tw-w-[190px] tw-text-center tw-rounded-[5px] tw-border tw-bg-white" /><br/><br/>
 
         <!-- 생필품 이름 -->
         <label for="itemName" style="font-weight: bold; float: left;" class="tw-mr-[10px]">생필품 이름</label>
@@ -47,11 +47,11 @@
 
         <!-- 구매 주기 선택 -->
         <label for="purchaseCycle" style="font-weight: bold;" class="tw-mr-[10px]">사용기한(일)</label>
-        <input type="number" id="purchaseCycle" class="tw-border-box tw-w-[190px] tw-text-center tw-rounded-[5px] tw-border" placeholder="구매 주기를 입력하세요" min="1"/><br/><br/>
+        <input type="number" id="purchaseCycle" class="tw-border-box tw-w-[190px] tw-text-center tw-rounded-[5px] tw-border tw-bg-white" placeholder="구매 주기를 입력하세요" min="1"/><br/><br/>
 
         <!-- 알람 설정 -->
         <label for="alarmDays" style="font-weight: bold;" class="tw-mr-[10px]">알람(사용 안 할시에는 0)</label>
-        <input type="number" id="alarmDays" class="tw-border-box tw-w-[190px] tw-text-center tw-rounded-[5px] tw-border" placeholder="몇일 전 알람" min="0"/><br/><br/>
+        <input type="number" id="alarmDays" class="tw-border-box tw-w-[190px] tw-text-center tw-rounded-[5px] tw-border tw-bg-white" placeholder="몇일 전 알람" min="0"/><br/><br/>
 
         <!-- 버튼들 -->
         <button id="createScheduleBtn" class="tw-w-full tw-bg-[#7DAF82] tw-text-white tw-font-medium tw-h-10 tw-rounded-lg hover:tw-bg-[#6A9F72] tw-tracking-wider transition-all">일정 생성</button>
@@ -92,14 +92,16 @@
         <!-- 버튼 추가 -->
         <div id="sortButtons">
             <button id="wishlistButton">관심목록</button>
-            <input type="text" id="searchInput" class="tw-border-box tw-w-[190px] tw-text-center tw-border tw-rounded-md focus:tw-ring-2 focus:tw-ring-[#7DAF82] tw-input tw-h-[25px]" placeholder="검색어를 입력하세요" onkeydown="if(event.key === 'Enter') searchItems()"/>
+            <input type="text" id="searchInput" class="tw-border-box tw-w-[190px] tw-text-center tw-border tw-rounded-md focus:tw-ring-2 focus:tw-ring-[#7DAF82] tw-input tw-h-[25px] tw-bg-white" placeholder="검색어를 입력하세요" onkeydown="if(event.key === 'Enter') searchItems()"/>
             <button onclick="searchItems()">검색</button>
             <button id="sortByAccuracy" class="active">정확도순</button>
             <button id="sortByPrice">최저가순</button>
         </div>
 
         <!-- 검색어를 포함한 제목 -->
-        <div style="text-align: left;" class="tw-font-bold tw-h-[30px]" id="searchTitle">쇼핑 추천 리스트 - 검색 결과: </div>
+        <div style="text-align: left; margin-left: 5px;" class="tw-font-bold tw-h-[30px]" id="searchTitle">쇼핑 추천 리스트 - 검색 결과: </div>
+
+        <div style="font-size: 10px; margin-left: 5px;">#리스트의 제목을 클릭하면 해당 사이트로 이동합니다.</div>
 
         <!-- 검색 결과를 표시할 곳 -->
         <ul id="resultContainer"></ul> <!-- ul로 변경 -->
