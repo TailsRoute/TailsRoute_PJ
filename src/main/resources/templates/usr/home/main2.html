@@ -108,22 +108,34 @@
         const loginButton = document.getElementById("login-button");
         const closeLoginModal = document.getElementById("closeLoginModal");
 
-        // 로그인 팝업 열기
-        loginButton.addEventListener("click", () => {
-            loginModal.classList.remove("tw-hidden");
-        });
+        if (loginButton) {
+            // 로그인 팝업 열기
+            loginButton.addEventListener("click", () => {
+                if (loginModal) {
+                    loginModal.classList.remove("tw-hidden");
+                }
+            });
+        }
 
-        // 로그인 팝업 닫기
-        closeLoginModal.addEventListener("click", () => {
-            loginModal.classList.add("tw-hidden");
-        });
+        if (closeLoginModal) {
+            // 로그인 팝업 닫기
+            closeLoginModal.addEventListener("click", () => {
+                if (loginModal) {
+                    loginModal.classList.add("tw-hidden");
+                }
+            });
 
-        // 팝업 외부 클릭 시 닫기
-        loginModal.addEventListener("click", (event) => {
-            if (event.target === loginModal) {
-                loginModal.classList.add("tw-hidden");
-            }
-        });
+        }
+
+        if (loginModal) {
+            // 팝업 외부 클릭 시 닫기
+            loginModal.addEventListener("click", (event) => {
+                if (event.target === loginModal) {
+                    loginModal.classList.add("tw-hidden");
+                }
+            });
+        }
+
     });
 
     $(document).ready(function () {
@@ -223,7 +235,8 @@
     </div>
     <!-- 사이드 메뉴 -->
     <div id="sidebar"
-         class="tw-fixed tw-top-1/2 tw-left-4 tw-transform -tw-translate-y-1/2 tw-rounded-lg tw-w-56 tw-py-6 tw-flex tw-flex-col tw-items-start tw-space-y-6" style="z-index: 1000;">
+         class="tw-fixed tw-top-1/2 tw-left-4 tw-transform -tw-translate-y-1/2 tw-rounded-lg tw-w-56 tw-py-6 tw-flex tw-flex-col tw-items-start tw-space-y-6"
+         style="z-index: 1000;">
         <a href="#section1"
            class="tw-flex tw-items-center tw-w-full tw-py-3 tw-px-4 tw-text-[#3A3A3A] tw-font-medium tw-tracking-wider hover:tw-text-[#7DAF82] tw-transition-all">
             <span class="tw-text-base"> 홈페이지</span>
@@ -345,11 +358,11 @@
         <!-- 로그인 상태 표시: username이 null이 아닐 때만 표시 -->
         <div th:if="${isLogined}" id="welcome-button"
              class="icon button-style tw-flex tw-items-center tw-justify-between tw-p-4 tw-rounded-full tw-shadow-md tw-border tw-cursor-pointer hover:tw-shadow-lg tw-h-16 tw-w-48 transition-all"
-             style="border-color: #FF7F50;"  onclick="window.location.href='/usr/member/myPage';">
+             style="border-color: #FF7F50;" onclick="window.location.href='/usr/member/myPage';">
             <i class="bi bi-person-fill tw-text-gray-700 tw-text-2xl "></i>
-            <span class="tw-text-gray-700 tw-font-medium" style="margin-left: 8px;">
-        안녕하세요,<br th:utext="${nickname + '님!'}"/>
-    </span>
+            <span class="tw-text-gray-700 tw-font-medium" style="margin-left: 8px;"
+                  th:utext="'안녕하세요, <br>' + (${member.nickname ?: '회원'}) + '님!'"></span>
+
         </div>
 
     </div>
@@ -368,7 +381,8 @@
         <i class="bi bi-bell-fill tw-text-white tw-text-2xl"></i>
     </div>
 </div>
-<div class="gps_popup_bg1 tw-fixed tw-left-0 tw-top-0 tw-w-full tw-h-full tw-bg-gray-900/70 tw-z-50" th:if="${isLogined && gpsChack == null}">
+<div class="gps_popup_bg1 tw-fixed tw-left-0 tw-top-0 tw-w-full tw-h-full tw-bg-gray-900/70 tw-z-50"
+     th:if="${isLogined && gpsChack == null}">
     <div class="gps_popup tw-gap-5">
         <div class="tw-p-2 tw-text-3xl tw-font-bold">GPS 정보 수집 동의 안내</div>
         <div class="tw-p-2 tw-text-2xl">위치 정보 수집에 동의하지 않을 경우 일부 서비스 이용이 제한될 수 있습니다.</div>
@@ -379,7 +393,8 @@
         </div>
     </div>
 </div>
-<div class="gps_popup_bg2 tw-fixed tw-left-0 tw-top-0 tw-w-full tw-h-full tw-bg-gray-900/70 tw-z-50" style="display: none;">
+<div class="gps_popup_bg2 tw-fixed tw-left-0 tw-top-0 tw-w-full tw-h-full tw-bg-gray-900/70 tw-z-50"
+     style="display: none;">
     <div class="gps_popup2 tw-gap-5">
         <div class="tw-p-2 tw-text-3xl tw-font-bold">GPS 정보 수집 동의 안내</div>
         <div class="tw-p-2 tw-text-2xl">위치 정보 수집에 동의하지 않을 경우 일부 서비스 이용이 제한될 수 있습니다.</div>
