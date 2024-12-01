@@ -1,24 +1,71 @@
 <th:block th:replace="~{usr/common/head}"/>
+
 <head>
     <title>TailsRoute</title>
     <link rel="stylesheet" href="/resource/css/videoAnalysis.css"/>
 </head>
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        function previewVideo(event) {
+            const file = event.target.files[0];
+            if (file) {
+                const videoPreview = document.getElementById('videoPreview');
+                if (videoPreview) {
+                    videoPreview.src = URL.createObjectURL(file);
+                    videoPreview.style.display = 'block';
+                    videoPreview.load();
+                } else {
+                    console.error('videoPreview 요소를 찾을 수 없습니다.');
+                }
+            }
+        }
+
+        // 비디오 미리보기용 이벤트 리스너
+        const videoInput = document.getElementById('video');
+        if (videoInput) {
+            videoInput.addEventListener('change', previewVideo);
+        } else {
+            console.error('video 요소를 찾을 수 없습니다.');
+        }
+
+        // 분석 결과를 받은 후 비디오 미리보기 갱신
+        const videoPath = document.getElementById('videoPreview').getAttribute('src');
+        if (videoPath && videoPath !== '') {
+            const videoPreview = document.getElementById('videoPreview');
+            videoPreview.src = videoPath;
+            videoPreview.style.display = 'block';
+            videoPreview.load();
+        }
+    });
+
+</script>
+
+
 <body>
-<div class="container ">
+<div class="container">
     <!-- 헤더 -->
     <h1>비디오 업로드 및 분석</h1>
 
     <!-- 업로드 폼 -->
-    <form action="/usr/behaviorAnalysis/videoAnalysis" method="post" enctype="multipart/form-data">
+    <form action="/usr/behaviorAnalysis/videoAnalysis" method="post" enctype="multipart/form-data" id="uploadForm">
         <label for="video">비디오 파일 선택:</label>
         <input type="file" id="video" name="file" accept="video/*" required>
         <button type="submit">업로드 및 분석</button>
     </form>
 
+    <!-- 비디오 미리보기 -->
+    <div class="preview">
+        <h2>비디오 미리보기</h2>
+        <video id="videoPreview" controls style="max-width: 100%;" th:src="${videoPath != null} ? ${videoPath}:''"></video>
+    </div>
+
     <!-- 분석 결과 -->
     <div class="result">
         <h2>분석 결과</h2>
-        <pre th:text="${result != null} ? result : '분석 결과가 없습니다.'"></pre>
+        <!-- 분석 결과가 있으면 표시 -->
+        <pre th:if="${result != null}" th:text="${result}">결과를 가져오는 중...</pre>
+        <!-- 분석 결과가 없으면 기본 메시지 표시 -->
+        <p th:if="${result == null}">분석 결과가 없습니다.</p>
     </div>
 </div>
 </body>
