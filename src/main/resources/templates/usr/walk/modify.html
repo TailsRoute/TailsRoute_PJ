@@ -29,11 +29,11 @@
 
         /* 컨테이너 */
         .modifyWalk {
+            width: 1440px;
             background: #FFF7E5;
             border: 1px solid #E0C097;
             border-radius: 20px;
             box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15);
-            width: 70%;
             margin: 30px auto;
             padding: 40px 30px;
         }
@@ -71,7 +71,6 @@
 
         /* 지도 */
         .mapContainer {
-            border: 1px solid #E0C097;
             border-radius: 15px;
             background: #FFFDF9;
             width: 100%;
@@ -91,8 +90,10 @@
             background: #7daf82;
             border: none;
             border-radius: 8px;
-            padding: 12px 30px;
-            font-size: 18px;
+            padding: 0; /* 패딩 제거 */
+            width: 110px; /* 고정 너비 */
+            height: 40px; /* 고정 높이 */
+            font-size: 16px; /* 버튼 크기에 맞는 폰트 크기 조정 */
             font-weight: bold;
             color: white;
             cursor: pointer;
@@ -104,6 +105,7 @@
         button:hover {
             background: #5c8d6d;
             box-shadow: 0 8px 15px rgba(0, 0, 0, 0.2);
+            transform: translateY(-2px);
         }
 
 
@@ -116,7 +118,7 @@
 
         #updateRouteButton {
             position: absolute; /* 컨테이너 기준으로 절대 위치 */
-            right: 220px; /* 오른쪽 끝에서 300px 떨어짐 */
+            right: 30px; /* 오른쪽 끝에서 300px 떨어짐 */
 
         }
 
@@ -130,31 +132,41 @@
 
         #resetMapButton:hover {
             background-color: #D95A50;;
+            transform: translateY(-2px);
         }
         .form-item {
-            flex: 1; /* 두 필드가 동일한 너비를 차지하도록 설정 */
-            display: flex;
-            flex-direction: column; /* 라벨과 필드를 세로로 정렬 */
+            display: flex; /* 가로로 배치 */
+            flex-direction: row; /* 라벨과 필드를 가로로 정렬 */
+            align-items: center; /* 수직 가운데 정렬 */
+            gap: 10px; /* 라벨과 필드 사이 여백 */
+            margin-bottom: 15px; /* 각 필드 간 간격 */
         }
 
         .form-item label {
             font-weight: bold;
             font-size: 16px;
             color: #6D4C41;
-            margin-bottom: 5px; /* 라벨과 필드 간격 */
+
+            text-align: right; /* 라벨을 오른쪽 정렬 */
+            margin-right: 10px; /* 필드와의 여백 */
+            white-space: nowrap; /* 텍스트 줄바꿈 방지 */
         }
 
         .form-item select,
         .form-item input {
-            flex: 1; /* 입력 필드가 너비를 채우도록 */
-            padding: 4px 10px;
-            border: 1px solid #E0C097;
+            flex:0.5; /* 입력 필드가 남은 너비를 차지하도록 설정 */
             border-radius: 8px;
             background-color: white;
             font-size: 16px;
             color: #4E342E;
-            box-shadow: inset 0 2px 5px rgba(0, 0, 0, 0.05);
+            border: 1px solid #ccc; /* 테두리 추가 */
         }
+
+        .form-item input:focus,
+        .form-item select:focus {
+            outline: none; /* 기본 아웃라인 제거 */
+        }
+
         .form-container {
             display: flex;
             justify-content: space-between; /* 양쪽 간격 조정 */
@@ -162,9 +174,22 @@
         }
         .mapContainer{
             display: flex;
-            max-height: 350px;
+            max-height: 500px;
         }
-
+        #goBackButton{
+            background-color: #3A3A3A !important;
+         margin-left: 30px;
+        }
+        #goBackButton:hover{
+            background-color: #2E2E2E !important;
+            transform: translateY(-2px);
+        }
+        .route-buttons{
+            margin-bottom: 33px;
+        }
+        .reset-button{
+            margin-bottom: 33px;
+        }
     </style>
 </head>
 <body>
@@ -176,43 +201,52 @@
     <div class="modifyWalk">
         <input type="hidden" id="walkId" th:value="${walkId}"/>
 
-        <div class="form-container">
+        <div class="form-container tw-grid tw-grid-cols-2 tw-gap-6 tw-mb-6">
             <!-- 첫 번째 필드 -->
-            <div class="form-item">
-                <label for="favoriteRoutes">즐겨찾기 경로</label>
-                <select id="favoriteRoutes">
+            <div class="form-item tw-flex tw-flex-col tw-gap-2">
+                <label for="favoriteRoutes" class="tw-text-lg tw-font-medium">즐겨찾기 경로</label>
+                <select id="favoriteRoutes" class="tw-rounded-md focus:tw-ring-2 focus:tw-ring-[#7DAF82] tw-text-center tw-border tw-input tw-h-[40px] tw-px-2 tw-transition-all tw-duration-300">
                     <option value="">즐겨찾기에서 선택</option>
                 </select>
             </div>
+
+            <!-- 버튼 그룹 (왼쪽) -->
+            <div class="route-buttons tw-flex tw-gap-2 tw-items-center tw-justify-start">
+                <button id="deleteLastPoint" >이전 루트</button>
+                <button id="restoreLastPoint" >루트 복구</button>
+            </div>
+
             <!-- 두 번째 필드 -->
-            <div class="form-item">
-                <label for="routeName">산책명</label>
-                <input type="text" id="routeName" th:value="${routeName}" />
-            </div>
-            <div class="form-item">
-                <label for="scheduleDate">산책 날짜</label>
-                <span id="scheduleDate" th:text="${purchaseDate}"></span>
+            <div class="form-item tw-flex tw-flex-col tw-gap-2">
+                <label for="routeName" class="tw-text-lg tw-font-medium">산책명</label>
+                <input type="text" id="routeName" class="tw-rounded-md focus:tw-ring-2 focus:tw-ring-[#7DAF82] tw-text-center tw-border tw-input tw-h-[40px] tw-px-2 tw-transition-all tw-duration-300" th:value="${routeName}" />
             </div>
 
-            <div class="form-item">
-                <label for="routedistance">산책 거리</label>
-                <span id="routedistance" th:text="${routedistance}"></span>
+            <!-- 버튼 (오른쪽) -->
+            <div class="reset-button tw-flex tw-items-center tw-justify-end">
+                <button id="resetMapButton" >초기화</button>
             </div>
 
+            <!-- 세 번째 필드 -->
+            <div class="form-item tw-flex tw-flex-col tw-gap-2 tw-col-span-2">
+                <label for="scheduleDate" class="tw-text-lg tw-font-medium">산책 날짜</label>
+                <span id="scheduleDate" class="tw-h-[40px] tw-flex tw-items-center tw-bg-white tw-border tw-border-gray-300 tw-rounded-md tw-px-2" th:text="${purchaseDate}"></span>
+            </div>
+
+            <!-- 네 번째 필드 -->
+            <div class="form-item tw-flex tw-flex-col tw-gap-2 tw-col-span-2">
+                <label for="routedistance" class="tw-text-lg tw-font-medium">산책 거리</label>
+                <span id="routedistance" class="tw-h-[40px] tw-flex tw-items-center tw-bg-white tw-border tw-border-gray-300 tw-rounded-md tw-px-2" th:text="${routedistance}"></span>
+            </div>
         </div>
 
 
         <div id="mapContainer" class="mapContainer"></div>
-
-        <div class="buttons">
-            <div class="routeButton">
-                <button id="deleteLastPoint">이전 루트</button>
-                <button id="restoreLastPoint">루트 복구</button>
-            </div>
-            <button id="resetMapButton">초기화</button>
-        </div>
+        <div style="margin-left: 10px; font-size: 10px;"># 위치정보 동의를 하지 않을시 기본 좌표가 서울로 고정됩니다.</div>
     </div>
+    <button id="goBackButton"  onclick="history.back()">뒤로가기</button>
     <button id="updateRouteButton">확인</button>
+
 </div>
 
 <script>
@@ -286,14 +320,30 @@
     }
 
     function loadRouteData() {
-        const routeName = document.getElementById('routeName').value; // 입력된 routeName
-        const purchaseDate = document.getElementById('scheduleDate').textContent; // 표시된 purchaseDate
-        const routedistance = document.getElementById('routedistance').textContent; // 표시된 routedistance
+        const routeName = document.getElementById('routeName').value.trim(); // 입력된 routeName
+        const purchaseDate = document.getElementById('scheduleDate').textContent.trim(); // 표시된 purchaseDate
+        const routedistanceElement = document.getElementById('routedistance'); // routedistance 요소
+        const routedistance = routedistanceElement.textContent.trim(); // 표시된 routedistance 값
+
+        // 입력값 검증
+        if (!routeName || !purchaseDate || !routedistance) {
+            alert("모든 데이터를 올바르게 입력했는지 확인해주세요.");
+            return;
+        }
 
         // REST API 호출
-        fetch(`/usr/walk/getRoutePicture?routeName=${encodeURIComponent(routeName)}&purchaseDate=${encodeURIComponent(purchaseDate)}&routedistance=${routedistance}`)
-            .then(response => response.json())
+        fetch(`/usr/walk/getRoutePicture?routeName=${encodeURIComponent(routeName)}&purchaseDate=${encodeURIComponent(purchaseDate)}&routedistance=${encodeURIComponent(routedistance)}`)
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+                return response.json();
+            })
             .then(data => {
+                if (!data.path) {
+                    alert("경로 데이터가 비어 있습니다.");
+                    return;
+                }
 
                 // `data.path`를 JSON으로 파싱
                 let pathData;
@@ -305,9 +355,8 @@
                     return;
                 }
 
-                // pathData가 배열인지 확인
-                if (!Array.isArray(pathData)) {
-                    console.error("path 데이터가 배열이 아닙니다:", pathData);
+                // pathData 유효성 확인
+                if (!Array.isArray(pathData) || pathData.length === 0) {
                     alert("경로 데이터가 유효하지 않습니다.");
                     return;
                 }
@@ -315,15 +364,12 @@
                 // LatLng로 변환
                 const waypoints = pathData.map(coord => new naver.maps.LatLng(coord.y, coord.x));
 
-                // 폴리라인 생성
-                if (polyline) {
-                    polyline.setMap(null);
-                }
-
-                // 기존 마커 제거
+                // 기존 폴리라인 및 마커 제거
+                if (polyline) polyline.setMap(null);
                 markers.forEach(marker => marker.setMap(null));
                 markers = [];
 
+                // 새 폴리라인 생성
                 polyline = new naver.maps.Polyline({
                     map: map,
                     path: waypoints,
@@ -332,24 +378,27 @@
                     strokeOpacity: 0.8
                 });
 
-                // 마커 생성
+                // 새 마커 생성
                 waypoints.forEach((point, index) => {
                     const marker = new naver.maps.Marker({
                         position: point,
                         map: map,
-                        title: `Point ${index + 1}` // 마커 제목 설정
+                        title: `Point ${index + 1}`
                     });
-                    markers.push(marker); // 마커 배열에 추가
+                    markers.push(marker);
                 });
-
 
                 // 맵 중심 설정
                 if (waypoints.length > 0) {
                     map.setCenter(waypoints[0]);
                 }
+
+                // routedistance 값에 'km' 추가
+                routedistanceElement.textContent = `${routedistance} km`;
             })
             .catch(error => {
                 console.error("경로 데이터를 불러오는 중 오류 발생:", error);
+                alert("경로 데이터를 불러오는 데 실패했습니다. 다시 시도해주세요.");
             });
     }
 
@@ -380,8 +429,11 @@
                         routeNameInput.value = selectedRoute.routeName;
                     }
 
-                    // 선택한 경로의 거리 값을 그대로 사용
-                    document.getElementById('routedistance').textContent = selectedRoute.routedistance;
+                    // 선택한 경로의 거리 값을 설정하고 'km' 추가
+                    const routedistanceElement = document.getElementById('routedistance');
+                    if (routedistanceElement) {
+                        routedistanceElement.textContent = `${selectedRoute.routedistance} km`;
+                    }
 
                     // 지도 경로 렌더링
                     const pathData = JSON.parse(selectedRoute.routePicture).path;
@@ -402,7 +454,6 @@
                         strokeOpacity: 0.6
                     });
 
-
                     // 마커 생성
                     waypoints.forEach((point, index) => {
                         const marker = new naver.maps.Marker({
@@ -413,7 +464,6 @@
                         markers.push(marker); // 마커 배열에 추가
                     });
 
-
                     if (waypoints.length > 0) {
                         map.setCenter(waypoints[0]);
                     }
@@ -423,6 +473,7 @@
                 console.error("즐겨찾기 데이터를 불러오는 중 오류 발생:", error);
             });
     }
+
 
 
     document.getElementById('updateRouteButton').addEventListener('click', function () {
@@ -531,7 +582,7 @@
         }
     });
     document.getElementById('resetMapButton').addEventListener('click', function (event) {
-        const userConfirmed = confirm('정말 초기화 하시겠습니까?');
+        const userConfirmed = confirm('⚠️ 경고: 초기화 후 작업은 되돌릴 수 없습니다.');
         if (!userConfirmed) {
             event.preventDefault(); // 이벤트 기본 동작 차단
             return; // 초기화 중단
