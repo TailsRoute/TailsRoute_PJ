@@ -14,10 +14,10 @@ import org.springframework.stereotype.Component;
 @Service
 public class ApiService {
 
-    @Value("${NAVER_CLIENT_ID}")
+    @Value("${ClientID}")
     private String clientId;
 
-    @Value("${NAVER_CLIENT_SECRET}")
+    @Value("${ClientSecret}")
     private String clientSecret;
 
 

@@ -39,49 +39,52 @@ function initMap1() {
         document.getElementById("clearPathButton").addEventListener("click", clearPath);
         // 경로 저장 버튼 클릭 이벤트 리스너
         document.getElementById("savePathButton").addEventListener("click", function () {
-            const routeName = document.getElementById("routeName").value;
-            const scheduleDate = document.getElementById("scheduleDate").textContent;
-            const routedistanceText = document.getElementById("routedistance").textContent; // "2.5 km"
-            const routedistance = parseFloat(routedistanceText.match(/[0-9.]+/)[0]);
-            // 입력값 검사
-            if (!routeName) {
-                alert("산책명을 적어주세요.");
-                return; // 값을 입력하지 않으면 함수 종료
-            }
-            if (isNaN(routedistance) || routedistance <= 0) {
-                alert("루트를 적어주세요.");
-                return; // 유효하지 않으면 함수 종료
-            }
-            const data = JSON.stringify({ path: waypoints }); // 경로 데이터를 문자열화
-            const walkData = {
-                memberId: w1memberId,
-                routeName: routeName,
-                purchaseDate: scheduleDate,
-                routePicture: data,
-                routedistance: routedistance,
-                isLiked: 0
-            };
-            // 서버로 경로 정보 전송
-            fetch('/usr/walk/create', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(walkData)
-            })
-                .then(response => {
-                    if (response.ok) {
-                        return response.text();
-                    }
-                    throw new Error('Network response was not ok.');
+            if (!savePathButton.hasListener) {
+                const routeName = document.getElementById("routeName").value;
+                const scheduleDate = document.getElementById("scheduleDate").textContent;
+                const routedistanceText = document.getElementById("routedistance").textContent; // "2.5 km"
+                const routedistance = parseFloat(routedistanceText.match(/[0-9.]+/)[0]);
+                // 입력값 검사
+                if (!routeName) {
+                    alert("산책명을 적어주세요.");
+                    return; // 값을 입력하지 않으면 함수 종료
+                }
+                if (isNaN(routedistance) || routedistance <= 0) {
+                    alert("루트를 적어주세요.");
+                    return; // 유효하지 않으면 함수 종료
+                }
+                const data = JSON.stringify({path: waypoints}); // 경로 데이터를 문자열화
+                const walkData = {
+                    memberId: w1memberId,
+                    routeName: routeName,
+                    purchaseDate: scheduleDate,
+                    routePicture: data,
+                    routedistance: routedistance,
+                    isLiked: 0
+                };
+                // 서버로 경로 정보 전송
+                fetch('/usr/walk/create', {
+                    method: 'POST',
+                    headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify(walkData)
                 })
-                .then(data => {
-                    console.log('성공:', data);
-                    alert('일정이 추가되었습니다.');
-                    window.location.href = "../walk/page";
-                })
-                .catch((error) => {
-                    console.error('실패:', error.message, error.stack);
-                    alert('일정 생성 중 오류가 발생했습니다.');
-                });
+                    .then(response => {
+                        if (response.ok) {
+                            return response.text();
+                        }
+                        throw new Error('Network response was not ok.');
+                    })
+                    .then(data => {
+                        console.log('성공:', data);
+                        alert('일정이 추가되었습니다.');
+                        window.location.href = "../walk/page";
+                    })
+                    .catch((error) => {
+                        console.error('실패:', error.message, error.stack);
+                        alert('일정 생성 중 오류가 발생했습니다.');
+                    });
+                savePathButton.hasListener = true;
+            }
         });
         document.getElementById("showlist").addEventListener("click", function () {
             const walkingSchedule = document.getElementById("WalkingSchedule");
