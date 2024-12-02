@@ -94,6 +94,9 @@ html,body {
     margin-left: 10px;
     padding-left: 10px;
     padding-right: 10px;
+    max-height: 560px;
+    overflow-x: hidden;
+    overflow-y: auto;
 }
 .WalkingTrail {
     margin-top: 10px;

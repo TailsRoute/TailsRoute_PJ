@@ -144,6 +144,7 @@ html,body {
 .product-image {
     width: auto; /* 너비는 자동으로 비율에 맞게 조정 */
     height: 150px; /* 높이를 150px로 설정 */
+    padding-top: 5px;
 }
 
 /* 결과 리스트 스타일 */
@@ -160,10 +161,22 @@ html,body {
 
 /* 리스트 항목 스타일 */
 .product-item {
-    padding: 10px; /* 내부 여백 설정 */
+    padding-top: 10px; /* 내부 여백 설정 */
     border-bottom: 1px solid #ccc; /* 항목 사이에 선 추가 */
     display: flex; /* Flexbox 사용 */
     align-items: center; /* 세로 중앙 정렬 */
+    margin-top: -15px;
+}
+
+.product-category {
+    padding-left: 3px;
+    padding-right: 3px;
+    display: inline-grid;
+    text-align: center;
+    border: 1px solid #DADADA;
+    border-radius: 10px;
+    margin-left: 10px;
+    margin-right: 10px;
 }
 
 /* 마지막 항목에서 하단 선 제거 */
@@ -184,8 +197,9 @@ html,body {
 
 /* 가격 스타일 */
 .product-price {
+    padding-left: 10px;
     font-size: 1.5em; /* 글자 크기를 H3 정도로 설정 (약 1.5em) */
-    margin: 0; /* 기본 마진 제거 */
+    margin-top: -30px;
 }
 
 /* 페이지네이션 스타일 */
