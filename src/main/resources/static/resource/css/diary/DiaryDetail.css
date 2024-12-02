@@ -12,7 +12,7 @@ html,body {
 
 /* 컨테이너 스타일 */
 .container {
-    max-width: 800px;
+    max-width: 1440px;
     margin: 100px auto;
     padding: 24px;
     background-color: #FFF9E6;
@@ -67,7 +67,7 @@ html,body {
 }
 
 .image {
-    width: 500px;
+    width: 600px;
     height: auto;
     border-radius: 8px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);

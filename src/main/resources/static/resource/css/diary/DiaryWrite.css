@@ -2,6 +2,20 @@ html,body {
     background-color: #f9f5eb !important;
     color: #4D3E3E;
 }
+#title{
+    box-shadow: none !important;
+}
+input, select, textarea {
+    border: 2px solid #ccc; /* 점선 테두리 */
+    border-radius: 5px; /* 모서리 둥글게 */
+    padding-left: 10px; /* 왼쪽 여백 10px 추가 */
+    background: #ffffff;
+    transition: border-color 0.3s ease, box-shadow 0.3s ease; /* 전환 효과 */
+}
+input:focus, select:focus, textarea:focus {
+    outline: none;
+    box-shadow: 0 0 0 2px #7DAF82;
+}
 .input-hidden {
     background-color: transparent; /* 배경색 투명 */
     border: none; /* 테두리 없음 */
@@ -14,9 +28,7 @@ html,body {
     font-weight: bold;
     margin-bottom: 10px;
     margin-top: 10px;
-    font-family: 'Nunito', sans-serif;
 }
-
 .upload-container {
     background-color: white; /* 배경색 흰색 */
     border: 1px solid #ccc; /* 테두리 */
@@ -28,35 +40,21 @@ html,body {
     margin: auto; /* 중앙 정렬 */
     overflow: hidden; /* 컨테이너 밖의 내용 숨기기 */
 }
-
 .preview {
     position: relative; /* 부모 컨테이너를 상대적으로 설정 */
     width: 100%; /* 컨테이너 너비를 100%로 설정 */
     height: 100%; /* 컨테이너 높이를 100%로 설정 */
 }
-
-#imagePreview {
-    position: absolute; /* 이미지가 부모 컨테이너를 꽉 채우도록 설정 */
-    top: 50%; /* 상단 중앙 위치 */
-    left: 50%; /* 좌측 중앙 위치 */
-    width: auto; /* 너비 자동 설정 */
-    height: 100%; /* 높이는 100%로 설정 */
-    transform: translate(-50%, -50%); /* 중앙 정렬 */
-    object-fit: cover; /* 비율 유지하며 꽉 차게 설정 */
-}
 #fileInput {
     margin-bottom: 10px; /* 아래쪽 여백 */
 }
-
 .fileInput-text {
     margin-top: 10px; /* 위쪽 여백 */
     color: #888; /* 텍스트 색상 */
 }
-
 #time {
     margin-left: 16px; /* 왼쪽 여백 */
 }
-
 #body, #information {
     height: 100px; /* 고정된 높이 */
     width: 1500px; /* 고정된 너비 */
@@ -68,13 +66,10 @@ html,body {
     white-space: normal; /* 공백과 줄바꿈을 허용 */
     display: block; /* 블록 요소로 설정 */
 }
-
-
 .textarea-container {
     display: flex; /* Flexbox로 설정 */
     justify-content: center; /* 수평 중앙 정렬 */
 }
-
 .medicine {
     display: flex; /* Flexbox로 설정 */
     flex-direction: column; /* 수직 정렬 */
@@ -96,19 +91,14 @@ html,body {
     display: inline;
     margin-right: 1312px;
 }
-
-
 .medicine > div {
     margin-bottom: 10px; /* 아래쪽 여백 */
     margin-top: 10px; /* 위쪽 여백 */
 }
-
-
 #SubmitButton {
     padding-left: 50px; /* 왼쪽 패딩 */
     padding-right: 50px; /* 오른쪽 패딩 */
 }
-
 .hidden {
     display: none; /* 미리보기가 숨겨질 때 사용 */
 }
@@ -116,7 +106,6 @@ html,body {
     display: block;
     width: 50px;
     height: 50px;
-
 }
 .header{
     display: block;
@@ -135,20 +124,6 @@ html,body {
     border: none; /* 테두리 제거 */
     cursor: pointer; /* 포인터 커서 */
 }
-
- .remove-btn{
-     background-color: #FF6F61; /* 따뜻한 배경색 */
-     color: white; /* 텍스트 색상 */
-     font-weight: bold; /* 폰트 굵기 */
-     padding: 10px 20px; /* 버튼 패딩 */
-     border-radius: 8px; /* 둥근 모서리 */
-     transition: background-color 0.3s ease; /* 배경색 변화 애니메이션 */
-     border: none; /* 테두리 제거 */
-     cursor: pointer; /* 포인터 커서 */
-     margin-top: 10px;
-     margin-right: 10px;
- }
-
 /* 호버 스타일 */
 #fileBtn:hover {
     background-color: #5c8d6d; /* 호버 시 배경색 */
@@ -164,9 +139,7 @@ html,body {
     border: none; /* 테두리 제거 */
     cursor: pointer; /* 포인터 커서 */
     font-weight: bold; /* 폰트 굵기 */
-
 }
-
 .historyBack{
     background-color: #3A3A3A; /* 따뜻한 배경색 */
     color: white;
@@ -182,15 +155,11 @@ html,body {
     margin-bottom: 8px;
     margin-left: 15px;
 }
-
-
 #SubmitButton:hover{
     background-color: #5c8d6d; /* 호버 시 배경색 */
     transform: translateY(-2px);
-
 }
 .historyBack:hover {
     background-color: #2E2E2E;; /* 호버 시 배경색 */
     transform: translateY(-2px);
 }
-
