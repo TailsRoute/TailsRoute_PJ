@@ -38,9 +38,9 @@ public class UsrHospitalController {
     private String GOOGLE_MAP_ID;
 
     // 루트 디렉토리에 있는 .env 파일에서 API 키 불러옴
-    @Value("${NAVER_MAP_CLIENT_ID}")
+    @Value("${NAVER_API}")
     private String naver_clientId; // 네이버 클라이언트 ID
-    @Value("${NAVER_MAP_CLIENT_SECRET}")
+    @Value("${NAVER_SECRET}")
     private String naver_clientSecret;  // 네이버 클라이언트 Secret
 
     @Autowired

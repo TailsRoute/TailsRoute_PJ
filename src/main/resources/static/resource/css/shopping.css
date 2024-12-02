@@ -142,7 +142,7 @@ html,body {
 
 /* 이미지 크기를 150px로 설정 */
 .product-image {
-    width: auto; /* 너비는 자동으로 비율에 맞게 조정 */
+    width: 145px; /* 너비는 자동으로 비율에 맞게 조정 */
     height: 150px; /* 높이를 150px로 설정 */
     padding-top: 5px;
 }

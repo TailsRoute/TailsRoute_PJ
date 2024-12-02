@@ -17,9 +17,6 @@ import java.util.Map;
 @RestController
 public class DirectionsController {
 
-    @Value("${OPENROUTESERVICE_API_KEY}")
-    private String openRouteServiceApiKey;
-
     @Value("${NAVER_API}")
     private String apiKeyId;  // 네이버 API Key ID
 
@@ -125,26 +122,5 @@ public class DirectionsController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
                     .body("Failed to fetch route: " + e.getMessage());
         }
-    }
-    @GetMapping("/get-directions")
-    public ResponseEntity<String> getDirections(
-            @RequestParam double startLat,
-            @RequestParam double startLng,
-            @RequestParam double endLat,
-            @RequestParam double endLng) {
-        // OpenRouteService의 foot-walking 경로를 위한 URL 구성
-        String url = UriComponentsBuilder.fromHttpUrl("https://api.openrouteservice.org/v2/directions/foot-walking")
-                .queryParam("start", startLng + "," + startLat)  // 경도, 위도 순서
-                .queryParam("end", endLng + "," + endLat)      // 경도, 위도 순서
-                .toUriString();
-        // 요청 헤더에 API 키 추가
-        HttpHeaders headers = new HttpHeaders();
-        headers.set("Authorization", openRouteServiceApiKey);
-        // RestTemplate을 사용하여 OpenRouteService API 호출
-        RestTemplate restTemplate = new RestTemplate();
-        HttpEntity<String> entity = new HttpEntity<>(headers);
-        ResponseEntity<String> response = restTemplate.exchange(url, HttpMethod.GET, entity, String.class);
-        // 결과 반환
-        return ResponseEntity.ok(response.getBody());
     }
 }
