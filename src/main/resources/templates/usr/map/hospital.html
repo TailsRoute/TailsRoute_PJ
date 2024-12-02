@@ -7,7 +7,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href="/resource/dist/styles.css" th:href="@{/resource/dist/styles.css}" rel="stylesheet">
     <link rel="stylesheet" href="/resource/css/hospital.css"/>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/2.1.4/tailwind.min.css">
 </head>
 <body>
 
@@ -17,16 +16,16 @@
 </script>
 
 <!-- 상단 고정 top-bar -->
-<div id="top-bar" class="w-full text-white flex items-center justify-center" style="height: 60px;">
-    <span class="text-lg font-semibold">Top Bar</span>
+<div id="top-bar" class="tw-w-full tw-text-white tw-flex tw-items-center tw-justify-center" style="height: 60px;">
+    <span class="tw-text-lg tw-font-semibold">Top Bar</span>
 </div>
 
 <!-- 전체 레이아웃 컨테이너 -->
-<div class="flex-grow" style="height: calc(100vh - 60px);">
+<div class="tw-flex-grow" style="height: calc(100vh - 60px);">
     <!-- 내부 레이아웃 컨테이너: 지도 영역 -->
-    <div class="w-full h-full">
+    <div class="tw-w-full tw-h-full">
         <!-- 지도 영역 -->
-        <div class="bg-gray-200 flex items-center justify-center" style="height: 100%">
+        <div class="tw-bg-gray-200 tw-flex tw-items-center tw-justify-center" style="height: 100%">
             <div id="hospital-map" style="width: 100%; height: 100%;"></div>
         </div>
     </div>
@@ -35,27 +34,27 @@
 <!-- 사이드바 -->
 <div id="hospital-sidebar">
     <!-- 헤더에 가려지지 않도록 공간을 확보하는 역할 -->
-    <div class="tw-bg-blue-500 w-full text-white flex items-center justify-center" style="height: 60px;"></div>
-    <div class="hospital-search-container p-4">
+    <div class="tw-bg-blue-500 tw-w-full tw-text-white tw-flex tw-items-center tw-justify-center" style="height: 60px;"></div>
+    <div class="hospital-search-container tw-p-4">
         <!-- 지역별 검색 -->
-        <div class="mb-4">
-            <div class="flex space-x-4">
-                <h2 class="text-xl font-semibold mb-4">지역별 동물병원 검색</h2>
+        <div class="tw-mb-4">
+            <div class="tw-flex">
+                <h2 class="tw-text-xl tw-font-semibold tw-mb-4">지역별 동물병원 검색</h2>
             </div>
-            <div class="flex space-x-4">
-                <div class="flex items-center space-x-2">
+            <div class="tw-flex ">
+                <div class="tw-flex tw-items-center margin-right">
                     <select id="city-select" onchange="loadCounties()"
-                            class="p-2 border border-gray-300 rounded bg-white">
+                            class="tw-p-2 tw-border tw-border-gray-300 tw-rounded-lg tw-bg-white">
                         <option value="">시/도 선택</option>
                     </select>
                 </div>
-                <div class="flex items-center space-x-2">
-                    <select id="county-select" class="p-2 border border-gray-300 rounded bg-white">
+                <div class="tw-flex tw-items-center  margin-right">
+                    <select id="county-select" class="tw-p-2 tw-border tw-border-gray-300 tw-rounded-lg tw-bg-white">
                         <option value="">시/군/구 선택</option>
                     </select>
                 </div>
                 <div>
-                    <button id="hospital-search-button" class="border rounded">
+                    <button id="hospital-search-button" class="tw-border tw-rounded-lg  margin-left">
                         검색
                     </button>
                 </div>
@@ -63,8 +62,8 @@
         </div>
 
         <!-- 24시간 병원만 보기 토글 -->
-        <div class="mb-4 flex items-center space-x-4 justify-end">
-            <label class="flex items-center space-x-2">
+        <div class="tw-mb-4 tw-flex tw-items-center tw-space-x-4 tw-justify-end">
+            <label class="tw-flex tw-items-center tw-space-x-2">
                 <input role="switch" type="checkbox"/>
                 <span>24시간 병원만 보기</span>
             </label>
@@ -72,7 +71,7 @@
     </div>
     <div class="hospital-results-container">
         <ul>
-            <div class="text-gray-500 p-4">검색 결과가 없습니다.</div>
+            <div class="tw-text-gray-500 tw-p-4">검색 결과가 없습니다.</div>
             <!-- 병원 리스트 항목 -->
             <!--            <li class="mb-4 border-b pb-4">-->
             <!--                <p class="font-semibold">오아시스 정형외과 신경외과 동물병원</p>-->
