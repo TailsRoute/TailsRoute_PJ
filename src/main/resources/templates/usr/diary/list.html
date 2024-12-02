@@ -3,8 +3,7 @@
 </div>
 <!DOCTYPE html>
 <html lang="en">
-<!--테일윈드 적용-->
-<link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+
 <!--켈린더.js 사용경로적용-->
 <script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.15/index.global.min.js"></script>
 <!--리스트 css 경로적용-->
@@ -18,23 +17,24 @@
 
 <body>
 <!-- 페이지 명 -->
-<div class="tw-pb-[30px] pt-12">
+<div class="tw-pb-[30px] tw-pt-12">
     <div class="tw-text-center tw-text-[50px] tw-p-[20px] tw-border-b-2 tw-border-[#DADADA] tw-max-w-[1440px] tw-mx-auto">
         반려견 성장일지
     </div>
 
     <!-- 메인컨테이너-->
-    <section class="container pt-20 mx-auto flex flex-col justify-between h-screen">
+    <section class="tw-container tw-pt-20 tw-mx-auto tw-flex tw-flex-col tw-justify-between tw-h-screen">
         <!-- 필터 -->
         <form action="list" method="get" id="sortForm">
             <script src="/resource/js/diary/DiaryList.js"></script>
 
-            <input id="keywordInput" class="searchBox w-full py-1 pl-10 pr-4 text-black rounded-lg focus:outline-none "
+            <input id="keywordInput"
+                   class="searchBox tw-w-full tw-py-1 tw-pl-4 tw-pr-4 tw-text-center tw-text-black tw-rounded-lg focus:tw-outline-none"
                    type="text"
                    name="keyword" th:value="${keyword}" placeholder="검색">
             <button id="searchButton" type="submit">
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" fill="currentColor"
-                     class="h-5 w-5 text-gray-600">
+                     class="tw-h-5 tw-w-5 tw-text-gray-600">
                     <path fill-rule="evenodd"
                           d="M9.965 11.026a5 5 0 1 1 1.06-1.06l2.755 2.754a.75.75 0 1 1-1.06 1.06l-2.755-2.754ZM10.5 7a3.5 3.5 0 1 1-7 0 3.5 3.5 0 0 1 7 0Z"
                           clip-rule="evenodd"/>
@@ -48,7 +48,7 @@
             </select>
         </form>
 
-        <div class="flex flex-grow justify-center items-start space-x-20">
+        <div class="tw-flex tw-flex-grow tw-justify-center tw-items-start tw-space-x-20">
 
             <label for="calendar">일생기록 달력
                 <!-- 켈린더 -->
@@ -58,23 +58,24 @@
 
             <label for="diaryList">일생기록 리스트
                 <!-- 기록 리스트 페이지-->
-                <div id="diaryList" class="diaryList flex flex-col w-full">
-                    <table class="min-w-full table-auto">
+                <div id="diaryList" class="diaryList tw-flex tw-flex-col tw-w-full">
+                    <table class="tw-min-w-full tw-table-auto">
 
                         <thead class="listType">
-                        <th class="py-4 ">날짜</th>
+                        <th class="tw-py-4">날짜</th>
                         <th>제목</th>
                         </thead>
                         <tbody th:each="diary : ${diaries}">
-                        <td class="pl-15 py-2  py-4 w-[150px] text-center  whitespace-nowrap " style="color:#3A3A3A"
+                        <td class="tw-pl-15 tw-py-4 tw-w-[150px] tw-text-center tw-whitespace-nowrap"
+                            style="color:#3A3A3A"
                             th:text="${diary.regDate}">작성일
                         </td>
-                        <td class="pr-20 py-2 text-center hover:underline " style="color:#3A3A3A;">
+                        <td class="tw-pr-20 tw-py-2 tw-text-center hover:tw-underline" style="color:#3A3A3A;">
                             <a th:href="@{/usr/diary/detail(id=${diary.id})}" th:text="${diary.title}">제목</a>
                         </td>
                         </tbody>
                     </table>
-                    <div class="pagination ">
+                    <div class="pagination">
     <span th:if="${totalPages == 0}">
         <span>1</span> <!-- 데이터가 없을 때 1만 표시 -->
     </span>
@@ -126,10 +127,9 @@
         </label>
 
         <button id="writeButton" onclick="window.location.href='/usr/diary/write'"
-                class="px-4 py-2     text-white font-semibold rounded mt-4">
+                class="tw-px-4 tw-py-2 tw-text-white tw-font-semibold tw-rounded tw-mt-4">
             새 글 작성
         </button>
     </section>
-
 </body>
 </html>
