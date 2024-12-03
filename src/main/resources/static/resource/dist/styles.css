@@ -799,6 +799,10 @@ html {
   }
 }
 
+.tw-lh-\[1\]{
+  line-height: 1;
+}
+
 .tw-btn {
   display: inline-flex;
   height: 3rem;
