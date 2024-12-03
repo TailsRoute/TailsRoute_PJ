@@ -1,52 +1,36 @@
 
-:root {
-    --background-color: #FAF3E0;
-    --card-background: #FFFFFF;
-    --banner-color: #FDEDD0;
-    --text-color: #3A3A3A;
-    --header-color: #4B5D67;
-    --button-color: #7DAF82;
-    --button-hover-color: #5C8D6D;
-    --link-hover-color: #FF6F61;
-}
-
 /* 기본 설정 */
 body {
-    background-color: var(--background-color);
-    font-family: 'Arial', sans-serif;
+    background-color: #f9f5eb;
     margin: 0;
     padding: 0;
-    color: var(--text-color);
-    display: flex;
-    flex-direction: column;
-    align-items: center;
+    color: #4D3E3E;
     min-height: 100vh;
 }
 
 /* 메인 컨테이너 */
 .container {
-    width: 90%;
-    max-width: 700px;
-    background-color: var(--card-background);
+    width: 1440px;
+    background-color: #f9f5eb;
     border-radius: 12px;
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
     padding: 30px 20px;
+
     margin: 30px 0;
 }
 
 /* 헤더 스타일 */
-h1 {
+.title {
     text-align: center;
-    color: var(--header-color);
-    font-size: 24px;
-    margin-bottom: 20px;
+    color: #4D3E3E;
 }
 
 h2 {
-    color: var(--header-color);
+    color: #4D3E3E;
     text-align: center;
     font-size: 20px;
     margin-bottom: 10px;
+    margin-top: 10px;
 }
 
 /* 업로드 폼 */
@@ -57,28 +41,74 @@ form {
     gap: 20px;
 }
 
+/* Flexbox로 가로 정렬 */
+.form-row {
+    display: flex;
+    align-items: center; /* 수직 가운데 정렬 */
+    gap: 20px; /* 요소 간 간격 */
+}
+
+.form-row label {
+    font-size: 16px;
+    font-weight: bold;
+    color: #4D3E3E;
+    white-space: nowrap; /* 텍스트 줄바꿈 방지 */
+}
+
+.form-row input[type="file"] {
+    flex-grow: 1; /* 파일 선택 필드가 가능한 공간을 차지 */
+    padding: 10px;
+    border: 2px dashed #7DAF82;
+    border-radius: 8px;
+    background-color: rgba(125, 175, 130, 0.1);
+    font-size: 14px;
+    cursor: pointer;
+    transition: background-color 0.3s, border-color 0.3s;
+}
+
+.form-row input[type="file"]:hover {
+    border-color: #5C8D6D;
+    background-color: rgba(92, 141, 109, 0.1);
+}
+
+.form-row button {
+    background-color: #7DAF82;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 8px;
+    font-size: 14px;
+    cursor: pointer;
+    transition: background-color 0.3s, transform 0.2s;
+}
+
+.form-row button:hover {
+    background-color: #5C8D6D;
+    transform: translateY(-2px);
+}
+
 label {
     font-size: 16px;
     font-weight: bold;
-    color: var(--text-color);
+    color: #4D3E3E;
 }
 
 input[type="file"] {
     width: 100%;
     max-width: 400px;
     padding: 12px;
-    border: 2px dashed var(--button-color);
+    border: 2px dashed #7DAF82;
     border-radius: 8px;
     cursor: pointer;
     transition: border-color 0.3s ease;
 }
 
 input[type="file"]:hover {
-    border-color: var(--button-hover-color);
+    border-color: #5C8D6D;
 }
 
 button {
-    background-color: var(--button-color);
+    background-color: #7DAF82;
     color: #FFFFFF;
     border: none;
     padding: 12px 24px;
@@ -90,45 +120,143 @@ button {
 }
 
 button:hover {
-    background-color: var(--button-hover-color);
+    background-color: #5C8D6D;
 }
 
 /* 분석 결과 */
 .result {
     margin-top: 30px;
     padding: 20px;
-    background-color: var(--banner-color);
+    background-color: #FDEDD0;
     border-radius: 10px;
     box-shadow: inset 0 2px 6px rgba(0, 0, 0, 0.1);
 }
 
 pre {
     font-size: 14px;
-    color: var(--text-color);
+    color: #4D3E3E;
     line-height: 1.5;
 }
 
-/* 푸터 */
-footer {
-    text-align: center;
-    margin-top: auto;
-    padding: 20px 0;
-    font-size: 14px;
-    color: var(--text-color);
-}
-
-footer a {
-    color: var(--button-color);
-    text-decoration: none;
-    font-weight: bold;
-    transition: color 0.3s ease;
-}
-
-footer a:hover {
-    color: var(--link-hover-color);
-}
 
 #videoPreview {
     max-width: 100%;
     display: none; /* 기본적으로 숨김 */
+}
+
+#upload-container {
+    display: flex;
+    align-items: center;
+}
+
+.form-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+/* 업로드 버튼 스타일 */
+.custom-upload-box {
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    width: 500px;
+    height: 80px;
+    background: #FFFFFF; /* 흰색 배경 */
+    box-shadow: 0px 3px 8px rgba(0, 0, 0, 0.15);
+    border-radius: 20px;
+    padding: 20px;
+    transition: transform 0.3s ease, box-shadow 0.3s ease, background 0.5s ease;
+    position: relative;
+}
+
+/* 아이콘 및 텍스트 */
+.custom-upload-box .svg {
+    margin-right: 20px;
+    transform: scale(1);
+    transition: transform 0.3s ease;
+}
+
+.custom-upload-box .text {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    transform: translateY(0); /* 초기 위치 */
+    transition: transform 0.3s ease;
+}
+
+/* 텍스트 색상 */
+.custom-upload-box .text .title {
+    font-weight: bold;
+    font-size: 20px;
+    color: #4D3E3E;
+}
+
+.custom-upload-box .text span {
+    font-size: 14px;
+    color: #4D3E3E;
+}
+
+/* 점 스타일 */
+.custom-upload-box .dots {
+    margin-left: auto;
+    display: flex;
+    gap: 5px;
+}
+
+.custom-upload-box .dots div {
+    width: 8px;
+    height: 8px;
+    background: #7DAF82; /* 점 색상 */
+    border-radius: 50%;
+    animation: bounce 1.2s infinite ease-in-out; /* 점 애니메이션 */
+}
+
+/* 점 애니메이션 */
+@keyframes bounce {
+    0%, 80%, 100% {
+        transform: scale(1);
+    }
+    50% {
+        transform: scale(1.5);
+    }
+}
+
+/* 호버 효과 */
+.custom-upload-box:hover {
+    transform: translateY(-5px);
+    box-shadow: 0px 6px 12px rgba(0, 0, 0, 0.2), 0 0 20px rgba(180, 180, 180, 0.8); /* 부드러운 회색 글로우 효과 */
+}
+
+/* 배경 효과 (호버 시 강조) */
+.custom-upload-box:hover::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    border-radius: 20px;
+    z-index: -1;
+    opacity: 1;
+    transition: opacity 0.3s ease;
+}
+
+/* 버튼 스타일 */
+button {
+    background-color: #7DAF82;
+    color: #FFFFFF;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 8px;
+    font-size: 20px;
+    height: 65px;
+    font-weight: bold;
+    transition: background-color 0.3s ease, transform 0.2s;
+}
+
+button:hover {
+    background-color: #5C8D6D;
+    transform: translateY(-2px);
 }

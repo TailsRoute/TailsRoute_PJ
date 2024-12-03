@@ -4,6 +4,7 @@ import com.project.tailsroute.service.BehaviorService;
 import com.project.tailsroute.vo.Member;
 import com.project.tailsroute.vo.Rq;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -44,6 +45,9 @@ public class BehaviorController {
         model.addAttribute("result", null);
         return "usr/behaviorAnalysis/videoAnalysis";
     }
+
+    @Value("${file.upload-dir}") // application.properties에 정의
+    private String uploadDir;
 
     // 비디오 업로드 및 분석 요청 처리
     @PostMapping("/videoAnalysis")

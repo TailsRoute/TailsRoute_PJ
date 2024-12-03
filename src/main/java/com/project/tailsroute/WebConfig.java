@@ -10,12 +10,14 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 @Configuration
 public class WebConfig implements WebMvcConfigurer {
-
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
         // "/uploads/**" 경로를 "file:uploads/" 디렉토리로 매핑
         registry.addResourceHandler("/uploads/**")
                 .addResourceLocations("file:uploads/");
+
+        registry.addResourceHandler("/uploaded_videos/**")
+                .addResourceLocations("file:uploaded_videos/");
     }
 
     @Override

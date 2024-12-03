@@ -1,14 +1,16 @@
+
 html{
     background: #f9f5eb !important;
+    color: #4D3E3E;
 }
 
 body {
     margin: 0;
     padding: 0;
-    font-family: 'Arial', sans-serif;
     display: flex;
     flex-direction: column;
     height: 100vh;
+    color: #4D3E3E;
 }
 
 /* 중앙 텍스트 */
@@ -55,7 +57,6 @@ body {
 .form-group label {
     flex: 0 0 100px;
     font-size: 16px;
-    color: #3A3A3A;
 }
 
 .form-group input {
@@ -77,7 +78,6 @@ body {
 
 .form-group-checkbox {
     font-size: 14px;
-    color: #3A3A3A;
     margin-bottom: 16px;
 }
 
@@ -85,6 +85,12 @@ body {
     color: #7DAF82;
     text-decoration: underline;
 }
+
+#Id, #loginPw {
+    background-color: #FFFFFF;
+}
+
+
 
 .login-button {
     width: 100%;
@@ -172,3 +178,4 @@ body {
     min-width: 80px;
     text-align: center;
 }
+

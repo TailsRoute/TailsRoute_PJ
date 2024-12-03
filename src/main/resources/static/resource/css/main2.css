@@ -1,7 +1,13 @@
+
 /*changeMain css*/
 
 .custom-card {
     border-radius: 300px 30px 30px 30px; /* 왼쪽 위를 더 크게 둥글게 */
+}
+
+
+#loginId, #loginPw{
+    background-color: #FFFFFF;
 }
 
 .scroll-downs {
