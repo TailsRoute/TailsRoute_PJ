@@ -11,7 +11,7 @@
 <body>
 <!-- 로그인 타이틀 -->
 <header class="tw-pt-16 tw-text-center tw-bg-transparent tw-mt-5">
-    <h4 class="tw-text-4xl tw-font-bold tw-text-[#3A3A3A]">로그인</h4>
+    <h4 class="tw-text-center tw-text-[50px] tw-font-bold" style="font-family: 'Cafe24Ssurround', sans-serif;">로그인</h4>
 </header>
 
 <!-- 메인 콘텐츠 -->
@@ -22,11 +22,11 @@
         <section class="tw-flex-1 tw-px-6 tw-py-8 lg:tw-p-12">
             <form class="login-form tw-space-y-6" action="/usr/member/doLogin" method="POST" name="Login">
                 <!-- 타이틀 -->
-                <h5 class="tw-text-2xl tw-font-bold tw-text-gray-800 tw-mb-4">회원 로그인</h5>
+                <h5 class="tw-text-2xl tw-font-bold tw-mb-4">회원 로그인</h5>
 
                 <!-- 아이디 -->
                 <div class="tw-form-control">
-                    <label class="tw-block tw-text-sm tw-font-medium tw-text-gray-600">아이디</label>
+                    <label class="tw-block tw-text-sm tw-font-medium">아이디</label>
                     <input id="loginId" type="text" placeholder="아이디"
                            class="tw-input tw-w-full tw-border tw-rounded-md focus:tw-ring-2 focus:tw-ring-[#7DAF82] tw-px-4 tw-py-2"
                            name="loginId" required />
@@ -34,7 +34,7 @@
 
                 <!-- 비밀번호 -->
                 <div class="tw-form-control">
-                    <label class="tw-block tw-text-sm tw-font-medium tw-text-gray-600">비밀번호</label>
+                    <label class="tw-block tw-text-sm tw-font-medium">비밀번호</label>
                     <input id="loginPw" type="password" placeholder="비밀번호"
                            class="tw-input tw-w-full tw-border tw-rounded-md focus:tw-ring-2 focus:tw-ring-[#7DAF82] tw-px-4 tw-py-2"
                            name="loginPw" required />
@@ -46,9 +46,12 @@
                     로그인
                 </button>
 
-                <!-- 아이디/비밀번호 찾기 -->
-                <div class="tw-flex tw-justify-end tw-items-end tw-mt-4">
-                    <a href="/usr/member/find" class="tw-text-sm tw-text-gray-500 hover:tw-text-[#7DAF82]">아이디 찾기 / 비밀번호 찾기</a>
+
+                <div class="tw-flex tw-justify-between tw-items-end tw-mt-4">
+                    <!--회원가입-->
+                    <a href="/usr/member/join" class="tw-text-sm hover:tw-text-[#7DAF82]">회원가입</a>
+                    <!-- 아이디/비밀번호 찾기 -->
+                    <a href="/usr/member/find" class="tw-text-sm hover:tw-text-[#7DAF82]">아이디 찾기 / 비밀번호 찾기</a>
                 </div>
             </form>
         </section>
@@ -61,7 +64,7 @@
         <!-- 소셜 로그인 -->
         <section class="tw-flex-1 tw-flex tw-flex-col tw-justify-center tw-px-6 tw-py-8 lg:tw-p-12">
             <div class="tw-space-y-4 tw-max-w-md tw-mx-auto">
-                <h5 class="tw-text-2xl tw-font-bold tw-text-gray-800 tw-mb-4 text-center">소셜 계정으로 로그인</h5>
+                <h5 class="tw-text-2xl tw-font-bold tw-mb-4 text-center">소셜 계정으로 로그인</h5>
                 <button class="social-button kakao tw-btn tw-btn-outline tw-w-full hover:tw-text-white tw-py-2" onclick="window.location.href='/usr/member/kakao-login';">
                     카카오 계정으로 로그인
                 </button>

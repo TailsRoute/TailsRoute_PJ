@@ -42,30 +42,62 @@
 
 
 <body>
-<div class="container">
-    <!-- 헤더 -->
-    <h1>비디오 업로드 및 분석</h1>
-
-    <!-- 업로드 폼 -->
-    <form action="/usr/behaviorAnalysis/videoAnalysis" method="post" enctype="multipart/form-data" id="uploadForm">
-        <label for="video">비디오 파일 선택:</label>
-        <input type="file" id="video" name="file" accept="video/*" required>
-        <button type="submit">업로드 및 분석</button>
-    </form>
-
-    <!-- 비디오 미리보기 -->
-    <div class="preview">
-        <h2>비디오 미리보기</h2>
-        <video id="videoPreview" controls style="max-width: 100%;" th:src="${videoPath != null} ? ${videoPath}:''"></video>
+<div class="tw-h-[60px]"></div>
+<div class="tw-pb-[30px]">
+    <div class="tw-text-center tw-text-[50px] tw-p-[20px] tw-border-b-2 tw-border-[#DADADA] tw-max-w-[1440px] tw-mx-auto"
+         style="font-family: 'Cafe24Ssurround', sans-serif;">
+        반려견 행동분석
     </div>
+</div>
+<div class="tw-flex tw-items-center tw-justify-center">
+    <div class="container">
+        <!-- 헤더 -->
+        <div class="title tw-font-bold tw-text-4xl tw-pb-[20px]">비디오 업로드 및 분석</div>
+        <div id="uploadFormContainer">
+            <!-- 업로드 폼 -->
+            <form action="/usr/behaviorAnalysis/videoAnalysis" method="post" enctype="multipart/form-data"
+                  id="uploadForm">
+                <div class="upload-container">
+                    <div class="form-row">
+                        <!-- 업로드 버튼 대신하는 label -->
+                        <label for="video" class="custom-upload-box">
+                            <div class="svg">
+                                <svg width="40" height="40" viewBox="0 0 66 57" fill="none"
+                                     xmlns="http://www.w3.org/2000/svg">
+                                    <path d="M2.70977 0H19.4194C20.2733 0 21.0742 0.402215 21.5857 1.08315L25.3821 6.14266C25.8937 6.82361 26.6946 7.22581 27.5484 7.22581H62.3226C63.8185 7.22581 65.0323 8.43956 65.0323 9.93548V53.2903C65.0323 54.7862 63.8185 56 62.3226 56H2.70968C1.21376 56 0 54.7862 0 53.2903V2.70968C0 1.21375 1.21385 0 2.70977 0Z"
+                                          fill="#7DAF82"/>
+                                    </path>
+                                </svg>
+                            </div>
+                            <div class="text">
+                                <p class="title">Upload a video of your dog</p>
+                            </div>
+                        </label>
+                        <!-- 숨겨진 파일 입력 -->
+                        <input type="file" id="video" name="file" accept="video/*" required style="display: none;">
+                        <!-- 분석 시작 버튼 -->
+                        <button type="submit">SUBMIT</button>
+                    </div>
+                </div>
+            </form>
+        </div>
 
-    <!-- 분석 결과 -->
-    <div class="result">
-        <h2>분석 결과</h2>
-        <!-- 분석 결과가 있으면 표시 -->
-        <pre th:if="${result != null}" th:text="${result}">결과를 가져오는 중...</pre>
-        <!-- 분석 결과가 없으면 기본 메시지 표시 -->
-        <p th:if="${result == null}">분석 결과가 없습니다.</p>
+
+        <!-- 비디오 미리보기 -->
+        <div class="preview">
+            <h2>비디오 미리보기</h2>
+            <video id="videoPreview" controls style="max-width: 100%;"
+                   th:src="${videoPath != null} ? ${videoPath}:''"></video>
+        </div>
+
+        <!-- 분석 결과 -->
+        <div class="result">
+            <h2>분석 결과</h2>
+            <!-- 분석 결과가 있으면 표시 -->
+            <pre th:if="${result != null}" th:text="${result}">결과를 가져오는 중...</pre>
+            <!-- 분석 결과가 없으면 기본 메시지 표시 -->
+            <p th:if="${result == null}">분석 결과가 없습니다.</p>
+        </div>
     </div>
 </div>
 </body>
