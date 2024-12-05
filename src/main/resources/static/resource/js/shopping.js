@@ -481,8 +481,11 @@ function renderEssentials(essentialsData) {
         // HTML 콘텐츠를 인코딩
         const encodedContent = encodeURIComponent(contentContainer.innerHTML);
 
+        // 도메인을 환경에 따라 동적으로 설정
+        const baseUrl = window.location.origin; // 현재 환경의 도메인 가져오기
+
         // 페이지를 initializeEditor가 있는 HTML 파일로 이동
-        window.location.href = `http://localhost:8081/usr/shopping/write?content=${encodedContent}&image=${encodeURIComponent(productPicture)}&link=${encodeURIComponent(productLink)}&linkText=${encodeURIComponent(productTitle)}`;
+        window.location.href = `${baseUrl}/usr/shopping/write?content=${encodedContent}&image=${encodeURIComponent(productPicture)}&link=${encodeURIComponent(productLink)}&linkText=${encodeURIComponent(productTitle)}`;
     }
 
     // 삭제 버튼 클릭 이벤트 설정

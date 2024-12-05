@@ -107,3 +107,18 @@ td{
     margin-top: 10px;
     transform: translate(-50%);
 }
+
+.article_button {
+    background-color: #7DAF82;
+    color: #ffffff;
+    justify-content: center;
+    align-items: center;
+    border-radius: 10px;
+    width: 100px;
+    display: inline-grid;
+}
+
+.article_button:hover {
+    background-color: #5C8D6D;
+    transform: translateY(-2px);
+}
