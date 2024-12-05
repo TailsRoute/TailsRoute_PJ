@@ -22,6 +22,19 @@ import jakarta.servlet.http.HttpServletRequest;
 
 public class Ut {
 
+    public static String jsReplace(String replaceUri) {
+
+        if (replaceUri == null) {
+            replaceUri = "/";
+        }
+
+        return Ut.f("""
+					<script>
+						location.replace('%s');
+					</script>
+				""", replaceUri);
+    }
+
     public static String jsReplace(String msg, String replaceUri) {
 
         if (msg == null) {
