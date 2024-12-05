@@ -99,7 +99,7 @@ public class UsrMemberController {
 
         rq.logout();
 
-        return Ut.jsReplace("S-1", Ut.f("로그아웃 되었습니다"), "/usr/home/main2");
+        return Ut.jsReplace("S-1", Ut.f("로그아웃 되었습니다"), "/usr/home/main");
     }
 
     @GetMapping("/usr/member/myPage")
@@ -296,7 +296,7 @@ public class UsrMemberController {
         return Map.of(
                 "success", true,
                 "message", "회원가입이 성공적으로 처리되었습니다.",
-                "redirectUri", "/usr/home/main2"
+                "redirectUri", "/usr/home/main"
         );
     }
 

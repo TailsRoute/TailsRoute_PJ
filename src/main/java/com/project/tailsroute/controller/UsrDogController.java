@@ -1,6 +1,7 @@
 package com.project.tailsroute.controller;
 
 import com.project.tailsroute.service.DogService;
+import com.project.tailsroute.util.Ut;
 import com.project.tailsroute.vo.Dog;
 import com.project.tailsroute.vo.Member;
 import com.project.tailsroute.vo.Rq;
@@ -11,6 +12,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
@@ -28,6 +30,7 @@ public class UsrDogController {
     private DogService dogService;
 
     @GetMapping("/usr/dog/add")
+    @ResponseBody
     public String showAdd(Model model) {
         boolean isLogined = rq.isLogined();
 
@@ -35,17 +38,17 @@ public class UsrDogController {
             Member member = rq.getLoginedMember();
             model.addAttribute("member", member);
         } else {
-            return "redirect:/usr/home/main";
+            return Ut.jsHistoryBack("F-1", Ut.f("로그인이 필요한 서비스 입니다."));
         }
 
         Dog dog = dogService.getDogfile(rq.getLoginedMemberId());
         if (dog != null) {
-            return "redirect:/usr/home/main";
+            return Ut.jsHistoryBack("F-2", Ut.f("한 계정당 반려견은 한 마리만 등록할 수 있습니다."));
         }
 
         model.addAttribute("isLogined", isLogined);
 
-        return "/usr/dog/add";
+        return Ut.jsReplace("/usr/home/main");
     }
 
     @GetMapping("/usr/dog/modify")
