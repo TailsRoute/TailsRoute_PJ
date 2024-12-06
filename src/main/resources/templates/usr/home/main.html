@@ -1,13 +1,269 @@
-<th:block th:replace="usr/common/head"/>
-<!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<th:block th:replace="usr/common/head2"/>
+<!--<!DOCTYPE html>-->
+<!--<html lang="en" xmlns:th="http://www.thymeleaf.org">-->
 <head>
-    <title>TailsRoute</title>
-    <link rel="stylesheet" href="/resource/css/main.css"/>
+    <!-- <th:block th:replace="usr/common/head2"/> -->
+    <title>Main</title>
+    <link rel="stylesheet" href="/resource/css/main2.css"/>
+    <script src="https://cdn.jsdelivr.net/npm/smooth-scrollbar@8.5.3/dist/smooth-scrollbar.js"></script>
+
+    <style>
+        /* 카페24 */
+        @font-face {
+            font-family: 'Cafe24Ssurround';
+            src: url('https://fastly.jsdelivr.net/gh/projectnoonnu/noonfonts_2105_2@1.0/Cafe24Ssurround.woff') format('woff');
+            font-weight: normal;
+            font-style: normal;
+        }
+
+        /* 프리텐다드 */
+        @font-face {
+            font-family: 'Pretendard-Regular';
+            src: url('https://fastly.jsdelivr.net/gh/Project-Noonnu/noonfonts_2107@1.1/Pretendard-Regular.woff') format('woff');
+            font-weight: 400;
+            font-style: normal;
+        }
+
+        html, body {
+            font-family: 'Pretendard-Regular', sans-serif;
+        }
+
+        #darkOverlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5); /* 어두운 배경 */
+            z-index: 40; /* sidebar 뒤에 위치 */
+            display: none; /* 기본적으로 숨김 */
+        }
+
+    </style>
+
 </head>
 <body>
+
+
+
+<script th:inline="javascript">
+    $(document).ready(function () {
+        // 1. 알람 메시지 초기화
+        const alarmContainer = $("#alarmMessages");
+        const alarmCountBadge = $("#alarmCount");
+
+        function isValidUser() {
+            const isLogined = /*[[${isLogined}]]*/ false;
+            const member = /*[[${member}]]*/ null;
+
+            if (!isLogined || !member || !member.id || member.id === 'null') {
+                console.error("유효한 사용자 정보가 아닙니다.");
+                return false;
+            }
+            return true;
+        }
+
+        function displayAlarms(alarmMessages) {
+            alarmContainer.empty(); // 기존 내용 초기화
+            const today = new Date();
+            let alarmCount = 0;
+
+            alarmMessages.forEach(alarm => {
+                const alarmDate = new Date(alarm.alarm_date);
+
+                if (alarmDate < today) {
+                    const alarmElement = $(`<p data-id="${alarm.id}" class="alarm-message tw-text-[#4D3E3E] tw-p-2 tw-rounded-[10px] tw-mb-[5px]" style="background-color: #FFF9E6; width: 360px; margin-left: auto; margin-right: auto;">
+                    <a href="${alarm.site}" class="tw-no-underline tw-text-[#4D3E3E]">${alarm.message}</a>
+                </p>`);
+                    alarmContainer.append(alarmElement);
+                    alarmCount++;
+                }
+            });
+
+            alarmContainer.off("click", "p").on("click", "p", handleAlarmClick);
+            updateAlarmCount(alarmCount);
+        }
+
+        function handleAlarmClick() {
+            const alarmId = $(this).data("id");
+
+            fetch(`/usr/alarm/delete?id=${alarmId}`, {method: 'DELETE'})
+                .then(response => {
+                    if (!response.ok) throw new Error('삭제 실패');
+                    return response.json();
+                })
+                .then(data => {
+                    console.log(data.message);
+                    $(this).remove();
+                    alarmCount--;
+                    updateAlarmCount(alarmCount);
+                })
+                .catch(error => {
+                    console.error('오류 발생:', error);
+                });
+        }
+
+        function updateAlarmCount(alarmCount) {
+            if (alarmCount > 0) {
+                alarmCountBadge.text(alarmCount);
+                alarmCountBadge.show();
+            } else {
+                alarmCountBadge.hide();
+            }
+        }
+
+        function fetchAlarms() {
+            if (!isValidUser()) return;
+
+            const member = /*[[${member}]]*/ null;
+            const memberId = member.id;
+            const url = `/usr/alarm/get?memberId=${memberId}`;
+
+            $.ajax({
+                url: url,
+                type: 'GET',
+                success: function (data) {
+                    displayAlarms(data);
+                },
+                error: function (error) {
+                    console.error("알람 메시지 가져오기 실패:", error);
+                }
+            });
+        }
+
+        fetchAlarms();
+
+        // 2. 알람 및 프로필 클릭 동작
+        $(".alarm_profile").click(function (event) {
+            event.stopPropagation();
+            if (!$(".alarm_profile_bar").hasClass("tw-hidden")) {
+                $(".alarm_profile_bar").addClass("tw-hidden");
+            } else {
+                $(".head_profile_bar").addClass("tw-hidden");
+                $(".alarm_profile_bar").removeClass("tw-hidden");
+            }
+        });
+
+        $(".head_profile").click(function (event) {
+            event.stopPropagation();
+            if (!$(".head_profile_bar").hasClass("tw-hidden")) {
+                $(".head_profile_bar").addClass("tw-hidden");
+            } else {
+                $(".alarm_profile_bar").addClass("tw-hidden");
+            }
+        });
+
+        $(document).click(function () {
+            $(".alarm_profile_bar").addClass("tw-hidden");
+            $(".head_profile_bar").addClass("tw-hidden");
+        });
+
+        // 3. 스크롤 동작
+        var $html = $("html");
+        var page = 1;
+        var lastPage = $(".content").length;
+
+        $html.animate({scrollTop: 0}, 10);
+
+        window.addEventListener(
+            "wheel",
+            function (e) {
+                e.preventDefault();
+                if ($html.is(":animated")) return;
+                if (e.deltaY > 0) {
+                    if (page === lastPage) return;
+                    page++;
+                } else if (e.deltaY < 0) {
+                    if (page === 1) return;
+                    page--;
+                }
+                var posTop = (page - 1) * $(window).height();
+                $html.animate({scrollTop: posTop});
+            },
+            {passive: false}
+        );
+
+        document.addEventListener("scroll", () => {
+            const loginButton = document.getElementById("login-button");
+            const loginStatus = document.getElementById("welcome-button");
+            const hospitalButton = document.getElementById("hospital-button");
+            if (window.scrollY > 100) {
+                loginButton?.classList.add("rounded");
+                loginStatus?.classList.add("rounded");
+                hospitalButton?.classList.add("rounded");
+            } else {
+                loginButton?.classList.remove("rounded");
+                loginStatus?.classList.remove("rounded");
+                hospitalButton?.classList.remove("rounded");
+            }
+        });
+
+        // 로그인 버튼 클릭 시 팝업 열기
+        $("#login-button").click(function () {
+            $("#loginModal").removeClass("tw-hidden"); // 팝업 보이기
+        });
+
+        // 닫기 버튼 클릭 시 팝업 닫기
+        $("#closeLoginModal").click(function () {
+            $("#loginModal").addClass("tw-hidden"); // 팝업 숨기기
+        });
+
+        // 팝업 외부 클릭 시 닫기
+        $("#loginModal").click(function (event) {
+            if (event.target === this) {
+                $(this).addClass("tw-hidden");
+            }
+        });
+
+        /////////////////////////////////
+        // 알람 버튼 클릭 시 동작
+        $(".alarm_profile").click(function (event) {
+            event.stopPropagation();
+
+            // 어두운 배경 표시
+            $("#darkOverlay").css("display", "block");
+
+            // 사이드바 표시 및 화면 중앙으로 정렬
+            const $sidebar = $("#sidebar");
+            $sidebar.removeClass("tw-hidden");
+
+            // 화면 중앙 정렬
+            const windowWidth = $(window).width();
+            const windowHeight = $(window).height();
+            const sidebarWidth = $sidebar.outerWidth();
+            const sidebarHeight = $sidebar.outerHeight();
+
+            $sidebar.css({
+                left: (windowWidth - sidebarWidth) / 2 + "px",
+                top: (windowHeight - sidebarHeight) / 2 + "px"
+            });
+        });
+
+        // 어두운 배경 클릭 시 닫기
+        $("#darkOverlay").click(function () {
+            $(this).addClass("tw-hidden"); // 배경 숨기기
+            $("#darkOverlay").css("display", "none");
+            $("#sidebar").addClass("tw-hidden"); // 사이드바 숨기기
+        });
+
+        // 문서 클릭 시 사이드바 닫기
+        $(document).click(function () {
+            $("#darkOverlay").addClass("tw-hidden"); // 배경 숨기기
+            $("#sidebar").addClass("tw-hidden"); // 사이드바 숨기기
+        });
+
+        // 사이드바 내 클릭 시 닫기 방지
+        $("#sidebar").click(function (event) {
+            event.stopPropagation();
+        });
+    });
+</script>
+
+
+
 <div th:if="${gpsChack != null}">
     <script>
+        // GPS 위치 정보 변화 확인
         let currentLatitude;
         let currentLongitude;
 
@@ -46,86 +302,401 @@
 
             // 현재 위도와 경도가 다를 경우 팝업 표시
             if (gpsChack.latitude !== currentLatitude && gpsChack.longitude !== currentLongitude) {
-                document.querySelector('.gps_popup2').style.display = 'flex'; // 팝업 표시
+                document.querySelector('.gps_popup_bg2').style.display = 'block'; // 팝업 표시
             }
         }
 
         window.onload = getCurrentLocation;
     </script>
 </div>
+<script>
+    $(document).ready(function () {
+        var $html = $("html");
+        var page = 1;
+        var lastPage = $(".content").length;
+
+        // 초기 스크롤 위치 설정
+        $html.animate({scrollTop: 0}, 10);
+
+        // wheel 이벤트 리스너 설정
+        window.addEventListener(
+            "wheel",
+            function (e) {
+                e.preventDefault(); // 기본 동작 방지
+                if ($html.is(":animated")) return; // 애니메이션 중복 방지
+                if (e.deltaY > 0) {
+                    if (page === lastPage) return;
+                    page++;
+                } else if (e.deltaY < 0) {
+                    if (page === 1) return;
+                    page--;
+                }
+                var posTop = (page - 1) * $(window).height();
+                $html.animate({scrollTop: posTop});
+            },
+            {passive: false} // passive 설정을 false로 변경
+        );
+
+        // 스크롤 이벤트 추가
+        document.addEventListener("scroll", () => {
+            const loginButton = document.getElementById("login-button");
+            const loginStatus = document.getElementById("welcome-button")
+            const hospitalButton = document.getElementById("hospital-button");
+            if (window.scrollY > 100) {
+                // 스크롤이 100px 이상일 때 둥근 아이콘으로 변경
+                loginButton?.classList.add("rounded");
+                loginStatus?.classList.add("rounded");
+                hospitalButton?.classList.add("rounded");
+            } else {
+                loginButton?.classList.remove("rounded");
+                loginStatus?.classList.remove("rounded");
+                hospitalButton?.classList.remove("rounded");
+            }
+        });
+    });
+
+    // 팝업 모달 열기/닫기 기능
+    document.addEventListener("DOMContentLoaded", () => {
+        const loginModal = document.getElementById("loginModal");
+        const loginButton = document.getElementById("login-button");
+        const closeLoginModal = document.getElementById("closeLoginModal");
+
+        if (loginButton) {
+            // 로그인 팝업 열기
+            loginButton.addEventListener("click", () => {
+                if (loginModal) {
+                    loginModal.classList.remove("tw-hidden");
+                }
+            });
+        }
+
+        if (closeLoginModal) {
+            // 로그인 팝업 닫기
+            closeLoginModal.addEventListener("click", () => {
+                if (loginModal) {
+                    loginModal.classList.add("tw-hidden");
+                }
+            });
+
+        }
+
+        if (loginModal) {
+            // 팝업 외부 클릭 시 닫기
+            loginModal.addEventListener("click", (event) => {
+                if (event.target === loginModal) {
+                    loginModal.classList.add("tw-hidden");
+                }
+            });
+        }
+
+    });
+
+    $(document).ready(function () {
+        // 사이드 메뉴 클릭 시 부드럽게 이동
+        $('#side_menu a').on('click', function (e) {
+            e.preventDefault();
+            const target = $($(this).attr('href'));
+            if (target.length) {
+                $('html, body').animate({
+                    scrollTop: target.offset().top
+                }, 800);
+            }
+        });
+
+        // 초기 스크롤 위치 설정
+        $("html").animate({scrollTop: 0}, 10);
+    });
+</script>
+
+
 <script src="/resource/js/main.js"></script>
-<div class="left_box"></div>
-<div class="right_box"></div>
-<div class="main_box tw-relative">
-    <img class="main_image" th:src="@{/resource/photo/main2.png}" alt="">
-    <div class="main_text tw-absolute">
-        <div>TailsRoute는 반려견의 실종 신고, 건강 관리, 훈련 추천, 커뮤니티 정보 교환 등을 제공하는 종합 케어 플랫폼입니다.</div>
-        <button class="main_button ">24시간 병원 안내</button>
-    </div>
-</div>
-<div class="main_box tw-relative">
-    <div class="main_box_title tw-absolute">반려견과 함께하는 스마트한 일상</div>
-    <div class="main_box_body tw-absolute">TailsRoute가 제공하는 다양한 서비스를 통해 반려견의 건강, 훈련, 실종 알림 등을 스마트하게 관리할 수 있는 생활을 의미합니다.
-        언제 어디서든 실시간 정보를 제공받아 반려견과 더 안전하고 행복한 일상을 만들어 보세요.
-    </div>
-    <button class="community tw-absolute hover_view">
-        <a href="../missing/list" class="hover_text tw-absolute">
-            <div class="hover_text_title">커뮤니티 정보 교환</div>
-            <div class="hover_text_body">자유게시판, 질문 게시판을 통해 반려견 관련정보를 공유하고, 다양한 경험을 나눠보세요.</div>
-        </a>
-    </button>
-    <button class="records tw-absolute hover_view">
-        <a href="../missing/list" class="hover_text tw-absolute">
-            <div class="hover_text_title">반려견 성장 과정 기록</div>
-            <div class="hover_text_body">사용자가 반려견의 성장과 건강 상태를 기록하며 일상과 변화를 세심하게 관리할 수 있는 기능입니다.</div>
-        </a>
-    </button>
-    <button class="shopping tw-absolute hover_view">
-        <a href="../missing/list" class="hover_text tw-absolute">
-            <div class="hover_text_title">쇼핑 및 알림 기능</div>
-            <div class="hover_text_body">주기적인 사료, 배변패드 등의 구매 알림을 받고 반려동물 용품 쇼핑몰로 연결됩니다.</div>
-        </a>
-    </button>
-    <button class="health tw-absolute hover_view">
-        <a href="../missing/list" class="hover_text tw-absolute">
-            <div class="hover_text_title">반려견 훈련 영상 추천 및 AI 기반 훈련 지원</div>
-            <div class="hover_text_body">반려견 훈련에 필요한 맞춤형 조언을 실시간으로 제공하는 AI 기반 훈련 지원 도구입니다.</div>
-        </a>
-    </button>
-</div>
-<div class="main_box tw-relative">
-    <div class="main_box_title tw-absolute tw-text-right">실종 신고 및 알림 서비스</div>
-    <div class="main_box_body tw-absolute tw-text-right">반려견이 설정된 구역을 벗어나면 즉시 푸시 알림을 받고, WebSocket을 통해 실시간으로 커뮤니티에 이미지를
-        전송할 수 있습니다.
-    </div>
-    <div class="slider_wrapper">
-        <button class="slider_btn left_btn">&#10094;</button>
-        <div class="slider_container">
-            <a class="misssing_item" th:href="@{'../missing/detail?missingId='+${missing.id}}"
-               th:each="missing : ${missings}">
-                <img th:src="@{${missing.photo}}" alt="Missing Image" class="misssing_image"/>
-            </a>
+
+<main id="mainContent" class="tw-w-full tw-flex tw-flex-col">
+
+
+    <!-- 로그인 팝업 -->
+    <div id="loginModal"
+         class="tw-fixed tw-inset-0 tw-bg-gray-900/70 tw-flex tw-items-center tw-justify-center tw-hidden tw-z-50">
+        <div class="tw-bg-white tw-rounded-xl tw-shadow-2xl tw-w-[400px] tw-p-8 tw-border tw-border-gray-200">
+            <!-- 로고 또는 타이틀 -->
+            <div class="tw-text-center tw-mb-6">
+                <h2 class="tw-text-2xl tw-font-extrabold tw-text-gray-800 tw-tracking-wide">로그인</h2>
+                <p class="tw-text-sm tw-text-gray-500 tw-tracking-wide">계정에 로그인하여 시작하세요</p>
+            </div>
+            <!-- 로그인 폼 -->
+            <form class="login-form" action="/usr/member/doLogin" method="POST" name="Login">
+                <!-- 아이디 입력 -->
+                <div class="tw-mb-4">
+                    <label for="loginId"
+                           class="tw-block tw-text-sm tw-font-medium tw-text-gray-700 tw-tracking-wider">아이디</label>
+                    <input type="text" id="loginId" name="loginId"
+                           class="tw-input tw-w-full tw-h-10 tw-px-4 tw-rounded-lg tw-border tw-border-gray-300 focus:tw-ring-2 focus:tw-ring-[#7DAF82] focus:tw-outline-none"
+                           placeholder="아이디를 입력하세요" required/>
+                </div>
+                <!-- 비밀번호 입력 -->
+                <div class="tw-mb-6">
+                    <label for="loginPw"
+                           class="tw-block tw-text-sm tw-font-medium tw-text-gray-700 tw-tracking-wider">비밀번호</label>
+                    <input type="password" id="loginPw" name="loginPw"
+                           class="tw-input tw-w-full tw-h-10 tw-px-4 tw-rounded-lg tw-border tw-border-gray-300 focus:tw-ring-2 focus:tw-ring-[#7DAF82] focus:tw-outline-none"
+                           placeholder="비밀번호를 입력하세요" required/>
+                </div>
+                <!-- 버튼 -->
+                <div class="tw-mb-4">
+                    <button type="submit"
+                            class="tw-w-full tw-bg-[#7DAF82] tw-text-white tw-font-medium tw-h-10 tw-rounded-lg hover:tw-bg-[#6A9F72] tw-tracking-wider transition-all">
+                        로그인
+                    </button>
+                </div>
+            </form>
+            <div class="tw-flex tw-items-center tw-my-4">
+                <div class="tw-flex-grow tw-h-px tw-bg-gray-300"></div>
+                <span class="tw-mx-4 tw-text-gray-500 tw-text-sm">소셜 로그인</span>
+                <div class="tw-flex-grow tw-h-px tw-bg-gray-300"></div>
+            </div>
+            <div class="tw-text-center tw-flex tw-items-center tw-justify-center tw-text-sm tw-tracking-wider tw-p-2">
+                <img class="tw-w-10 tw-h-10 tw-m-2 tw-cursor-pointer"
+                     onclick="window.location.href='/usr/member/naver-login';"
+                     src="/resource/photo/naver_icon.png"
+                     alt="naver_icon">
+                <img class="tw-w-10 tw-h-10 tw-m-2 tw-cursor-pointer"
+                     onclick="window.location.href='/usr/member/kakao-login';" src="/resource/photo/kakao_icon.png"
+                     alt="kakao_icon">
+            </div>
+            <!-- 아이디 / 비밀번호 찾기 -->
+            <div class="tw-text-center tw-text-sm tw-tracking-wider tw-p-2">
+                <p class="tw-text-gray-500">
+                    계정을 잊어버리셨나요?
+                    <a href="/usr/member/find" class="tw-text-[#7DAF82] tw-font-medium hover:tw-underline">회원찾기</a>
+                </p>
+            </div>
+            <!-- 회원가입 -->
+            <div class="tw-text-center tw-text-sm tw-tracking-wider tw-p-2">
+                <p class="tw-text-gray-500">
+                    계정이 없으신가요?
+                    <a href="/usr/member/join" class="tw-text-[#7DAF82] tw-font-medium hover:tw-underline">회원가입</a>
+                </p>
+            </div>
+            <!-- 닫기 버튼 -->
+            <div class="tw-text-center tw-mt-4">
+                <button type="button" id="closeLoginModal"
+                        class="tw-text-gray-500 hover:tw-text-gray-800 tw-text-sm tw-font-medium tw-tracking-wide transition-all">
+                    닫기
+                </button>
+            </div>
         </div>
-        <button class="slider_btn right_btn">&#10095;</button>
+    </div>
+
+
+
+
+    <!-- 어두운 배경 -->
+    <div id="darkOverlay" class="tw-hidden tw-fixed tw-inset-0 tw-bg-black tw-opacity-50 tw-z-40"></div>
+
+    <!-- 알람 메시지 -->
+    <div id="sidebar"
+         class="alarm_profile_bar tw-hidden tw-fixed tw-z-50 tw-w-[400px] tw-h-[350px] tw-bg-white tw-rounded-[30px] tw-flex-col tw-items-center tw-justify-center tw-gap-2 tw-shadow tw-shadow-[#4D3E3E]">
+
+        <div class="tw-flex tw-justify-center">
+            <h3 class="tw-text-lg tw-text-[#4D3E3E] tw-font-bold tw-mt-4">알람 메시지</h3>
+        </div>
+        <div id="alarmMessages"
+             class="tw-flex tw-flex-col tw-items-start tw-w-full tw-h-full tw-overflow-auto tw-p-2 tw-mh-[250px]">
+            <!-- 알람 메시지가 여기에 동적으로 추가됩니다. -->
+        </div>
+    </div>
+
+
+
+    <!-- 사이드 메뉴 -->
+    <div id="side_menu"
+         class="tw-fixed tw-top-1/2 tw-left-4 tw-transform -tw-translate-y-1/2 tw-rounded-lg tw-w-56 tw-py-6 tw-flex tw-flex-col tw-items-start tw-space-y-6"
+         style="z-index: 1000;">
+        <a href="#section1"
+           class="tw-flex tw-items-center tw-w-full tw-py-3 tw-px-4 tw-text-[#3A3A3A] tw-font-medium tw-tracking-wider hover:tw-text-[#7DAF82] tw-transition-all">
+            <span class="tw-text-base"> 홈페이지</span>
+        </a>
+        <a href="#section2"
+           class="tw-flex tw-items-center tw-w-full tw-py-3 tw-px-4 tw-text-[#3A3A3A] tw-font-medium tw-tracking-wider hover:tw-text-[#7DAF82] tw-transition-all">
+            <span class="tw-text-base"> 실종신고</span>
+        </a>
+        <a href="#section3"
+           class="tw-flex tw-items-center tw-w-full tw-py-3 tw-px-4 tw-text-[#3A3A3A] tw-font-medium tw-tracking-wider hover:tw-text-[#7DAF82] tw-transition-all">
+            <span class="tw-text-base"> 훈련영상</span>
+        </a>
+    </div>
+
+    <section id="section1"
+             class="content tw-w-full tw-h-screen tw-flex tw-items-center tw-justify-center tw-bg-[#F9F5EB]">
+        <div class="custom-card tw-bg-[#EDE0D4] tw-rounded-xl tw-shadow-md tw-flex tw-flex-col md:tw-flex-row tw-h-[90%] md:tw-h-[80%] tw-w-[80%]">
+            <!-- 이미지 영역 -->
+            <img class="tw-mx-auto md:tw-ml-10 tw-mt-10 tw-object-cover tw-rounded-lg tw-max-h-64 md:tw-max-h-full"
+                 src="/resource/photo/main_dog.png"
+                 alt="Dog Image">
+
+            <!-- 텍스트 영역 -->
+            <div class="tw-px-6 md:tw-ml-8 tw-flex tw-flex-col tw-justify-center tw-h-auto tw-text-center md:tw-text-left tw-mt-8 md:tw-mt-0">
+                <h1 class="tw-text-4xl md:tw-text-6xl tw-text-[#3A3A3A] tw-font-bold tw-mb-4">
+                    반려견과 함께<br>반려견을 위한 공간
+                </h1>
+                <p class="tw-text-lg tw-text-[#3A3A3A] md:tw-text-xl tw-mb-10">
+                    반려견 케어를 위한 종합 관리 플랫폼
+                </p>
+                <button class="community" onclick="location.href='../article/main'">커뮤니티</button>
+            </div>
+        </div>
+    </section>
+
+
+    <!-- 두 번째 화면 -->
+    <section id="section2"
+             class="content tw-w-full tw-h-screen tw-bg-[#FDEDD0] tw-flex tw-items-center tw-justify-center tw-relative">
+        <div class="main-missing-body">
+            <div class="tw-p-[100px] tw-relative">
+                <h2 class="tw-text-4xl tw-font-bold tw-text-gray-700">실종 신고 및 알림 서비스</h2>
+                <div class="tw-flex tw-justify-between">
+            <span class="main-missing-text-body tw-text-xl tw-pt-4">반려견이 실종되었을 때, 신고 포스터를 작성하여 주변 사용자와 사이트 방문자에게 도움을 요청하실 수
+                있습니다.</span>
+                    <a href="../missing/list" class="tw-text-4xl">&#x279C;</a>
+                </div>
+            </div>
+            <div class="slider_wrapper">
+                <button class="slider_btn left_btn">&#10094;</button>
+                <div class="slider_container">
+                    <a class="misssing_item tw-relative" th:href="@{'../missing/detail?missingId='+${missing.id}}"
+                       th:each="missing : ${missings}">
+                        <img th:src="@{${missing.photo}}" alt="Missing Image" class="misssing_image"/>
+                        <div class="overlay">
+                            <div class="tw-p-2 tw-text-[12px]" th:text="${missing.reportDate.substring(0, 13)}"></div>
+                            <div class="tw-p-2 tw-font-bold" th:text="${missing.name}"></div>
+                            <div class="tw-p-2"
+                                 th:text="${#strings.length(missing.missingLocation) >= 22 ? missing.missingLocation.substring(0, 22) + ' ...' : missing.missingLocation}"></div>
+                            <div class="tw-pl-2 tw-pt-2"
+                                 th:text="${#strings.length(missing.trait) >= 22 ? missing.trait.substring(0, 22) : missing.trait}"></div>
+                            <span class="tw-pl-2" th:if="${#strings.length(missing.trait) >= 22}" th:text="..."></span>
+                            <span class="tw-absolute tw-right-5"
+                                  th:href="@{'../missing/detail?missingId='+${missing.id}}"
+                                  th:text="'자세히보기 ' + '&#10095;'"></span>
+                        </div>
+                    </a>
+                </div>
+                <button class="slider_btn right_btn">&#10095;</button>
+            </div>
+        </div>
+    </section>
+
+    <!-- 세 번째 화면 -->
+    <section id="section3"
+             class="content tw-w-full tw-h-screen tw-bg-[#FAF3E0] tw-flex tw-items-center tw-justify-center">
+        <div class="main-missing-body">
+            <div class="tw-p-[100px]">
+                <h2 class="tw-text-4xl tw-font-bold tw-text-gray-700">반려견 훈련 영상 추천,</h2>
+                <h2 class="tw-text-4xl tw-font-bold tw-text-gray-700">AI 기반 훈련 지원</h2>
+                <div class="box3">
+                    <div class="container">
+                        <a href="../behaviorAnalysis/videoAnalysis" class="svg-box">
+                            <span class="svg-title tw-text-xl tw-font-bold">실시간 피드백 제공</span>
+                            <span class="svg-icon flat-filled" id="filled-message"></span>
+                            <span class="svg-text tw-text-xl tw-font-bold">AI가 훈련 진행 사항을 실시간으로 피드백</span>
+                        </a>
+                        <a href="../behaviorAnalysis/videoAnalysis" class="svg-box">
+                            <span class="svg-title tw-text-xl tw-font-bold">즉각적인 도움 제공</span>
+                            <span class="svg-icon flat-filled" id="filled-film"></span>
+                            <span class="svg-text tw-text-xl tw-font-bold">맞춤형 영상을 추천하여 주인의 훈련 노력을 더 효과적으로 도움</span>
+                        </a>
+                        <a href="../behaviorAnalysis/videoAnalysis" class="svg-box">
+                            <span class="svg-title tw-text-xl tw-font-bold">행동 패턴 기록 및 분석</span>
+                            <span class="svg-icon flat-filled" id="filled-magnify"></span>
+                            <span class="svg-text tw-text-xl tw-font-bold">AI가 행동 데이터를 기록해 맞춤 훈련 전략 제공</span>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+</main>
+
+<!-- 오른쪽 고정 버튼 -->
+<div id="buttonContainer"
+     class="tw-fixed tw-bottom-10 tw-right-10 tw-flex tw-flex-col tw-items-end tw-gap-4 transition-all">
+    <div id="Button" class="tw-flex tw-flex-col tw-items-end tw-gap-4">
+
+        <!-- 로그인/회원가입 버튼: username이 null일 때만 표시 -->
+        <div th:if="${!isLogined}" id="login-button"
+             class="icon button-style tw-flex tw-items-center tw-justify-center tw-p-4 tw-rounded-full tw-shadow-md tw-border tw-cursor-pointer hover:tw-shadow-lg tw-h-16 tw-w-48 transition-all"
+             style="border-color: #FF7F50;">
+            <i class="bi bi-person-fill tw-text-gray-700 tw-text-2xl"></i>
+            <span class="tw-text-gray-700 tw-font-medium" style="margin-left: 8px;">로그인/회원가입</span>
+        </div>
+
+        <!-- 로그인 상태 표시: username이 null이 아닐 때만 표시 -->
+        <div th:if="${isLogined}" id="welcome-button"
+             class="icon button-style tw-flex tw-items-center tw-justify-between tw-p-4 tw-rounded-full tw-shadow-md tw-border tw-cursor-pointer hover:tw-shadow-lg tw-h-16 tw-w-48 transition-all"
+             style="border-color: #FF7F50;" onclick="window.location.href='/usr/member/myPage';">
+            <i class="bi bi-person-fill tw-text-gray-700 tw-text-2xl "></i>
+            <span class="tw-text-gray-700 tw-font-medium" style="margin-left: 8px;"
+                  th:utext="'안녕하세요, <br>' + (${member.nickname ?: '회원'}) + '님!'"></span>
+
+        </div>
+
+    </div>
+
+    <!-- 24시 병원 버튼 -->
+    <div id="hospital-button"
+         class="button-style tw-flex tw-items-center tw-justify-center tw-p-4 tw-rounded-full tw-shadow-md tw-border tw-cursor-pointer hover:tw-shadow-lg  tw-h-16 tw-w-48 transition-all"
+         style="border-color: #FF7F50;"
+         onclick="location.href='/usr/hospital/main'">
+        <i class="bi bi-moon tw-text-gray-700 tw-text-2xl"></i>
+        <span class="tw-text-gray-700 tw-font-medium" style="margin-left: 8px;">24시 병원</span>
+    </div>
+
+
+    <!-- 알람 버튼 -->
+    <div th:if="${isLogined}"
+         class="button-style tw-flex tw-items-center tw-justify-center tw-w-[70px] tw-h-[70px] tw-rounded-full tw-bg-[#FF7F50] tw-cursor-pointer">
+        <div class="alarm_profile tw-cursor-pointer tw-text-white tw-text-lg tw-relative tw-flex tw-items-center tw-justify-center tw-w-[70px] tw-h-[70px] tw-rounded-full">
+            <!-- 알림 아이콘을 클릭했을 때 sidebar로 이동 -->
+            <i class="fa-solid fa-bell"></i>
+            <!-- 알람 수를 표시하는 배지 -->
+            <div id="alarm_badge" class="tw-absolute" style="width: 18px; height: 18px;">
+                <span id="alarmCount"
+                      class="tw-absolute tw-top-[-7px] tw-right-[-5px] tw-text-l-[10px] tw-text-[10px] tw-bg-red-500 tw-text-white tw-rounded-full tw-w-[10px] tw-h-[10px] tw-text-center tw-flex tw-items-center tw-justify-center tw-hidden tw-lh-[1]"></span>
+            </div>
+        </div>
     </div>
 </div>
 
-<div class="gps_popup tw-gap-5" th:if="${isLogined && gpsChack == null}">
-    <div class="tw-p-2 tw-text-3xl">GPS 정보 수신에 동의 하시겠습니까? (1)</div>
-    <div class="tw-p-2 tw-text-3xl">접속 환경이 변경될 경우, 새로운 팝업이 표시될 수 있습니다.</div>
-    <div class="tw-flex tw-gap-11">
-        <button class="gps_popup_button" onclick="gpsChackOn()">확인</button>
-        <button class="gps_popup_button" onclick="gpsChackOff()">취소</button>
+
+<div class="gps_popup_bg1 tw-fixed tw-left-0 tw-top-0 tw-w-full tw-h-full tw-bg-gray-900/70 tw-z-50"
+     th:if="${isLogined && gpsChack == null}">
+    <div class="gps_popup tw-gap-5">
+        <div class="tw-p-2 tw-text-3xl tw-font-bold">GPS 정보 수집 동의 안내</div>
+        <div class="tw-p-2 tw-text-2xl">위치 정보 수집에 동의하지 않을 경우 일부 서비스 이용이 제한될 수 있습니다.</div>
+        <div class="tw-p-2 tw-text-2xl">접속 환경이 변경될 경우, 안내 팝업이 다시 표시될 수 있습니다.</div>
+        <div class="tw-flex tw-gap-11">
+            <button class="gps_popup_button" onclick="gpsChackOn()">동의</button>
+            <button class="gps_popup_cancelButton" onclick="gpsChackOff()">거부</button>
+        </div>
+    </div>
+</div>
+<div class="gps_popup_bg2 tw-fixed tw-left-0 tw-top-0 tw-w-full tw-h-full tw-bg-gray-900/70 tw-z-50"
+     style="display: none;">
+    <div class="gps_popup2 tw-gap-5">
+        <div class="tw-p-2 tw-text-3xl tw-font-bold">GPS 정보 수집 동의 안내</div>
+        <div class="tw-p-2 tw-text-2xl">위치 정보 수집에 동의하지 않을 경우 일부 서비스 이용이 제한될 수 있습니다.</div>
+        <div class="tw-p-2 tw-text-2xl">접속 환경이 변경될 경우, 안내 팝업이 다시 표시될 수 있습니다.</div>
+        <div class="tw-flex tw-gap-11">
+            <button class="gps_popup_button" onclick="gpsChackUpdate()">동의</button>
+            <button class="gps_popup_cancelButton" onclick="gpsChackCancel()">거부</button>
+        </div>
     </div>
 </div>
 
-<div class="gps_popup2 tw-gap-5" style="display: none;">
-    <div class="tw-p-2 tw-text-3xl">GPS 정보 수신에 동의 하시겠습니까? (2)</div>
-    <div class="tw-p-2 tw-text-3xl">접속 환경이 변경될 경우, 새로운 팝업이 표시될 수 있습니다.</div>
-    <div class="tw-flex tw-gap-11">
-        <button class="gps_popup_button" onclick="gpsChackUpdate()">확인</button>
-        <button class="gps_popup_button" onclick="gpsChackCancel()">취소</button>
-    </div>
-</div>
+<!-- 푸터 -->
+<footer class="tw-w-full tw-bg-gray-200 tw-py-6 tw-shadow-inner tw-flex tw-items-center tw-justify-center">
+    <p class="tw-text-sm tw-text-gray-600">© 2024 TailsRoute. All rights reserved.</p>
+</footer>
+
 </body>
 </html>

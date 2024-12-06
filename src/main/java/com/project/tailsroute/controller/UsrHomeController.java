@@ -67,6 +67,6 @@ public class UsrHomeController {
 
         model.addAttribute("missings", missings);
 
-        return "usr/home/main2";
+        return "usr/home/main";
     }
 }
