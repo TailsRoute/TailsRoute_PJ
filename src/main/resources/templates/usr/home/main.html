@@ -72,9 +72,12 @@
                 const alarmDate = new Date(alarm.alarm_date);
 
                 if (alarmDate < today) {
-                    const alarmElement = $(`<p data-id="${alarm.id}" class="alarm-message tw-text-[#4D3E3E] tw-p-2 tw-rounded-[10px] tw-mb-[5px]" style="background-color: #FFF9E6; width: 360px; margin-left: auto; margin-right: auto;">
-                    <a href="${alarm.site}" class="tw-no-underline tw-text-[#4D3E3E]">${alarm.message}</a>
-                </p>`);
+                    const alarmElement = $(`<p data-id="${alarm.id}" class="alarm-message tw-text-[#4D3E3E] tw-p-2 tw-rounded-[10px] tw-mb-[5px]"
+        style="background-color: #FFF9E6; width: 360px; margin-left: auto; margin-right: auto; cursor: pointer; position: relative;">
+        <a href="${alarm.site}" class="tw-no-underline tw-text-[#4D3E3E]"
+           style="text-decoration: none; position: absolute; top: 0; left: 0; width: 100%; height: 100%;"></a>
+        ${alarm.message}
+    </p>`);
                     alarmContainer.append(alarmElement);
                     alarmCount++;
                 }
