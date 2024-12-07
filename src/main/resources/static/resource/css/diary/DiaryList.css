@@ -111,7 +111,6 @@ body {
     font-size: 28px; /* 제목 크기 조정 */
     color: #8B5E3B; /* 제목 색상 */
     animation: bounce 0.5s infinite; /* 제목 애니메이션 */
-    font-family: 'Nunito', sans-serif;
 }
 
 @keyframes bounce {
@@ -281,4 +280,8 @@ input, select, textarea {
 input:focus, select:focus, textarea:focus {
     outline: none;
     box-shadow: 0 0 0 2px #7DAF82;
+}
+.title{
+    font-family: 'Cafe24Ssurround', sans-serif;
+
 }

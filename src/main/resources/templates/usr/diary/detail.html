@@ -12,7 +12,7 @@
 </div>
 
 <div class="tw-h-[60px]"></div>
-<div class="tw-text-center tw-text-[50px] tw-p-[20px] tw-border-b-2 tw-border-[#DADADA] tw-max-w-[1440px] tw-mx-auto">
+<div class="title tw-text-center tw-text-[50px] tw-p-[20px] tw-border-b-2 tw-border-[#DADADA] tw-max-w-[1440px] tw-mx-auto">
     반려견 성장일지 상세보기
 </div>
 <!-- 메인 콘텐츠 -->
@@ -22,7 +22,7 @@
     <div class="diary-details ">
         <p><strong th:text="${diary.extra__writer}"></strong> | <span th:text="${diary.regDate}"></span></p>
         <div class="butn">
-            <p></p></ㅔ> <a th:href="@{/usr/diary/list}">목록 <i class="fas fa-list"></i></a> |
+            <p> <a th:href="@{/usr/diary/list}">목록 <i class="fas fa-list"></i></a> |
             <a th:href="@{/usr/diary/recommend(id=${diary.id})}" class="shareButton"
                onclick="return confirm('일상기록 공유 게시판으로 저장됩니다.')">공유 <i class="fas fa-share-alt"></i></a></p>
         </div>
