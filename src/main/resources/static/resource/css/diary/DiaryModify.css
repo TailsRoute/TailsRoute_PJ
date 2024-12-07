@@ -166,4 +166,7 @@ input:focus, select:focus, textarea:focus {
 #title{
     box-shadow: none!important;
 }
+.title{
+    font-family: 'Cafe24Ssurround', sans-serif;
+}
 
