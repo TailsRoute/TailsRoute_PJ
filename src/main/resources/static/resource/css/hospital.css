@@ -2,6 +2,7 @@
 body {
     background: #FFFEF0;
     color: #4D3E3E;
+    word-break: keep-all;
 }
 
 /* 지도의 크기를 설정합니다 */

@@ -1,7 +1,8 @@
-body {
-    background-color: #f9f5eb;
+html,body {
+    background-color: #f9f5eb !important;
     color: #4D3E3E;
     transition: background-color 0.3s ease;
+    word-break: keep-all;
 }
 
 /* 캘린더 */

@@ -6,6 +6,7 @@ body {
     padding: 0;
     color: #4D3E3E;
     min-height: 100vh;
+    word-break: keep-all;
 }
 
 /* 메인 컨테이너 */
