@@ -86,21 +86,21 @@ function initMap1() {
                 savePathButton.hasListener = true;
             }
         });
-        document.getElementById("showlist").addEventListener("click", function () {
-            const walkingSchedule = document.getElementById("WalkingSchedule");
-            const showlistButton = document.getElementById("showlist");
-            if (walkingSchedule.style.display === "none" || walkingSchedule.style.display === "") {
-                // 요소가 보이지 않으면 보이도록 설정
-                walkingSchedule.style.display = "inline-block";
-                showlistButton.textContent = "리스트 숨기기";
-            } else {
-                // 요소가 보이면 숨기기
-                walkingSchedule.style.display = "none";
-                showlistButton.textContent = "리스트 보기";
-            }
-        });
     }
 }
+document.getElementById("showlist").addEventListener("click", function () {
+    const walkingSchedule = document.getElementById("WalkingSchedule");
+    const showlistButton = document.getElementById("showlist");
+    if (walkingSchedule.style.display === "none" || walkingSchedule.style.display === "") {
+        // 요소가 보이지 않으면 보이도록 설정
+        walkingSchedule.style.display = "inline-block";
+        showlistButton.textContent = "리스트 숨기기";
+    } else {
+        // 요소가 보이면 숨기기
+        walkingSchedule.style.display = "none";
+        showlistButton.textContent = "리스트 보기";
+    }
+});
 let totalDistance = 0;
 function addLatLng(location, waypoints, markers, map) {
     const lat = location.lat();
