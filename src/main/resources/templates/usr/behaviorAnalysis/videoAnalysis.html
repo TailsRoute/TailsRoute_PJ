@@ -86,18 +86,29 @@
         <!-- 비디오 미리보기 -->
         <div class="preview">
             <h2>비디오 미리보기</h2>
-            <video id="videoPreview" controls style="max-width: 100%;"
+            <video id="videoPreview" controls
                    th:src="${videoPath != null} ? ${videoPath}:''"></video>
         </div>
 
         <!-- 분석 결과 -->
-        <div class="result">
+        <section class="result">
             <h2>분석 결과</h2>
-            <!-- 분석 결과가 있으면 표시 -->
-            <pre th:if="${result != null}" th:text="${result}">결과를 가져오는 중...</pre>
-            <!-- 분석 결과가 없으면 기본 메시지 표시 -->
-            <p th:if="${result == null}">분석 결과가 없습니다.</p>
-        </div>
+            <div th:if="${error}">
+                <p th:text="${error}" style="color: red;"></p>
+            </div>
+            <div th:if="${most_common_behavior != null}">
+                <h3>대표 행동</h3>
+                <p th:text="${most_common_behavior}">결과를 가져오는 중...</p>
+            </div>
+            <div th:if="${behavior_percentages != null}">
+                <h3>행동 퍼센테이지</h3>
+                <ul>
+                    <li th:each="item : ${behavior_percentages}">
+                        <span th:text="${item.behavior}"></span>: <span th:text="${item.percentage}"></span>%
+                    </li>
+                </ul>
+            </div>
+        </section>
     </div>
 </div>
 </body>

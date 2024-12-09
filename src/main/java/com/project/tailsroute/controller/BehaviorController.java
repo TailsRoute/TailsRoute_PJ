@@ -29,7 +29,7 @@ public class BehaviorController {
     // 업로드 페이지 렌더링
     @GetMapping("/videoAnalysis")
     public String videoAnalysisPage(Model model) {
-        boolean isLogined = rq.isLogined();
+        boolean isLogined = (rq != null) && rq.isLogined();
         model.addAttribute("isLogined", isLogined);
         System.out.println("isLogined = " + isLogined);
         if (isLogined) {
@@ -52,7 +52,7 @@ public class BehaviorController {
     // 비디오 업로드 및 분석 요청 처리
     @PostMapping("/videoAnalysis")
     public String analyzeVideo(@RequestParam("file") MultipartFile file, Model model) {
-        boolean isLogined = rq.isLogined();
+        boolean isLogined = (rq != null) && rq.isLogined();
         if (isLogined) {
             Member member = rq.getLoginedMember();
             model.addAttribute("member", member);
@@ -62,11 +62,15 @@ public class BehaviorController {
             // 서비스 호출
             var analysisResult = behaviorService.analyzeVideo(file);
 
+            model.addAttribute("behavior_percentages", analysisResult.get("behavior_percentages"));
+            model.addAttribute("most_common_behavior", analysisResult.get("most_common_behavior"));
+
+            System.err.println(analysisResult.get("behavior_percentages"));
+            System.err.println(analysisResult.get("most_common_behavior"));
+
             // 서비스 결과를 모델에 추가
-            model.addAttribute("message", analysisResult.get("message"));
             model.addAttribute("videoPath", analysisResult.get("video_path"));
             System.err.println(analysisResult.get("video_path"));
-            model.addAttribute("result", analysisResult.get("result"));
             model.addAttribute("isLogined", isLogined);
 
         } catch (Exception e) {
