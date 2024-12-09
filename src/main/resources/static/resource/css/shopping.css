@@ -1,6 +1,7 @@
 html,body {
     background-color: #F9F5EB !important;
     color: #4D3E3E;
+    word-break: keep-all;
 }
 
 #heads {

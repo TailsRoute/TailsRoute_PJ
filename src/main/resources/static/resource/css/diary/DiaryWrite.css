@@ -1,6 +1,7 @@
 html,body {
     background-color: #f9f5eb !important;
     color: #4D3E3E;
+    word-break: keep-all;
 }
 #title{
     box-shadow: none !important;
