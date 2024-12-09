@@ -82,7 +82,9 @@ public class UsrMemberController {
             return Ut.jsHistoryBack("F-3", Ut.f("%s는(은) 존재하지 않습니다.", loginId));
         }
 
-        if (member.getLoginPw().equals(loginPw) == false) {
+        String hashedInput = Ut.sha256(loginPw);
+
+        if (!hashedInput.equals(member.getLoginPw())) {
             return Ut.jsHistoryBack("F-4", Ut.f("비밀번호가 올바르지 않습니다."));
         }
 
