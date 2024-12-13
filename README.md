@@ -3,7 +3,7 @@
 
 ## 네이버 클라우드 APIKey 사용방법
 ### NAVER CLOUD FLATFORM API 발급 방법
-1) https://www.ncloud.com/에 접속 후 로그인 한다
+1) https://www.ncloud.com/ 에 접속 후 로그인 한다
 2) 상단에 서비스 탭을 클릭한다
 3) 밑으로 스크롤해서 Application Services를 찾아서 Application Services > Maps를 클릭한다.
 
@@ -35,15 +35,17 @@
 ## 기상청_API_사용방법
 
 ### 기상청_단기예보 조회서비스 API발급 방법
-1) https://www.ncloud.com/에 접속 후 로그인 한다
-2) 상단에 서비스 탭을 클릭한다
-3) 밑으로 스크롤해서 Application Services를 찾아서 Application Services > Maps를 클릭한다.
+1) https://www.data.go.kr/ 에 접속 후 로그인 한다
+2) 기상청_단기예보 ((구)_동네예보) 조회서비스 검색
+3) 활용신청 버튼을 눌러 신청
+4) 마이페이지에 들어가보면 API인증키를 확인 할 수 있다(여기서는 Decodingehls 인증키를 사용해야한다)
 
 > #### .env 파일 설정방법
 > 1. Meteorological_Administration_API_KEY=""을 추가한다
-     ![image](https://github.com/user-attachments/assets/3645b5e8-b2c4-4072-b19e-ddc247b6fe0a)
-     ![image](https://github.com/user-attachments/assets/6f15f9c5-64dc-430d-b213-381a6eae5325)
-     ![image](https://github.com/user-attachments/assets/e0049f45-7280-42b1-8be8-1ccceefc113c)
+
+  ![image](https://github.com/user-attachments/assets/3645b5e8-b2c4-4072-b19e-ddc247b6fe0a)
+  ![image](https://github.com/user-attachments/assets/6f15f9c5-64dc-430d-b213-381a6eae5325)
+  ![image](https://github.com/user-attachments/assets/e0049f45-7280-42b1-8be8-1ccceefc113c)
 
 <br>
 
@@ -54,20 +56,21 @@
 
 > #### .env 파일 설정방법
 > 1. TMAP_KEY=""을 추가한다
-     ![image](https://github.com/user-attachments/assets/0ef8d0cb-bde4-43f1-bb9b-bd3b8f963057)
-     ![image](https://github.com/user-attachments/assets/95d7ee94-a49a-4095-b568-850bfdb12543)
+     
+![image](https://github.com/user-attachments/assets/0ef8d0cb-bde4-43f1-bb9b-bd3b8f963057)
+![image](https://github.com/user-attachments/assets/95d7ee94-a49a-4095-b568-850bfdb12543)
 
 3) API 사용 요금에 무료체험 사용하기로 API신청
 4) 대시보드 > 앱에 들어가면 보이는 앱키(appKey) 클릭
 
 ![image](https://github.com/user-attachments/assets/f3eecca5-4282-4375-bef6-8e6163efbc96)
-![image](https://github.com/user-attachments/assets/249ecdcc-6b7a-4bef-9b2b-e13f2f2cc167)
+
 
 <br>
 
 ## Coolsms 문자서비스 APIKey 발급 방법
+![image](https://github.com/user-attachments/assets/249ecdcc-6b7a-4bef-9b2b-e13f2f2cc167)
 
-![image](https://github.com/user-attachments/assets/22e54868-5576-4eb1-bb0b-1c8292d53a00)
 
 1. CoolSMS 회원가입 및 로그인
    CoolSMS(https://www.coolsms.co.kr) 사이트에 접속합니다.
@@ -89,16 +92,16 @@
 
 6. 프로젝트의 .env 파일 안에
 
-   > apiKey="Collsms에서 확인한 API KEY"
-   > apiSecret="Collsms에서 확인한 API SECRET"
-   와 같이 추가해주시면 됩니다.
+   > - apiKey="Collsms에서 확인한 API KEY"
+   > - apiSecret="Collsms에서 확인한 API SECRET" 와 같이 추가해주시면 됩니다.
 
 
 <br>
 
 ## 구글 이메일 APIKey 발급 방법
 
-![image](https://github.com/user-attachments/assets/5892ff8a-d1c0-4c70-bbdc-90809b5a4af1)
+![image](https://github.com/user-attachments/assets/22e54868-5576-4eb1-bb0b-1c8292d53a00)
+
 
 1. Google 계정에 로그인
 
@@ -125,8 +128,8 @@ spring.mail.username=picon1317@gmail.com를 자신의 이메일로 바꿔줍니�
 <br>
 
 ## Google Map API 키 발급
+![image](https://github.com/user-attachments/assets/5892ff8a-d1c0-4c70-bbdc-90809b5a4af1)
 
-![image](https://github.com/user-attachments/assets/6f5c8731-4b5e-43bb-878d-9fdefb9d5ea9)
 
 
 동물병원의 위치를 지도에 표시하기 위해 Google 지도 API를 사용하였기 때문에, 서비스를 제대로 제공하기 위해서는 Google 지도 API 키가 필요하다.
@@ -143,10 +146,10 @@ Google Map API Key의 경우, 루트 디렉토리에 있는 .env 파일에 다�
 같이 작성해야 한다. YOUR_API_KEY는 발급받은 값으로 대체한다.
 
 > GOOGLE_MAP_API_KEY="YOUR_API_KEY"
-<br>
+
+<br>  
 
 ## Google Map ID 키 발급
-
 ![image](https://github.com/user-attachments/assets/ff798685-def1-41e3-b781-85563374c2e8)
 
 
@@ -171,7 +174,7 @@ YOUR_MAP_ID는 발급받은 값으로 대체한
    네이버 개발자 센터에 접속하여 네이버 계정으로 로그인합니다.
 
 2. 애플리케이션 등록
-   상단 메뉴에서 **[애플리케이션] → [애플리케이션 등록]**을 클릭합니다.
+   상단 메뉴에서 [애플리케이션] → [애플리케이션 등록]을 클릭합니다.
    애플리케이션 이름을 입력하고, 사용 API 항목에서 아래 두 가지를 모두 선택합니다.
     - 네이버 로그인
     - 검색
@@ -179,7 +182,7 @@ YOUR_MAP_ID는 발급받은 값으로 대체한
 3. 필수 설정
    서비스 URL : 애플리케이션이 동작하는 웹사이트 URL을 입력합니다.
    Redirect URI : 소셜 로그인 인증 완료 후 리디렉션될 URL을 입력합니다.
-    - http://사이트 주소/auth/naver/callback
+    - http://사이트주소/auth/naver/callback
 
 4. API Key 확인
    애플리케이션 등록이 완료되면, 애플리케이션 상세 정보 페이지에서 다음 두 값을 확인할 수 있습니다.
