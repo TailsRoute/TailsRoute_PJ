@@ -3,6 +3,60 @@
 
 
 ## TechSkill
+<div>
+  <h4>프론트엔드</h4>
+  <img src="https://img.shields.io/badge/HTML5-E34F26?style=for-the-badge&logo=html5&logoColor=white">
+  <img src="https://img.shields.io/badge/CSS3-1572B6?style=for-the-badge&logo=css3&logoColor=white">
+  <img src="https://img.shields.io/badge/JavaScript-F7DF1E?style=for-the-badge&logo=javascript&logoColor=black">
+  <img src="https://img.shields.io/badge/Tailwind_CSS-06B6D4?style=for-the-badge&logo=tailwindcss&logoColor=white">
+  <img src="https://img.shields.io/badge/Thymeleaf-005F0F?style=for-the-badge&logo=thymeleaf&logoColor=white">
+
+  <h4>백엔드</h4>
+  <img src="https://img.shields.io/badge/Spring_Boot-6DB33F?style=for-the-badge&logo=spring-boot&logoColor=white">
+  <img src="https://img.shields.io/badge/Java-007396?style=for-the-badge&logo=java&logoColor=white">
+  <img src="https://img.shields.io/badge/Flask-000000?style=for-the-badge&logo=flask&logoColor=white">
+  <img src="https://img.shields.io/badge/Python-3776AB?style=for-the-badge&logo=python&logoColor=white">
+  <img src="https://img.shields.io/badge/Arduino-00979D?style=for-the-badge&logo=arduino&logoColor=white">
+  <img src="https://img.shields.io/badge/C++-00599C?style=for-the-badge&logo=cplusplus&logoColor=white">
+
+  <h4>개발환경</h4>
+  <img src="https://img.shields.io/badge/Windows10-0078D6?style=for-the-badge&logo=windows&logoColor=white">
+  <img src="https://img.shields.io/badge/IntelliJ-000000?style=for-the-badge&logo=intellij-idea&logoColor=white">
+  <img src="https://img.shields.io/badge/XAMPP-FB7A24?style=for-the-badge&logo=xampp&logoColor=white">
+  <img src="https://img.shields.io/badge/SQL_Log-003B57?style=for-the-badge&logo=mysql&logoColor=white">
+  <img src="https://img.shields.io/badge/VS_Code-007ACC?style=for-the-badge&logo=visual-studio-code&logoColor=white">
+
+  <h4>데이터베이스</h4> 
+  <img src="https://img.shields.io/badge/MySQL-4479A1?style=for-the-badge&logo=mysql&logoColor=white">
+
+  <h4>API</h4>
+  <img src="https://img.shields.io/badge/Google_App-4285F4?style=for-the-badge&logo=google&logoColor=white">
+  <img src="https://img.shields.io/badge/Google_Maps-4285F4?style=for-the-badge&logo=google-maps&logoColor=white">
+  <img src="https://img.shields.io/badge/Cool_SMS-00C78C?style=for-the-badge&logo=telegram&logoColor=white">
+  <img src="https://img.shields.io/badge/T_MAP-FF7500?style=for-the-badge&logo=naver&logoColor=white">
+  <img src="https://img.shields.io/badge/기상청-0078D7?style=for-the-badge&logo=weather&logoColor=white">
+  <img src="https://img.shields.io/badge/Kakao_Developers-FFCD00?style=for-the-badge&logo=kakao&logoColor=black">
+  <img src="https://img.shields.io/badge/Naver_Developers-03C75A?style=for-the-badge&logo=naver&logoColor=white">
+  <img src="https://img.shields.io/badge/NCloud-03C75A?style=for-the-badge&logo=naver&logoColor=white">
+
+  <h4>모델</h4>
+  <img src="https://img.shields.io/badge/ST_GCN-000000?style=for-the-badge&logo=matrix&logoColor=white">
+  <img src="https://img.shields.io/badge/Meta-4267B2?style=for-the-badge&logo=meta&logoColor=white">
+  <img src="https://img.shields.io/badge/SAMURAI-FF0000?style=for-the-badge&logo=gun&logoColor=white">
+  <img src="https://img.shields.io/badge/MobileNet_SSD-4285F4?style=for-the-badge&logo=tensorflow&logoColor=white">
+  <img src="https://img.shields.io/badge/ResNet50-3776AB?style=for-the-badge&logo=pytorch&logoColor=white">
+
+  <h4>라이브러리</h4>
+  <img src="https://img.shields.io/badge/FullCalendar-0078D7?style=for-the-badge&logo=calendar&logoColor=white">
+  <img src="https://img.shields.io/badge/Selenium-43B02A?style=for-the-badge&logo=selenium&logoColor=white">
+  <img src="https://img.shields.io/badge/TOAST_UI-FF6F61?style=for-the-badge&logo=html5&logoColor=white">
+  <img src="https://img.shields.io/badge/Geolocation-2C3E50?style=for-the-badge&logo=location&logoColor=white">
+  <img src="https://img.shields.io/badge/OpenCV-5C3EE8?style=for-the-badge&logo=opencv&logoColor=white">
+
+  <h4>데이터셋</h4>
+  <img src="https://img.shields.io/badge/Kaggle-20BEFF?style=for-the-badge&logo=kaggle&logoColor=white">
+  <img src="https://img.shields.io/badge/Animal_Pose-FFD700?style=for-the-badge&logo=data&logoColor=black">
+</div>
 
 
 
@@ -22,7 +76,7 @@
 
 ### 메인페이지
 
-![img_19.png](img_19.png)![img_20.png](img_20.png)![img_18.png](img_18.png)
+![image](https://github.com/user-attachments/assets/a6f3da0b-209d-4420-90ba-71dccb7096fa)![image](https://github.com/user-attachments/assets/a7f7dd51-895b-4505-a120-f4729ee79e33)![image](https://github.com/user-attachments/assets/5499e3e0-5d46-4d68-977f-5ff3bc44208b)
 
 - 메인페이지는 반려견과 보호자가 더 건강하고 즐거운 반려 생활을 누릴 수 있도록 돕는 시작점입니다.
   심플하고 직관적인 디자인으로 누구나 쉽게 접근할 수 있으며, 반려견 관리에 필요한 다양한 서비스를 한눈에 확인할 수 있습니다.
@@ -30,36 +84,39 @@
 
 ### 실종신고
 
-![img_25.png](img_25.png)
+![실종신고목록](https://github.com/user-attachments/assets/7859d1a9-4a29-474a-9267-3428ba177730)
 
 - 카테고리 선택을 통해 전체 또는 지역별 실종 게시글을 확인하고, 한 페이지에 최대 25개의 게시글이 표시됩니다. 실종 신고 시 위치와 동물 정보를 입력하고 저장하면 알림이 전송되며, 신고 내용은 수정 및 상세 확인이 가능합니다. 이를 통해 빠르게 정보를 공유하고 실종 동물의 발견을 지원합니다.
 
 ### 24시간 병원정보
-![img_30.png](img_30.png)
+![24시 병원](https://github.com/user-attachments/assets/316efbeb-8fe2-4528-a1b3-4e0eabd7fd4c)
 
 - CSV 파일 업로드와 지도 정보 업데이트, 병원 정보 크롤링을 통해 병원 데이터를 효율적으로 관리합니다. Google Maps API를 활용해 병원 위치를 시각화하며, 위치 선택 및 24시간 병원 필터로 원하는 병원을 손쉽게 검색할 수 있습니다. 검색된 병원은 지도 마커를 클릭해 상세 정보를 확인할 수 있습니다.
 
 ### 쇼핑 페이지
-![img_26.png](img_26.png)
+![반려용품 쇼핑몰](https://github.com/user-attachments/assets/2964cc80-79ea-4007-b77d-16cf95ccbdaa)
 
 - 날짜와 알람을 설정하여 쇼핑 일정을 손쉽게 생성하실 수 있습니다. 관심 있는 제품은 관심목록에 추가하여 따로 관리할 수 있으며, 검색어를 입력하거나 리스트를 클릭하면 관련 제품 정보를 바로 확인하실 수 있습니다. 또한, 일정의 추천 버튼을 누르면 해당 제품 정보를 포함한 글쓰기로 이동할 수 있어 더욱 편리하게 쇼핑을 계획하실 수 있습니다.
 
 
 ### 산책일지
-![img_27.png](img_27.png)
+![반려견 산책일지](https://github.com/user-attachments/assets/847b0dfc-a630-4b6f-904c-631a6faf2ece)
 
 - 지도에 위치 정보와 산책 경로를 시각화하고, 일정 생성 및 날씨 정보를 함께 확인할 수 있습니다. 산책 일지를 작성하거나 경로를 수정하며, 즐겨찾기 등록 및 삭제도 간편하게 관리 가능합니다.
 
 ### 성장일지
-![img_28.png](img_28.png)
+![반려견 성장일지](https://github.com/user-attachments/assets/47aa3921-b571-4a08-b25a-50caf2273e70)
+
 - 성장일지 화면에서 반려견의 성장 기록을 작성, 확인, 관리할 수 있으며, 캘린더와 검색 기능으로 원하는 기록을 손쉽게 찾을 수 있습니다. 기록은 최신순 또는 오래된 순으로 정렬 가능하며, 알림 기능을 통해 주요 이벤트를 미리 받을 수 있습니다.
 
 ### 커뮤니티
-![img_29.png](img_29.png)
+![커뮤니티](https://github.com/user-attachments/assets/e5a5501a-5cf8-45b7-b94f-5ebd7ee2d1a3)
+
 - 쇼핑, 산책, 일정 등의 메뉴와 다양한 주제의 게시판(공지사항, Q&A, 자유게시판 등)을 이용할 수 있습니다. 게시판에서 간략한 내용과 작성자를 확인하거나, 게시글 열람 및 참여가 가능합니다. 좌측에서는 회원 프로필과 반려견의 활동 정보(산책 거리, 걸음 수 등)를 확인할 수 있습니다.
 
 ### 행동분석
-![img_31.png](img_31.png)
+![반려견 행동분석](https://github.com/user-attachments/assets/62ed40c2-9bdb-44b8-a3ea-248e41f72379)
+
 - 훈련 관리 화면에서는 반려견 행동 분석을 위해 비디오를 업로드할 수 있으며, 업로드된 비디오를 통해 강아지가 어떤 행동을 하고 있는지 확인할 수 있습니다. 간단한 행동 결과를 제공하여 반려견의 행동을 이해하는 데 도움을 줍니다.
 ---
 
@@ -76,18 +133,17 @@
 > 1. NAVER_API=""을 추가한다
 > 2. NAVER_SECRET=""을 추가한다
 
-![img_7.png](img_7.png)
-![img_8.png](img_8.png)
-4) 이용 신청을 눌러 API신청을 한다(신청서비스는 Web Dynamic Map,Geocoding, Reverse Geocoding만 있으면 된다)
-![img_4.png](img_4.png)
+![NAVER CLOUD FLATFORM API1](https://github.com/user-attachments/assets/599ed2c8-800e-4823-93b0-3f37491e109d)
+![NAVER CLOUD FLATFORM API2](https://github.com/user-attachments/assets/3f3fe6c3-0e4d-4689-936f-89bfafe8c24c)
 
+4) 이용 신청을 눌러 API신청을 한다(신청서비스는 Web Dynamic Map,Geocoding, Reverse Geocoding만 있으면 된다)
+![NAVER CLOUD FLATFORM API3](https://github.com/user-attachments/assets/c03e22d8-60d6-4e4c-8a05-4541a22c3e36)
 
 5) 만든 API의 콘솔화면으로 간다.
-![img_5.png](img_5.png)
+![NAVER CLOUD FLATFORM API4](https://github.com/user-attachments/assets/862d58cf-b5b1-42d1-8e25-68145b1784aa)
 
 6) 인증정보를 클릭해 API키를 확인한다.
-![img_6.png](img_6.png)
-
+![NAVER CLOUD FLATFORM API5](https://github.com/user-attachments/assets/0ddde606-8b56-46a6-90c5-f836e47c6570)
 
 
 <br>
@@ -103,9 +159,9 @@
 > #### .env 파일 설정방법
 > 1. Meteorological_Administration_API_KEY=""을 추가한다
 
-![img_9.png](img_9.png)
-![img_10.png](img_10.png)
-![img_11.png](img_11.png)
+![기상청API1](https://github.com/user-attachments/assets/99145113-9bc6-407a-8ea6-aa47045477cc)
+![기상청API2](https://github.com/user-attachments/assets/1ccc1665-c7bd-4ad4-ac1f-36e2bb40fd5b)
+![기상청API3](https://github.com/user-attachments/assets/1ddb60b9-5a90-45d8-aa99-80329b2178de)
 
 <br>
 
@@ -117,14 +173,15 @@
 > #### .env 파일 설정방법
 > 1. TMAP_KEY=""을 추가한다
 
-![img_12.png](img_12.png)
-![img_13.png](img_13.png)
-![img_14.png](img_14.png)
+![TMAP API1](https://github.com/user-attachments/assets/1c82b62f-7159-4d8a-8a8d-84422a477506)
+![TMAP API2](https://github.com/user-attachments/assets/30cfce46-1718-4f91-9cdd-5ba47288778e)
+![TMAP API3](https://github.com/user-attachments/assets/b7bd9584-fdb9-490b-9aaa-4a75bbebec52)
 
 3) API 사용 요금에 무료체험 사용하기로 API신청
 4) 대시보드 > 앱에 들어가면 보이는 앱키(appKey) 클릭
+   
+![TMAP API4](https://github.com/user-attachments/assets/1840b993-9bcb-4018-95d9-8493deb8ab7f)
 
-![img_15.png](img_15.png)
 
 <br>
 
